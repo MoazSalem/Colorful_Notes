@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:notes/Screens/CreateNote.dart';
-import 'package:notes/Screens/EditNote.dart';
+import 'package:notes/Screens/Actions/EditNote.dart';
+import 'package:notes/Screens/Actions/CreateNote.dart';
 import 'package:notes/Screens/HomeScreen.dart';
 
 bool isGrid = false;

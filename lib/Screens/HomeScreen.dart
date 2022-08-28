@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:notes/Screens/Info.dart';
+import 'package:notes/Screens/SideBar/Info.dart';
 import 'package:notes/Screens/SideBar/Notes.dart';
 import 'package:notes/Screens/SideBar/Settings.dart';
 import 'package:notes/Screens/SideBar/VoiceNotes.dart';
@@ -121,21 +121,23 @@ class _HomeState extends State<Home> {
     );
   }
 }
+Future<void> refreshDatabase() async {
+  await getDatabaseItems(database);
+}
 Future<void> startDatabase() async {
-  openDatabase('notes.db', version: 1, onCreate: (db, version) async {
+  await openDatabase('notes.db', version: 1, onCreate: (db, version) async {
     print("db created");
     await db.execute(
         'CREATE TABLE Notes (id INTEGER PRIMARY KEY, title TEXT, content TEXT, time Text, cindex INTEGER)');
   }, onOpen: (db) async{
-    await getDatabaseItems(db);
     print("db opened");
   }).then((value) => database = value);
+  await refreshDatabase();
 }
 
 Future<void> destroyDatabase() async {
   await deleteDatabase('notes.db');
-  startDatabase();
-  getDatabaseItems(database).then((value) => database = value as Database);
+  await refreshDatabase();
 }
 
 Future<void> insertToDatabase({required String title,
@@ -148,15 +150,14 @@ Future<void> insertToDatabase({required String title,
         'INSERT INTO Notes(title, content, cindex, time) VALUES("$title", "$content", "$index","$time")')
         .then((value) {
       print('inserted: $value');
-      getDatabaseItems(database).then((value) =>
-      database = value as Database);
     });
   });
+  await refreshDatabase();
 }
 
-Future<List<Map>> getDatabaseItems(database) async {
+Future<void> getDatabaseItems(database) async {
   List<Map> list = await database.rawQuery('SELECT * FROM Notes');
-  return notesMap = await list;
+  notesMap = await list;
 }
 
 Future<void> editDatabaseItem({required String title,
@@ -168,12 +169,13 @@ Future<void> editDatabaseItem({required String title,
       'UPDATE Notes SET title = ?, content = ?, time = ?, cindex = ? WHERE title = ?',
       ['$title2', '$content', '$time', '$index','$title']);
   print('updated: $count');
-  getDatabaseItems(database).then((value) => database = value as Database);
+  await refreshDatabase();
+  await refreshDatabase();
 }
 
 Future<void> deleteFromDatabase({required int id}) async {
   int count =
   await database.rawDelete('DELETE FROM Notes WHERE id = ?', ['$id']);
   assert(count == 1);
-  getDatabaseItems(database).then((value) => database = value as Database);
+  await refreshDatabase();
 }

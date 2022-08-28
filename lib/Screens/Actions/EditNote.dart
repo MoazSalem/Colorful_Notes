@@ -101,7 +101,7 @@ class _EditNoteState extends State<EditNote> {
                       contentC.text != widget.Content ||
                       chosenIndex != widget.index
                   ? {
-                      editDatabaseItem(
+                      await editDatabaseItem(
                           time: "Edited $time",
                           content: contentC.text,
                           title: widget.Title,
