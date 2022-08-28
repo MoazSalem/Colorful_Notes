@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
         title: 'Adaptive Theme Demo',
         theme: theme,
         darkTheme: darkTheme,
-        home: Home(),
+        home: Home()
       ),
     );
   }

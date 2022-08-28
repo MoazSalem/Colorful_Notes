@@ -14,8 +14,81 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   Widget NlistView(int reverseIndex) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        child: Stack(alignment: Alignment.topRight, children: [
+          GestureDetector(
+            onTap: () => Navigator.of(context)
+                .push(MaterialPageRoute(
+                    builder: (context) => EditNote(
+                          Title: notesMap[reverseIndex]["title"],
+                          Content: notesMap[reverseIndex]["content"],
+                          index: notesMap[reverseIndex]['cindex'],
+                        )))
+                .then((value) => setState(() {})),
+            child: Card(
+              color: colors[notesMap[reverseIndex]['cindex']],
+              elevation: 4,
+              shadowColor: colors[notesMap[reverseIndex]['cindex']],
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(0)),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 60, left: 10, right: 10),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 40.0),
+                  child: Column(children: [
+                    Padding(
+                      padding: const EdgeInsets.only(top: 60),
+                      child: Text(notesMap[reverseIndex]["title"],
+                          style: TextStyle(
+                              fontWeight: FontWeight.w800,
+                              fontSize: 20,
+                              color: Colors.white)),
+                    ),
+                    SizedBox(
+                      height: 40,
+                    ),
+                    Text(notesMap[reverseIndex]["content"],
+                        maxLines: 4,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(color: Colors.white)),
+                    SizedBox(
+                      height: 40,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 113),
+                      child: Text(
+                        notesMap[reverseIndex]["time"],
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  ]),
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: IconButton(
+                focusColor: Colors.blue,
+                onPressed: () async {
+                  showDeleteDialog(index: reverseIndex);
+                },
+                icon: Icon(
+                  Icons.close,
+                  color: Colors.white,
+                  size: 26,
+                )),
+          ),
+        ]),
+      ),
+    );
+  }
+
+  Widget NgridView(int reverseIndex) {
+    return Center(
       child: Stack(alignment: Alignment.topRight, children: [
         GestureDetector(
           onTap: () => Navigator.of(context)
@@ -26,43 +99,38 @@ class _HomePageState extends State<HomePage> {
                         index: notesMap[reverseIndex]['cindex'],
                       )))
               .then((value) => setState(() {})),
-          child: Card(
-            color: colors[notesMap[reverseIndex]['cindex']],
-            elevation: 4,
-            shadowColor: colors[notesMap[reverseIndex]['cindex']],
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(0)),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 60, left: 10, right: 10),
+          child: SizedBox(
+            height: 200,
+            width: 200,
+            child: Card(
+              color: colors[notesMap[reverseIndex]['cindex']],
+              elevation: 2,
+              shadowColor: colors[notesMap[reverseIndex]['cindex']],
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(0)),
+              ),
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 40.0),
+                padding: const EdgeInsets.symmetric(horizontal: 30.0),
                 child: Column(children: [
                   Padding(
-                    padding: const EdgeInsets.only(top: 60),
-                    child: Text(notesMap[reverseIndex]["title"],
-                        style: TextStyle(
-                            fontWeight: FontWeight.w800,
-                            fontSize: 20,
-                            color: Colors.white)),
+                    padding: const EdgeInsets.only(top: 17),
+                    child: Text(
+                      notesMap[reverseIndex]["title"],
+                      style: TextStyle(
+                          fontWeight: FontWeight.w800,
+                          fontSize: 20,
+                          color: Colors.white),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
                   SizedBox(
-                    height: 40,
+                    height: 10,
                   ),
                   Text(notesMap[reverseIndex]["content"],
                       maxLines: 4,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(color: Colors.white)),
-                  SizedBox(
-                    height: 40,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 113),
-                    child: Text(
-                      notesMap[reverseIndex]["time"],
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
                 ]),
               ),
             ),
@@ -83,70 +151,6 @@ class _HomePageState extends State<HomePage> {
         ),
       ]),
     );
-  }
-
-  Widget NgridView(int reverseIndex) {
-    return Stack(alignment: Alignment.topRight, children: [
-      GestureDetector(
-        onTap: () => Navigator.of(context)
-            .push(MaterialPageRoute(
-                builder: (context) => EditNote(
-                      Title: notesMap[reverseIndex]["title"],
-                      Content: notesMap[reverseIndex]["content"],
-                      index: notesMap[reverseIndex]['cindex'],
-                    )))
-            .then((value) => setState(() {})),
-        child: SizedBox(
-          height: 200,
-          width: 200,
-          child: Card(
-            color: colors[notesMap[reverseIndex]['cindex']],
-            elevation: 2,
-            shadowColor: colors[notesMap[reverseIndex]['cindex']],
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(0)),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 30.0),
-              child: Column(children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 17),
-                  child: Text(
-                    notesMap[reverseIndex]["title"],
-                    style: TextStyle(
-                        fontWeight: FontWeight.w800,
-                        fontSize: 20,
-                        color: Colors.white),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Text(notesMap[reverseIndex]["content"],
-                    maxLines: 4,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(color: Colors.white)),
-              ]),
-            ),
-          ),
-        ),
-      ),
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: IconButton(
-            focusColor: Colors.blue,
-            onPressed: () async {
-              showDeleteDialog(index: reverseIndex);
-            },
-            icon: Icon(
-              Icons.close,
-              color: Colors.white,
-              size: 26,
-            )),
-      ),
-    ]);
   }
 
   @override
