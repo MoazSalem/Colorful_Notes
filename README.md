@@ -1,16 +1,19 @@
-# notes
+# Notes
 
-A Nice looking notes app.
+A Nice looking colorful notes app using a local database with sqflite.
 
-## Getting Started
+## Features:
+-Colorful notes
+-List and Grid View Style
+-Edit Notes and remove them any time
 
-This project is a starting point for a Flutter application.
+## Bugs:
+Sometimes app wouldn't update the state resulting some changes not showing up.
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Screenshots
+![Screenshot_20220828_144110](https://user-images.githubusercontent.com/88838071/187083649-9e068c51-0a17-40c7-b90c-6b433127b84c.png)
+![Screenshot_20220828_144139](https://user-images.githubusercontent.com/88838071/187083661-8d208903-7571-4f7b-b67e-d14ed392bd68.png)
+![Screenshot_20220828_144209](https://user-images.githubusercontent.com/88838071/187083665-e9ef86f1-ddbd-44ee-8fe0-ea00928300a7.png)
+![Screenshot_20220828_144245](https://user-images.githubusercontent.com/88838071/187083672-0cda2d96-b935-492a-819d-dd997fa6435b.png)
+![Screenshot_20220828_144328](https://user-images.githubusercontent.com/88838071/187083687-9ad86364-e7a0-4e48-823d-e1397e9289da.png)
+![Screenshot_20220828_144253](https://user-images.githubusercontent.com/88838071/187083692-a591ad3f-cc28-4ded-a87d-22a602120ca7.png)
