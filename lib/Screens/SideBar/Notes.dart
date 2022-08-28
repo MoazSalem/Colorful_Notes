@@ -153,7 +153,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-        elevation: 6,
+          elevation: 6,
           backgroundColor: Colors.amber,
           onPressed: () => Navigator.of(context)
               .push(
@@ -172,20 +172,25 @@ class _HomePageState extends State<HomePage> {
                   style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 60,top: 6),
+                  padding: const EdgeInsets.only(left: 60, top: 6),
                   child: IconButton(
                       onPressed: () {
                         setState(() {
                           isGrid = !isGrid;
                         });
                       },
-                      icon: !isGrid ? Icon(Icons.grid_view_rounded,size: 30,) : Icon(Icons.featured_play_list_rounded,size: 30)),
+                      icon: !isGrid
+                          ? Icon(
+                              Icons.grid_view_rounded,
+                              size: 30,
+                            )
+                          : Icon(Icons.featured_play_list_rounded, size: 30)),
                 )
               ],
             ),
           ),
-          !isGrid
-              ? notesMap.length != 0
+          notesMap.length != 0
+              ? !isGrid
                   ? ListView.builder(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
@@ -195,28 +200,30 @@ class _HomePageState extends State<HomePage> {
                         return NlistView(reverseIndex);
                       })
                   : Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 200),
-                      child: Center(
-                          child: Text(
-                        "You don't have any notes",
-                        style: TextStyle(
-                            color: Colors.pink, fontWeight: FontWeight.w400),
-                      )),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 4),
+                      child: GridView.builder(
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                          ),
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: notesMap.length,
+                          itemBuilder: (context, index) {
+                            int reverseIndex = notesMap.length - index - 1;
+                            return NgridView(reverseIndex);
+                          }),
                     )
               : Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8,vertical: 4),
-                child: GridView.builder(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                    ),
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: notesMap.length,
-                    itemBuilder: (context, index) {
-                      int reverseIndex = notesMap.length - index - 1;
-                      return NgridView(reverseIndex);
-                    }),
-              ),
+                  padding: const EdgeInsets.symmetric(vertical: 200),
+                  child: Center(
+                      child: Text(
+                    "You don't have any notes",
+                    style: TextStyle(
+                        color: Colors.pink, fontWeight: FontWeight.w400),
+                  )),
+                ),
           SizedBox(
             height: 20,
           ),

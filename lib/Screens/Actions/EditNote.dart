@@ -68,30 +68,33 @@ class _EditNoteState extends State<EditNote> {
                   border: InputBorder.none,
                   constraints: BoxConstraints.expand(height: 450, width: 200))),
         ),
-        Padding(
-          padding: const EdgeInsets.only(left: 20, bottom: 20),
-          child: Container(
-            height: 60,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: colors.length,
-              itemBuilder: (BuildContext context, Index) => GestureDetector(
-                onTap: () {
-                  chosenIndex = Index;
-                  setState(() {});
-                },
-                child: CircleAvatar(
-                  radius: 35,
-                  backgroundColor: Colors.white,
-                  child: CircleAvatar(
-                    radius: 25,
-                    backgroundColor: colors[Index],
+            Padding(
+              padding: const EdgeInsets.only(bottom: 20),
+              child: Container(
+                height: 60,
+                child: Center(
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    scrollDirection: Axis.horizontal,
+                    itemCount: colors.length,
+                    itemBuilder: (BuildContext context, Index) => GestureDetector(
+                      onTap: () {
+                        chosenIndex = Index;
+                        setState(() {});
+                      },
+                      child: CircleAvatar(
+                        radius: 35,
+                        backgroundColor: Colors.white,
+                        child: CircleAvatar(
+                          radius: 25,
+                          backgroundColor: colors[Index],
+                        ),
+                      ),
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-        ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 60),
           child: TextButton(
