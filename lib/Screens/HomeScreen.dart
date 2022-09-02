@@ -23,6 +23,7 @@ late int viewIndex;
 bool loading = true;
 late bool showDate;
 late bool showShadow;
+bool isTablet = getDeviceType() == 'tablet' ? true : false;
 GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
 
 class Home extends StatefulWidget {
@@ -36,7 +37,7 @@ class _HomeState extends State<Home> {
   List<Widget> page = [
     Builder(
       builder: (context) {
-        return MediaQuery.of(context).size.shortestSide > 600
+        return isTablet
             ? MediaQuery(
                 data: MediaQuery.of(context).copyWith(textScaleFactor: 1.5),
                 child: HomePageT())
@@ -45,14 +46,33 @@ class _HomeState extends State<Home> {
                 child: HomePage());
       },
     ),
-    const VoiceNotesPage(),
-    const SettingsPage(),
-    const InfoPage(),
+    Builder(
+      builder: (context) {
+        return MediaQuery(
+            data: MediaQuery.of(context)
+                .copyWith(textScaleFactor: isTablet ? 1.5 : 1.0),
+            child: VoiceNotesPage());
+      },
+    ),
+    Builder(
+        builder: (context) {
+          return MediaQuery(
+              data: MediaQuery.of(context)
+                  .copyWith(textScaleFactor: isTablet ? 1.5 : 1.0),
+              child: SettingsPage());
+        },),
+    Builder(
+      builder: (context) {
+        return MediaQuery(
+            data: MediaQuery.of(context)
+                .copyWith(textScaleFactor: isTablet ? 1.5 : 1.0),
+            child: InfoPage());
+      },),
   ];
 
   Widget SideBar() {
     return Container(
-      width: 60,
+      width: isTablet ? 100 : 60,
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
       ),
@@ -70,15 +90,15 @@ class _HomeState extends State<Home> {
                         onIndexChanged(0);
                       },
                       icon: currentIndex != 0
-                          ? const Icon(
+                          ? Icon(
                               Icons.text_snippet_outlined,
                               color: Colors.amber,
-                              size: 26,
+                              size: isTablet ? 26 : 36,
                             )
-                          : const Icon(
+                          : Icon(
                               Icons.text_snippet,
                               color: Colors.amber,
-                              size: 30,
+                              size: isTablet ? 30 : 40,
                             )),
                   const SizedBox(
                     height: 30,
@@ -298,4 +318,9 @@ Future<void> deleteFromDatabase({required int id}) async {
       await database.rawDelete('DELETE FROM Notes WHERE id = ?', ['$id']);
   assert(count == 1);
   await refreshDatabase();
+}
+
+String getDeviceType() {
+  final data = MediaQueryData.fromWindow(WidgetsBinding.instance.window);
+  return data.size.shortestSide < 600 ? 'phone' : 'tablet';
 }

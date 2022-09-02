@@ -1,133 +1,360 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:notes/Screens/Actions/EditNote.dart';
 import 'package:notes/Screens/Actions/CreateNote.dart';
 import 'package:notes/Screens/HomeScreen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+bool noTitle = false;
+bool noContent = false;
+Map<String, int> viewModes = {"Long View" : 1,"Grid View" : 2};
 
 class HomePageT extends StatefulWidget {
-  const HomePageT({Key? key}) : super(key: key);
+  HomePageT({Key? key}) : super(key: key);
 
   @override
   State<HomePageT> createState() => _HomePageTState();
 }
 
 class _HomePageTState extends State<HomePageT> {
-  Widget NgridView(int reverseIndex) {
-    return Center(
-      child: Stack(alignment: Alignment.topRight, children: [
-        GestureDetector(
-          onTap: () => Navigator.of(context)
-              .push(MaterialPageRoute(
-                  builder: (context) => EditNote(
-                        Title: notesMap[reverseIndex]["title"],
-                        Content: notesMap[reverseIndex]["content"],
-                        index: notesMap[reverseIndex]['cindex'],
-                      )))
-              .then((value) => setState(() {})),
-          child: SizedBox(
-            height: 400,
-            width: 400,
-            child: Card(
-              color: colors[notesMap[reverseIndex]['cindex']],
-              elevation: 2,
-              shadowColor: colors[notesMap[reverseIndex]['cindex']],
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(0)),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 30.0,vertical: 20),
-                child: Column(children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 40),
-                    child: Text(
-                      notesMap[reverseIndex]["title"],
-                      style: TextStyle(
-                          fontWeight: FontWeight.w800,
-                          fontSize: 28,
-                          color: Colors.white),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 30,
-                  ),
-                  Text(notesMap[reverseIndex]["content"],
-                      maxLines: 5,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(color: Colors.white,fontSize: 20)),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 100,top: 20),
-                    child: Text(
-                      notesMap[reverseIndex]["time"],
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                ]),
-              ),
 
-            ),
+  Widget leading() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        IconButton(
+          onPressed: () {
+            Navigator.of(context)
+                .push(
+                  MaterialPageRoute(builder: (context) => createNote()),
+                )
+                .then((_) => setState(() {}));
+          },
+          icon: Icon(
+            Icons.add,
+            size: 30,
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 40,vertical: 20),
-          child: IconButton(
-              focusColor: Colors.blue,
-              onPressed: () async {
-                showDeleteDialog(index: reverseIndex);
-              },
-              icon: Icon(
-                Icons.close,
-                color: Colors.white,
-                size: 46,
-              )),
+        PopupMenuButton<String>(
+
+          onSelected: (value) async{
+            final prefs = await SharedPreferences.getInstance();
+            await prefs.setInt("viewIndex", viewModes[value]!);
+            setState(() {
+              viewIndex = viewModes[value]!;
+            });
+            },
+          itemBuilder: (BuildContext context) {
+            return {"Long View","Grid View"}.map((String choice) {
+              return PopupMenuItem<String>(
+                value: choice,
+                child: Text(choice,style: TextStyle(fontWeight: FontWeight.w500 ),),
+              );
+            }).toList();
+          },
         ),
-      ]),
+      ],
+    );
+  }
+
+  Widget nSmallListView(int reverseIndex, int dateValue, String date) {
+    return Center(
+      child: Padding(
+        padding:
+            EdgeInsets.symmetric(horizontal: 8, vertical: showShadow ? 4 : 2),
+        child: Stack(alignment: Alignment.topRight, children: [
+          GestureDetector(
+            onTap: () => Navigator.of(context)
+                .push(MaterialPageRoute(
+                    builder: (context) => EditNote(
+                          Title: notesMap[reverseIndex]["title"],
+                          Content: notesMap[reverseIndex]["content"],
+                          index: notesMap[reverseIndex]['cindex'],
+                        )))
+                .then((value) => setState(() {})),
+            child: Container(
+              height: 260,
+              width: 760,
+              child: Card(
+                color: colors[notesMap[reverseIndex]['cindex']],
+                elevation: showShadow ? 4 : 0,
+                shadowColor: colors[notesMap[reverseIndex]['cindex']],
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(0)),
+                ),
+                child: Padding(
+                  padding: EdgeInsets.only(
+                      left: 30.0,
+                      right: noTitle ? 55.0 : 30.0,
+                      top: noTitle ? 24.0 : 20.0,
+                      bottom: showDate ? 10 : 10),
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        noTitle
+                            ? Container()
+                            : Padding(
+                                padding:
+                                    const EdgeInsets.only(bottom: 14, right: 40),
+                                child: Expanded(
+                                  child: Text(notesMap[reverseIndex]["title"],
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w800,
+                                          fontSize: 30,
+                                          color: Colors.white)),
+                                ),
+                              ),
+                        Expanded(
+                          flex: noTitle ? 4 : 3,
+                          child: Text(
+                              noContent
+                                  ? "Empty"
+                                  : notesMap[reverseIndex]["content"],
+                              maxLines: noTitle
+                                  ? showDate
+                                      ? 4
+                                      : 5
+                                  : showDate
+                                      ? 3
+                                      : 4,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                  color:
+                                      noContent ? Colors.white38 : Colors.white,
+                                  fontSize: noTitle ? 25 : 21)),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        showDate
+                            ? Expanded(
+                                child: Stack(
+                                  alignment: Alignment.centerLeft,
+                                  children: [
+                                    Text(
+                                      dateValue == 0
+                                          ? "Today"
+                                          : dateValue == -1
+                                              ? "Yesterday"
+                                              : date,
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        Text(
+                                          notesMap[reverseIndex]["edited"] ==
+                                                  "yes"
+                                              ? "Edited"
+                                              : "",
+                                          style:
+                                              TextStyle(color: Colors.white38),
+                                        )
+                                      ],
+                                    )
+                                  ],
+                                ),
+                              )
+                            : Container(),
+                      ]),
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 18),
+            child: IconButton(
+                focusColor: Colors.blue,
+                onPressed: () async {
+                  showDeleteDialog(index: reverseIndex);
+                },
+                icon: Icon(
+                  Icons.close,
+                  color: Colors.white,
+                  size: 46,
+                )),
+          ),
+        ]),
+      ),
+    );
+  }
+
+  Widget nGridView(int reverseIndex, int dateValue, String date) {
+    return Center(
+      child: Padding(
+        padding:
+            EdgeInsets.symmetric(horizontal: 0, vertical: showShadow ? 2 : 0),
+        child: Stack(alignment: Alignment.topRight, children: [
+          GestureDetector(
+            onTap: () => Navigator.of(context)
+                .push(MaterialPageRoute(
+                    builder: (context) => EditNote(
+                          Title: notesMap[reverseIndex]["title"],
+                          Content: notesMap[reverseIndex]["content"],
+                          index: notesMap[reverseIndex]['cindex'],
+                        )))
+                .then((value) => setState(() {})),
+            child: Container(
+              height: 400,
+              width: 400,
+              child: Card(
+                color: colors[notesMap[reverseIndex]['cindex']],
+                elevation: showShadow ? 4 : 0,
+                shadowColor: colors[notesMap[reverseIndex]['cindex']],
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(0)),
+                ),
+                child: Padding(
+                  padding: EdgeInsets.only(
+                      left: 15.0,
+                      right: noTitle ? 56.0 : 20.0,
+                      top: noTitle ? 17.0 : 18.0,
+                      bottom: showDate ? 10 : 10),
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        noTitle
+                            ? Container()
+                            : Padding(
+                                padding:
+                                    const EdgeInsets.only(bottom: 6, right: 46),
+                                child: Expanded(
+                                  child: Text(notesMap[reverseIndex]["title"],
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w800,
+                                          fontSize: 24,
+                                          color: Colors.white)),
+                                ),
+                              ),
+                        Expanded(
+                          flex: noTitle ? 6 : 5,
+                          child: Text(
+                              noContent
+                                  ? "Empty"
+                                  : notesMap[reverseIndex]["content"],
+                              maxLines: noTitle
+                                  ? showDate
+                                      ? 7
+                                      : 8
+                                  : showDate
+                                      ? 7
+                                      : 9,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                  color:
+                                      noContent ? Colors.white38 : Colors.white,
+                                  fontSize: noTitle ? 23 : 18)),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        showDate
+                            ? Expanded(
+                                child: Stack(
+                                  alignment: Alignment.centerLeft,
+                                  children: [
+                                    Text(
+                                      dateValue == 0
+                                          ? "Today"
+                                          : dateValue == -1
+                                              ? "Yesterday"
+                                              : date,
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        Text(
+                                          notesMap[reverseIndex]["edited"] ==
+                                                  "yes"
+                                              ? "Edited"
+                                              : "",
+                                          style:
+                                              TextStyle(color: Colors.white38),
+                                        )
+                                      ],
+                                    )
+                                  ],
+                                ),
+                              )
+                            : Container(),
+                      ]),
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+            child: IconButton(
+                focusColor: Colors.blue,
+                onPressed: () async {
+                  showDeleteDialog(index: reverseIndex);
+                },
+                icon: Icon(
+                  Icons.close,
+                  color: Colors.white,
+                  size: 46,
+                )),
+          ),
+        ]),
+      ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-          elevation: 6,
-          backgroundColor: Colors.amber,
-          onPressed: () => Navigator.of(context)
-              .push(
-                MaterialPageRoute(builder: (context) => createNote()),
-              )
-              .then((_) => setState(() {})),
-          child: const Icon(Icons.add)),
       body: ListView(
         children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 60, bottom: 60, top: 60),
-            child: Row(
-              children: [
-                Text(
-                  "Notes",
-                  style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold),
-                ),
-              ],
-            ),
-          ),
+          customAppBar("Notes", leading()),
           notesMap.length != 0
-              ?  Padding(
+              ? viewIndex != 2
+                  ? ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: notesMap.length,
+                      itemBuilder: (context, index) {
+                        int reverseIndex = notesMap.length - index - 1;
+                        notesMap[reverseIndex]["title"] == ""
+                            ? noTitle = true
+                            : noTitle = false;
+                        notesMap[reverseIndex]["content"] == ""
+                            ? noContent = true
+                            : noContent = false;
+                        int dateValue =
+                            calculateDifference(notesMap[reverseIndex]["time"]);
+                        String date = parseDate(notesMap[reverseIndex]["time"]);
+                        return nSmallListView(reverseIndex, dateValue, date);
+                      })
+                  : Padding(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 10),
-                      child: Center(
-                        child: GridView.builder(
-                            gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                            ),
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemCount: notesMap.length,
-                            itemBuilder: (context, index) {
-                              int reverseIndex = notesMap.length - index - 1;
-                              return NgridView(reverseIndex);
-                            }),
-                      ),
+                          horizontal: 16, vertical: 2),
+                      child: GridView.builder(
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                          ),
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: notesMap.length,
+                          itemBuilder: (context, index) {
+                            int reverseIndex = notesMap.length - index - 1;
+                            notesMap[reverseIndex]["title"] == ""
+                                ? noTitle = true
+                                : noTitle = false;
+                            notesMap[reverseIndex]["content"] == ""
+                                ? noContent = true
+                                : noContent = false;
+                            int dateValue = calculateDifference(
+                                notesMap[reverseIndex]["time"]);
+                            String date =
+                                parseDate(notesMap[reverseIndex]["time"]);
+                            return nGridView(reverseIndex, dateValue, date);
+                          }),
                     )
               : Padding(
                   padding: const EdgeInsets.symmetric(vertical: 200),
@@ -144,6 +371,20 @@ class _HomePageTState extends State<HomePageT> {
         ],
       ),
     );
+  }
+
+  int calculateDifference(String stringDate) {
+    var date = DateTime.parse(stringDate);
+    DateTime now = DateTime.now();
+    return DateTime(date.year, date.month, date.day)
+        .difference(DateTime(now.year, now.month, now.day))
+        .inDays;
+  }
+
+  String parseDate(String stringDate) {
+    var date = DateTime.parse(stringDate);
+    String parsedDate = DateFormat.MMMMd().format(date);
+    return parsedDate;
   }
 
   Future<void> showDeleteDialog({required int index}) async {

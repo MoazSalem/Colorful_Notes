@@ -21,7 +21,7 @@ class InfoPage extends StatelessWidget {
                   RichText(
                       text: TextSpan(
                     style: TextStyle(
-                        fontSize: 20,
+                        fontSize: isTablet ? 30 : 20,
                         fontWeight: FontWeight.w300,
                         color: Theme.of(context).textTheme.bodyMedium!.color),
                     children: <TextSpan>[
