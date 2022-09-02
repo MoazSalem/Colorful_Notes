@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 bool noTitle = false;
 bool noContent = false;
+Map<String, int> viewModes = {"Large View" : 0,"Long View" : 1,"Grid View" : 2};
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
@@ -34,20 +35,24 @@ class _HomePageState extends State<HomePage> {
             size: 30,
           ),
         ),
-        IconButton(
-          onPressed: () async{
+        PopupMenuButton<String>(
+
+          onSelected: (value) async{
             final prefs = await SharedPreferences.getInstance();
+            await prefs.setInt("viewIndex", viewModes[value]!);
             setState(() {
-              viewIndex == 3 ? viewIndex = 0 : viewIndex++ ;
-              print(viewIndex);
+              viewIndex = viewModes[value]!;
             });
-            await prefs.setInt("viewIndex", viewIndex);
+            },
+          itemBuilder: (BuildContext context) {
+            return {"Large View","Long View","Grid View"}.map((String choice) {
+              return PopupMenuItem<String>(
+                value: choice,
+                child: Text(choice,style: TextStyle(fontWeight: FontWeight.w500 ),),
+              );
+            }).toList();
           },
-          icon: Icon(
-            Icons.swap_calls,
-            size: 30,
-          ),
-        )
+        ),
       ],
     );
   }
