@@ -5,6 +5,7 @@ import 'package:notes/Screens/SideBar/Notes.dart';
 import 'package:notes/Screens/SideBar/NotesTablet.dart';
 import 'package:notes/Screens/SideBar/Settings.dart';
 import 'package:notes/Screens/SideBar/VoiceNotes.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:adaptive_theme/adaptive_theme.dart';
 
@@ -18,9 +19,10 @@ List<Color> colors = [
   Color(0xfff169a7),
 ];
 int currentIndex = 0;
+late int viewIndex;
 bool loading = true;
-bool showDate = true;
-bool showShadow = true;
+late bool showDate;
+late bool showShadow;
 GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
 
 class Home extends StatefulWidget {
@@ -233,6 +235,7 @@ Widget customAppBar(String title, [Widget? leading]) {
 }
 
 Future<void> startDatabase() async {
+  final prefs = await SharedPreferences.getInstance();
   await openDatabase('notes.db', version: 1, onCreate: (db, version) async {
     print("db created");
     await db.execute(
@@ -240,6 +243,9 @@ Future<void> startDatabase() async {
   }, onOpen: (db) async {
     print("db opened");
   }).then((value) => database = value);
+  viewIndex = await prefs.getInt('viewIndex') ?? 0;
+  showDate = await prefs.getBool('showDate') ?? true;
+  showShadow = await prefs.getBool('showShadow') ?? true;
   await refreshDatabase();
 }
 

@@ -5,12 +5,11 @@ import 'package:notes/Screens/Actions/CreateNote.dart';
 import 'package:notes/Screens/HomeScreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-int viewIndex = 0;
 bool noTitle = false;
 bool noContent = false;
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  HomePage({Key? key}) : super(key: key);
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -36,11 +35,13 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
         IconButton(
-          onPressed: () {
+          onPressed: () async{
+            final prefs = await SharedPreferences.getInstance();
             setState(() {
               viewIndex == 3 ? viewIndex = 0 : viewIndex++ ;
               print(viewIndex);
             });
+            await prefs.setInt("viewIndex", viewIndex);
           },
           icon: Icon(
             Icons.swap_calls,

@@ -1,6 +1,7 @@
 import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:notes/Screens/HomeScreen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({Key? key}) : super(key: key);
@@ -40,10 +41,11 @@ class _SettingsPageState extends State<SettingsPage> {
                   padding: const EdgeInsets.only(right: 10),
                   child: ChoiceChip(
                     selected: d1,
-                    onSelected: (value) {
-                      setState(() {
-                        showDate = true;
-                      });
+                    onSelected: (value) async {
+                      final prefs = await SharedPreferences.getInstance();
+                      await prefs.setBool("showDate", true);
+                      showDate = true;
+                      setState(() {});
                     },
                     label: Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -53,10 +55,11 @@ class _SettingsPageState extends State<SettingsPage> {
                 ),
                 ChoiceChip(
                   selected: d2,
-                  onSelected: (value) {
-                    setState(() {
-                      showDate = false;
-                    });
+                  onSelected: (value) async {
+                    final prefs = await SharedPreferences.getInstance();
+                    await prefs.setBool("showDate", false);
+                    showDate = false;
+                    setState(() {});
                   },
                   label: Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -85,8 +88,11 @@ class _SettingsPageState extends State<SettingsPage> {
                   child: ChoiceChip(
                     selected: s1,
                     onSelected: (value) {
-                      setState(() {
+                      setState(() async {
+                        final prefs = await SharedPreferences.getInstance();
+                        await prefs.setBool("showShadow", true);
                         showShadow = true;
+                        setState(() {});
                       });
                     },
                     label: Padding(
@@ -97,10 +103,11 @@ class _SettingsPageState extends State<SettingsPage> {
                 ),
                 ChoiceChip(
                   selected: s2,
-                  onSelected: (value) {
-                    setState(() {
-                      showShadow = false;
-                    });
+                  onSelected: (value) async {
+                    final prefs = await SharedPreferences.getInstance();
+                    await prefs.setBool("showShadow", false);
+                    showShadow = false;
+                    setState(() {});
                   },
                   label: Padding(
                     padding: const EdgeInsets.all(8.0),
