@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:notes/Screens/HomeScreen.dart';
 
 final TextEditingController titleC = TextEditingController();
@@ -51,7 +50,8 @@ class _EditNoteState extends State<EditNote> {
                   color: Colors.white,
                   fontSize: 40,
                   fontWeight: FontWeight.w500),
-              decoration: InputDecoration(border: InputBorder.none)),
+              decoration:
+                  InputDecoration(border: InputBorder.none, hintText: "No Title")),
         ),
         SizedBox(
           height: 40,
@@ -66,46 +66,47 @@ class _EditNoteState extends State<EditNote> {
               style: TextStyle(color: Colors.white, fontSize: 30),
               decoration: InputDecoration(
                   border: InputBorder.none,
-                  constraints: BoxConstraints.expand(height: 450, width: 200))),
+                  constraints: BoxConstraints.expand(height: 450, width: 200),
+                  hintText: "Write Your Note Here")),
         ),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 20),
-              child: Container(
-                height: 60,
-                child: Center(
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    scrollDirection: Axis.horizontal,
-                    itemCount: colors.length,
-                    itemBuilder: (BuildContext context, Index) => GestureDetector(
-                      onTap: () {
-                        chosenIndex = Index;
-                        setState(() {});
-                      },
-                      child: CircleAvatar(
-                        radius: 35,
-                        backgroundColor: Colors.white,
-                        child: CircleAvatar(
-                          radius: 25,
-                          backgroundColor: colors[Index],
-                        ),
-                      ),
+        Padding(
+          padding: const EdgeInsets.only(bottom: 20),
+          child: Container(
+            height: 60,
+            child: Center(
+              child: ListView.builder(
+                shrinkWrap: true,
+                scrollDirection: Axis.horizontal,
+                itemCount: colors.length,
+                itemBuilder: (BuildContext context, Index) => GestureDetector(
+                  onTap: () {
+                    chosenIndex = Index;
+                    setState(() {});
+                  },
+                  child: CircleAvatar(
+                    radius: 35,
+                    backgroundColor: Colors.white,
+                    child: CircleAvatar(
+                      radius: 25,
+                      backgroundColor: colors[Index],
                     ),
                   ),
                 ),
               ),
             ),
+          ),
+        ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 60),
           child: TextButton(
             onPressed: () async {
-              var time = DateFormat.MMMd().add_jm().format(DateTime.now());
+              var time = DateTime.now().toString();
               titleC.text != widget.Title ||
                       contentC.text != widget.Content ||
                       chosenIndex != widget.index
                   ? {
                       await editDatabaseItem(
-                          time: "Edited $time",
+                          time: "$time",
                           content: contentC.text,
                           title: widget.Title,
                           title2: titleC.text,

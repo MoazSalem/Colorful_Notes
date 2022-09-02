@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:notes/Screens/Actions/EditNote.dart';
 import 'package:notes/Screens/Actions/CreateNote.dart';
 import 'package:notes/Screens/HomeScreen.dart';
 
 bool isGrid = false;
+bool noTitle = false;
+bool noContent = false;
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -13,10 +16,43 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  Widget NlistView(int reverseIndex) {
+  Widget leading() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        IconButton(
+          onPressed: () {
+            Navigator.of(context)
+                .push(
+                  MaterialPageRoute(builder: (context) => createNote()),
+                )
+                .then((_) => setState(() {}));
+          },
+          icon: Icon(
+            Icons.add,
+            size: 30,
+          ),
+        ),
+        IconButton(
+          onPressed: () {
+            setState(() {
+              isGrid = !isGrid;
+            });
+          },
+          icon: Icon(
+            Icons.swap_calls,
+            size: 30,
+          ),
+        )
+      ],
+    );
+  }
+
+  Widget nListView(int reverseIndex, int dateValue, String date) {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        padding:
+            EdgeInsets.symmetric(horizontal: 8, vertical: showShadow ? 4 : 2),
         child: Stack(alignment: Alignment.topRight, children: [
           GestureDetector(
             onTap: () => Navigator.of(context)
@@ -27,50 +63,91 @@ class _HomePageState extends State<HomePage> {
                           index: notesMap[reverseIndex]['cindex'],
                         )))
                 .then((value) => setState(() {})),
-            child: Card(
-              color: colors[notesMap[reverseIndex]['cindex']],
-              elevation: 4,
-              shadowColor: colors[notesMap[reverseIndex]['cindex']],
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(0)),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.only(bottom: 60, left: 10, right: 10),
+            child: Container(
+              height: 300,
+              width: 300,
+              child: Card(
+                color: colors[notesMap[reverseIndex]['cindex']],
+                elevation: showShadow ? 4 : 0,
+                shadowColor: colors[notesMap[reverseIndex]['cindex']],
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(0)),
+                ),
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 40.0),
-                  child: Column(children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 60),
-                      child: Text(notesMap[reverseIndex]["title"],
-                          style: TextStyle(
-                              fontWeight: FontWeight.w800,
-                              fontSize: 20,
-                              color: Colors.white)),
-                    ),
-                    SizedBox(
-                      height: 40,
-                    ),
-                    Text(notesMap[reverseIndex]["content"],
-                        maxLines: 4,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(color: Colors.white)),
-                    SizedBox(
-                      height: 40,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(right: 113),
-                      child: Text(
-                        notesMap[reverseIndex]["time"],
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
-                  ]),
+                  padding: EdgeInsets.only(
+                      left: 40.0,
+                      right: 40.0,
+                      top: 40,
+                      bottom: showDate ? 15 : 10),
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        noTitle
+                            ? Container()
+                            : Expanded(
+                                flex: 2,
+                                child: Text(notesMap[reverseIndex]["title"],
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w800,
+                                        fontSize: 24,
+                                        color: Colors.white)),
+                              ),
+                        Expanded(
+                          flex: 6,
+                          child: Text(
+                              noContent
+                                  ? "Empty"
+                                  : notesMap[reverseIndex]["content"],
+                              maxLines: showDate ? 8 : 9,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                  color:
+                                      noContent ? Colors.white38 : Colors.white,
+                                  fontSize: noTitle ? 21 : 16)),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        showDate
+                            ? Expanded(
+                                flex: 1,
+                                child: Stack(
+                                  alignment: Alignment.centerLeft,
+                                  children: [
+                                    Text(
+                                      dateValue == 0
+                                          ? "Today"
+                                          : dateValue == -1
+                                              ? "Yesterday"
+                                              : date,
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        Text(
+                                          notesMap[reverseIndex]["edited"] ==
+                                                  "yes"
+                                              ? "Edited"
+                                              : "",
+                                          style:
+                                              TextStyle(color: Colors.white38),
+                                        )
+                                      ],
+                                    )
+                                  ],
+                                ),
+                              )
+                            : Container(),
+                      ]),
                 ),
               ),
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
             child: IconButton(
                 focusColor: Colors.blue,
                 onPressed: () async {
@@ -87,112 +164,250 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget NgridView(int reverseIndex) {
+  Widget nSmallListView(int reverseIndex, int dateValue, String date) {
     return Center(
-      child: Stack(alignment: Alignment.topRight, children: [
-        GestureDetector(
-          onTap: () => Navigator.of(context)
-              .push(MaterialPageRoute(
-                  builder: (context) => EditNote(
-                        Title: notesMap[reverseIndex]["title"],
-                        Content: notesMap[reverseIndex]["content"],
-                        index: notesMap[reverseIndex]['cindex'],
-                      )))
-              .then((value) => setState(() {})),
-          child: SizedBox(
-            height: 200,
-            width: 200,
-            child: Card(
-              color: colors[notesMap[reverseIndex]['cindex']],
-              elevation: 2,
-              shadowColor: colors[notesMap[reverseIndex]['cindex']],
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(0)),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                child: Column(children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 17),
-                    child: Text(
-                      notesMap[reverseIndex]["title"],
-                      style: TextStyle(
-                          fontWeight: FontWeight.w800,
-                          fontSize: 20,
-                          color: Colors.white),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Text(notesMap[reverseIndex]["content"],
-                      maxLines: 4,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(color: Colors.white)),
-                ]),
+      child: Padding(
+        padding:
+        EdgeInsets.symmetric(horizontal: 8, vertical: showShadow ? 4 : 2),
+        child: Stack(alignment: Alignment.topRight, children: [
+          GestureDetector(
+            onTap: () => Navigator.of(context)
+                .push(MaterialPageRoute(
+                builder: (context) => EditNote(
+                  Title: notesMap[reverseIndex]["title"],
+                  Content: notesMap[reverseIndex]["content"],
+                  index: notesMap[reverseIndex]['cindex'],
+                )))
+                .then((value) => setState(() {})),
+            child: Container(
+              height: 110,
+              width: 300,
+              child: Card(
+                color: colors[notesMap[reverseIndex]['cindex']],
+                elevation: showShadow ? 4 : 0,
+                shadowColor: colors[notesMap[reverseIndex]['cindex']],
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(0)),
+                ),
+                child: Padding(
+                  padding: EdgeInsets.only(
+                      left: 15.0,
+                      right: noTitle ? 30.0 : 20.0,
+                      top: noTitle ? 14.0: 12.0,
+                      bottom: showDate ? 10 : 10),
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        noTitle
+                            ? Container()
+                            : Padding(
+                              padding: const EdgeInsets.only(bottom: 6,right: 40),
+                              child: Expanded(
+                          flex: 1,
+                          child: Text(notesMap[reverseIndex]["title"],
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w800,
+                                    fontSize: 24,
+                                    color: Colors.white)),
+                        ),
+                            ),
+                        Expanded(
+                          flex: noTitle ? 2 : 1,
+                          child: Text(
+                              noContent
+                                  ? "Empty"
+                                  : notesMap[reverseIndex]["content"],
+                              maxLines: noTitle ? showDate ? 2 : 3 : showDate ? 1 : 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                  color:
+                                  noContent ? Colors.white38 : Colors.white,
+                                  fontSize: noTitle ? 21 : 16)),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        showDate
+                            ? Expanded(
+                          flex: 1,
+                          child: Stack(
+                            alignment: Alignment.centerLeft,
+                            children: [
+                              Text(
+                                dateValue == 0
+                                    ? "Today"
+                                    : dateValue == -1
+                                    ? "Yesterday"
+                                    : date,
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Text(
+                                    notesMap[reverseIndex]["edited"] ==
+                                        "yes"
+                                        ? "Edited"
+                                        : "",
+                                    style:
+                                    TextStyle(color: Colors.white38),
+                                  )
+                                ],
+                              )
+                            ],
+                          ),
+                        )
+                            : Container(),
+                      ]),
+                ),
               ),
             ),
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: IconButton(
-              focusColor: Colors.blue,
-              onPressed: () async {
-                showDeleteDialog(index: reverseIndex);
-              },
-              icon: Icon(
-                Icons.close,
-                color: Colors.white,
-                size: 26,
-              )),
-        ),
-      ]),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+            child: IconButton(
+                focusColor: Colors.blue,
+                onPressed: () async {
+                  showDeleteDialog(index: reverseIndex);
+                },
+                icon: Icon(
+                  Icons.close,
+                  color: Colors.white,
+                  size: 26,
+                )),
+          ),
+        ]),
+      ),
+    );
+  }
+
+  Widget nGridView(int reverseIndex, int dateValue, String date) {
+    return Center(
+      child: Padding(
+        padding:
+        EdgeInsets.symmetric(horizontal: 0, vertical: showShadow ? 2 : 0),
+        child: Stack(alignment: Alignment.topRight, children: [
+          GestureDetector(
+            onTap: () => Navigator.of(context)
+                .push(MaterialPageRoute(
+                builder: (context) => EditNote(
+                  Title: notesMap[reverseIndex]["title"],
+                  Content: notesMap[reverseIndex]["content"],
+                  index: notesMap[reverseIndex]['cindex'],
+                )))
+                .then((value) => setState(() {})),
+            child: Container(
+              height: 180,
+              width: 180,
+              child: Card(
+                color: colors[notesMap[reverseIndex]['cindex']],
+                elevation: showShadow ? 4 : 0,
+                shadowColor: colors[notesMap[reverseIndex]['cindex']],
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(0)),
+                ),
+                child: Padding(
+                  padding: EdgeInsets.only(
+                      left: 15.0,
+                      right: noTitle ? 38.0 : 20.0,
+                      top: noTitle ? 14.0: 14.0,
+                      bottom: showDate ? 10 : 10),
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        noTitle
+                            ? Container()
+                            : Padding(
+                          padding: const EdgeInsets.only(bottom: 6,right: 40),
+                          child: Expanded(
+                            flex: 1,
+                            child: Text(notesMap[reverseIndex]["title"],
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w800,
+                                    fontSize: 20,
+                                    color: Colors.white)),
+                          ),
+                        ),
+                        Expanded(
+                          flex: noTitle ? 3 : 2,
+                          child: Text(
+                              noContent
+                                  ? "Empty"
+                                  : notesMap[reverseIndex]["content"],
+                              maxLines: noTitle ? showDate ? 3 : 4 : showDate ? 3 : 3,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                  color:
+                                  noContent ? Colors.white38 : Colors.white,
+                                  fontSize: noTitle ? 21 : 16)),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        showDate
+                            ? Expanded(
+                          flex: 1,
+                          child: Stack(
+                            alignment: Alignment.centerLeft,
+                            children: [
+                              Text(
+                                dateValue == 0
+                                    ? "Today"
+                                    : dateValue == -1
+                                    ? "Yesterday"
+                                    : date,
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Text(
+                                    notesMap[reverseIndex]["edited"] ==
+                                        "yes"
+                                        ? "Edited"
+                                        : "",
+                                    style:
+                                    TextStyle(color: Colors.white38),
+                                  )
+                                ],
+                              )
+                            ],
+                          ),
+                        )
+                            : Container(),
+                      ]),
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+            child: IconButton(
+                focusColor: Colors.blue,
+                onPressed: () async {
+                  showDeleteDialog(index: reverseIndex);
+                },
+                icon: Icon(
+                  Icons.close,
+                  color: Colors.white,
+                  size: 26,
+                )),
+          ),
+        ]),
+      ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-          elevation: 6,
-          backgroundColor: Colors.amber,
-          onPressed: () => Navigator.of(context)
-              .push(
-                MaterialPageRoute(builder: (context) => createNote()),
-              )
-              .then((_) => setState(() {})),
-          child: const Icon(Icons.add)),
       body: ListView(
         children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 30, bottom: 40, top: 60),
-            child: Row(
-              children: [
-                Text(
-                  "Notes",
-                  style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 60, top: 6),
-                  child: IconButton(
-                      onPressed: () {
-                        setState(() {
-                          isGrid = !isGrid;
-                        });
-                      },
-                      icon: !isGrid
-                          ? Icon(
-                              Icons.grid_view_rounded,
-                              size: 30,
-                            )
-                          : Icon(Icons.featured_play_list_rounded, size: 30)),
-                )
-              ],
-            ),
-          ),
+          customAppBar("Notes", leading()),
           notesMap.length != 0
               ? !isGrid
                   ? ListView.builder(
@@ -201,11 +416,20 @@ class _HomePageState extends State<HomePage> {
                       itemCount: notesMap.length,
                       itemBuilder: (context, index) {
                         int reverseIndex = notesMap.length - index - 1;
-                        return NlistView(reverseIndex);
+                        notesMap[reverseIndex]["title"] == ""
+                            ? noTitle = true
+                            : noTitle = false;
+                        notesMap[reverseIndex]["content"] == ""
+                            ? noContent = true
+                            : noContent = false;
+                        int dateValue =
+                            calculateDifference(notesMap[reverseIndex]["time"]);
+                        String date = parseDate(notesMap[reverseIndex]["time"]);
+                        return nSmallListView(reverseIndex, dateValue, date);
                       })
                   : Padding(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 4),
+                          horizontal: 16, vertical: 2),
                       child: GridView.builder(
                           gridDelegate:
                               SliverGridDelegateWithFixedCrossAxisCount(
@@ -216,7 +440,16 @@ class _HomePageState extends State<HomePage> {
                           itemCount: notesMap.length,
                           itemBuilder: (context, index) {
                             int reverseIndex = notesMap.length - index - 1;
-                            return NgridView(reverseIndex);
+                            notesMap[reverseIndex]["title"] == ""
+                                ? noTitle = true
+                                : noTitle = false;
+                            notesMap[reverseIndex]["content"] == ""
+                                ? noContent = true
+                                : noContent = false;
+                            int dateValue =
+                            calculateDifference(notesMap[reverseIndex]["time"]);
+                            String date = parseDate(notesMap[reverseIndex]["time"]);
+                            return nGridView(reverseIndex, dateValue, date);
                           }),
                     )
               : Padding(
@@ -234,6 +467,20 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
     );
+  }
+
+  int calculateDifference(String stringDate) {
+    var date = DateTime.parse(stringDate);
+    DateTime now = DateTime.now();
+    return DateTime(date.year, date.month, date.day)
+        .difference(DateTime(now.year, now.month, now.day))
+        .inDays;
+  }
+
+  String parseDate(String stringDate) {
+    var date = DateTime.parse(stringDate);
+    String parsedDate = DateFormat.MMMMd().format(date);
+    return parsedDate;
   }
 
   Future<void> showDeleteDialog({required int index}) async {

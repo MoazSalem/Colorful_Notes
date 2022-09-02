@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'Screens/HomeScreen.dart';
 import 'package:adaptive_theme/adaptive_theme.dart';
 
@@ -25,12 +26,11 @@ class MyApp extends StatelessWidget {
       ),
       initial: AdaptiveThemeMode.system,
       builder: (theme, darkTheme) => MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Adaptive Theme Demo',
-        theme: theme,
-        darkTheme: darkTheme,
-        home: Home()
-      ),
+          debugShowCheckedModeBanner: false,
+          title: 'Adaptive Theme Demo',
+          theme: theme,
+          darkTheme: darkTheme,
+          home: Home()),
     );
   }
 }

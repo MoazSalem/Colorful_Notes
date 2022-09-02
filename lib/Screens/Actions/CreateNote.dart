@@ -89,7 +89,7 @@ class _CreatNoteState extends State<createNote> {
           padding: const EdgeInsets.symmetric(horizontal: 60),
           child: TextButton(
             onPressed: () async {
-              time = DateFormat.MMMd().add_jm().format(DateTime.now());
+              time = DateTime.now().toString();
               title = titleC.text;
               content = contentC.text;
               titleC.text != "" || contentC.text != ""
