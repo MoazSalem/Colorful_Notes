@@ -3,8 +3,9 @@ import 'package:intl/intl.dart';
 import 'package:notes/Screens/Actions/EditNote.dart';
 import 'package:notes/Screens/Actions/CreateNote.dart';
 import 'package:notes/Screens/HomeScreen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-bool isGrid = false;
+int viewIndex = 0;
 bool noTitle = false;
 bool noContent = false;
 
@@ -16,6 +17,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
   Widget leading() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
@@ -36,7 +38,8 @@ class _HomePageState extends State<HomePage> {
         IconButton(
           onPressed: () {
             setState(() {
-              isGrid = !isGrid;
+              viewIndex == 3 ? viewIndex = 0 : viewIndex++ ;
+              print(viewIndex);
             });
           },
           icon: Icon(
@@ -112,7 +115,6 @@ class _HomePageState extends State<HomePage> {
                         ),
                         showDate
                             ? Expanded(
-                                flex: 1,
                                 child: Stack(
                                   alignment: Alignment.centerLeft,
                                   children: [
@@ -168,16 +170,16 @@ class _HomePageState extends State<HomePage> {
     return Center(
       child: Padding(
         padding:
-        EdgeInsets.symmetric(horizontal: 8, vertical: showShadow ? 4 : 2),
+            EdgeInsets.symmetric(horizontal: 8, vertical: showShadow ? 4 : 2),
         child: Stack(alignment: Alignment.topRight, children: [
           GestureDetector(
             onTap: () => Navigator.of(context)
                 .push(MaterialPageRoute(
-                builder: (context) => EditNote(
-                  Title: notesMap[reverseIndex]["title"],
-                  Content: notesMap[reverseIndex]["content"],
-                  index: notesMap[reverseIndex]['cindex'],
-                )))
+                    builder: (context) => EditNote(
+                          Title: notesMap[reverseIndex]["title"],
+                          Content: notesMap[reverseIndex]["content"],
+                          index: notesMap[reverseIndex]['cindex'],
+                        )))
                 .then((value) => setState(() {})),
             child: Container(
               height: 110,
@@ -193,7 +195,7 @@ class _HomePageState extends State<HomePage> {
                   padding: EdgeInsets.only(
                       left: 15.0,
                       right: noTitle ? 30.0 : 20.0,
-                      top: noTitle ? 14.0: 12.0,
+                      top: noTitle ? 14.0 : 12.0,
                       bottom: showDate ? 10 : 10),
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -201,29 +203,35 @@ class _HomePageState extends State<HomePage> {
                         noTitle
                             ? Container()
                             : Padding(
-                              padding: const EdgeInsets.only(bottom: 6,right: 40),
-                              child: Expanded(
-                          flex: 1,
-                          child: Text(notesMap[reverseIndex]["title"],
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w800,
-                                    fontSize: 24,
-                                    color: Colors.white)),
-                        ),
-                            ),
+                                padding:
+                                    const EdgeInsets.only(bottom: 6, right: 40),
+                                child: Expanded(
+                                  child: Text(notesMap[reverseIndex]["title"],
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w800,
+                                          fontSize: 24,
+                                          color: Colors.white)),
+                                ),
+                              ),
                         Expanded(
                           flex: noTitle ? 2 : 1,
                           child: Text(
                               noContent
                                   ? "Empty"
                                   : notesMap[reverseIndex]["content"],
-                              maxLines: noTitle ? showDate ? 2 : 3 : showDate ? 1 : 2,
+                              maxLines: noTitle
+                                  ? showDate
+                                      ? 2
+                                      : 3
+                                  : showDate
+                                      ? 1
+                                      : 2,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
                                   color:
-                                  noContent ? Colors.white38 : Colors.white,
+                                      noContent ? Colors.white38 : Colors.white,
                                   fontSize: noTitle ? 21 : 16)),
                         ),
                         SizedBox(
@@ -231,34 +239,33 @@ class _HomePageState extends State<HomePage> {
                         ),
                         showDate
                             ? Expanded(
-                          flex: 1,
-                          child: Stack(
-                            alignment: Alignment.centerLeft,
-                            children: [
-                              Text(
-                                dateValue == 0
-                                    ? "Today"
-                                    : dateValue == -1
-                                    ? "Yesterday"
-                                    : date,
-                                style: TextStyle(color: Colors.white),
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  Text(
-                                    notesMap[reverseIndex]["edited"] ==
-                                        "yes"
-                                        ? "Edited"
-                                        : "",
-                                    style:
-                                    TextStyle(color: Colors.white38),
-                                  )
-                                ],
+                                child: Stack(
+                                  alignment: Alignment.centerLeft,
+                                  children: [
+                                    Text(
+                                      dateValue == 0
+                                          ? "Today"
+                                          : dateValue == -1
+                                              ? "Yesterday"
+                                              : date,
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        Text(
+                                          notesMap[reverseIndex]["edited"] ==
+                                                  "yes"
+                                              ? "Edited"
+                                              : "",
+                                          style:
+                                              TextStyle(color: Colors.white38),
+                                        )
+                                      ],
+                                    )
+                                  ],
+                                ),
                               )
-                            ],
-                          ),
-                        )
                             : Container(),
                       ]),
                 ),
@@ -287,16 +294,16 @@ class _HomePageState extends State<HomePage> {
     return Center(
       child: Padding(
         padding:
-        EdgeInsets.symmetric(horizontal: 0, vertical: showShadow ? 2 : 0),
+            EdgeInsets.symmetric(horizontal: 0, vertical: showShadow ? 2 : 0),
         child: Stack(alignment: Alignment.topRight, children: [
           GestureDetector(
             onTap: () => Navigator.of(context)
                 .push(MaterialPageRoute(
-                builder: (context) => EditNote(
-                  Title: notesMap[reverseIndex]["title"],
-                  Content: notesMap[reverseIndex]["content"],
-                  index: notesMap[reverseIndex]['cindex'],
-                )))
+                    builder: (context) => EditNote(
+                          Title: notesMap[reverseIndex]["title"],
+                          Content: notesMap[reverseIndex]["content"],
+                          index: notesMap[reverseIndex]['cindex'],
+                        )))
                 .then((value) => setState(() {})),
             child: Container(
               height: 180,
@@ -312,7 +319,7 @@ class _HomePageState extends State<HomePage> {
                   padding: EdgeInsets.only(
                       left: 15.0,
                       right: noTitle ? 38.0 : 20.0,
-                      top: noTitle ? 14.0: 14.0,
+                      top: noTitle ? 14.0 : 14.0,
                       bottom: showDate ? 10 : 10),
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -320,29 +327,35 @@ class _HomePageState extends State<HomePage> {
                         noTitle
                             ? Container()
                             : Padding(
-                          padding: const EdgeInsets.only(bottom: 6,right: 40),
-                          child: Expanded(
-                            flex: 1,
-                            child: Text(notesMap[reverseIndex]["title"],
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w800,
-                                    fontSize: 20,
-                                    color: Colors.white)),
-                          ),
-                        ),
+                                padding:
+                                    const EdgeInsets.only(bottom: 6, right: 40),
+                                child: Expanded(
+                                  child: Text(notesMap[reverseIndex]["title"],
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w800,
+                                          fontSize: 20,
+                                          color: Colors.white)),
+                                ),
+                              ),
                         Expanded(
                           flex: noTitle ? 3 : 2,
                           child: Text(
                               noContent
                                   ? "Empty"
                                   : notesMap[reverseIndex]["content"],
-                              maxLines: noTitle ? showDate ? 3 : 4 : showDate ? 3 : 3,
+                              maxLines: noTitle
+                                  ? showDate
+                                      ? 3
+                                      : 4
+                                  : showDate
+                                      ? 3
+                                      : 3,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
                                   color:
-                                  noContent ? Colors.white38 : Colors.white,
+                                      noContent ? Colors.white38 : Colors.white,
                                   fontSize: noTitle ? 21 : 16)),
                         ),
                         SizedBox(
@@ -350,34 +363,33 @@ class _HomePageState extends State<HomePage> {
                         ),
                         showDate
                             ? Expanded(
-                          flex: 1,
-                          child: Stack(
-                            alignment: Alignment.centerLeft,
-                            children: [
-                              Text(
-                                dateValue == 0
-                                    ? "Today"
-                                    : dateValue == -1
-                                    ? "Yesterday"
-                                    : date,
-                                style: TextStyle(color: Colors.white),
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  Text(
-                                    notesMap[reverseIndex]["edited"] ==
-                                        "yes"
-                                        ? "Edited"
-                                        : "",
-                                    style:
-                                    TextStyle(color: Colors.white38),
-                                  )
-                                ],
+                                child: Stack(
+                                  alignment: Alignment.centerLeft,
+                                  children: [
+                                    Text(
+                                      dateValue == 0
+                                          ? "Today"
+                                          : dateValue == -1
+                                              ? "Yesterday"
+                                              : date,
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        Text(
+                                          notesMap[reverseIndex]["edited"] ==
+                                                  "yes"
+                                              ? "Edited"
+                                              : "",
+                                          style:
+                                              TextStyle(color: Colors.white38),
+                                        )
+                                      ],
+                                    )
+                                  ],
+                                ),
                               )
-                            ],
-                          ),
-                        )
                             : Container(),
                       ]),
                 ),
@@ -409,7 +421,7 @@ class _HomePageState extends State<HomePage> {
         children: [
           customAppBar("Notes", leading()),
           notesMap.length != 0
-              ? !isGrid
+              ? viewIndex != 2
                   ? ListView.builder(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
@@ -425,7 +437,10 @@ class _HomePageState extends State<HomePage> {
                         int dateValue =
                             calculateDifference(notesMap[reverseIndex]["time"]);
                         String date = parseDate(notesMap[reverseIndex]["time"]);
-                        return nSmallListView(reverseIndex, dateValue, date);
+                        Widget chosenView = viewIndex == 0
+                            ? nListView(reverseIndex, dateValue, date)
+                            : nSmallListView(reverseIndex, dateValue, date);
+                        return chosenView;
                       })
                   : Padding(
                       padding: const EdgeInsets.symmetric(
@@ -446,9 +461,10 @@ class _HomePageState extends State<HomePage> {
                             notesMap[reverseIndex]["content"] == ""
                                 ? noContent = true
                                 : noContent = false;
-                            int dateValue =
-                            calculateDifference(notesMap[reverseIndex]["time"]);
-                            String date = parseDate(notesMap[reverseIndex]["time"]);
+                            int dateValue = calculateDifference(
+                                notesMap[reverseIndex]["time"]);
+                            String date =
+                                parseDate(notesMap[reverseIndex]["time"]);
                             return nGridView(reverseIndex, dateValue, date);
                           }),
                     )
