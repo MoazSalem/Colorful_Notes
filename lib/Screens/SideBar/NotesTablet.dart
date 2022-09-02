@@ -7,7 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 bool noTitle = false;
 bool noContent = false;
-Map<String, int> viewModes = {"Long View" : 1,"Grid View" : 2};
+Map<String, int> viewModes = {"Long View": 1, "Grid View": 2};
 
 class HomePageT extends StatefulWidget {
   HomePageT({Key? key}) : super(key: key);
@@ -17,7 +17,6 @@ class HomePageT extends StatefulWidget {
 }
 
 class _HomePageTState extends State<HomePageT> {
-
   Widget leading() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
@@ -36,19 +35,21 @@ class _HomePageTState extends State<HomePageT> {
           ),
         ),
         PopupMenuButton<String>(
-
-          onSelected: (value) async{
+          onSelected: (value) async {
             final prefs = await SharedPreferences.getInstance();
             await prefs.setInt("viewIndex", viewModes[value]!);
             setState(() {
               viewIndex = viewModes[value]!;
             });
-            },
+          },
           itemBuilder: (BuildContext context) {
-            return {"Long View","Grid View"}.map((String choice) {
+            return {"Long View", "Grid View"}.map((String choice) {
               return PopupMenuItem<String>(
                 value: choice,
-                child: Text(choice,style: TextStyle(fontWeight: FontWeight.w500 ),),
+                child: Text(
+                  choice,
+                  style: TextStyle(fontWeight: FontWeight.w500),
+                ),
               );
             }).toList();
           },
@@ -94,8 +95,8 @@ class _HomePageTState extends State<HomePageT> {
                         noTitle
                             ? Container()
                             : Padding(
-                                padding:
-                                    const EdgeInsets.only(bottom: 14, right: 40),
+                                padding: const EdgeInsets.only(
+                                    bottom: 14, right: 40),
                                 child: Expanded(
                                   child: Text(notesMap[reverseIndex]["title"],
                                       maxLines: 1,
@@ -208,18 +209,18 @@ class _HomePageTState extends State<HomePageT> {
                 ),
                 child: Padding(
                   padding: EdgeInsets.only(
-                      left: 15.0,
-                      right: noTitle ? 56.0 : 20.0,
-                      top: noTitle ? 17.0 : 18.0,
-                      bottom: showDate ? 10 : 10),
+                      left: 40.0,
+                      right: noTitle ? 56.0 : 36.0,
+                      top: 40.0,
+                      bottom: 20),
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         noTitle
                             ? Container()
                             : Padding(
-                                padding:
-                                    const EdgeInsets.only(bottom: 6, right: 46),
+                                padding: const EdgeInsets.only(
+                                    bottom: 16, right: 40),
                                 child: Expanded(
                                   child: Text(notesMap[reverseIndex]["title"],
                                       maxLines: 1,
@@ -242,12 +243,12 @@ class _HomePageTState extends State<HomePageT> {
                                       : 8
                                   : showDate
                                       ? 7
-                                      : 9,
+                                      : 7,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
                                   color:
                                       noContent ? Colors.white38 : Colors.white,
-                                  fontSize: noTitle ? 23 : 18)),
+                                  fontSize: noTitle ? 20 : 19)),
                         ),
                         SizedBox(
                           height: 10,
@@ -312,7 +313,7 @@ class _HomePageTState extends State<HomePageT> {
         children: [
           customAppBar("Notes", leading()),
           notesMap.length != 0
-              ? viewIndex != 2
+              ? viewIndex == 1
                   ? ListView.builder(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
