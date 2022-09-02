@@ -93,12 +93,12 @@ class _HomeState extends State<Home> {
                           ? Icon(
                               Icons.text_snippet_outlined,
                               color: Colors.amber,
-                              size: isTablet ? 26 : 36,
+                              size: isTablet ? 36 : 26,
                             )
                           : Icon(
                               Icons.text_snippet,
                               color: Colors.amber,
-                              size: isTablet ? 30 : 40,
+                              size: isTablet ?  40 : 30,
                             )),
                   const SizedBox(
                     height: 30,
@@ -108,15 +108,15 @@ class _HomeState extends State<Home> {
                         onIndexChanged(1);
                       },
                       icon: currentIndex != 1
-                          ? const Icon(
+                          ? Icon(
                               Icons.keyboard_voice_outlined,
                               color: Color(0xfff77b85),
-                              size: 30,
+                              size: isTablet ?  40 : 30,
                             )
-                          : const Icon(
+                          : Icon(
                               Icons.keyboard_voice,
                               color: Color(0xfff77b85),
-                              size: 30,
+                              size: isTablet ?  40 : 30,
                             )),
                   const SizedBox(
                     height: 30,
@@ -126,15 +126,15 @@ class _HomeState extends State<Home> {
                         onIndexChanged(2);
                       },
                       icon: currentIndex != 2
-                          ? const Icon(
+                          ? Icon(
                               Icons.settings_outlined,
                               color: Color(0xffff8b34),
-                              size: 30,
+                              size: isTablet ?  40 : 30,
                             )
-                          : const Icon(
+                          : Icon(
                               Icons.settings,
                               color: Color(0xffff8b34),
-                              size: 30,
+                              size: isTablet ?  40 : 30,
                             )),
                 ],
               )),
@@ -144,15 +144,15 @@ class _HomeState extends State<Home> {
                   onIndexChanged(3);
                 },
                 icon: currentIndex != 3
-                    ? const Icon(
+                    ? Icon(
                         Icons.info_outline,
                         color: Color(0xff66c6c2),
-                        size: 30,
+                        size: isTablet ?  40 : 30,
                       )
-                    : const Icon(
+                    : Icon(
                         Icons.info,
                         color: Color(0xff66c6c2),
-                        size: 30,
+                        size: isTablet ?  40 : 30,
                       )),
           )
         ],
