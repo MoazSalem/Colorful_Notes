@@ -238,15 +238,13 @@ class _HomePageState extends State<HomePage> {
                             : Padding(
                                 padding:
                                     const EdgeInsets.only(bottom: 6, right: 40),
-                                child: Expanded(
-                                  child: Text(Notes[reverseIndex]["title"],
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w800,
-                                          fontSize: 24,
-                                          color: Colors.white)),
-                                ),
+                                child: Text(Notes[reverseIndex]["title"],
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w800,
+                                        fontSize: 24,
+                                        color: Colors.white)),
                               ),
                         Expanded(
                           flex: noTitle ? 2 : 1,
@@ -363,15 +361,13 @@ class _HomePageState extends State<HomePage> {
                             : Padding(
                                 padding:
                                     const EdgeInsets.only(bottom: 6, right: 40),
-                                child: Expanded(
-                                  child: Text(Notes[reverseIndex]["title"],
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w800,
-                                          fontSize: 18,
-                                          color: Colors.white)),
-                                ),
+                                child: Text(Notes[reverseIndex]["title"],
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w800,
+                                        fontSize: 18,
+                                        color: Colors.white)),
                               ),
                         Expanded(
                           flex: noTitle ? 3 : 2,
