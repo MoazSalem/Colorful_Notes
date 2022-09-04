@@ -23,7 +23,7 @@ class _SettingsPageState extends State<SettingsPage> {
     return Scaffold(
       body: ListView(
         children: [
-          customAppBar("Settings"),
+          customAppBar("Settings",45),
           Padding(
             padding: const EdgeInsets.only(left: 35, bottom: 10, top: 10),
             child: Text(

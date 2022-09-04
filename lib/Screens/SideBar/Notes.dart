@@ -21,57 +21,61 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   Widget leading() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        IconButton(
-          onPressed: () {
-            Navigator.of(context)
-                .push(
-                  MaterialPageRoute(builder: (context) => createNote()),
-                )
-                .then((_) => setState(() {}));
-          },
-          icon: Icon(
-            Icons.add,
-            size: 30,
+    return Padding(
+      padding: const EdgeInsets.only(top: 5),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          IconButton(
+            onPressed: () {
+              Navigator.of(context)
+                  .push(
+                    MaterialPageRoute(builder: (context) => createNote()),
+                  )
+                  .then((_) => setState(() {}));
+            },
+            icon: Icon(
+              Icons.add,
+              size: 30,
+            ),
           ),
-        ),
-        IconButton(
-          onPressed: () {
-            setState(() {
-              SearchOn = !SearchOn;
-              searchNotes(searchC.text);
-            });
-          },
-          icon: Icon(
-            Icons.search,
-            size: 30,
-            color: SearchOn ? Color(0xffff8b34) : Colors.black,
+          IconButton(
+            onPressed: () {
+              setState(() {
+                SearchOn = !SearchOn;
+                searchNotes(searchC.text);
+              });
+            },
+            icon: Icon(
+              Icons.search,
+              size: 30,
+              color: SearchOn ? Color(0xffff8b34) : Theme.of(context).textTheme.bodyMedium!.color,
+            ),
           ),
-        ),
-        PopupMenuButton<String>(
-          onSelected: (value) async {
-            final prefs = await SharedPreferences.getInstance();
-            await prefs.setInt("viewIndex", viewModes[value]!);
-            setState(() {
-              viewIndex = viewModes[value]!;
-            });
-          },
-          itemBuilder: (BuildContext context) {
-            return {"Large View", "Long View", "Grid View"}
-                .map((String choice) {
-              return PopupMenuItem<String>(
-                value: choice,
-                child: Text(
-                  choice,
-                  style: TextStyle(fontWeight: FontWeight.w500),
-                ),
-              );
-            }).toList();
-          },
-        ),
-      ],
+          PopupMenuButton<String>(
+            onSelected: (value) async {
+              final prefs = await SharedPreferences.getInstance();
+              await prefs.setInt("viewIndex", viewModes[value]!);
+              setState(() {
+                viewIndex = viewModes[value]!;
+              });
+            },
+            itemBuilder: (BuildContext context) {
+              return {"Large View", "Long View", "Grid View"}
+                  .map((String choice) {
+                return PopupMenuItem<String>(
+                  value: choice,
+                  child: Text(
+                    choice,
+                    style: TextStyle(fontWeight: FontWeight.w500),
+                  ),
+                );
+              }).toList();
+            },
+          ),
+        ],
+      ),
     );
   }
 
@@ -125,7 +129,7 @@ class _HomePageState extends State<HomePage> {
                                         color: Colors.white)),
                               ),
                         Expanded(
-                          flex: 6,
+                          flex: 7,
                           child: Text(
                               noContent
                                   ? "Empty"
@@ -461,28 +465,31 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       body: ListView(
         children: [
-          customAppBar("Notes", leading()),
+          customAppBar("Notes",42,leading()),
           SearchOn
-              ? Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
-                  child: TextFormField(
-                      controller: searchC,
-                      onChanged: searchNotes,
-                      maxLines: 1,
-                      decoration: InputDecoration(
-                        contentPadding:
-                            EdgeInsets.symmetric(vertical: 5, horizontal: 20),
-                        enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.grey.shade300),
-                            borderRadius: BorderRadius.circular(0)),
-                        hintText: "Search",
-                        filled: true,
-                        fillColor: Colors.white,
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(0)),
-                      )),
-                )
+              ? Center(
+                child: Padding(
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 5, horizontal: 12),
+                    child: TextFormField(
+                      autofocus:true ,
+                        controller: searchC,
+                        onChanged: searchNotes,
+                        maxLines: 1,
+                        decoration: InputDecoration(
+                          contentPadding:
+                              EdgeInsets.symmetric(vertical: 5, horizontal: 20),
+                          enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.grey.shade300),
+                              borderRadius: BorderRadius.circular(0)),
+                          hintText: "Search",
+                          filled: true,
+                          fillColor: Theme.of(context).cardColor,
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(0)),
+                        )),
+                  ),
+              )
               : Container(),
           notesMap.length != 0
               ? viewIndex != 2

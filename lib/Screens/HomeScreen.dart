@@ -226,17 +226,17 @@ class _HomeState extends State<Home> {
 
 Widget divider() {
   return Divider(
-    height: 10,
+    height: 20,
     color:
         Theme.of(scaffoldKey.currentContext!).highlightColor.withOpacity(0.3),
   );
 }
 
-Widget customAppBar(String title, [Widget? leading]) {
+Widget customAppBar(String title,double top,[Widget? leading]) {
   return Column(
     children: [
       Padding(
-        padding: const EdgeInsets.only(left: 30, bottom: 10, top: 42),
+        padding: EdgeInsets.only(left: 20, bottom: 10, top: top),
         child: Stack(
           alignment: Alignment.centerLeft,
           children: [
@@ -245,7 +245,7 @@ Widget customAppBar(String title, [Widget? leading]) {
               style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
             ),
             Padding(
-              padding: const EdgeInsets.only(right: 20),
+              padding: const EdgeInsets.only(right: 5),
               child: leading == null ? Container() : leading,
             )
           ],

@@ -12,7 +12,7 @@ class InfoPage extends StatelessWidget {
     return Scaffold(
       body: ListView(
         children: [
-          customAppBar("Info"),
+          customAppBar("Info",45),
           Padding(
               padding:
                   const EdgeInsets.symmetric(horizontal: 35.0, vertical: 20),

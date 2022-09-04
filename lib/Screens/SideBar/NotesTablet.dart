@@ -311,7 +311,7 @@ class _HomePageTState extends State<HomePageT> {
     return Scaffold(
       body: ListView(
         children: [
-          customAppBar("Notes", leading()),
+          customAppBar("Notes", 42 ,leading()),
           notesMap.length != 0
               ? viewIndex == 1
                   ? ListView.builder(
