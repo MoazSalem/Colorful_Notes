@@ -55,19 +55,21 @@ class _HomeState extends State<Home> {
       },
     ),
     Builder(
-        builder: (context) {
-          return MediaQuery(
-              data: MediaQuery.of(context)
-                  .copyWith(textScaleFactor: isTablet ? 1.5 : 1.0),
-              child: SettingsPage());
-        },),
+      builder: (context) {
+        return MediaQuery(
+            data: MediaQuery.of(context)
+                .copyWith(textScaleFactor: isTablet ? 1.5 : 1.0),
+            child: SettingsPage());
+      },
+    ),
     Builder(
       builder: (context) {
         return MediaQuery(
             data: MediaQuery.of(context)
                 .copyWith(textScaleFactor: isTablet ? 1.5 : 1.0),
             child: InfoPage());
-      },),
+      },
+    ),
   ];
 
   Widget SideBar() {
@@ -98,7 +100,7 @@ class _HomeState extends State<Home> {
                           : Icon(
                               Icons.text_snippet,
                               color: Colors.amber,
-                              size: isTablet ?  40 : 30,
+                              size: isTablet ? 40 : 30,
                             )),
                   const SizedBox(
                     height: 30,
@@ -111,12 +113,12 @@ class _HomeState extends State<Home> {
                           ? Icon(
                               Icons.keyboard_voice_outlined,
                               color: Color(0xfff77b85),
-                              size: isTablet ?  40 : 30,
+                              size: isTablet ? 40 : 30,
                             )
                           : Icon(
                               Icons.keyboard_voice,
                               color: Color(0xfff77b85),
-                              size: isTablet ?  40 : 30,
+                              size: isTablet ? 40 : 30,
                             )),
                   const SizedBox(
                     height: 30,
@@ -129,12 +131,12 @@ class _HomeState extends State<Home> {
                           ? Icon(
                               Icons.settings_outlined,
                               color: Color(0xffff8b34),
-                              size: isTablet ?  40 : 30,
+                              size: isTablet ? 40 : 30,
                             )
                           : Icon(
                               Icons.settings,
                               color: Color(0xffff8b34),
-                              size: isTablet ?  40 : 30,
+                              size: isTablet ? 40 : 30,
                             )),
                 ],
               )),
@@ -147,12 +149,12 @@ class _HomeState extends State<Home> {
                     ? Icon(
                         Icons.info_outline,
                         color: Color(0xff66c6c2),
-                        size: isTablet ?  40 : 30,
+                        size: isTablet ? 40 : 30,
                       )
                     : Icon(
                         Icons.info,
                         color: Color(0xff66c6c2),
-                        size: isTablet ?  40 : 30,
+                        size: isTablet ? 40 : 30,
                       )),
           )
         ],
@@ -224,7 +226,7 @@ class _HomeState extends State<Home> {
 
 Widget divider() {
   return Divider(
-    height: 30,
+    height: 10,
     color:
         Theme.of(scaffoldKey.currentContext!).highlightColor.withOpacity(0.3),
   );
@@ -259,7 +261,7 @@ Future<void> startDatabase() async {
   await openDatabase('notes.db', version: 1, onCreate: (db, version) async {
     print("db created");
     await db.execute(
-        'CREATE TABLE Notes (id INTEGER PRIMARY KEY, title TEXT, content TEXT, time Text, cindex INTEGER,edited Text)');
+        'CREATE TABLE Notes (id INTEGER PRIMARY KEY, title TEXT, content TEXT, time Text, cindex INTEGER, tindex INTEGER,edited Text)');
   }, onOpen: (db) async {
     print("db opened");
   }).then((value) => database = value);
@@ -284,9 +286,10 @@ Future<void> insertToDatabase(
     required int index,
     required String time}) async {
   await database.transaction((txn) async {
+    int tIndex = 0;
     txn
         .rawInsert(
-            'INSERT INTO Notes(title, content, cindex, time, edited) VALUES("$title", "$content", "$index","$time","no")')
+            'INSERT INTO Notes(title, content, cindex, tindex, time, edited) VALUES("$title", "$content", "$index", "$tIndex","$time","no")')
         .then((value) {
       print('inserted: $value');
     });
@@ -305,11 +308,11 @@ Future<void> editDatabaseItem(
     required String time,
     required int index,
     required String title2}) async {
+  int tIndex = 0;
   int count = await database.rawUpdate(
-      'UPDATE Notes SET title = ?, content = ?, time = ?, cindex = ?, edited = ? WHERE title = ?',
-      ['$title2', '$content', '$time', '$index', 'yes', '$title']);
+      'UPDATE Notes SET title = ?, content = ?, time = ?, cindex = ?, tindex = ?, edited = ? WHERE title = ?',
+      ['$title2', '$content', '$time', '$index', '$tIndex', 'yes', '$title']);
   print('updated: $count');
-  await refreshDatabase();
   await refreshDatabase();
 }
 

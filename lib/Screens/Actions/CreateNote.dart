@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:notes/Screens/HomeScreen.dart';
 
 final TextEditingController titleC = TextEditingController();
@@ -32,6 +31,7 @@ class _CreatNoteState extends State<createNote> {
         Padding(
           padding: const EdgeInsets.only(left: 40),
           child: TextFormField(
+              cursorColor: Colors.white,
               autofocus: true,
               textInputAction: TextInputAction.next,
               controller: titleC,
@@ -48,6 +48,7 @@ class _CreatNoteState extends State<createNote> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 40),
           child: TextFormField(
+              cursorColor: Colors.white,
               textInputAction: TextInputAction.done,
               controller: contentC,
               maxLines: 16,

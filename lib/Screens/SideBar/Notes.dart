@@ -7,7 +7,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 bool noTitle = false;
 bool noContent = false;
-Map<String, int> viewModes = {"Large View" : 0,"Long View" : 1,"Grid View" : 2};
+bool SearchOn = false;
+Map<String, int> viewModes = {"Large View": 0, "Long View": 1, "Grid View": 2};
+List<Map> searchedNotes = [];
+final TextEditingController searchC = TextEditingController();
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
@@ -17,7 +20,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
   Widget leading() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
@@ -35,20 +37,36 @@ class _HomePageState extends State<HomePage> {
             size: 30,
           ),
         ),
+        IconButton(
+          onPressed: () {
+            setState(() {
+              SearchOn = !SearchOn;
+              searchNotes(searchC.text);
+            });
+          },
+          icon: Icon(
+            Icons.search,
+            size: 30,
+            color: SearchOn ? Color(0xffff8b34) : Colors.black,
+          ),
+        ),
         PopupMenuButton<String>(
-
-          onSelected: (value) async{
+          onSelected: (value) async {
             final prefs = await SharedPreferences.getInstance();
             await prefs.setInt("viewIndex", viewModes[value]!);
             setState(() {
               viewIndex = viewModes[value]!;
             });
-            },
+          },
           itemBuilder: (BuildContext context) {
-            return {"Large View","Long View","Grid View"}.map((String choice) {
+            return {"Large View", "Long View", "Grid View"}
+                .map((String choice) {
               return PopupMenuItem<String>(
                 value: choice,
-                child: Text(choice,style: TextStyle(fontWeight: FontWeight.w500 ),),
+                child: Text(
+                  choice,
+                  style: TextStyle(fontWeight: FontWeight.w500),
+                ),
               );
             }).toList();
           },
@@ -57,7 +75,8 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget nListView(int reverseIndex, int dateValue, String date) {
+  Widget nListView(
+      List<Map> Notes, int reverseIndex, int dateValue, String date) {
     return Center(
       child: Padding(
         padding:
@@ -67,18 +86,20 @@ class _HomePageState extends State<HomePage> {
             onTap: () => Navigator.of(context)
                 .push(MaterialPageRoute(
                     builder: (context) => EditNote(
-                          Title: notesMap[reverseIndex]["title"],
-                          Content: notesMap[reverseIndex]["content"],
-                          index: notesMap[reverseIndex]['cindex'],
+                          Title: Notes[reverseIndex]["title"],
+                          Content: Notes[reverseIndex]["content"],
+                          index: Notes[reverseIndex]['cindex'],
                         )))
-                .then((value) => setState(() {})),
+                .then((value) => setState(() {
+                      searchNotes(searchC.text);
+                    })),
             child: Container(
               height: 300,
               width: 300,
               child: Card(
-                color: colors[notesMap[reverseIndex]['cindex']],
+                color: colors[Notes[reverseIndex]['cindex']],
                 elevation: showShadow ? 4 : 0,
-                shadowColor: colors[notesMap[reverseIndex]['cindex']],
+                shadowColor: colors[Notes[reverseIndex]['cindex']],
                 shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(0)),
                 ),
@@ -95,7 +116,7 @@ class _HomePageState extends State<HomePage> {
                             ? Container()
                             : Expanded(
                                 flex: 2,
-                                child: Text(notesMap[reverseIndex]["title"],
+                                child: Text(Notes[reverseIndex]["title"],
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
@@ -108,7 +129,7 @@ class _HomePageState extends State<HomePage> {
                           child: Text(
                               noContent
                                   ? "Empty"
-                                  : notesMap[reverseIndex]["content"],
+                                  : Notes[reverseIndex]["content"],
                               maxLines: showDate ? 8 : 9,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
@@ -136,8 +157,7 @@ class _HomePageState extends State<HomePage> {
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
                                         Text(
-                                          notesMap[reverseIndex]["edited"] ==
-                                                  "yes"
+                                          Notes[reverseIndex]["edited"] == "yes"
                                               ? "Edited"
                                               : "",
                                           style:
@@ -159,7 +179,7 @@ class _HomePageState extends State<HomePage> {
             child: IconButton(
                 focusColor: Colors.blue,
                 onPressed: () async {
-                  showDeleteDialog(index: reverseIndex);
+                  showDeleteDialog(index: reverseIndex, Notes: Notes);
                 },
                 icon: Icon(
                   Icons.close,
@@ -172,7 +192,8 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget nSmallListView(int reverseIndex, int dateValue, String date) {
+  Widget nSmallListView(
+      List<Map> Notes, int reverseIndex, int dateValue, String date) {
     return Center(
       child: Padding(
         padding:
@@ -186,14 +207,16 @@ class _HomePageState extends State<HomePage> {
                           Content: notesMap[reverseIndex]["content"],
                           index: notesMap[reverseIndex]['cindex'],
                         )))
-                .then((value) => setState(() {})),
+                .then((value) => setState(() {
+                      searchNotes(searchC.text);
+                    })),
             child: Container(
               height: 110,
               width: 300,
               child: Card(
-                color: colors[notesMap[reverseIndex]['cindex']],
+                color: colors[Notes[reverseIndex]['cindex']],
                 elevation: showShadow ? 4 : 0,
-                shadowColor: colors[notesMap[reverseIndex]['cindex']],
+                shadowColor: colors[Notes[reverseIndex]['cindex']],
                 shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(0)),
                 ),
@@ -212,7 +235,7 @@ class _HomePageState extends State<HomePage> {
                                 padding:
                                     const EdgeInsets.only(bottom: 6, right: 40),
                                 child: Expanded(
-                                  child: Text(notesMap[reverseIndex]["title"],
+                                  child: Text(Notes[reverseIndex]["title"],
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
@@ -226,7 +249,7 @@ class _HomePageState extends State<HomePage> {
                           child: Text(
                               noContent
                                   ? "Empty"
-                                  : notesMap[reverseIndex]["content"],
+                                  : Notes[reverseIndex]["content"],
                               maxLines: noTitle
                                   ? showDate
                                       ? 2
@@ -260,8 +283,7 @@ class _HomePageState extends State<HomePage> {
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
                                         Text(
-                                          notesMap[reverseIndex]["edited"] ==
-                                                  "yes"
+                                          Notes[reverseIndex]["edited"] == "yes"
                                               ? "Edited"
                                               : "",
                                           style:
@@ -283,7 +305,7 @@ class _HomePageState extends State<HomePage> {
             child: IconButton(
                 focusColor: Colors.blue,
                 onPressed: () async {
-                  showDeleteDialog(index: reverseIndex);
+                  showDeleteDialog(index: reverseIndex, Notes: Notes);
                 },
                 icon: Icon(
                   Icons.close,
@@ -296,7 +318,8 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget nGridView(int reverseIndex, int dateValue, String date) {
+  Widget nGridView(
+      List<Map> Notes, int reverseIndex, int dateValue, String date) {
     return Center(
       child: Padding(
         padding:
@@ -310,14 +333,16 @@ class _HomePageState extends State<HomePage> {
                           Content: notesMap[reverseIndex]["content"],
                           index: notesMap[reverseIndex]['cindex'],
                         )))
-                .then((value) => setState(() {})),
+                .then((value) => setState(() {
+                      searchNotes(searchC.text);
+                    })),
             child: Container(
               height: 180,
               width: 180,
               child: Card(
-                color: colors[notesMap[reverseIndex]['cindex']],
+                color: colors[Notes[reverseIndex]['cindex']],
                 elevation: showShadow ? 4 : 0,
-                shadowColor: colors[notesMap[reverseIndex]['cindex']],
+                shadowColor: colors[Notes[reverseIndex]['cindex']],
                 shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(0)),
                 ),
@@ -336,7 +361,7 @@ class _HomePageState extends State<HomePage> {
                                 padding:
                                     const EdgeInsets.only(bottom: 6, right: 40),
                                 child: Expanded(
-                                  child: Text(notesMap[reverseIndex]["title"],
+                                  child: Text(Notes[reverseIndex]["title"],
                                       maxLines: 2,
                                       overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
@@ -350,7 +375,7 @@ class _HomePageState extends State<HomePage> {
                           child: Text(
                               noContent
                                   ? "Empty"
-                                  : notesMap[reverseIndex]["content"],
+                                  : Notes[reverseIndex]["content"],
                               maxLines: noTitle
                                   ? showDate
                                       ? 3
@@ -384,8 +409,7 @@ class _HomePageState extends State<HomePage> {
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
                                         Text(
-                                          notesMap[reverseIndex]["edited"] ==
-                                                  "yes"
+                                          Notes[reverseIndex]["edited"] == "yes"
                                               ? "Edited"
                                               : "",
                                           style:
@@ -407,7 +431,7 @@ class _HomePageState extends State<HomePage> {
             child: IconButton(
                 focusColor: Colors.blue,
                 onPressed: () async {
-                  showDeleteDialog(index: reverseIndex);
+                  showDeleteDialog(index: reverseIndex, Notes: Notes);
                 },
                 icon: Icon(
                   Icons.close,
@@ -420,20 +444,54 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  void searchNotes(String query) {
+    final searched = notesMap.where((note) {
+      final title = note['title'].toString().toLowerCase();
+      final content = note['content'].toString().toLowerCase();
+      return title.contains(query) || content.contains(query);
+    }).toList();
+    setState(() {
+      searchedNotes = searched;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    List<Map> Notes = SearchOn ? searchedNotes : notesMap;
     return Scaffold(
       body: ListView(
         children: [
           customAppBar("Notes", leading()),
+          SearchOn
+              ? Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
+                  child: TextFormField(
+                      controller: searchC,
+                      onChanged: searchNotes,
+                      maxLines: 1,
+                      decoration: InputDecoration(
+                        contentPadding:
+                            EdgeInsets.symmetric(vertical: 5, horizontal: 20),
+                        enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.grey.shade300),
+                            borderRadius: BorderRadius.circular(0)),
+                        hintText: "Search",
+                        filled: true,
+                        fillColor: Colors.white,
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(0)),
+                      )),
+                )
+              : Container(),
           notesMap.length != 0
               ? viewIndex != 2
                   ? ListView.builder(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
-                      itemCount: notesMap.length,
+                      itemCount: Notes.length,
                       itemBuilder: (context, index) {
-                        int reverseIndex = notesMap.length - index - 1;
+                        int reverseIndex = Notes.length - index - 1;
                         notesMap[reverseIndex]["title"] == ""
                             ? noTitle = true
                             : noTitle = false;
@@ -444,8 +502,9 @@ class _HomePageState extends State<HomePage> {
                             calculateDifference(notesMap[reverseIndex]["time"]);
                         String date = parseDate(notesMap[reverseIndex]["time"]);
                         Widget chosenView = viewIndex == 0
-                            ? nListView(reverseIndex, dateValue, date)
-                            : nSmallListView(reverseIndex, dateValue, date);
+                            ? nListView(Notes, reverseIndex, dateValue, date)
+                            : nSmallListView(
+                                Notes, reverseIndex, dateValue, date);
                         return chosenView;
                       })
                   : Padding(
@@ -458,9 +517,9 @@ class _HomePageState extends State<HomePage> {
                           ),
                           shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),
-                          itemCount: notesMap.length,
+                          itemCount: Notes.length,
                           itemBuilder: (context, index) {
-                            int reverseIndex = notesMap.length - index - 1;
+                            int reverseIndex = Notes.length - index - 1;
                             notesMap[reverseIndex]["title"] == ""
                                 ? noTitle = true
                                 : noTitle = false;
@@ -471,7 +530,8 @@ class _HomePageState extends State<HomePage> {
                                 notesMap[reverseIndex]["time"]);
                             String date =
                                 parseDate(notesMap[reverseIndex]["time"]);
-                            return nGridView(reverseIndex, dateValue, date);
+                            return nGridView(
+                                Notes, reverseIndex, dateValue, date);
                           }),
                     )
               : Padding(
@@ -505,7 +565,8 @@ class _HomePageState extends State<HomePage> {
     return parsedDate;
   }
 
-  Future<void> showDeleteDialog({required int index}) async {
+  Future<void> showDeleteDialog(
+      {required List<Map> Notes, required int index}) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
@@ -524,8 +585,10 @@ class _HomePageState extends State<HomePage> {
                 child: Text("Cancel")),
             TextButton(
                 onPressed: () async {
-                  await deleteFromDatabase(id: notesMap[index]["id"]);
-                  setState(() {});
+                  await deleteFromDatabase(id: Notes[index]["id"]);
+                  setState(() {
+                    searchNotes(searchC.text);
+                  });
                   Navigator.of(context).pop();
                 },
                 child: Text("Yes"))

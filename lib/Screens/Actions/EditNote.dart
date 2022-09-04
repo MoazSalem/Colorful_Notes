@@ -44,14 +44,15 @@ class _EditNoteState extends State<EditNote> {
         Padding(
           padding: const EdgeInsets.only(left: 40),
           child: TextFormField(
+              cursorColor: Colors.white,
               textInputAction: TextInputAction.done,
               controller: titleC,
               style: TextStyle(
                   color: Colors.white,
                   fontSize: 40,
                   fontWeight: FontWeight.w500),
-              decoration:
-                  InputDecoration(border: InputBorder.none, hintText: "No Title")),
+              decoration: InputDecoration(
+                  border: InputBorder.none, hintText: "No Title")),
         ),
         SizedBox(
           height: 40,
@@ -59,6 +60,7 @@ class _EditNoteState extends State<EditNote> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 40),
           child: TextFormField(
+              cursorColor: Colors.white,
               textInputAction: TextInputAction.done,
               controller: contentC,
               maxLines: 16,
