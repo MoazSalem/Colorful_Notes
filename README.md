@@ -7,9 +7,6 @@ A Nice looking colorful notes app using a local database with sqflite.
 -List and Grid view style</br>
 -Edit notes and remove them any time</br>
 
-## Bugs:
-Sometimes app wouldn't update the state resulting some changes not showing up.
-
 ## Screenshots
 ![Screenshot_20220828_144110](https://user-images.githubusercontent.com/88838071/187083649-9e068c51-0a17-40c7-b90c-6b433127b84c.png)
 ![Screenshot_20220828_144139](https://user-images.githubusercontent.com/88838071/187083661-8d208903-7571-4f7b-b67e-d14ed392bd68.png)
