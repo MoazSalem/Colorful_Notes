@@ -50,7 +50,9 @@ class _HomePageState extends State<HomePage> {
             icon: Icon(
               Icons.search,
               size: 30,
-              color: SearchOn ? Color(0xffff8b34) : Theme.of(context).textTheme.bodyMedium!.color,
+              color: SearchOn
+                  ? Color(0xffff8b34)
+                  : Theme.of(context).textTheme.bodyMedium!.color,
             ),
           ),
           PopupMenuButton<String>(
@@ -83,8 +85,7 @@ class _HomePageState extends State<HomePage> {
       List<Map> Notes, int reverseIndex, int dateValue, String date) {
     return Center(
       child: Padding(
-        padding:
-            EdgeInsets.symmetric(horizontal: 8, vertical: showShadow ? 4 : 2),
+        padding: EdgeInsets.symmetric(vertical: showShadow ? 2 : 0),
         child: Stack(alignment: Alignment.topRight, children: [
           GestureDetector(
             onTap: () => Navigator.of(context)
@@ -200,8 +201,7 @@ class _HomePageState extends State<HomePage> {
       List<Map> Notes, int reverseIndex, int dateValue, String date) {
     return Center(
       child: Padding(
-        padding:
-            EdgeInsets.symmetric(horizontal: 8, vertical: showShadow ? 4 : 2),
+        padding: EdgeInsets.symmetric(vertical: showShadow ? 2 : 0),
         child: Stack(alignment: Alignment.topRight, children: [
           GestureDetector(
             onTap: () => Navigator.of(context)
@@ -326,8 +326,7 @@ class _HomePageState extends State<HomePage> {
       List<Map> Notes, int reverseIndex, int dateValue, String date) {
     return Center(
       child: Padding(
-        padding:
-            EdgeInsets.symmetric(horizontal: 0, vertical: showShadow ? 2 : 0),
+        padding: EdgeInsets.symmetric(vertical: showShadow ? 2 : 0),
         child: Stack(alignment: Alignment.topRight, children: [
           GestureDetector(
             onTap: () => Navigator.of(context)
@@ -353,7 +352,7 @@ class _HomePageState extends State<HomePage> {
                 child: Padding(
                   padding: EdgeInsets.only(
                       left: 15.0,
-                      right: noTitle ? 38.0 : 20.0,
+                      right: 20.0,
                       top: noTitle ? 14.0 : 14.0,
                       bottom: showDate ? 10 : 10),
                   child: Column(
@@ -370,28 +369,31 @@ class _HomePageState extends State<HomePage> {
                                       overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
                                           fontWeight: FontWeight.w800,
-                                          fontSize: 20,
+                                          fontSize: 18,
                                           color: Colors.white)),
                                 ),
                               ),
                         Expanded(
                           flex: noTitle ? 3 : 2,
-                          child: Text(
-                              noContent
-                                  ? "Empty"
-                                  : Notes[reverseIndex]["content"],
-                              maxLines: noTitle
-                                  ? showDate
-                                      ? 3
-                                      : 4
-                                  : showDate
-                                      ? 3
-                                      : 3,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                  color:
-                                      noContent ? Colors.white38 : Colors.white,
-                                  fontSize: noTitle ? 21 : 16)),
+                          child: Padding(
+                            padding: EdgeInsets.only(right: noTitle ? 20.0 : 0),
+                            child: Text(
+                                noContent
+                                    ? "Empty"
+                                    : Notes[reverseIndex]["content"],
+                                maxLines: noTitle
+                                    ? showDate
+                                        ? 3
+                                        : 4
+                                    : showDate
+                                        ? 2
+                                        : 3,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                    color:
+                                        noContent ? Colors.white38 : Colors.white,
+                                    fontSize: noTitle ? 20 : 13)),
+                          ),
                         ),
                         SizedBox(
                           height: 10,
@@ -465,14 +467,14 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       body: ListView(
         children: [
-          customAppBar("Notes",42,leading()),
+          customAppBar("Notes", 42, leading()),
           SearchOn
               ? Center(
-                child: Padding(
-                    padding:
-                        const EdgeInsets.symmetric(vertical: 5, horizontal: 12),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10, horizontal: 20),
                     child: TextFormField(
-                      autofocus:true ,
+                        autofocus: true,
                         controller: searchC,
                         onChanged: searchNotes,
                         maxLines: 1,
@@ -480,7 +482,8 @@ class _HomePageState extends State<HomePage> {
                           contentPadding:
                               EdgeInsets.symmetric(vertical: 5, horizontal: 20),
                           enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.grey.shade300),
+                              borderSide:
+                                  BorderSide(color: Colors.grey.shade300),
                               borderRadius: BorderRadius.circular(0)),
                           hintText: "Search",
                           filled: true,
@@ -489,31 +492,37 @@ class _HomePageState extends State<HomePage> {
                               borderRadius: BorderRadius.circular(0)),
                         )),
                   ),
-              )
+                )
               : Container(),
           notesMap.length != 0
               ? viewIndex != 2
-                  ? ListView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: Notes.length,
-                      itemBuilder: (context, index) {
-                        int reverseIndex = Notes.length - index - 1;
-                        notesMap[reverseIndex]["title"] == ""
-                            ? noTitle = true
-                            : noTitle = false;
-                        notesMap[reverseIndex]["content"] == ""
-                            ? noContent = true
-                            : noContent = false;
-                        int dateValue =
-                            calculateDifference(notesMap[reverseIndex]["time"]);
-                        String date = parseDate(notesMap[reverseIndex]["time"]);
-                        Widget chosenView = viewIndex == 0
-                            ? nListView(Notes, reverseIndex, dateValue, date)
-                            : nSmallListView(
-                                Notes, reverseIndex, dateValue, date);
-                        return chosenView;
-                      })
+                  ? Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 2),
+                      child: ListView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: Notes.length,
+                          itemBuilder: (context, index) {
+                            int reverseIndex = Notes.length - index - 1;
+                            notesMap[reverseIndex]["title"] == ""
+                                ? noTitle = true
+                                : noTitle = false;
+                            notesMap[reverseIndex]["content"] == ""
+                                ? noContent = true
+                                : noContent = false;
+                            int dateValue = calculateDifference(
+                                notesMap[reverseIndex]["time"]);
+                            String date =
+                                parseDate(notesMap[reverseIndex]["time"]);
+                            Widget chosenView = viewIndex == 0
+                                ? nListView(
+                                    Notes, reverseIndex, dateValue, date)
+                                : nSmallListView(
+                                    Notes, reverseIndex, dateValue, date);
+                            return chosenView;
+                          }),
+                    )
                   : Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 16, vertical: 2),

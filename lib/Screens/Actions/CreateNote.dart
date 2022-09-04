@@ -38,7 +38,7 @@ class _CreatNoteState extends State<createNote> {
               controller: titleC,
               style: TextStyle(
                   color: Colors.white,
-                  fontSize: 36,
+                  fontSize: isTablet? 60 : 36,
                   fontWeight: FontWeight.w500),
               decoration:
                   InputDecoration(border: InputBorder.none, hintText: "Title")),
@@ -52,17 +52,17 @@ class _CreatNoteState extends State<createNote> {
               cursorColor: Colors.white,
               textInputAction: TextInputAction.done,
               controller: contentC,
-              maxLines: 15,
+              maxLines: isTablet? 20 : 15,
               showCursor: true,
-              style: TextStyle(color: Colors.white, fontSize: 24),
+              style: TextStyle(color: Colors.white, fontSize: isTablet? 40 :24),
               decoration: InputDecoration(
                   border: InputBorder.none,
-                  constraints: BoxConstraints.expand(height: 460, width: 200),
+                  constraints: BoxConstraints.expand(height: isTablet? 800 : 460, width: 200),
                   hintText: "Write Your Note Here")),
         ),
         FittedBox(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            padding: EdgeInsets.symmetric(horizontal: isTablet ? 100 : 20.0),
             child: Container(
               height: 60,
               child: Center(

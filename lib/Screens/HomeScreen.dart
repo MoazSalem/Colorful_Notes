@@ -236,7 +236,7 @@ Widget customAppBar(String title,double top,[Widget? leading]) {
   return Column(
     children: [
       Padding(
-        padding: EdgeInsets.only(left: 20, bottom: 10, top: top),
+        padding: EdgeInsets.only(left: isTablet? 40:20, bottom: 10, top: top),
         child: Stack(
           alignment: Alignment.centerLeft,
           children: [

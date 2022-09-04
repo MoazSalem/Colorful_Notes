@@ -19,9 +19,11 @@ class HomePageT extends StatefulWidget {
 class _HomePageTState extends State<HomePageT> {
   Widget leading() {
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         IconButton(
+          iconSize: isTablet ? 55 : 30,
           onPressed: () {
             Navigator.of(context)
                 .push(
@@ -29,12 +31,14 @@ class _HomePageTState extends State<HomePageT> {
                 )
                 .then((_) => setState(() {}));
           },
-          icon: Icon(
-            Icons.add,
-            size: 30,
+          icon: FittedBox(
+            child: Icon(
+              Icons.add,
+            ),
           ),
         ),
         PopupMenuButton<String>(
+          iconSize: isTablet ? 50 : 30,
           onSelected: (value) async {
             final prefs = await SharedPreferences.getInstance();
             await prefs.setInt("viewIndex", viewModes[value]!);
@@ -62,7 +66,7 @@ class _HomePageTState extends State<HomePageT> {
     return Center(
       child: Padding(
         padding:
-            EdgeInsets.symmetric(horizontal: 8, vertical: showShadow ? 4 : 2),
+            EdgeInsets.symmetric(horizontal: 0, vertical: showShadow ? 2 : 0),
         child: Stack(alignment: Alignment.topRight, children: [
           GestureDetector(
             onTap: () => Navigator.of(context)
@@ -311,26 +315,32 @@ class _HomePageTState extends State<HomePageT> {
     return Scaffold(
       body: ListView(
         children: [
-          customAppBar("Notes", 42 ,leading()),
+          customAppBar("Notes", 42, leading()),
           notesMap.length != 0
               ? viewIndex == 1
-                  ? ListView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: notesMap.length,
-                      itemBuilder: (context, index) {
-                        int reverseIndex = notesMap.length - index - 1;
-                        notesMap[reverseIndex]["title"] == ""
-                            ? noTitle = true
-                            : noTitle = false;
-                        notesMap[reverseIndex]["content"] == ""
-                            ? noContent = true
-                            : noContent = false;
-                        int dateValue =
-                            calculateDifference(notesMap[reverseIndex]["time"]);
-                        String date = parseDate(notesMap[reverseIndex]["time"]);
-                        return nSmallListView(reverseIndex, dateValue, date);
-                      })
+                  ? Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 2),
+                      child: ListView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: notesMap.length,
+                          itemBuilder: (context, index) {
+                            int reverseIndex = notesMap.length - index - 1;
+                            notesMap[reverseIndex]["title"] == ""
+                                ? noTitle = true
+                                : noTitle = false;
+                            notesMap[reverseIndex]["content"] == ""
+                                ? noContent = true
+                                : noContent = false;
+                            int dateValue = calculateDifference(
+                                notesMap[reverseIndex]["time"]);
+                            String date =
+                                parseDate(notesMap[reverseIndex]["time"]);
+                            return nSmallListView(
+                                reverseIndex, dateValue, date);
+                          }),
+                    )
                   : Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 16, vertical: 2),
