@@ -30,6 +30,8 @@ dependencies:
   flutter:
     sdk: flutter
 
+  bloc: ^8.1.0
+  flutter_bloc: ^8.1.1
   cupertino_icons: ^1.0.2
   sqflite: ^2.0.3+1
   intl: ^0.17.0
@@ -37,7 +39,6 @@ dependencies:
   flutter_launcher_icons: ^0.10.0
   url_launcher: ^6.1.5
   shared_preferences: ^2.0.15
-  animations: ^2.0.4
 
 dev_dependencies:
   flutter_test:

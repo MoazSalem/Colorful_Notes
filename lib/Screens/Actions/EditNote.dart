@@ -1,98 +1,86 @@
 import 'package:flutter/material.dart';
-import 'package:notes/Screens/HomeScreen.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:notes/Bloc/notes_bloc.dart';
 
 final TextEditingController titleC = TextEditingController();
 final TextEditingController contentC = TextEditingController();
 late int Index;
-int chosenIndex = 0;
 
-class EditNote extends StatefulWidget {
-  String Title = "";
-  String Content = "";
-  int index = 0;
-
-  EditNote(
-      {Key? key,
-      required this.Title,
-      required this.Content,
-      required this.index})
-      : super(key: key);
-
-  @override
-  State<EditNote> createState() => _EditNoteState();
-}
-
-class _EditNoteState extends State<EditNote> {
-  @override
-  void initState() {
-    super.initState();
-    titleC.text = widget.Title;
-    contentC.text = widget.Content;
-    Index = widget.index;
-    chosenIndex = Index;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: colors[chosenIndex],
-      body: SafeArea(
-          child: ListView(children: [
-        SizedBox(
-          height: 30,
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 40),
-          child: TextFormField(
-            maxLines: 2,
-              cursorColor: Colors.white,
-              textInputAction: TextInputAction.done,
-              controller: titleC,
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: isTablet? 60 :36,
-                  fontWeight: FontWeight.w500),
-              decoration: InputDecoration(
-                  border: InputBorder.none, hintText: "No Title")),
-        ),
-        SizedBox(
-          height: 10,
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 40),
-          child: TextFormField(
-              cursorColor: Colors.white,
-              textInputAction: TextInputAction.done,
-              controller: contentC,
-              maxLines: isTablet? 20 :15,
-              showCursor: true,
-              style: TextStyle(color: Colors.white, fontSize: isTablet? 40 : 24),
-              decoration: InputDecoration(
-                  border: InputBorder.none,
-                  constraints: BoxConstraints.expand(height: isTablet? 800 : 460, width: 200),
-                  hintText: "Write Your Note Here")),
-        ),
-        FittedBox(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: isTablet ? 100 : 20.0),
-            child: Container(
-              height: 60,
-              child: Center(
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  scrollDirection: Axis.horizontal,
-                  itemCount: colors.length,
-                  itemBuilder: (BuildContext context, Index) => GestureDetector(
-                    onTap: () {
-                      chosenIndex = Index;
-                      setState(() {});
-                    },
-                    child: CircleAvatar(
-                      radius: 35,
-                      backgroundColor: Colors.white,
+Widget EditNote(BuildContext context,
+    {required String Title, required String Content, required int index}) {
+  titleC.text = Title;
+  contentC.text = Content;
+  int bIndex = index;
+  return BlocConsumer<NotesBloc, NotesState>(
+    listener: (context, state) {
+      // TODO: implement listener
+    },
+    builder: (context, state) {
+      var B = NotesBloc.get(context);
+      return Scaffold(
+        backgroundColor: B.colors[bIndex],
+        body: SafeArea(
+            child: ListView(children: [
+          SizedBox(
+            height: 70,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 40),
+            child: TextFormField(
+                maxLines: 2,
+                cursorColor: Colors.white,
+                textInputAction: TextInputAction.done,
+                controller: titleC,
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: B.isTablet ? 60 : 36,
+                    fontWeight: FontWeight.w500),
+                decoration: InputDecoration(
+                    border: InputBorder.none, hintText: "No Title")),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 40),
+            child: TextFormField(
+                cursorColor: Colors.white,
+                textInputAction: TextInputAction.done,
+                controller: contentC,
+                maxLines: B.isTablet ? 20 : 15,
+                showCursor: true,
+                style: TextStyle(
+                    color: Colors.white, fontSize: B.isTablet ? 40 : 24),
+                decoration: InputDecoration(
+                    border: InputBorder.none,
+                    constraints: BoxConstraints.expand(
+                        height: B.isTablet ? 800 : 460, width: 200),
+                    hintText: "Write Your Note Here")),
+          ),
+          FittedBox(
+            child: Padding(
+              padding:
+                  EdgeInsets.symmetric(horizontal: B.isTablet ? 100 : 20.0),
+              child: Container(
+                height: 60,
+                child: Center(
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    scrollDirection: Axis.horizontal,
+                    itemCount: B.colors.length,
+                    itemBuilder: (BuildContext context, Index) =>
+                        GestureDetector(
+                      onTap: () {
+                        bIndex = Index;
+                        B.ColorChanged(Index);
+                      },
                       child: CircleAvatar(
-                        radius: 25,
-                        backgroundColor: colors[Index],
+                        radius: 35,
+                        backgroundColor: Colors.white,
+                        child: CircleAvatar(
+                          radius: 25,
+                          backgroundColor: B.colors[Index],
+                        ),
                       ),
                     ),
                   ),
@@ -100,33 +88,34 @@ class _EditNoteState extends State<EditNote> {
               ),
             ),
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 60,vertical: 20),
-          child: TextButton(
-            onPressed: () async {
-              var time = DateTime.now().toString();
-              titleC.text != widget.Title ||
-                      contentC.text != widget.Content ||
-                      chosenIndex != widget.index
-                  ? {
-                      await editDatabaseItem(
-                          time: "$time",
-                          content: contentC.text,
-                          title: widget.Title,
-                          title2: titleC.text,
-                          index: chosenIndex),
-                      Navigator.of(context).pop(),
-                    }
-                  : Navigator.of(context).pop();
-            },
-            child: Text(
-              "Done",
-              style: TextStyle(fontSize: 30, color: Colors.white),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 20),
+            child: TextButton(
+              onPressed: () async {
+                var time = DateTime.now().toString();
+                titleC.text != Title ||
+                        contentC.text != Content ||
+                        bIndex != index
+                    ? {
+                        await B.editDatabaseItem(
+                            time: "$time",
+                            content: contentC.text,
+                            title: Title,
+                            title2: titleC.text,
+                            index: B.chosenIndex),
+                        Navigator.of(context).pop(),
+                        B.onCreateNote()
+                      }
+                    : Navigator.of(context).pop();
+              },
+              child: Text(
+                "Done",
+                style: TextStyle(fontSize: 30, color: Colors.white),
+              ),
             ),
-          ),
-        )
-      ])),
-    );
-  }
+          )
+        ])),
+      );
+    },
+  );
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:notes/Screens/HomeScreen.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:notes/Bloc/notes_bloc.dart';
 
 final TextEditingController titleC = TextEditingController();
 final TextEditingController contentC = TextEditingController();
@@ -7,26 +8,20 @@ late String title;
 late String content;
 late String time;
 late int Index;
-int chosenIndex = 0;
 
-class createNote extends StatefulWidget {
-  createNote({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  State<createNote> createState() => _CreatNoteState();
-}
-
-class _CreatNoteState extends State<createNote> {
-  @override
-  Widget build(BuildContext context) {
+  Widget createNote(BuildContext context) {
+    return BlocConsumer<NotesBloc, NotesState>(
+  listener: (context, state) {
+    // TODO: implement listener
+  },
+  builder: (context, state) {
+    var B = NotesBloc.get(context);
     return Scaffold(
-      backgroundColor: colors[chosenIndex],
+      backgroundColor: B.colors[B.chosenIndex],
       body: SafeArea(
           child: ListView(children: [
         SizedBox(
-          height: 30,
+          height: 70,
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 40),
@@ -38,7 +33,7 @@ class _CreatNoteState extends State<createNote> {
               controller: titleC,
               style: TextStyle(
                   color: Colors.white,
-                  fontSize: isTablet? 60 : 36,
+                  fontSize: B.isTablet? 60 : 36,
                   fontWeight: FontWeight.w500),
               decoration:
                   InputDecoration(border: InputBorder.none, hintText: "Title")),
@@ -52,35 +47,34 @@ class _CreatNoteState extends State<createNote> {
               cursorColor: Colors.white,
               textInputAction: TextInputAction.done,
               controller: contentC,
-              maxLines: isTablet? 20 : 15,
+              maxLines: B.isTablet? 20 : 15,
               showCursor: true,
-              style: TextStyle(color: Colors.white, fontSize: isTablet? 40 :24),
+              style: TextStyle(color: Colors.white, fontSize: B.isTablet? 40 :24),
               decoration: InputDecoration(
                   border: InputBorder.none,
-                  constraints: BoxConstraints.expand(height: isTablet? 800 : 460, width: 200),
+                  constraints: BoxConstraints.expand(height: B.isTablet? 800 : 460, width: 200),
                   hintText: "Write Your Note Here")),
         ),
         FittedBox(
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: isTablet ? 100 : 20.0),
+            padding: EdgeInsets.symmetric(horizontal: B.isTablet ? 100 : 20.0),
             child: Container(
               height: 60,
               child: Center(
                 child: ListView.builder(
                   shrinkWrap: true,
                   scrollDirection: Axis.horizontal,
-                  itemCount: colors.length,
+                  itemCount: B.colors.length,
                   itemBuilder: (BuildContext context, Index) => GestureDetector(
                     onTap: () {
-                      chosenIndex = Index;
-                      setState(() {});
+                      B.ColorChanged(Index);
                     },
                     child: CircleAvatar(
                       radius: 35,
                       backgroundColor: Colors.white,
                       child: CircleAvatar(
                         radius: 25,
-                        backgroundColor: colors[Index],
+                        backgroundColor: B.colors[Index],
                       ),
                     ),
                   ),
@@ -98,14 +92,15 @@ class _CreatNoteState extends State<createNote> {
               content = contentC.text;
               titleC.text != "" || contentC.text != ""
                   ? {
-                      await insertToDatabase(
+                      await B.insertToDatabase(
                           title: title,
                           time: time,
                           content: content,
-                          index: chosenIndex),
+                          index: B.chosenIndex),
                       titleC.text = "",
                       contentC.text = "",
-                      Navigator.pop(context)
+                      Navigator.pop(context),
+                      B.onCreateNote()
                     }
                   : Navigator.pop(context);
             },
@@ -117,5 +112,6 @@ class _CreatNoteState extends State<createNote> {
         )
       ])),
     );
+  },
+);
   }
-}

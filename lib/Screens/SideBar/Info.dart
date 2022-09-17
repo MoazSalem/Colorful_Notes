@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:notes/Screens/HomeScreen.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:notes/Bloc/notes_bloc.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 final Uri _url = Uri.parse('https://github.com/MoazSalem/Notes_FlutterApp');
@@ -9,10 +10,16 @@ class InfoPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return BlocConsumer<NotesBloc, NotesState>(
+  listener: (context, state) {
+    // TODO: implement listener
+  },
+  builder: (context, state) {
+    var B = NotesBloc.get(context);
     return Scaffold(
       body: ListView(
         children: [
-          customAppBar("Info",45),
+          B.customAppBar(context,"Info",45),
           Padding(
               padding:
                   const EdgeInsets.symmetric(horizontal: 35.0, vertical: 20),
@@ -21,7 +28,7 @@ class InfoPage extends StatelessWidget {
                   RichText(
                       text: TextSpan(
                     style: TextStyle(
-                        fontSize: isTablet ? 30 : 20,
+                        fontSize: B.isTablet ? 30 : 20,
                         fontWeight: FontWeight.w300,
                         color: Theme.of(context).textTheme.bodyMedium!.color),
                     children: <TextSpan>[
@@ -29,7 +36,7 @@ class InfoPage extends StatelessWidget {
                           text: "This an open source app that was made by "),
                       TextSpan(
                           text: "MoazSalem ",
-                          style: TextStyle(color: colors[2])),
+                          style: TextStyle(color: B.colors[2])),
                       TextSpan(text: "using flutter to learn new techniques!"),
                     ],
                   )),
@@ -51,7 +58,7 @@ class InfoPage extends StatelessWidget {
                         style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.w300,
-                            color: colors[3]),
+                            color: B.colors[3]),
                       ),
                     ),
                   ),
@@ -60,6 +67,8 @@ class InfoPage extends StatelessWidget {
         ],
       ),
     );
+  },
+);
   }
 }
 

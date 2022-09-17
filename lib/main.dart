@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.amber,
         accentColor: Colors.amber,
       ),
-      initial: AdaptiveThemeMode.system,
+      initial: AdaptiveThemeMode.light,
       builder: (theme, darkTheme) => MaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'Adaptive Theme Demo',
