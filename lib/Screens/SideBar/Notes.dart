@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 import 'package:notes/Bloc/notes_bloc.dart';
 import 'package:notes/Screens/Actions/EditNote.dart';
 import 'package:notes/Screens/Actions/CreateNote.dart';
@@ -37,74 +36,57 @@ class HomePage extends StatelessWidget {
         }
 
         Widget leading() {
-          return Padding(
-            padding: const EdgeInsets.only(top: 5),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                IconButton(
-                  onPressed: () {
-                    showBottomSheet(
-                        context: context,
-                        builder: (context) => createNote(context));
-                  },
-                  icon: Icon(
-                    Icons.add,
-                    size: 30,
-                  ),
+          return Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              IconButton(
+                onPressed: () {
+                  showBottomSheet(
+                      context: context,
+                      builder: (context) => createNote(context));
+                },
+                icon: Icon(
+                  Icons.add,
+                  size: 30,
                 ),
-                IconButton(
-                  onPressed: () {
-                    SearchOn = !SearchOn;
-                    searchNotes(searchC.text);
-                    B.onSearch();
-                  },
-                  icon: Icon(
-                    Icons.search,
-                    size: 30,
-                    color: SearchOn
-                        ? Color(0xffff8b34)
-                        : Theme.of(context).textTheme.bodyMedium!.color,
-                  ),
+              ),
+              IconButton(
+                onPressed: () {
+                  SearchOn = !SearchOn;
+                  searchNotes(searchC.text);
+                  B.onSearch();
+                },
+                icon: Icon(
+                  Icons.search,
+                  size: 30,
+                  color: SearchOn
+                      ? Color(0xffff8b34)
+                      : Theme.of(context).textTheme.bodyMedium!.color,
                 ),
-                PopupMenuButton<String>(
-                  onSelected: (value) async {
-                    final prefs = await SharedPreferences.getInstance();
-                    await prefs.setInt("viewIndex", viewModes[value]!);
-                    B.viewIndex = viewModes[value]!;
-                    B.onViewChanged();
-                  },
-                  itemBuilder: (BuildContext context) {
-                    return {"Large View", "Long View", "Grid View"}
-                        .map((String choice) {
-                      return PopupMenuItem<String>(
-                        value: choice,
-                        child: Text(
-                          choice,
-                          style: TextStyle(fontWeight: FontWeight.w500),
-                        ),
-                      );
-                    }).toList();
-                  },
-                ),
-              ],
-            ),
+              ),
+              PopupMenuButton<String>(
+                onSelected: (value) async {
+                  final prefs = await SharedPreferences.getInstance();
+                  await prefs.setInt("viewIndex", viewModes[value]!);
+                  B.viewIndex = viewModes[value]!;
+                  B.onViewChanged();
+                },
+                itemBuilder: (BuildContext context) {
+                  return {"Large View", "Long View", "Grid View"}
+                      .map((String choice) {
+                    return PopupMenuItem<String>(
+                      value: choice,
+                      child: Text(
+                        choice,
+                        style: TextStyle(fontWeight: FontWeight.w500),
+                      ),
+                    );
+                  }).toList();
+                },
+              ),
+            ],
           );
-        }
-
-        int calculateDifference(String stringDate) {
-          var date = DateTime.parse(stringDate);
-          DateTime now = DateTime.now();
-          return DateTime(date.year, date.month, date.day)
-              .difference(DateTime(now.year, now.month, now.day))
-              .inDays;
-        }
-
-        String parseDate(String stringDate) {
-          var date = DateTime.parse(stringDate);
-          String parsedDate = DateFormat.MMMMd().format(date);
-          return parsedDate;
         }
 
         Future<void> showDeleteDialog(
@@ -130,6 +112,7 @@ class HomePage extends StatelessWidget {
                         await B.deleteFromDatabase(id: Notes[index]["id"]);
                         searchNotes(searchC.text);
                         Navigator.of(context).pop();
+                        B.onCreateNote();
                       },
                       child: Text("Yes"))
                 ],
@@ -148,6 +131,7 @@ class HomePage extends StatelessWidget {
                   onTap: () => showBottomSheet(
                     context: context,
                     builder: (context) => EditNote(context,
+                        ID: Notes[reverseIndex]['id'],
                         Title: Notes[reverseIndex]["title"],
                         Content: Notes[reverseIndex]["content"],
                         index: Notes[reverseIndex]['cindex']),
@@ -267,6 +251,7 @@ class HomePage extends StatelessWidget {
                     context: context,
                     builder: (context) => EditNote(
                       context,
+                      ID: Notes[reverseIndex]['id'],
                       Title: Notes[reverseIndex]["title"],
                       Content: Notes[reverseIndex]["content"],
                       index: Notes[reverseIndex]['cindex'],
@@ -394,6 +379,7 @@ class HomePage extends StatelessWidget {
                     context: context,
                     builder: (context) => EditNote(
                       context,
+                      ID: Notes[reverseIndex]['id'],
                       Title: Notes[reverseIndex]["title"],
                       Content: Notes[reverseIndex]["content"],
                       index: Notes[reverseIndex]['cindex'],
@@ -516,8 +502,9 @@ class HomePage extends StatelessWidget {
 
         return Scaffold(
           body: ListView(
+            padding: EdgeInsets.zero,
             children: [
-              B.customAppBar(context, "Notes", 42, leading()),
+              B.customAppBar(context, "Notes", 65, leading()),
               SearchOn
                   ? Center(
                       child: Padding(
@@ -550,6 +537,7 @@ class HomePage extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(
                               horizontal: 16, vertical: 2),
                           child: ListView.builder(
+                              padding: EdgeInsets.zero,
                               shrinkWrap: true,
                               physics: const NeverScrollableScrollPhysics(),
                               itemCount: Notes.length,
@@ -561,10 +549,10 @@ class HomePage extends StatelessWidget {
                                 B.notesMap[reverseIndex]["content"] == ""
                                     ? noContent = true
                                     : noContent = false;
-                                int dateValue = calculateDifference(
+                                int dateValue = B.calculateDifference(
                                     B.notesMap[reverseIndex]["time"]);
                                 String date =
-                                    parseDate(B.notesMap[reverseIndex]["time"]);
+                                    B.parseDate(B.notesMap[reverseIndex]["time"]);
                                 Widget chosenView = B.viewIndex == 0
                                     ? nListView(
                                         Notes, reverseIndex, dateValue, date)
@@ -577,6 +565,7 @@ class HomePage extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(
                               horizontal: 16, vertical: 2),
                           child: GridView.builder(
+                              padding: EdgeInsets.zero,
                               gridDelegate:
                                   SliverGridDelegateWithFixedCrossAxisCount(
                                 crossAxisCount: 2,
@@ -592,10 +581,10 @@ class HomePage extends StatelessWidget {
                                 B.notesMap[reverseIndex]["content"] == ""
                                     ? noContent = true
                                     : noContent = false;
-                                int dateValue = calculateDifference(
+                                int dateValue = B.calculateDifference(
                                     B.notesMap[reverseIndex]["time"]);
                                 String date =
-                                    parseDate(B.notesMap[reverseIndex]["time"]);
+                                    B.parseDate(B.notesMap[reverseIndex]["time"]);
                                 return nGridView(
                                     Notes, reverseIndex, dateValue, date);
                               }),

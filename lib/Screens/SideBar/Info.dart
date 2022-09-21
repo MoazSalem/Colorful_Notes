@@ -18,8 +18,9 @@ class InfoPage extends StatelessWidget {
     var B = NotesBloc.get(context);
     return Scaffold(
       body: ListView(
+        padding: EdgeInsets.zero,
         children: [
-          B.customAppBar(context,"Info",45),
+          B.customAppBar(context,"Info",66),
           Padding(
               padding:
                   const EdgeInsets.symmetric(horizontal: 35.0, vertical: 20),

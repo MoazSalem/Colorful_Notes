@@ -12,3 +12,6 @@ class PrefsChanged extends NotesState {}
 class Searched extends NotesState {}
 class ViewChanged extends NotesState {}
 class ColorsChanged extends NotesState {}
+class AudioPlayed extends NotesState {}
+class OnRecord extends NotesState {}
+class OnChanged extends NotesState {}

@@ -17,6 +17,7 @@ late int Index;
   builder: (context, state) {
     var B = NotesBloc.get(context);
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: B.colors[B.chosenIndex],
       body: SafeArea(
           child: ListView(children: [
@@ -104,8 +105,7 @@ late int Index;
                     }
                   : Navigator.pop(context);
             },
-            child: Text(
-              "Done",
+            child: Text("Done",
               style: TextStyle(fontSize: 30, color: Colors.white),
             ),
           ),

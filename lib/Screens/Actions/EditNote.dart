@@ -7,7 +7,10 @@ final TextEditingController contentC = TextEditingController();
 late int Index;
 
 Widget EditNote(BuildContext context,
-    {required String Title, required String Content, required int index}) {
+    {required String Title,
+    required String Content,
+    required int index,
+    required int ID}) {
   titleC.text = Title;
   contentC.text = Content;
   int bIndex = index;
@@ -18,6 +21,7 @@ Widget EditNote(BuildContext context,
     builder: (context, state) {
       var B = NotesBloc.get(context);
       return Scaffold(
+        resizeToAvoidBottomInset: false,
         backgroundColor: B.colors[bIndex],
         body: SafeArea(
             child: ListView(children: [
@@ -27,6 +31,7 @@ Widget EditNote(BuildContext context,
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 40),
             child: TextFormField(
+                onSaved: B.onViewChanged(),
                 maxLines: 2,
                 cursorColor: Colors.white,
                 textInputAction: TextInputAction.done,
@@ -44,6 +49,7 @@ Widget EditNote(BuildContext context,
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 40),
             child: TextFormField(
+                onSaved: B.onSearch(),
                 cursorColor: Colors.white,
                 textInputAction: TextInputAction.done,
                 controller: contentC,
@@ -100,16 +106,16 @@ Widget EditNote(BuildContext context,
                         await B.editDatabaseItem(
                             time: "$time",
                             content: contentC.text,
-                            title: Title,
+                            id: ID,
                             title2: titleC.text,
-                            index: B.chosenIndex),
+                            index: B.chosenIndex,
+                            type: 0),
                         Navigator.of(context).pop(),
                         B.onCreateNote()
                       }
                     : Navigator.of(context).pop();
               },
-              child: Text(
-                "Done",
+              child: Text("Done",
                 style: TextStyle(fontSize: 30, color: Colors.white),
               ),
             ),

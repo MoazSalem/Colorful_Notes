@@ -24,8 +24,9 @@ class SettingsPage extends StatelessWidget {
         var B = NotesBloc.get(context);
         return Scaffold(
           body: ListView(
+            padding: EdgeInsets.zero,
             children: [
-              B.customAppBar(context,"Settings", 45),
+              B.customAppBar(context,"Settings", 66),
               Padding(
                 padding: const EdgeInsets.only(left: 35, bottom: 10, top: 10),
                 child: Text(
