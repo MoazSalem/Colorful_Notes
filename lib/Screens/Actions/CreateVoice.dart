@@ -193,7 +193,7 @@ Widget createVoice(BuildContext context) {
                         stopWatchTimer.onResetTimer(),
                         isRecording = false,
                         titleC.text = "",
-                        time = "", //todo: fix this
+                        time = "",
                         Navigator.pop(context),
                         B.onCreateNote()
                       };

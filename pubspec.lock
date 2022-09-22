@@ -184,6 +184,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.0.1"
+  huawei_ml:
+    dependency: "direct main"
+    description:
+      name: huawei_ml
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.5+301"
+  huawei_ml_text:
+    dependency: "direct main"
+    description:
+      name: huawei_ml_text
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.2.0+301"
   image:
     dependency: transitive
     description:
