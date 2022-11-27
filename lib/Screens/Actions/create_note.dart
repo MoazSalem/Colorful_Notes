@@ -220,7 +220,6 @@ Widget createNote(BuildContext context, bool isML) {
                                 B.adCounter++,
                                 await prefs.setInt("adCounter", B.adCounter),
                                 B.adCounter == 3 ? {interstitialAd.show(), B.adCounter = 0} : null,
-                                print(B.adCounter),
                                 Navigator.pop(context),
                                 B.onCreateNote()
                               }

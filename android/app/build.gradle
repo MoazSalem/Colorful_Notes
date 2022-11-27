@@ -24,7 +24,6 @@ if (flutterVersionName == null) {
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
-apply plugin: 'com.huawei.agconnect'
 
 def keystoreProperties = new Properties()
 def keystorePropertiesFile = rootProject.file('app/keystore.properties')
@@ -67,7 +66,6 @@ android {
             minifyEnabled true
             // Unused resources will be removed.
             shrinkResources true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
 
@@ -78,6 +76,5 @@ flutter {
 }
 
 dependencies {
-    implementation 'com.huawei.agconnect:agconnect-core:1.5.2.300'
     implementation 'com.google.android.gms:play-services-ads:21.3.0'
 }

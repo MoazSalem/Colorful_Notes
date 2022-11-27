@@ -509,7 +509,7 @@ backUp() async {
   File source2 = File('${appDir.path}/Voice');
   File source3 = File('${appDir.path}/shared_prefs');
   Directory backup = Directory("${extDir[0]}/Notes/backup");
-  if ((await backup.existsSync())) {
+  if ((backup.existsSync())) {
     // print("Path exist");
     var status = await Permission.storage.status;
     if (!status.isGranted) {
