@@ -27,7 +27,7 @@ apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 apply plugin: 'com.huawei.agconnect'
 
 def keystoreProperties = new Properties()
-def keystorePropertiesFile = rootProject.file('key.properties')
+def keystorePropertiesFile = rootProject.file('app/keystore.properties')
 if (keystorePropertiesFile.exists()) {
     keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 }
@@ -63,6 +63,11 @@ android {
     buildTypes {
         release {
             signingConfig signingConfigs.release
+            // Enables code shrinking, obfuscation, and optimization for release builds.
+            minifyEnabled true
+            // Unused resources will be removed.
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
 
@@ -74,4 +79,5 @@ flutter {
 
 dependencies {
     implementation 'com.huawei.agconnect:agconnect-core:1.5.2.300'
+    implementation 'com.google.android.gms:play-services-ads:21.3.0'
 }
