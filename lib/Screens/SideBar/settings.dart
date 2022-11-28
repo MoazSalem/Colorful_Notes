@@ -277,14 +277,16 @@ class SettingsPage extends StatelessWidget {
                         children: [
                           TextButton(
                             onPressed: () {
-                              B.backUp();
+                              B.bDialog(context);
                             },
                             child: Text(
-                              "Backup",
+                              "Backup".tr(),
                               style: TextStyle(fontSize: 24, color: B.colors[3]),
                             ),
                           ),
-                          TextButton(onPressed: () {}, child: Text("Restore", style: TextStyle(fontSize: 24, color: B.colors[4]))),
+                          TextButton(onPressed: () {
+                            B.rDialog(context);
+                          }, child: Text("Restore".tr(), style: TextStyle(fontSize: 24, color: B.colors[4]))),
                         ],
                       )),
                 ),

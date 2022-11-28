@@ -124,7 +124,7 @@ class VoiceNotesPage extends StatelessWidget {
                       ),
                     )
                   : Container(),
-              B.voiceMap.isNotEmpty
+              notes.isNotEmpty
                   ? B.viewIndexV != 2
                       ? Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 2),

@@ -113,7 +113,7 @@ class HomePage extends StatelessWidget {
                       ),
                     )
                   : Container(),
-              B.allNotesMap.isNotEmpty
+              notes.isNotEmpty
                   ? B.viewIndex != 2
                       ? Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 2),

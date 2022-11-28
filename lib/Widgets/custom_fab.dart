@@ -146,7 +146,7 @@ Widget customFab(BuildContext context, bool openFab, colors, shadeColors, bool h
                   ],
                 )
                     : Container(
-                  width: isTablet ? 344 : 160,
+                  width: isTablet ? 200 : 160,
                 ),
               )),
           Container(

@@ -129,7 +129,7 @@ class NotesPage extends StatelessWidget {
                       ),
                     )
                   : Container(),
-              B.notesMap.isNotEmpty
+              notes.isNotEmpty
                   ? B.viewIndexN != 2
                       ? Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 2),

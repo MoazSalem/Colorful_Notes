@@ -51,6 +51,7 @@ dependencies:
   huawei_ml_language: ^3.2.0+301
   external_path: ^1.0.3
   google_mobile_ads: ^2.3.0
+  path: ^1.8.2
 
 dev_dependencies:
   flutter_test:
