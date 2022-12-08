@@ -71,7 +71,7 @@ class SettingsPage extends StatelessWidget {
                           return DropdownMenuItem(
                               value: items,
                               child: MediaQuery(
-                                data: MediaQuery.of(context).copyWith(textScaleFactor: isTablet ? 3.0 : 1.0),
+                                data: MediaQuery.of(context).copyWith(textScaleFactor: isTablet ? 2.0 : 1.0),
                                 child: Text(items).tr(),
                               ));
                         }).toList(),
@@ -114,7 +114,7 @@ class SettingsPage extends StatelessWidget {
                             return DropdownMenuItem(
                                 value: items,
                                 child: MediaQuery(
-                                  data: MediaQuery.of(context).copyWith(textScaleFactor: isTablet ? 3.0 : 1.0),
+                                  data: MediaQuery.of(context).copyWith(textScaleFactor: isTablet ? 2.0 : 1.0),
                                   child: Text(items).tr(),
                                 ));
                           }).toList(),
@@ -162,7 +162,7 @@ class SettingsPage extends StatelessWidget {
                             return DropdownMenuItem(
                                 value: items,
                                 child: MediaQuery(
-                                  data: MediaQuery.of(context).copyWith(textScaleFactor: isTablet ? 3.0 : 1.0),
+                                  data: MediaQuery.of(context).copyWith(textScaleFactor: isTablet ? 2.0 : 1.0),
                                   child: Text(items).tr(),
                                 ));
                           }).toList(),
@@ -267,31 +267,31 @@ class SettingsPage extends StatelessWidget {
                 ),
               ),
               B.divider(context),
-              SizedBox(
-                height: height,
-                child: Center(
-                  child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: padding),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          TextButton(
-                            onPressed: () {
-                              B.bDialog(context);
-                            },
-                            child: Text(
-                              "Backup".tr(),
-                              style: TextStyle(fontSize: 24, color: B.colors[3]),
-                            ),
-                          ),
-                          TextButton(onPressed: () {
-                            B.rDialog(context);
-                          }, child: Text("Restore".tr(), style: TextStyle(fontSize: 24, color: B.colors[4]))),
-                        ],
-                      )),
-                ),
-              ),
-              B.divider(context),
+              // SizedBox(
+              //   height: height,
+              //   child: Center(
+              //     child: Padding(
+              //         padding: EdgeInsets.symmetric(horizontal: padding),
+              //         child: Row(
+              //           mainAxisAlignment: MainAxisAlignment.spaceAround,
+              //           children: [
+              //             TextButton(
+              //               onPressed: () {
+              //                 B.bDialog(context);
+              //               },
+              //               child: Text(
+              //                 "Backup".tr(),
+              //                 style: TextStyle(fontSize: 24, color: B.colors[3]),
+              //               ),
+              //             ),
+              //             TextButton(onPressed: () {
+              //               B.rDialog(context);
+              //             }, child: Text("Restore".tr(), style: TextStyle(fontSize: 24, color: B.colors[4]))),
+              //           ],
+              //         )),
+              //   ),
+              // ),
+              // B.divider(context),
             ],
           ),
         );

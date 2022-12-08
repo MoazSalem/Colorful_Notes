@@ -27,7 +27,6 @@ class Home extends StatelessWidget {
             interstitialAd = ad;
           },
           onAdFailedToLoad: (LoadAdError error) {
-            print('InterstitialAd failed to load: $error');
           },
         ));
     return AnnotatedRegion<SystemUiOverlayStyle>(
@@ -230,12 +229,12 @@ class Home extends StatelessWidget {
 final BannerAd banner1 = BannerAd(
   adUnitId: 'ca-app-pub-1796999612396305/5626834454',
   size: AdSize.banner,
-  request: AdRequest(),
-  listener: BannerAdListener(),
+  request: const AdRequest(),
+  listener: const BannerAdListener(),
 );
 final BannerAd banner2 = BannerAd(
   adUnitId: 'ca-app-pub-1796999612396305/2782013418',
   size: AdSize.banner,
-  request: AdRequest(),
-  listener: BannerAdListener(),
+  request: const AdRequest(),
+  listener: const BannerAdListener(),
 );

@@ -24,9 +24,9 @@ class InfoPage extends StatelessWidget {
         return Scaffold(
           bottomNavigationBar: Container(
             alignment: Alignment.center,
-            child: adWidget,
             width: banner2.size.width.toDouble(),
             height: banner2.size.height.toDouble(),
+            child: adWidget,
           ),
           body: ListView(
             padding: EdgeInsets.zero,

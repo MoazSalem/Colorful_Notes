@@ -25,7 +25,6 @@ Widget listView({
       child: Stack(alignment: Alignment.topRight, children: [
         SizedBox(
           height: isTablet ? width * 0.9 : width * 0.7639,
-          width: isTablet ? width * 0.9 : width * 0.7639,
           child: Card(
             color: colors[notes[reverseIndex]['cindex']],
             elevation: showShadow ? 4 : 0,

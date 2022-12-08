@@ -2,10 +2,10 @@
 
 import 'dart:async';
 import 'dart:io';
-import 'package:path/path.dart' as path;
+// import 'package:path/path.dart' as path;
 import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:external_path/external_path.dart';
+// import 'package:external_path/external_path.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -36,7 +36,7 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
   late int adCounter;
   late double width;
   late Directory appDir;
-  late List<String> extDir;
+  // late List<String> extDir;
   late bool showDate;
   late bool showShadow;
   late bool showEdited;
@@ -141,7 +141,7 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
 
   localPath() async {
     appDir = await getApplicationDocumentsDirectory();
-    extDir = await ExternalPath.getExternalStorageDirectories();
+    // extDir = await ExternalPath.getExternalStorageDirectories();
   }
 
   createVoiceFolder() async {
@@ -204,23 +204,23 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
     }
   }
 
-  Future getAllStoragePermission() async {
-    PermissionStatus status = await Permission.storage.request();
-    PermissionStatus status1 = await Permission.accessMediaLocation.request();
-    PermissionStatus status2 = await Permission.manageExternalStorage.request();
-    if (kDebugMode) {
-      print('status $status -> $status1 -> $status2');
-    }
-    if (status.isGranted && status2.isGranted) {
-      return true;
-    } else if (status.isPermanentlyDenied || status2.isPermanentlyDenied) {
-      await openAppSettings();
-    } else if (status.isDenied) {
-      if (kDebugMode) {
-        print('Permission Denied');
-      }
-    }
-  }
+  // Future getAllStoragePermission() async {
+  //   PermissionStatus status = await Permission.storage.request();
+  //   PermissionStatus status1 = await Permission.accessMediaLocation.request();
+  //   PermissionStatus status2 = await Permission.manageExternalStorage.request();
+  //   if (kDebugMode) {
+  //     print('status $status -> $status1 -> $status2');
+  //   }
+  //   if (status.isGranted && status2.isGranted) {
+  //     return true;
+  //   } else if (status.isPermanentlyDenied || status2.isPermanentlyDenied) {
+  //     await openAppSettings();
+  //   } else if (status.isDenied) {
+  //     if (kDebugMode) {
+  //       print('Permission Denied');
+  //     }
+  //   }
+  // }
 
   Future deleteFile(location) async {
     try {
@@ -344,12 +344,10 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
         onPressed: () async {
           notes[index]["type"] == 1
               ? {
-                  print(notes[index]["content"]),
                   await deleteFile(notes[index]["content"]),
                   await deleteFromDatabase(id: notes[index]["id"]),
                 }
               : {
-                  print("here"),
                   await deleteFromDatabase(id: notes[index]["id"]),
                 };
           Navigator.of(context).pop();
@@ -524,163 +522,172 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
     );
   }
 
-  void copyDirectory(Directory source, Directory destination) => source.listSync(recursive: false).forEach((var entity) {
-        if (entity is Directory) {
-          var newDirectory = Directory(path.join(destination.absolute.path, path.basename(entity.path)));
-          newDirectory.createSync();
+  // void copyDirectory(Directory source, Directory destination) => source.listSync(recursive: false).forEach((var entity) {
+  //       if (entity is Directory) {
+  //         var newDirectory = Directory(path.join(destination.absolute.path, path.basename(entity.path)));
+  //         newDirectory.createSync();
+  //
+  //         copyDirectory(entity.absolute, newDirectory);
+  //       } else if (entity is File) {
+  //         entity.copySync(path.join(destination.path, path.basename(entity.path)));
+  //       }
+  //     });
 
-          copyDirectory(entity.absolute, newDirectory);
-        } else if (entity is File) {
-          entity.copySync(path.join(destination.path, path.basename(entity.path)));
-        }
-      });
-
-  backUp() async {
-    await getAllStoragePermission();
-    final dbFolder = await getDatabasesPath();
-    File source1 = File('$dbFolder/notes.db');
-    File source2 = File('/data/user/0/com.moazsalem.notes/shared_prefs/FlutterSharedPreferences.xml');
-    File source3 = File('${appDir.path}/Voice');
-    Directory dbBackup = Directory("${extDir[0]}/Colorful Notes/backup/Database");
-    Directory voBackup = Directory("${extDir[0]}/Colorful Notes/backup/.VoiceNotes");
-    Directory spBackup = Directory("${extDir[0]}/Colorful Notes/backup/Shared_Preference");
-    if ((dbBackup.existsSync()) && (voBackup.existsSync()) && (spBackup.existsSync())) {
-      if (kDebugMode) {
-        print("Path exist");
-      }
-    } else {
-      if (kDebugMode) {
-        print("Path doesn't exist");
-      }
-      await dbBackup.create(recursive: true);
-      await voBackup.create(recursive: true);
-      await spBackup.create(recursive: true);
-    }
-    String newPath = "${dbBackup.path}/notes.db";
-    await source1.copy(newPath);
-    if (kDebugMode) {
-      print("Successfully Copied DB");
-    }
-    newPath = "${spBackup.path}/FlutterSharedPreferences.xml";
-    await source2.copy(newPath);
-    if (kDebugMode) {
-      print("Successfully Copied FlutterSharedPreferences.xml");
-    }
-    copyDirectory(Directory(source3.path), Directory(voBackup.path));
-    if (kDebugMode) {
-      print("Successfully Copied Voice Notes");
-    }
-  }
-
-  restore() async {
-    await getAllStoragePermission();
-    final dbFolder = await getDatabasesPath();
-    String source1 = '$dbFolder/notes.db';
-    String source2 = '/data/user/0/com.moazsalem.notes/shared_prefs/FlutterSharedPreferences.xml';
-    String source3 = '${appDir.path}/Voice';
-    Directory dbBackup = Directory("${extDir[0]}/Colorful Notes/backup/Database");
-    Directory voBackup = Directory("${extDir[0]}/Colorful Notes/backup/.VoiceNotes");
-    Directory spBackup = Directory("${extDir[0]}/Colorful Notes/backup/Shared_Preference");
-    if ((dbBackup.existsSync()) && (voBackup.existsSync()) && (spBackup.existsSync())) {
-      if (kDebugMode) {
-        print("Path exist");
-        if ((Directory(source3).existsSync())) {
-          if (kDebugMode) {
-            print("Voice exist");
-            await Directory(source3).delete(recursive: true);
-            await Directory(source3).create(recursive: true);
-          }
-        } else {
-          if (kDebugMode) {
-            print("Voice doesn't exist");
-          }
-          await Directory(source3).create(recursive: true);
-        }
-      }
-    } else {
-      if (kDebugMode) {
-        print("Path doesn't exist");
-      }
-    }
-    File db = File("${dbBackup.path}/notes.db");
-    await db.copy(source1);
-    if (kDebugMode) {
-      print("Successfully Copied DB");
-    }
-    File sp = File("${spBackup.path}/FlutterSharedPreferences.xml");
-    await sp.copy(source2);
-    if (kDebugMode) {
-      print("Successfully Copied FlutterSharedPreferences.xml");
-    }
-    copyDirectory(Directory(voBackup.path), Directory(source3));
-    if (kDebugMode) {
-      print("Successfully Copied Voice Notes");
-    }
-    startDatabase();
-  }
-
-  bDialog(BuildContext context) {
-    return Dialogs.materialDialog(msg: "m2".tr(), title: "Backup".tr(), color: Theme.of(context).cardColor, context: context, actions: [
-      IconsOutlineButton(
-        onPressed: () {
-          Navigator.of(context).pop();
-        },
-        text: 'Cancel'.tr(),
-        iconData: Icons.cancel_outlined,
-        textStyle: const TextStyle(color: Colors.grey),
-        iconColor: Colors.grey,
-      ),
-      IconsButton(
-        onPressed: () async {
-          await backUp();
-          Navigator.of(context).pop();
-          onDelete();
-          SnackBar snackBar = SnackBar(
-            content: Text('Backup Complete'.tr()),
-          );
-          ScaffoldMessenger.of(context).showSnackBar(snackBar);
-        },
-        text: 'Backup'.tr(),
-        iconData: Icons.backup_outlined,
-        color: colors[0],
-        textStyle: const TextStyle(color: Colors.white),
-        iconColor: Colors.white,
-      ),
-    ]);
-  }
-
-  rDialog(BuildContext context) {
-    return Dialogs.materialDialog(msg: "m3".tr(), title: "Restore".tr(), color: Theme.of(context).cardColor, context: context, actions: [
-      IconsOutlineButton(
-        onPressed: () {
-          Navigator.of(context).pop();
-        },
-        text: 'Cancel'.tr(),
-        iconData: Icons.cancel_outlined,
-        textStyle: const TextStyle(color: Colors.grey),
-        iconColor: Colors.grey,
-      ),
-      IconsButton(
-        onPressed: () async {
-          await restore();
-          Navigator.of(context).pop();
-          onDelete();
-          SnackBar snackBar = SnackBar(
-            content: Text('Restore Complete'.tr()),
-          );
-          ScaffoldMessenger.of(context).showSnackBar(snackBar);
-        },
-        text: 'Yes'.tr(),
-        iconData: Icons.restore,
-        color: colors[0],
-        textStyle: const TextStyle(color: Colors.white),
-        iconColor: Colors.white,
-      ),
-    ]);
-  }
+  // backUp() async {
+  //   await getAllStoragePermission();
+  //   final dbFolder = await getDatabasesPath();
+  //   File source1 = File('$dbFolder/notes.db');
+  //   File source2 = File('/data/user/0/com.moazsalem.notes/shared_prefs/FlutterSharedPreferences.xml');
+  //   File source3 = File('${appDir.path}/Voice');
+  //   Directory dbBackup = Directory("${extDir[0]}/Download/Colorful Notes/backup/Database");
+  //   Directory voBackup = Directory("${extDir[0]}/Download/Colorful Notes/backup/.VoiceNotes");
+  //   Directory spBackup = Directory("${extDir[0]}/Download/Colorful Notes/backup/Shared_Preference");
+  //   if ((dbBackup.existsSync()) && (voBackup.existsSync()) && (spBackup.existsSync())) {
+  //     if (kDebugMode) {
+  //       print("Path exist");
+  //     }
+  //   } else {
+  //     if (kDebugMode) {
+  //       print("Path doesn't exist");
+  //     }
+  //     await dbBackup.create(recursive: true);
+  //     await voBackup.create(recursive: true);
+  //     await spBackup.create(recursive: true);
+  //   }
+  //   String newPath = "${dbBackup.path}/notes.db";
+  //   await source1.copy(newPath);
+  //   if (kDebugMode) {
+  //     print("Successfully Copied DB");
+  //   }
+  //   newPath = "${spBackup.path}/FlutterSharedPreferences.xml";
+  //   await source2.copy(newPath);
+  //   if (kDebugMode) {
+  //     print("Successfully Copied FlutterSharedPreferences.xml");
+  //   }
+  //   if (Directory(source3.path).existsSync()) {
+  //     if (kDebugMode) {
+  //       print("Voice exist");
+  //       }
+  //     copyDirectory(Directory(source3.path), Directory(voBackup.path));
+  //     if (kDebugMode) {
+  //       print("Successfully Copied Voice Notes");
+  //     }
+  //   } else {
+  //     if (kDebugMode) {
+  //       print("Voice doesn't exist");
+  //     }
+  //   }
+  // }
+  //
+  // restore() async {
+  //   await getAllStoragePermission();
+  //   final dbFolder = await getDatabasesPath();
+  //   String source1 = '$dbFolder/notes.db';
+  //   String source2 = '/data/user/0/com.moazsalem.notes/shared_prefs/FlutterSharedPreferences.xml';
+  //   String source3 = '${appDir.path}/Voice';
+  //   Directory dbBackup = Directory("${extDir[0]}/Download/Colorful Notes/backup/Database");
+  //   Directory voBackup = Directory("${extDir[0]}/Download/Colorful Notes/backup/.VoiceNotes");
+  //   Directory spBackup = Directory("${extDir[0]}/Download/Colorful Notes/backup/Shared_Preference");
+  //   if ((dbBackup.existsSync()) && (voBackup.existsSync()) && (spBackup.existsSync())) {
+  //     if (kDebugMode) {
+  //       print("Path exist");
+  //       if ((Directory(source3).existsSync())) {
+  //         if (kDebugMode) {
+  //           print("Voice exist");
+  //           await Directory(source3).delete(recursive: true);
+  //           await Directory(source3).create(recursive: true);
+  //         }
+  //       } else {
+  //         if (kDebugMode) {
+  //           print("Voice doesn't exist");
+  //         }
+  //         await Directory(source3).create(recursive: true);
+  //       }
+  //     }
+  //   } else {
+  //     if (kDebugMode) {
+  //       print("Path doesn't exist");
+  //     }
+  //   }
+  //   File db = File("${dbBackup.path}/notes.db");
+  //   await db.copy(source1);
+  //   if (kDebugMode) {
+  //     print("Successfully Copied DB");
+  //   }
+  //   File sp = File("${spBackup.path}/FlutterSharedPreferences.xml");
+  //   await sp.copy(source2);
+  //   if (kDebugMode) {
+  //     print("Successfully Copied FlutterSharedPreferences.xml");
+  //   }
+  //   copyDirectory(Directory(voBackup.path), Directory(source3));
+  //   if (kDebugMode) {
+  //     print("Successfully Copied Voice Notes");
+  //   }
+  //   startDatabase();
+  // }
+  //
+  // bDialog(BuildContext context) {
+  //   return Dialogs.materialDialog(msg: "m2".tr(), title: "Backup".tr(), color: Theme.of(context).cardColor, context: context, actions: [
+  //     IconsOutlineButton(
+  //       onPressed: () {
+  //         Navigator.of(context).pop();
+  //       },
+  //       text: 'Cancel'.tr(),
+  //       iconData: Icons.cancel_outlined,
+  //       textStyle: const TextStyle(color: Colors.grey),
+  //       iconColor: Colors.grey,
+  //     ),
+  //     IconsButton(
+  //       onPressed: () async {
+  //         await backUp();
+  //         Navigator.of(context).pop();
+  //         onDelete();
+  //         SnackBar snackBar = SnackBar(
+  //           content: Text('Backup Complete'.tr()),
+  //         );
+  //         ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  //       },
+  //       text: 'Backup'.tr(),
+  //       iconData: Icons.backup_outlined,
+  //       color: colors[0],
+  //       textStyle: const TextStyle(color: Colors.white),
+  //       iconColor: Colors.white,
+  //     ),
+  //   ]);
+  // }
+  //
+  // rDialog(BuildContext context) {
+  //   return Dialogs.materialDialog(msg: "m3".tr(), title: "Restore".tr(), color: Theme.of(context).cardColor, context: context, actions: [
+  //     IconsOutlineButton(
+  //       onPressed: () {
+  //         Navigator.of(context).pop();
+  //       },
+  //       text: 'Cancel'.tr(),
+  //       iconData: Icons.cancel_outlined,
+  //       textStyle: const TextStyle(color: Colors.grey),
+  //       iconColor: Colors.grey,
+  //     ),
+  //     IconsButton(
+  //       onPressed: () async {
+  //         await restore();
+  //         Navigator.of(context).pop();
+  //         onDelete();
+  //         SnackBar snackBar = SnackBar(
+  //           content: Text('Restore Complete'.tr()),
+  //         );
+  //         ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  //       },
+  //       text: 'Yes'.tr(),
+  //       iconData: Icons.restore,
+  //       color: colors[0],
+  //       textStyle: const TextStyle(color: Colors.white),
+  //       iconColor: Colors.white,
+  //     ),
+  //   ]);
+  // }
 }
 
 String getDeviceType() {
   final data = MediaQueryData.fromWindow(WidgetsBinding.instance.window);
-  return data.size.shortestSide < 600 ? 'phone' : 'tablet';
+  return data.size.shortestSide < 750 ? 'phone' : 'tablet';
 }
