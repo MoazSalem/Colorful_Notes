@@ -28,219 +28,226 @@ Widget createVoice(BuildContext context) {
       return Scaffold(
         resizeToAvoidBottomInset: false,
         backgroundColor: B.colors[chosenIndex],
-        body: SafeArea(
-            child: ListView(children: [
-          const SizedBox(
-            height: 70,
-          ),
-          Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 40),
-              child: TextFormField(
-                  textAlign: TextAlign.center,
-                  focusNode: titleFocusNode,
-                  maxLines: 2,
-                  cursorColor: Colors.white,
-                  autofocus: true,
-                  textInputAction: TextInputAction.done,
-                  controller: titleC,
-                  style: TextStyle(color: Colors.white, fontSize: B.isTablet ? 60 : 36, fontWeight: FontWeight.w500),
-                  decoration: InputDecoration(border: InputBorder.none, hintText: "Title".tr())),
-            ),
-            SizedBox(
-              height: height * 0.574,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+        body: Padding(
+          padding: const EdgeInsets.only(top: 40.0),
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  StreamBuilder<int>(
-                    stream: stopWatchTimer.rawTime,
-                    initialData: 0,
-                    builder: (context, snap) {
-                      final value = snap.data;
-                      final displayTime = StopWatchTimer.getDisplayTime(value!);
-                      return Column(
-                        children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.all(8),
-                            child: Text(
-                              displayTime,
-                              style: TextStyle(fontSize: B.isTablet ? 80 : 40, fontWeight: FontWeight.w500, color: value == 0 ? Colors.black54 : Colors.white),
-                            ),
-                          ),
-                        ],
-                      );
-                    },
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(vertical: B.isTablet ? 80 : 50.0),
-                    child: isRecording
-                        ? isPaused
-                            ? IconButton(
-                                constraints: const BoxConstraints.tightFor(height: 120, width: 120),
-                                onPressed: () async {
-                                  await record.resume();
-                                  stopWatchTimer.onStartTimer();
-                                  isPaused = false;
-                                  B.onRecord();
-                                },
-                                icon: const Icon(
-                                  Icons.play_arrow,
-                                  size: 100,
-                                  color: Colors.white,
-                                ))
-                            : IconButton(
-                                constraints: const BoxConstraints.tightFor(height: 120, width: 120),
-                                onPressed: () async {
-                                  await record.pause();
-                                  stopWatchTimer.onStopTimer();
-                                  isPaused = true;
-                                  B.onRecord();
-                                },
-                                icon: const Icon(
-                                  Icons.pause,
-                                  size: 100,
-                                  color: Colors.white,
-                                ))
-                        : IconButton(
-                            constraints: const BoxConstraints.tightFor(height: 120, width: 120),
-                            onPressed: () async {
-                              titleFocusNode.unfocus();
-                              time == ""
-                                  ? {time = DateTime.now().toString(), name = parseDate(time).toString()}
-                                  : {stopWatchTimer.onResetTimer(), B.deleteFile(context), time = DateTime.now().toString(), name = parseDate(time).toString()};
-                              if (await record.hasPermission()) {
-                                await B.createVoiceFolder();
-                                // Start timer.
-                                stopWatchTimer.onStartTimer();
-                                // Start recording
-                                isRecording = true;
-                                isPaused = false;
+                  Expanded(
+                      flex: B.isTablet? 8 : 4,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          IconButton(
+                              constraints: const BoxConstraints.tightFor(width: 60, height: 60),
+                              onPressed: () async {
+                                await record.stop();
+                                time = "";
+                                stopWatchTimer.onResetTimer();
+                                titleC.text = "";
+                                isRecording = false;
+                                name == "" ? null : B.deleteFile("${B.appDir.path}/Voice/$name.m4a");
+                                Navigator.pop(context);
                                 B.onRecord();
-                                await record.start(
-                                  path: "${B.appDir.path}/Voice/$name.m4a",
-                                  encoder: AudioEncoder.aacLc, // by default
-                                  bitRate: 128000, // by default
-                                  samplingRate: 44100, // by default
-                                );
-                              }
-                            },
-                            icon: const Icon(
-                              Icons.keyboard_voice_rounded,
-                              size: 100,
-                              color: Colors.black54,
-                            )),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(bottom: height * 0.06964),
+                              },
+                              icon: const Icon(
+                                Icons.arrow_back,
+                                size: 40,
+                                color: Colors.white,
+                              )),
+                        ],
+                      )),
+                  Expanded(
+                    flex: 1,
                     child: IconButton(
-                        constraints: const BoxConstraints.tightFor(height: 120, width: 120),
+                        constraints: const BoxConstraints.tightFor(width: 60, height: 60),
                         onPressed: () async {
-                          // Stop timer.
-                          stopWatchTimer.onStopTimer();
+                          final prefs = await SharedPreferences.getInstance();
                           await record.stop();
-                          isRecording = false;
-                          isPaused = false;
-                          B.onRecord();
+                          title = titleC.text;
+                          time == ""
+                              ? Navigator.pop(context)
+                              : {
+                            content = "${B.appDir.path}/Voice/$name.m4a",
+                            await B.insertToDatabase(title: title, time: time, content: content, index: chosenIndex, type: 1, layout: 0),
+                            stopWatchTimer.onResetTimer(),
+                            isRecording = false,
+                            titleC.text = "",
+                            time = "",
+                            B.adCounter++,
+                            await prefs.setInt("adCounter", B.adCounter),
+                            B.adCounter == 3 ? {interstitialAd.show(), B.adCounter = 0} : null,
+                            Navigator.pop(context),
+                            B.onCreateNote(),
+                            B.onChanged()
+                          };
                         },
-                        icon: Icon(
-                          Icons.stop_circle,
-                          size: 100,
-                          color: isRecording ? Colors.white : Colors.black54,
+                        icon: const Icon(
+                          Icons.done,
+                          size: 40,
+                          color: Colors.white,
                         )),
-                  ),
-                ],
-              ),
-            )
-          ]),
-          FittedBox(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: B.isTablet ? 100 : 20.0),
-              child: SizedBox(
-                height: 60,
-                child: Center(
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    scrollDirection: Axis.horizontal,
-                    itemCount: B.colors.length,
-                    itemBuilder: (BuildContext context, index) => GestureDetector(
-                      onTap: () {
-                        chosenIndex = index;
-                        B.onColorChanged();
-                      },
-                      child: CircleAvatar(
-                        radius: 35,
-                        backgroundColor: chosenIndex == index ? Colors.white : Colors.white54,
-                        child: CircleAvatar(
-                          radius: 25,
-                          backgroundColor: B.colors[index],
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
-          FittedBox(
-            child: Padding(
-              padding: EdgeInsets.symmetric(vertical: B.isTablet ? 10 : 5.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: B.isTablet ? 50 : 30),
-                    child: TextButton(
-                      onPressed: () async {
-                        await record.stop();
-                        time = "";
-                        stopWatchTimer.onResetTimer();
-                        titleC.text = "";
-                        isRecording = false;
-                        name == "" ? null : B.deleteFile("${B.appDir.path}/Voice/$name.m4a");
-                        Navigator.pop(context);
-                        B.onRecord();
-                      },
-                      child: Text(
-                        "Discard".tr(),
-                        style: const TextStyle(fontSize: 20, color: Colors.white),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: B.isTablet ? 60 : 40),
-                    child: TextButton(
-                      onPressed: () async {
-                        final prefs = await SharedPreferences.getInstance();
-                        await record.stop();
-                        title = titleC.text;
-                        time == ""
-                            ? Navigator.pop(context)
-                            : {
-                                content = "${B.appDir.path}/Voice/$name.m4a",
-                                await B.insertToDatabase(title: title, time: time, content: content, index: chosenIndex, type: 1, layout: 0),
-                                stopWatchTimer.onResetTimer(),
-                                isRecording = false,
-                                titleC.text = "",
-                                time = "",
-                                B.adCounter++,
-                                await prefs.setInt("adCounter", B.adCounter),
-                                B.adCounter == 3 ? {interstitialAd.show(), B.adCounter = 0} : null,
-                                Navigator.pop(context),
-                                B.onCreateNote(),
-                                B.onChanged()
-                              };
-                      },
-                      child: Text(
-                        "Save".tr(),
-                        style: const TextStyle(fontSize: 20, color: Colors.white),
-                      ),
-                    ),
                   )
                 ],
               ),
-            ),
-          )
-        ])),
+              Expanded(
+                child: Row(
+                  children: [
+                    Expanded(
+                      flex: 4,
+                      child: ListView(children: [
+                        Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                            child: TextFormField(
+                                textAlign: TextAlign.center,
+                                focusNode: titleFocusNode,
+                                maxLines: 2,
+                                cursorColor: Colors.white,
+                                autofocus: true,
+                                textInputAction: TextInputAction.done,
+                                controller: titleC,
+                                style: TextStyle(color: Colors.white, fontSize: B.isTablet ? 60 : 36, fontWeight: FontWeight.w500),
+                                decoration: InputDecoration(border: InputBorder.none, hintText: "Title".tr())),
+                          ),
+                          SizedBox(
+                            height: height * 0.8,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                StreamBuilder<int>(
+                                  stream: stopWatchTimer.rawTime,
+                                  initialData: 0,
+                                  builder: (context, snap) {
+                                    final value = snap.data;
+                                    final time = StopWatchTimer.getDisplayTime(value!);
+                                    var displayTime = time.split(".");
+                                    return Column(
+                                      children: <Widget>[
+                                        Padding(
+                                          padding: const EdgeInsets.all(8),
+                                          child: Text(
+                                            displayTime[0],
+                                            style: TextStyle(fontSize: B.isTablet ? 80 : 40, fontWeight: FontWeight.w500, color: value == 0 ? Colors.black54 : Colors.white),
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.symmetric(vertical: B.isTablet ? 80 : 50.0),
+                                  child: isRecording
+                                      ? isPaused
+                                          ? IconButton(
+                                              constraints: const BoxConstraints.tightFor(height: 120, width: 120),
+                                              onPressed: () async {
+                                                await record.resume();
+                                                stopWatchTimer.onStartTimer();
+                                                isPaused = false;
+                                                B.onRecord();
+                                              },
+                                              icon: const Icon(
+                                                Icons.play_arrow,
+                                                size: 100,
+                                                color: Colors.white,
+                                              ))
+                                          : IconButton(
+                                              constraints: const BoxConstraints.tightFor(height: 120, width: 120),
+                                              onPressed: () async {
+                                                await record.pause();
+                                                stopWatchTimer.onStopTimer();
+                                                isPaused = true;
+                                                B.onRecord();
+                                              },
+                                              icon: const Icon(
+                                                Icons.pause,
+                                                size: 100,
+                                                color: Colors.white,
+                                              ))
+                                      : IconButton(
+                                          constraints: const BoxConstraints.tightFor(height: 120, width: 120),
+                                          onPressed: () async {
+                                            titleFocusNode.unfocus();
+                                            time == ""
+                                                ? {time = DateTime.now().toString(), name = parseDate(time).toString()}
+                                                : {stopWatchTimer.onResetTimer(), B.deleteFile(context), time = DateTime.now().toString(), name = parseDate(time).toString()};
+                                            if (await record.hasPermission()) {
+                                              await B.createVoiceFolder();
+                                              // Start timer.
+                                              stopWatchTimer.onStartTimer();
+                                              // Start recording
+                                              isRecording = true;
+                                              isPaused = false;
+                                              B.onRecord();
+                                              await record.start(
+                                                path: "${B.appDir.path}/Voice/$name.m4a",
+                                                encoder: AudioEncoder.aacLc, // by default
+                                                bitRate: 128000, // by default
+                                                samplingRate: 44100, // by default
+                                              );
+                                            }
+                                          },
+                                          icon: const Icon(
+                                            Icons.keyboard_voice_rounded,
+                                            size: 100,
+                                            color: Colors.black54,
+                                          )),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(bottom: height * 0.06964),
+                                  child: IconButton(
+                                      constraints: const BoxConstraints.tightFor(height: 120, width: 120),
+                                      onPressed: () async {
+                                        // Stop timer.
+                                        stopWatchTimer.onStopTimer();
+                                        await record.stop();
+                                        isRecording = false;
+                                        isPaused = false;
+                                        B.onRecord();
+                                      },
+                                      icon: Icon(
+                                        Icons.stop_circle,
+                                        size: 100,
+                                        color: isRecording ? Colors.white : Colors.black54,
+                                      )),
+                                ),
+                              ],
+                            ),
+                          )
+                        ]),
+                      ]),
+                    ),
+                    Expanded(
+                        flex: 1,
+                        child: ListView.builder(
+                          scrollDirection: Axis.vertical,
+                          itemCount: B.colors.length,
+                          itemBuilder: (BuildContext context, index) => GestureDetector(
+                            onTap: () {
+                              chosenIndex = index;
+                              B.onColorChanged();
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.all(6.0),
+                              child: CircleAvatar(
+                                radius: 25,
+                                backgroundColor: chosenIndex == index ? Colors.white : Colors.white54,
+                                child: CircleAvatar(
+                                  radius: 20,
+                                  backgroundColor: B.colors[index],
+                                ),
+                              ),
+                            ),
+                          ),
+                        )) ],
+                ),
+              ),
+            ],
+          ),
+        ),
       );
     },
   );

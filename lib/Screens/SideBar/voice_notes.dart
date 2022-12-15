@@ -45,6 +45,11 @@ class VoiceNotesPage extends StatelessWidget {
                 ),
               ),
               PopupMenuButton<String>(
+                icon: B.viewIndexV == 0
+                    ? Icon(Icons.view_agenda)
+                    : B.viewIndexV == 1
+                        ? Icon(Icons.view_day)
+                        : Icon(Icons.grid_view_sharp),
                 onSelected: (value) async {
                   final prefs = await SharedPreferences.getInstance();
                   await prefs.setInt("viewIndexV", viewModes[value]!);
@@ -75,6 +80,7 @@ class VoiceNotesPage extends StatelessWidget {
         }
 
         return Scaffold(
+          floatingActionButtonLocation: B.fabIndex == 0 ? FloatingActionButtonLocation.endFloat : FloatingActionButtonLocation.startFloat,
           floatingActionButton: Container(
             decoration: BoxDecoration(
               shape: BoxShape.circle,

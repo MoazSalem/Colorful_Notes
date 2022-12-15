@@ -33,38 +33,75 @@ Widget editVoice({required Map note}) {
           SizedBox(
             height: B.isTablet ? 40 : 10,
           ),
-          FittedBox(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: B.isTablet ? 100 : 20.0),
-              child: SizedBox(
-                height: 60,
-                child: Center(
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    scrollDirection: Axis.horizontal,
-                    itemCount: B.colors.length,
-                    itemBuilder: (BuildContext context, index2) => GestureDetector(
-                      onTap: () {
-                        bIndex = index2;
-                        B.onColorChanged();
-                      },
-                      child: CircleAvatar(
-                        radius: 35,
-                        backgroundColor: bIndex == index2 ? Colors.white : Colors.white54,
-                        child: CircleAvatar(
-                          radius: 25,
-                          backgroundColor: B.colors[index2],
+          Column(
+            children: [
+              FittedBox(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: B.isTablet ? 100 : 20.0),
+                  child: SizedBox(
+                    height: 65,
+                    child: Center(
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        scrollDirection: Axis.horizontal,
+                        itemCount: 5,
+                        itemBuilder: (BuildContext context, index2) => GestureDetector(
+                          onTap: () {
+                            bIndex = index2;
+                            B.onColorChanged();
+                          },
+                          child: CircleAvatar(
+                            radius: 35,
+                            backgroundColor: bIndex == index2 ? Colors.white : Colors.white54,
+                            child: CircleAvatar(
+                              radius: 25,
+                              backgroundColor: B.colors[index2],
+                            ),
+                          ),
                         ),
                       ),
                     ),
                   ),
                 ),
               ),
-            ),
+              Padding(
+                padding: const EdgeInsets.only(top: 10.0),
+                child: FittedBox(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: B.isTablet ? 100 : 20.0),
+                    child: SizedBox(
+                      height: 65,
+                      child: Center(
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          scrollDirection: Axis.horizontal,
+                          itemCount: 5,
+                          itemBuilder: (BuildContext context, index3) => GestureDetector(
+                            onTap: () {
+                              index3 += 5;
+                              bIndex = index3;
+                              B.onColorChanged();
+                            },
+                            child: CircleAvatar(
+                              radius: 35,
+                              backgroundColor: bIndex == (index3 + 5) ? Colors.white : Colors.white54,
+                              child: CircleAvatar(
+                                radius: 25,
+                                backgroundColor: B.colors[index3 + 5],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
           FittedBox(
             child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 30.0),
+              padding: const EdgeInsets.symmetric(vertical: 20.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [

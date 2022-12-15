@@ -9,6 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:notes/Widgets/notes.dart';
 import 'package:notes/Screens/Actions/create_note.dart';
 import 'package:notes/Screens/Actions/create_voice.dart';
+import 'dart:ui' as UI;
 
 bool noTitle = false;
 bool noContent = false;
@@ -45,6 +46,11 @@ class HomePage extends StatelessWidget {
                 ),
               ),
               PopupMenuButton<String>(
+                icon: B.viewIndex == 0
+                    ? Icon(Icons.view_agenda)
+                    : B.viewIndex == 1
+                        ? Icon(Icons.view_day)
+                        : Icon(Icons.grid_view_sharp),
                 onSelected: (value) async {
                   final prefs = await SharedPreferences.getInstance();
                   await prefs.setInt("viewIndex", viewModes[value]!);
@@ -87,8 +93,10 @@ class HomePage extends StatelessWidget {
         }
 
         return Scaffold(
-          floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-          floatingActionButton: customFab(context, openFab, B.colors, B.shadeColors, false, 0, 2, create1, create2),
+          floatingActionButtonLocation: B.fabIndex == 0 ? FloatingActionButtonLocation.endFloat : FloatingActionButtonLocation.startFloat,
+          floatingActionButton: B.fabIndex == 0
+              ? customFab(context, openFab, B.colors, B.shadeColors, false, 0, 2, create1, create2)
+              : Directionality(textDirection: B.lang == 'en' ? UI.TextDirection.rtl : UI.TextDirection.ltr, child: customFab(context, openFab, B.colors, B.shadeColors, false, 0, 2, create1, create2)),
           body: ListView(
             padding: EdgeInsets.zero,
             children: [

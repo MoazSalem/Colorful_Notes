@@ -11,8 +11,10 @@ import 'package:notes/Screens/SideBar/notes.dart';
 import 'package:notes/Screens/SideBar/settings.dart';
 import 'package:notes/Screens/SideBar/voice_notes.dart';
 import 'package:adaptive_theme/adaptive_theme.dart';
+import 'package:notes/Widgets/SideBar.dart';
 
 late var interstitialAd;
+
 class Home extends StatelessWidget {
   const Home({Key? key}) : super(key: key);
 
@@ -26,8 +28,7 @@ class Home extends StatelessWidget {
             // Keep a reference to the ad so you can show it later.
             interstitialAd = ad;
           },
-          onAdFailedToLoad: (LoadAdError error) {
-          },
+          onAdFailedToLoad: (LoadAdError error) {},
         ));
     return AnnotatedRegion<SystemUiOverlayStyle>(
         value: SystemUiOverlayStyle(
@@ -45,7 +46,6 @@ class Home extends StatelessWidget {
             listener: (context, state) {},
             builder: (context, state) {
               var B = NotesBloc.get(context);
-              double sizeBox = B.isTablet ? 60 : 30;
               B.lang = context.locale.toString();
               B.getScreenWidth(context);
               List<Widget> page = [
@@ -70,6 +70,15 @@ class Home extends StatelessWidget {
                         data: MediaQuery.of(context).copyWith(textScaleFactor: B.isTablet ? 1.5 : 1.0),
                         child: SettingsPage(
                           currentTheme: B.getAppTheme(context),
+                          black: B.isBlack ? "Amoled" : "Dark",
+                          sB: B.sbIndex == 0
+                              ? "Left"
+                              : B.sbIndex == 1
+                                  ? "Left Inv"
+                                  : B.sbIndex == 2
+                                      ? "Right"
+                                      : "Right Inv",
+                          fabLoc: B.fabIndex == 0 ? "Right" : "Left",
                         ));
                   },
                 ),
@@ -79,120 +88,6 @@ class Home extends StatelessWidget {
                   },
                 ),
               ];
-
-              Widget sideBar() {
-                return Container(
-                  width: B.isTablet ? 100 : 60,
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).cardColor,
-                  ),
-                  child: Column(
-                    children: [
-                      Expanded(
-                          flex: 8,
-                          child: Column(
-                            children: [
-                              const SizedBox(
-                                height: 65,
-                              ),
-                              IconButton(
-                                  constraints: const BoxConstraints.tightFor(width: 60, height: 60),
-                                  onPressed: () {
-                                    B.onIndexChanged(0);
-                                  },
-                                  icon: B.currentIndex != 0
-                                      ? Icon(
-                                          Icons.home_outlined,
-                                          color: B.colors[0],
-                                          size: B.isTablet ? 32 : 22,
-                                        )
-                                      : Icon(
-                                          Icons.home,
-                                          color: B.colors[0],
-                                          size: B.isTablet ? 40 : 30,
-                                        )),
-                              SizedBox(
-                                height: sizeBox,
-                              ),
-                              IconButton(
-                                  constraints: const BoxConstraints.tightFor(width: 60, height: 60),
-                                  onPressed: () {
-                                    B.onIndexChanged(1);
-                                  },
-                                  icon: B.currentIndex != 1
-                                      ? Icon(
-                                          Icons.sticky_note_2_outlined,
-                                          color: B.colors[1],
-                                          size: B.isTablet ? 30 : 20,
-                                        )
-                                      : Icon(
-                                          Icons.sticky_note_2,
-                                          color: B.colors[1],
-                                          size: B.isTablet ? 40 : 30,
-                                        )),
-                              SizedBox(
-                                height: sizeBox,
-                              ),
-                              IconButton(
-                                  constraints: const BoxConstraints.tightFor(width: 60, height: 60),
-                                  onPressed: () {
-                                    B.onIndexChanged(2);
-                                  },
-                                  icon: B.currentIndex != 2
-                                      ? Icon(
-                                          Icons.keyboard_voice_outlined,
-                                          color: B.colors[3],
-                                          size: B.isTablet ? 34 : 24,
-                                        )
-                                      : Icon(
-                                          Icons.keyboard_voice,
-                                          color: B.colors[3],
-                                          size: B.isTablet ? 42 : 32,
-                                        )),
-                              SizedBox(
-                                height: sizeBox,
-                              ),
-                              IconButton(
-                                  constraints: const BoxConstraints.tightFor(width: 60, height: 60),
-                                  onPressed: () {
-                                    B.onIndexChanged(3);
-                                  },
-                                  icon: B.currentIndex != 3
-                                      ? Icon(
-                                          Icons.settings_outlined,
-                                          color: B.colors[2],
-                                          size: B.isTablet ? 30 : 20,
-                                        )
-                                      : Icon(
-                                          Icons.settings,
-                                          color: B.colors[2],
-                                          size: B.isTablet ? 40 : 30,
-                                        )),
-                            ],
-                          )),
-                      Expanded(
-                        child: IconButton(
-                            constraints: const BoxConstraints.tightFor(width: 60, height: 60),
-                            onPressed: () {
-                              B.onIndexChanged(4);
-                            },
-                            icon: B.currentIndex != 4
-                                ? Icon(
-                                    Icons.info_outline,
-                                    color: B.colors[4],
-                                    size: B.isTablet ? 30 : 20,
-                                  )
-                                : Icon(
-                                    Icons.info,
-                                    color: B.colors[4],
-                                    size: B.isTablet ? 40 : 30,
-                                  )),
-                      )
-                    ],
-                  ),
-                );
-              }
-
               return Scaffold(
                 resizeToAvoidBottomInset: false,
                 key: B.scaffoldKey,
@@ -207,18 +102,31 @@ class Home extends StatelessWidget {
                         ),
                       )
                     : Row(
-                        children: [
-                          sideBar(),
-                          Container(
-                            height: double.infinity,
-                            width: 1,
-                            color: Theme.of(context).highlightColor.withOpacity(0.15),
-                          ), // Divider
-                          Expanded(
-                            flex: 5,
-                            child: page[B.currentIndex],
-                          )
-                        ],
+                        children: B.sbIndex == 2 || B.sbIndex == 3
+                            ? [
+                                Expanded(
+                                  flex: 5,
+                                  child: page[B.currentIndex],
+                                ),
+                                Container(
+                                  height: double.infinity,
+                                  width: 1,
+                                  color: Theme.of(context).highlightColor.withOpacity(0.15),
+                                ),
+                                sideBar(context, B.sbIndex == 3 ? true : false), // Divider
+                              ]
+                            : [
+                                sideBar(context, B.sbIndex == 1 ? true : false),
+                                Container(
+                                  height: double.infinity,
+                                  width: 1,
+                                  color: Theme.of(context).highlightColor.withOpacity(0.15),
+                                ), // Divider
+                                Expanded(
+                                  flex: 5,
+                                  child: page[B.currentIndex],
+                                ),
+                              ],
                       ),
               );
             },
@@ -226,6 +134,7 @@ class Home extends StatelessWidget {
         ));
   }
 }
+
 final BannerAd banner1 = BannerAd(
   adUnitId: 'ca-app-pub-1796999612396305/5626834454',
   size: AdSize.banner,
