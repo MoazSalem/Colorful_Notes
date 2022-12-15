@@ -35,7 +35,11 @@ class SettingsPage extends StatelessWidget {
       listener: (context, state) {},
       builder: (context, state) {
         var B = NotesBloc.get(context);
-        double height = B.isTablet ? B.lang == 'en' ? 100 : 120 : B.lang == 'en' ? 60 : 80;
+        double height = B.isTablet
+            ? 120
+            : 80;
+        double title = isTablet ? 26 : 22;
+        double subtitle = isTablet ? 16 : 12;
         double switchSize = isTablet ? 100 : 50;
         double iconSize = isTablet ? 40 : 10.0;
         double itemHeight = isTablet ? 80 : 50.0;
@@ -60,11 +64,11 @@ class SettingsPage extends StatelessWidget {
                     child: ListTile(
                       title: Text(
                         "Language".tr(),
-                        style: const TextStyle(fontSize: 26, fontWeight: FontWeight.w500),
+                        style: TextStyle(fontSize: title, fontWeight: FontWeight.w500),
                       ),
                       subtitle: Text(
                         "sLanguage".tr(),
-                        style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
+                        style: TextStyle(fontSize: subtitle, fontWeight: FontWeight.w400),
                       ),
                       trailing: DropdownButton(
                         iconSize: iconSize,
@@ -107,11 +111,11 @@ class SettingsPage extends StatelessWidget {
                     child: ListTile(
                         title: Text(
                           "Start In".tr(),
-                          style: const TextStyle(fontSize: 26, fontWeight: FontWeight.w500),
+                          style: TextStyle(fontSize: title, fontWeight: FontWeight.w500),
                         ),
                         subtitle: Text(
                           "sStart In".tr(),
-                          style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
+                          style: TextStyle(fontSize: subtitle, fontWeight: FontWeight.w400),
                         ),
                         trailing: DropdownButton(
                           iconSize: iconSize,
@@ -159,11 +163,11 @@ class SettingsPage extends StatelessWidget {
                     child: ListTile(
                         title: Text(
                           "Side Bar".tr(),
-                          style: const TextStyle(fontSize: 26, fontWeight: FontWeight.w500),
+                          style: TextStyle(fontSize: title, fontWeight: FontWeight.w500),
                         ),
                         subtitle: Text(
                           "sSide Bar".tr(),
-                          style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
+                          style: TextStyle(fontSize: subtitle, fontWeight: FontWeight.w400),
                         ),
                         trailing: DropdownButton(
                           iconSize: iconSize,
@@ -214,11 +218,11 @@ class SettingsPage extends StatelessWidget {
                     child: ListTile(
                         title: Text(
                           "Create Button".tr(),
-                          style: const TextStyle(fontSize: 26, fontWeight: FontWeight.w500),
+                          style: TextStyle(fontSize: title, fontWeight: FontWeight.w500),
                         ),
                         subtitle: Text(
                           "sCreate Button".tr(),
-                          style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
+                          style: TextStyle(fontSize: subtitle, fontWeight: FontWeight.w400),
                         ),
                         trailing: DropdownButton(
                           iconSize: iconSize,
@@ -261,11 +265,11 @@ class SettingsPage extends StatelessWidget {
                     child: ListTile(
                         title: Text(
                           "App Theme".tr(),
-                          style: const TextStyle(fontSize: 26, fontWeight: FontWeight.w500),
+                          style: TextStyle(fontSize: title, fontWeight: FontWeight.w500),
                         ),
                         subtitle: Text(
                           "sApp Theme".tr(),
-                          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+                          style: TextStyle(fontSize: subtitle, fontWeight: FontWeight.w400),
                         ),
                         trailing: DropdownButton(
                           iconSize: iconSize,
@@ -310,11 +314,11 @@ class SettingsPage extends StatelessWidget {
                     child: ListTile(
                         title: Text(
                           "Amoled Mode".tr(),
-                          style: const TextStyle(fontSize: 26, fontWeight: FontWeight.w500),
+                          style: TextStyle(fontSize: title, fontWeight: FontWeight.w500),
                         ),
                         subtitle: Text(
                           "sAmoled Mode".tr(),
-                          style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
+                          style: TextStyle(fontSize: subtitle, fontWeight: FontWeight.w400),
                         ),
                         trailing: Padding(
                           padding: EdgeInsets.only(right: padding),
@@ -344,11 +348,11 @@ class SettingsPage extends StatelessWidget {
                     child: ListTile(
                         title: Text(
                           "Darker Colors".tr(),
-                          style: const TextStyle(fontSize: 26, fontWeight: FontWeight.w500),
+                          style: TextStyle(fontSize: title, fontWeight: FontWeight.w500),
                         ),
                         subtitle: Text(
                           "sDarker Colors".tr(),
-                          style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
+                          style: TextStyle(fontSize: subtitle, fontWeight: FontWeight.w400),
                         ),
                         trailing: Padding(
                           padding: EdgeInsets.only(right: padding),
@@ -378,11 +382,11 @@ class SettingsPage extends StatelessWidget {
                     child: ListTile(
                         title: Text(
                           "Show Date".tr(),
-                          style: const TextStyle(fontSize: 26, fontWeight: FontWeight.w500),
+                          style: TextStyle(fontSize: title, fontWeight: FontWeight.w500),
                         ),
                         subtitle: Text(
                           "sShow Date".tr(),
-                          style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
+                          style: TextStyle(fontSize: subtitle, fontWeight: FontWeight.w400),
                         ),
                         trailing: Padding(
                           padding: EdgeInsets.only(right: padding),
@@ -411,11 +415,11 @@ class SettingsPage extends StatelessWidget {
                     child: ListTile(
                         title: Text(
                           "Show Shadow".tr(),
-                          style: const TextStyle(fontSize: 26, fontWeight: FontWeight.w500),
+                          style: TextStyle(fontSize: title, fontWeight: FontWeight.w500),
                         ),
                         subtitle: Text(
                           "sShow Shadow".tr(),
-                          style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
+                          style: TextStyle(fontSize: subtitle, fontWeight: FontWeight.w400),
                         ),
                         trailing: Padding(
                           padding: EdgeInsets.only(right: padding),
@@ -444,11 +448,11 @@ class SettingsPage extends StatelessWidget {
                     child: ListTile(
                         title: Text(
                           "Show Edited".tr(),
-                          style: const TextStyle(fontSize: 26, fontWeight: FontWeight.w500),
+                          style: TextStyle(fontSize: title, fontWeight: FontWeight.w500),
                         ),
                         subtitle: Text(
                           "sShow Edited".tr(),
-                          style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
+                          style: TextStyle(fontSize: subtitle, fontWeight: FontWeight.w400),
                         ),
                         trailing: Padding(
                           padding: EdgeInsets.only(right: padding),

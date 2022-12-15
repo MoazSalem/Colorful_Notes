@@ -258,7 +258,7 @@ packages:
       name: huawei_ml_language
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.2.0+301"
+    version: "3.7.0+300"
   image:
     dependency: transitive
     description:
@@ -468,7 +468,7 @@ packages:
       name: provider
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "6.0.4"
+    version: "6.0.5"
   record:
     dependency: "direct main"
     description:
@@ -545,7 +545,7 @@ packages:
       name: shared_preferences_linux
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.1.1"
+    version: "2.1.2"
   shared_preferences_macos:
     dependency: transitive
     description:
@@ -573,7 +573,7 @@ packages:
       name: shared_preferences_windows
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.1.1"
+    version: "2.1.2"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -599,7 +599,7 @@ packages:
       name: sqflite
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.2.0+3"
+    version: "2.2.2"
   sqflite_common:
     dependency: transitive
     description:

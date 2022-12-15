@@ -11,9 +11,9 @@ import 'package:notes/Screens/SideBar/notes.dart';
 import 'package:notes/Screens/SideBar/settings.dart';
 import 'package:notes/Screens/SideBar/voice_notes.dart';
 import 'package:adaptive_theme/adaptive_theme.dart';
-import 'package:notes/Widgets/SideBar.dart';
+import 'package:notes/Widgets/sideBar.dart';
 
-late var interstitialAd;
+late AdManagerInterstitialAd interstitialAd;
 
 class Home extends StatelessWidget {
   const Home({Key? key}) : super(key: key);
