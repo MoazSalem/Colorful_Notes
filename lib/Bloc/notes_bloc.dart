@@ -60,7 +60,7 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
   bool loading = true;
   late String openPage;
   late String lang;
-  late String detectedLanguage;
+  String detectedLanguage= 'en';
   String capturedText = "";
   bool isTablet = getDeviceType() == 'tablet' ? true : false;
   GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
