@@ -2,10 +2,8 @@ import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:notes/Data/theme.dart';
 import 'package:notes/Bloc/notes_bloc.dart';
-import 'package:notes/Screens/home_screen.dart';
 import 'package:notes/Widgets/notes.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:switcher_button/switcher_button.dart';
@@ -30,15 +28,11 @@ class SettingsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    banner1.load();
-    AdWidget adWidget = AdWidget(ad: banner1);
     return BlocConsumer<NotesBloc, NotesState>(
       listener: (context, state) {},
       builder: (context, state) {
         var B = NotesBloc.get(context);
-        double height = B.isTablet
-            ? 120
-            : 80;
+        double height = B.isTablet ? 120 : 80;
         double title = isTablet ? 26 : 22;
         double subtitle = isTablet ? 16 : 12;
         double switchSize = isTablet ? 100 : 50;
@@ -47,12 +41,6 @@ class SettingsPage extends StatelessWidget {
         double fontSize = B.isTablet ? 10 : 14;
         double padding = B.isTablet ? 24 : 10;
         return Scaffold(
-          bottomNavigationBar: Container(
-            alignment: Alignment.center,
-            width: banner1.size.width.toDouble(),
-            height: banner1.size.height.toDouble(),
-            child: adWidget,
-          ),
           body: ListView(
             padding: EdgeInsets.zero,
             children: [
@@ -200,8 +188,6 @@ class SettingsPage extends StatelessWidget {
                                         ? B.sbIndex = 2
                                         : B.sbIndex = 3;
                             sB = newValue!;
-                            banner1.dispose();
-                            banner1.load();
                             final prefs = await SharedPreferences.getInstance();
                             await prefs.setInt("sbIndex", B.sbIndex);
                             B.prefsChanged();

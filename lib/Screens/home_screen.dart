@@ -2,7 +2,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:lottie/lottie.dart';
 import 'package:notes/Bloc/notes_bloc.dart';
 import 'package:notes/Screens/SideBar/home.dart';
@@ -13,23 +12,11 @@ import 'package:notes/Screens/SideBar/voice_notes.dart';
 import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:notes/Widgets/sideBar.dart';
 
-late AdManagerInterstitialAd interstitialAd;
-
 class Home extends StatelessWidget {
   const Home({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    AdManagerInterstitialAd.load(
-        adUnitId: 'ca-app-pub-1796999612396305/6912830112',
-        request: const AdManagerAdRequest(),
-        adLoadCallback: AdManagerInterstitialAdLoadCallback(
-          onAdLoaded: (AdManagerInterstitialAd ad) {
-            // Keep a reference to the ad so you can show it later.
-            interstitialAd = ad;
-          },
-          onAdFailedToLoad: (LoadAdError error) {},
-        ));
     return AnnotatedRegion<SystemUiOverlayStyle>(
         value: SystemUiOverlayStyle(
           statusBarColor: Colors.transparent,
@@ -134,16 +121,3 @@ class Home extends StatelessWidget {
         ));
   }
 }
-
-final BannerAd banner1 = BannerAd(
-  adUnitId: 'ca-app-pub-1796999612396305/5626834454',
-  size: AdSize.banner,
-  request: const AdRequest(),
-  listener: const BannerAdListener(),
-);
-final BannerAd banner2 = BannerAd(
-  adUnitId: 'ca-app-pub-1796999612396305/2782013418',
-  size: AdSize.banner,
-  request: const AdRequest(),
-  listener: const BannerAdListener(),
-);

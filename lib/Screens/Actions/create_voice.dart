@@ -2,9 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:notes/Bloc/notes_bloc.dart';
-import 'package:notes/Screens/home_screen.dart';
 import 'package:record/record.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 
 final record = Record();
@@ -36,7 +34,7 @@ Widget createVoice(BuildContext context) {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Expanded(
-                      flex: B.isTablet? 8 : 4,
+                      flex: B.isTablet ? 8 : 4,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
@@ -64,25 +62,21 @@ Widget createVoice(BuildContext context) {
                     child: IconButton(
                         constraints: const BoxConstraints.tightFor(width: 60, height: 60),
                         onPressed: () async {
-                          final prefs = await SharedPreferences.getInstance();
                           await record.stop();
                           title = titleC.text;
                           time == ""
                               ? Navigator.pop(context)
                               : {
-                            content = "${B.appDir.path}/Voice/$name.m4a",
-                            await B.insertToDatabase(title: title, time: time, content: content, index: chosenIndex, type: 1, layout: 0),
-                            stopWatchTimer.onResetTimer(),
-                            isRecording = false,
-                            titleC.text = "",
-                            time = "",
-                            B.adCounter++,
-                            await prefs.setInt("adCounter", B.adCounter),
-                            B.adCounter == 3 ? {interstitialAd.show(), B.adCounter = 0} : null,
-                            Navigator.pop(context),
-                            B.onCreateNote(),
-                            B.onChanged()
-                          };
+                                  content = "${B.appDir.path}/Voice/$name.m4a",
+                                  await B.insertToDatabase(title: title, time: time, content: content, index: chosenIndex, type: 1, layout: 0),
+                                  stopWatchTimer.onResetTimer(),
+                                  isRecording = false,
+                                  titleC.text = "",
+                                  time = "",
+                                  Navigator.pop(context),
+                                  B.onCreateNote(),
+                                  B.onChanged()
+                                };
                         },
                         icon: const Icon(
                           Icons.done,
@@ -100,7 +94,7 @@ Widget createVoice(BuildContext context) {
                       child: ListView(children: [
                         Column(mainAxisAlignment: MainAxisAlignment.center, children: [
                           Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                             child: TextFormField(
                                 textAlign: TextAlign.center,
                                 focusNode: titleFocusNode,
@@ -242,7 +236,8 @@ Widget createVoice(BuildContext context) {
                               ),
                             ),
                           ),
-                        )) ],
+                        ))
+                  ],
                 ),
               ),
             ],

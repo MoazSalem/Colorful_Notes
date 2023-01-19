@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
 import 'package:notes/Bloc/notes_bloc.dart';
-import 'package:notes/Screens/home_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final TextEditingController titleC = TextEditingController();
@@ -35,57 +34,52 @@ Widget createNote(BuildContext context, bool isML) {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Expanded(
-                      flex: B.isTablet? 8 : 4,
+                      flex: B.isTablet ? 8 : 4,
                       child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      IconButton(
-                          constraints: const BoxConstraints.tightFor(width: 60, height: 60),
-                          onPressed: () async {
-                            final prefs = await SharedPreferences.getInstance(), time = DateTime.now().toString();
-                            title = titleC.text;
-                            content = contentC.text;
-                            titleC.text != "" || contentC.text != ""
-                                ? {
-                              await B.detectLanguage("$title $content"),
-                              await B.insertToDatabase(title: title, time: time, content: content, index: chosenIndex, layout: B.detectedLanguage == 'ar' ? 1 : 0),
-                              titleC.text = "",
-                              contentC.text = "",
-                              B.adCounter++,
-                              B.adCounter > 2 ? {interstitialAd.show(), B.adCounter = 0} : null,
-                              await prefs.setInt("adCounter", B.adCounter),
-                              Navigator.pop(context),
-                              B.onCreateNote()
-                            }
-                                : Navigator.pop(context);
-                          },
-                          icon: const Icon(
-                            Icons.arrow_back,
-                            size: 40,
-                            color: Colors.white,
-                          )),
-                    ],
-                  )),
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          IconButton(
+                              constraints: const BoxConstraints.tightFor(width: 60, height: 60),
+                              onPressed: () async {
+                                final prefs = await SharedPreferences.getInstance(), time = DateTime.now().toString();
+                                title = titleC.text;
+                                content = contentC.text;
+                                titleC.text != "" || contentC.text != ""
+                                    ? {
+                                        await B.detectLanguage("$title $content"),
+                                        await B.insertToDatabase(title: title, time: time, content: content, index: chosenIndex, layout: B.detectedLanguage == 'ar' ? 1 : 0),
+                                        titleC.text = "",
+                                        contentC.text = "",
+                                        await prefs.setInt("adCounter", B.adCounter),
+                                        Navigator.pop(context),
+                                        B.onCreateNote()
+                                      }
+                                    : Navigator.pop(context);
+                              },
+                              icon: const Icon(
+                                Icons.arrow_back,
+                                size: 40,
+                                color: Colors.white,
+                              )),
+                        ],
+                      )),
                   Expanded(
                     flex: 1,
                     child: IconButton(
                         constraints: const BoxConstraints.tightFor(width: 60, height: 60),
                         onPressed: () async {
-                          final prefs = await SharedPreferences.getInstance(), time = DateTime.now().toString();
+                          time = DateTime.now().toString();
                           title = titleC.text;
                           content = contentC.text;
                           titleC.text != "" || contentC.text != ""
                               ? {
-                            await B.detectLanguage("$title $content"),
-                            await B.insertToDatabase(title: title, time: time, content: content, index: chosenIndex, layout: B.detectedLanguage == 'ar' ? 1 : 0),
-                            titleC.text = "",
-                            contentC.text = "",
-                            B.adCounter++,
-                            await prefs.setInt("adCounter", B.adCounter),
-                            B.adCounter == 3 ? {interstitialAd.show(), B.adCounter = 0} : null,
-                            Navigator.pop(context),
-                            B.onCreateNote()
-                          }
+                                  await B.detectLanguage("$title $content"),
+                                  await B.insertToDatabase(title: title, time: time, content: content, index: chosenIndex, layout: B.detectedLanguage == 'ar' ? 1 : 0),
+                                  titleC.text = "",
+                                  contentC.text = "",
+                                  Navigator.pop(context),
+                                  B.onCreateNote()
+                                }
                               : Navigator.pop(context);
                         },
                         icon: const Icon(
@@ -100,10 +94,10 @@ Widget createNote(BuildContext context, bool isML) {
                 child: Row(
                   children: [
                     Expanded(
-                      flex: B.isTablet? 8 : 4,
+                      flex: B.isTablet ? 8 : 4,
                       child: ListView(children: [
                         Padding(
-                          padding: B.lang == 'en' ? EdgeInsets.only(left: B.isTablet? 60:20): EdgeInsets.only(right: B.isTablet? 60:20),
+                          padding: B.lang == 'en' ? EdgeInsets.only(left: B.isTablet ? 60 : 20) : EdgeInsets.only(right: B.isTablet ? 60 : 20),
                           child: TextFormField(
                               maxLines: 2,
                               textDirection: B.lang == 'en' ? TextDirection.ltr : TextDirection.rtl,
@@ -216,7 +210,7 @@ Widget createNote(BuildContext context, bool isML) {
                                 //       ),
                                 //     ))
                                 : Padding(
-                                    padding: B.lang == 'en' ? EdgeInsets.only(left: B.isTablet? 60:20) : EdgeInsets.only(right: B.isTablet? 60:20),
+                                    padding: B.lang == 'en' ? EdgeInsets.only(left: B.isTablet ? 60 : 20) : EdgeInsets.only(right: B.isTablet ? 60 : 20),
                                     child: TextFormField(
                                         textDirection: B.lang == 'en' ? TextDirection.ltr : TextDirection.rtl,
                                         cursorColor: Colors.white,

@@ -1,9 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:notes/Bloc/notes_bloc.dart';
-import 'package:notes/Screens/home_screen.dart';
 // import 'package:url_launcher/url_launcher.dart';
 
 // final Uri _url = Uri.parse('https://github.com/MoazSalem/Notes_FlutterApp');
@@ -13,8 +11,6 @@ class InfoPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    banner2.load();
-    AdWidget adWidget = AdWidget(ad: banner2);
     return BlocConsumer<NotesBloc, NotesState>(
       listener: (context, state) {
         // TODO: implement listener
@@ -22,12 +18,6 @@ class InfoPage extends StatelessWidget {
       builder: (context, state) {
         var B = NotesBloc.get(context);
         return Scaffold(
-          bottomNavigationBar: Container(
-            alignment: Alignment.center,
-            width: banner2.size.width.toDouble(),
-            height: banner2.size.height.toDouble(),
-            child: adWidget,
-          ),
           body: ListView(
             padding: EdgeInsets.zero,
             children: [
