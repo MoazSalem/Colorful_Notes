@@ -9,13 +9,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:notes/Widgets/notes.dart';
 import 'package:notes/Screens/Actions/create_note.dart';
 import 'package:notes/Screens/Actions/create_voice.dart';
-import 'dart:ui' as UI;
+import 'dart:ui' as ui;
 
 bool noTitle = false;
 bool noContent = false;
 bool searchOn = false;
 bool openFab = false;
-Map<String, int> viewModes = {"Large View": 0, "Long View": 1, "Grid View": 2};
 final TextEditingController searchAC = TextEditingController();
 
 class HomePage extends StatelessWidget {
@@ -27,6 +26,7 @@ class HomePage extends StatelessWidget {
       listener: (context, state) {},
       builder: (context, state) {
         var B = NotesBloc.get(context);
+        int value = B.viewIndex;
         List<Map> notes = searchOn ? B.searchedALL : B.allNotesMap;
         Widget leading() {
           return Row(
@@ -45,30 +45,20 @@ class HomePage extends StatelessWidget {
                   color: searchOn ? const Color(0xffff8b34) : Theme.of(context).textTheme.bodyMedium!.color,
                 ),
               ),
-              PopupMenuButton<String>(
-                icon: B.viewIndex == 0
-                    ? Icon(Icons.view_agenda)
-                    : B.viewIndex == 1
-                        ? Icon(Icons.view_day)
-                        : Icon(Icons.grid_view_sharp),
-                onSelected: (value) async {
+              IconButton(
+                onPressed: () async {
+                  value < 2 ? value++ : value = 0;
                   final prefs = await SharedPreferences.getInstance();
-                  await prefs.setInt("viewIndex", viewModes[value]!);
-                  B.viewIndex = viewModes[value]!;
+                  await prefs.setInt("viewIndex", value);
+                  B.viewIndex = value;
                   B.onViewChanged();
                 },
-                itemBuilder: (BuildContext context) {
-                  return {"Large View", "Long View", "Grid View"}.map((String choice) {
-                    return PopupMenuItem<String>(
-                      value: choice,
-                      child: Text(
-                        choice.tr(),
-                        style: const TextStyle(fontWeight: FontWeight.w500),
-                      ),
-                    );
-                  }).toList();
-                },
-              ),
+                icon: B.viewIndex == 0
+                    ? const Icon(Icons.view_agenda)
+                    : B.viewIndex == 1
+                        ? const Icon(Icons.view_day)
+                        : const Icon(Icons.grid_view_sharp),
+              )
             ],
           );
         }
@@ -96,7 +86,7 @@ class HomePage extends StatelessWidget {
           floatingActionButtonLocation: B.fabIndex == 0 ? FloatingActionButtonLocation.endFloat : FloatingActionButtonLocation.startFloat,
           floatingActionButton: B.fabIndex == 0
               ? customFab(context, openFab, B.colors, B.shadeColors, false, 0, 2, create1, create2)
-              : Directionality(textDirection: B.lang == 'en' ? UI.TextDirection.rtl : UI.TextDirection.ltr, child: customFab(context, openFab, B.colors, B.shadeColors, false, 0, 2, create1, create2)),
+              : Directionality(textDirection: B.lang == 'en' ? ui.TextDirection.rtl : ui.TextDirection.ltr, child: customFab(context, openFab, B.colors, B.shadeColors, false, 0, 2, create1, create2)),
           body: ListView(
             padding: EdgeInsets.zero,
             children: [

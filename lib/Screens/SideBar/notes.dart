@@ -11,7 +11,6 @@ bool noTitle = false;
 bool noContent = false;
 bool searchOn = false;
 bool openFab = false;
-Map<String, int> viewModes = {"Large View": 0, "Long View": 1, "Grid View": 2};
 final TextEditingController searchC = TextEditingController();
 
 class NotesPage extends StatelessWidget {
@@ -23,6 +22,7 @@ class NotesPage extends StatelessWidget {
       listener: (context, state) {},
       builder: (context, state) {
         var B = NotesBloc.get(context);
+        int value = B.viewIndexN;
         List<Map> notes = searchOn ? B.searchedNotes : B.notesMap;
         Widget leading() {
           return Row(
@@ -41,26 +41,20 @@ class NotesPage extends StatelessWidget {
                   color: searchOn ? const Color(0xffff8b34) : Theme.of(context).textTheme.bodyMedium!.color,
                 ),
               ),
-              PopupMenuButton<String>(
-              icon: B.viewIndexN == 0? Icon(Icons.view_agenda): B.viewIndexN ==1?Icon(Icons.view_day): Icon(Icons.grid_view_sharp),
-                onSelected: (value) async {
+              IconButton(
+                onPressed: () async {
+                  value < 2 ? value++ : value = 0;
                   final prefs = await SharedPreferences.getInstance();
-                  await prefs.setInt("viewIndexN", viewModes[value]!);
-                  B.viewIndexN = viewModes[value]!;
+                  await prefs.setInt("viewIndex", value);
+                  B.viewIndexN = value;
                   B.onViewChanged();
                 },
-                itemBuilder: (BuildContext context) {
-                  return {"Large View", "Long View", "Grid View"}.map((String choice) {
-                    return PopupMenuItem<String>(
-                      value: choice,
-                      child: Text(
-                        choice.tr(),
-                        style: const TextStyle(fontWeight: FontWeight.w500),
-                      ),
-                    );
-                  }).toList();
-                },
-              ),
+                icon: B.viewIndexN == 0
+                    ? const Icon(Icons.view_agenda)
+                    : B.viewIndexN == 1
+                    ? const Icon(Icons.view_day)
+                    : const Icon(Icons.grid_view_sharp),
+              )
             ],
           );
         }

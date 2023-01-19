@@ -19,6 +19,7 @@ var sb = ["Left", "Left Inv", "Right", "Right Inv"];
 var fab = ["Right", "Left"];
 var pages = ["Home", "Text", "Voice"];
 
+// ignore: must_be_immutable
 class SettingsPage extends StatelessWidget {
   final String currentTheme;
   final String black;

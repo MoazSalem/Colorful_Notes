@@ -9,7 +9,6 @@ import '../Actions/create_voice.dart';
 
 late bool noTitle;
 bool searchOn = false;
-Map<String, int> viewModes = {"Large View": 0, "Long View": 1, "Grid View": 2};
 final TextEditingController searchVC = TextEditingController();
 
 class VoiceNotesPage extends StatelessWidget {
@@ -21,6 +20,7 @@ class VoiceNotesPage extends StatelessWidget {
       listener: (context, state) {},
       builder: (context, state) {
         var B = NotesBloc.get(context);
+        int value = B.viewIndexV;
         List<Map> notes = searchOn ? B.searchedVoice : B.voiceMap;
 
         showDelete(index) {
@@ -44,30 +44,20 @@ class VoiceNotesPage extends StatelessWidget {
                   color: searchOn ? const Color(0xffff8b34) : Theme.of(context).textTheme.bodyMedium!.color,
                 ),
               ),
-              PopupMenuButton<String>(
-                icon: B.viewIndexV == 0
-                    ? Icon(Icons.view_agenda)
-                    : B.viewIndexV == 1
-                        ? Icon(Icons.view_day)
-                        : Icon(Icons.grid_view_sharp),
-                onSelected: (value) async {
+              IconButton(
+                onPressed: () async {
+                  value < 2 ? value++ : value = 0;
                   final prefs = await SharedPreferences.getInstance();
-                  await prefs.setInt("viewIndexV", viewModes[value]!);
-                  B.viewIndexV = viewModes[value]!;
+                  await prefs.setInt("viewIndex", value);
+                  B.viewIndexV = value;
                   B.onViewChanged();
                 },
-                itemBuilder: (BuildContext context) {
-                  return {"Large View", "Long View", "Grid View"}.map((String choice) {
-                    return PopupMenuItem<String>(
-                      value: choice,
-                      child: Text(
-                        choice.tr(),
-                        style: const TextStyle(fontWeight: FontWeight.w500),
-                      ),
-                    );
-                  }).toList();
-                },
-              ),
+                icon: B.viewIndexV == 0
+                    ? const Icon(Icons.view_agenda)
+                    : B.viewIndexV == 1
+                    ? const Icon(Icons.view_day)
+                    : const Icon(Icons.grid_view_sharp),
+              )
             ],
           );
         }
