@@ -51,9 +51,9 @@ class NotesPage extends StatelessWidget {
                   B.onViewChanged();
                 },
                 icon: B.viewIndexN == 0
-                    ? const Icon(Icons.view_agenda)
+                    ? const Icon(Icons.view_agenda_sharp)
                     : B.viewIndexN == 1
-                        ? const Icon(Icons.view_day)
+                        ? const Icon(Icons.view_day_sharp)
                         : const Icon(Icons.grid_view_sharp),
               )
             ],

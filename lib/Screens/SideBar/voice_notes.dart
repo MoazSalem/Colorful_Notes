@@ -54,9 +54,9 @@ class VoiceNotesPage extends StatelessWidget {
                   B.onViewChanged();
                 },
                 icon: B.viewIndexV == 0
-                    ? const Icon(Icons.view_agenda)
+                    ? const Icon(Icons.view_agenda_sharp)
                     : B.viewIndexV == 1
-                        ? const Icon(Icons.view_day)
+                        ? const Icon(Icons.view_day_sharp)
                         : const Icon(Icons.grid_view_sharp),
               )
             ],
