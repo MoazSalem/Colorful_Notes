@@ -1,3 +1,4 @@
+import 'package:dynamic_color/dynamic_color.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,7 +15,7 @@ Widget editVoice({required Map note}) {
     builder: (context, state) {
       var B = NotesBloc.get(context);
       return Container(
-        color: B.colors[bIndex],
+        color: B.colors[bIndex].harmonizeWith(Theme.of(context).colorScheme.primary),
         child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.stretch, children: [
           SizedBox(
             height: B.isTablet ? 50 : 30,
@@ -23,12 +24,13 @@ Widget editVoice({required Map note}) {
             padding: EdgeInsets.symmetric(horizontal: B.isTablet ? 80 : 40),
             child: TextFormField(
                 onSaved: B.onViewChanged(),
+                textAlign: TextAlign.center,
                 maxLines: 2,
                 cursorColor: Colors.white,
                 textInputAction: TextInputAction.done,
                 controller: titleC,
                 style: TextStyle(color: Colors.white, fontSize: B.isTablet ? 60 : 36, fontWeight: FontWeight.w500),
-                decoration: InputDecoration(border: InputBorder.none, hintText: "No Title".tr())),
+                decoration: InputDecoration(border: InputBorder.none, hintText: "No Title".tr(),hintStyle: const TextStyle(color: Colors.black54))),
           ),
           SizedBox(
             height: B.isTablet ? 40 : 10,
@@ -87,7 +89,7 @@ Widget editVoice({required Map note}) {
                               backgroundColor: bIndex == (index3 + 5) ? Colors.white : Colors.white54,
                               child: CircleAvatar(
                                 radius: 25,
-                                backgroundColor: B.colors[index3 + 5],
+                                backgroundColor: B.colors[index3 + 5].harmonizeWith(Theme.of(context).colorScheme.primary),
                               ),
                             ),
                           ),

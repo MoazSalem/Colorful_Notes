@@ -42,7 +42,7 @@ class HomePage extends StatelessWidget {
                 icon: Icon(
                   Icons.search,
                   size: 30,
-                  color: searchOn ? const Color(0xffff8b34) : Theme.of(context).textTheme.bodyMedium!.color,
+                  color: searchOn ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.onSurfaceVariant,//const Color(0xffff8b34)
                 ),
               ),
               IconButton(
@@ -83,6 +83,7 @@ class HomePage extends StatelessWidget {
         }
 
         return Scaffold(
+          backgroundColor: B.isDarkMode ? Theme.of(context).colorScheme.background : Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.6),
           floatingActionButtonLocation: B.fabIndex == 0 ? FloatingActionButtonLocation.endFloat : FloatingActionButtonLocation.startFloat,
           floatingActionButton: B.fabIndex == 0
               ? customFab(context, openFab, B.colors, B.shadeColors, false, 0, 2, create1, create2)
@@ -273,7 +274,7 @@ class HomePage extends StatelessWidget {
                       child: Center(
                           child: Text(
                         "N1".tr(),
-                        style: TextStyle(color: B.colors[0], fontWeight: FontWeight.w400),
+                        style: TextStyle(color: Theme.of(context).colorScheme.primary, fontWeight: FontWeight.w400), //B.colors[0]
                       )),
                     ),
               const SizedBox(

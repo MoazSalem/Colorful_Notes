@@ -1,8 +1,9 @@
-import 'package:adaptive_theme/adaptive_theme.dart';
+//import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:notes/Data/theme.dart';
+
+//import 'package:notes/Data/theme.dart';
 import 'package:notes/Bloc/notes_bloc.dart';
 import 'package:notes/Widgets/notes.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -19,12 +20,12 @@ var pages = ["Home", "Text", "Voice"];
 
 // ignore: must_be_immutable
 class SettingsPage extends StatelessWidget {
-  final String currentTheme;
+  //final String currentTheme;  required this.currentTheme,
   final String black;
   late String sB;
   late String fabLoc;
 
-  SettingsPage({Key? key, required this.currentTheme, required this.black, required this.sB, required this.fabLoc}) : super(key: key);
+  SettingsPage({Key? key, required this.black, required this.sB, required this.fabLoc}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -40,11 +41,14 @@ class SettingsPage extends StatelessWidget {
         double itemHeight = isTablet ? 80 : 50.0;
         double fontSize = B.isTablet ? 10 : 14;
         double padding = B.isTablet ? 24 : 10;
+        Color textColor = Theme.of(context).colorScheme.onSurfaceVariant;
+        Color dropDownColor = Theme.of(context).colorScheme.surfaceVariant;
         return Scaffold(
+          backgroundColor: B.isDarkMode ? Theme.of(context).colorScheme.background : Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.6),
           body: ListView(
             padding: EdgeInsets.zero,
             children: [
-              B.customAppBar(context, "Settings".tr(), 66),
+              B.customAppBar(context, "Settings".tr(), 65),
               SizedBox(
                 height: height,
                 child: Center(
@@ -53,11 +57,11 @@ class SettingsPage extends StatelessWidget {
                     child: ListTile(
                       title: Text(
                         "Language".tr(),
-                        style: TextStyle(fontSize: title, fontWeight: FontWeight.w500),
+                        style: TextStyle(fontSize: title, fontWeight: FontWeight.w500, color: textColor),
                       ),
                       subtitle: Text(
                         "sLanguage".tr(),
-                        style: TextStyle(fontSize: subtitle, fontWeight: FontWeight.w400),
+                        style: TextStyle(fontSize: subtitle, fontWeight: FontWeight.w400, color: textColor),
                       ),
                       trailing: DropdownButton(
                         iconSize: iconSize,
@@ -65,11 +69,11 @@ class SettingsPage extends StatelessWidget {
                         borderRadius: BorderRadius.circular(10),
                         alignment: Alignment.center,
                         underline: Container(),
-                        style: TextStyle(color: Theme.of(context).textTheme.bodyMedium?.color, fontSize: fontSize, fontWeight: FontWeight.w400),
-                        dropdownColor: Theme.of(context).canvasColor,
+                        style: TextStyle(color: textColor, fontSize: fontSize, fontWeight: FontWeight.w400),
+                        dropdownColor: dropDownColor,
                         elevation: 0,
                         isDense: true,
-                        iconEnabledColor: Theme.of(context).textTheme.bodyMedium?.color,
+                        iconEnabledColor: textColor,
                         value: B.lang == 'en' ? "English" : "Arabic",
                         icon: const Icon(Icons.keyboard_arrow_down),
                         items: lang.map((String items) {
@@ -100,11 +104,11 @@ class SettingsPage extends StatelessWidget {
                     child: ListTile(
                         title: Text(
                           "Start In".tr(),
-                          style: TextStyle(fontSize: title, fontWeight: FontWeight.w500),
+                          style: TextStyle(fontSize: title, fontWeight: FontWeight.w500, color: textColor),
                         ),
                         subtitle: Text(
                           "sStart In".tr(),
-                          style: TextStyle(fontSize: subtitle, fontWeight: FontWeight.w400),
+                          style: TextStyle(fontSize: subtitle, fontWeight: FontWeight.w400, color: textColor),
                         ),
                         trailing: DropdownButton(
                           iconSize: iconSize,
@@ -112,11 +116,11 @@ class SettingsPage extends StatelessWidget {
                           borderRadius: BorderRadius.circular(10),
                           alignment: Alignment.center,
                           underline: Container(),
-                          style: TextStyle(color: Theme.of(context).textTheme.bodyMedium?.color, fontSize: fontSize, fontWeight: FontWeight.w400),
-                          dropdownColor: Theme.of(context).canvasColor,
+                          style: TextStyle(color: textColor, fontSize: fontSize, fontWeight: FontWeight.w400),
+                          dropdownColor: dropDownColor,
                           elevation: 0,
                           isDense: true,
-                          iconEnabledColor: Theme.of(context).textTheme.bodyMedium?.color,
+                          iconEnabledColor: textColor,
                           value: B.openPage,
                           icon: const Icon(Icons.keyboard_arrow_down),
                           items: pages.map((String items) {
@@ -152,11 +156,11 @@ class SettingsPage extends StatelessWidget {
                     child: ListTile(
                         title: Text(
                           "Side Bar".tr(),
-                          style: TextStyle(fontSize: title, fontWeight: FontWeight.w500),
+                          style: TextStyle(fontSize: title, fontWeight: FontWeight.w500, color: textColor),
                         ),
                         subtitle: Text(
                           "sSide Bar".tr(),
-                          style: TextStyle(fontSize: subtitle, fontWeight: FontWeight.w400),
+                          style: TextStyle(fontSize: subtitle, fontWeight: FontWeight.w400, color: textColor),
                         ),
                         trailing: DropdownButton(
                           iconSize: iconSize,
@@ -164,11 +168,11 @@ class SettingsPage extends StatelessWidget {
                           borderRadius: BorderRadius.circular(10),
                           alignment: Alignment.center,
                           underline: Container(),
-                          style: TextStyle(color: Theme.of(context).textTheme.bodyMedium?.color, fontSize: fontSize, fontWeight: FontWeight.w400),
-                          dropdownColor: Theme.of(context).canvasColor,
+                          style: TextStyle(color: textColor, fontSize: fontSize, fontWeight: FontWeight.w400),
+                          dropdownColor: dropDownColor,
                           elevation: 0,
                           isDense: true,
-                          iconEnabledColor: Theme.of(context).textTheme.bodyMedium?.color,
+                          iconEnabledColor: textColor,
                           value: sB,
                           icon: const Icon(Icons.keyboard_arrow_down),
                           items: sb.map((String items) {
@@ -205,11 +209,11 @@ class SettingsPage extends StatelessWidget {
                     child: ListTile(
                         title: Text(
                           "Create Button".tr(),
-                          style: TextStyle(fontSize: title, fontWeight: FontWeight.w500),
+                          style: TextStyle(fontSize: title, fontWeight: FontWeight.w500, color: textColor),
                         ),
                         subtitle: Text(
                           "sCreate Button".tr(),
-                          style: TextStyle(fontSize: subtitle, fontWeight: FontWeight.w400),
+                          style: TextStyle(fontSize: subtitle, fontWeight: FontWeight.w400, color: textColor),
                         ),
                         trailing: DropdownButton(
                           iconSize: iconSize,
@@ -217,11 +221,11 @@ class SettingsPage extends StatelessWidget {
                           borderRadius: BorderRadius.circular(10),
                           alignment: Alignment.center,
                           underline: Container(),
-                          style: TextStyle(color: Theme.of(context).textTheme.bodyMedium?.color, fontSize: fontSize, fontWeight: FontWeight.w400),
-                          dropdownColor: Theme.of(context).canvasColor,
+                          style: TextStyle(color: textColor, fontSize: fontSize, fontWeight: FontWeight.w400),
+                          dropdownColor: dropDownColor,
                           elevation: 0,
                           isDense: true,
-                          iconEnabledColor: Theme.of(context).textTheme.bodyMedium?.color,
+                          iconEnabledColor: textColor,
                           value: fabLoc,
                           icon: const Icon(Icons.keyboard_arrow_down),
                           items: fab.map((String items) {
@@ -244,123 +248,89 @@ class SettingsPage extends StatelessWidget {
                 ),
               ),
               B.divider(context),
-              SizedBox(
-                height: height,
-                child: Center(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: padding),
-                    child: ListTile(
-                        title: Text(
-                          "App Theme".tr(),
-                          style: TextStyle(fontSize: title, fontWeight: FontWeight.w500),
-                        ),
-                        subtitle: Text(
-                          "sApp Theme".tr(),
-                          style: TextStyle(fontSize: subtitle, fontWeight: FontWeight.w400),
-                        ),
-                        trailing: DropdownButton(
-                          iconSize: iconSize,
-                          itemHeight: itemHeight,
-                          borderRadius: BorderRadius.circular(10),
-                          alignment: Alignment.center,
-                          underline: Container(),
-                          style: TextStyle(color: Theme.of(context).textTheme.bodyMedium?.color, fontSize: fontSize, fontWeight: FontWeight.w400),
-                          dropdownColor: Theme.of(context).canvasColor,
-                          elevation: 0,
-                          isDense: true,
-                          iconEnabledColor: Theme.of(context).textTheme.bodyMedium?.color,
-                          value: dropDownTheme = currentTheme,
-                          icon: const Icon(Icons.keyboard_arrow_down),
-                          items: themes.map((String items) {
-                            return DropdownMenuItem(
-                                value: items,
-                                child: MediaQuery(
-                                  data: MediaQuery.of(context).copyWith(textScaleFactor: isTablet ? 2.0 : 1.0),
-                                  child: Text(items).tr(),
-                                ));
-                          }).toList(),
-                          onChanged: (String? newValue) {
-                            newValue == 'Light'
-                                ? AdaptiveTheme.of(context).setLight()
-                                : newValue == 'Dark'
-                                    ? AdaptiveTheme.of(context).setDark()
-                                    : AdaptiveTheme.of(context).setSystem();
-                            dropDownTheme = newValue!;
-                            B.prefsChanged();
-                          },
-                        )),
-                  ),
-                ),
-              ),
-              B.divider(context),
-              SizedBox(
-                height: height,
-                child: Center(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: padding),
-                    child: ListTile(
-                        title: Text(
-                          "Amoled Mode".tr(),
-                          style: TextStyle(fontSize: title, fontWeight: FontWeight.w500),
-                        ),
-                        subtitle: Text(
-                          "sAmoled Mode".tr(),
-                          style: TextStyle(fontSize: subtitle, fontWeight: FontWeight.w400),
-                        ),
-                        trailing: Padding(
-                          padding: EdgeInsets.only(right: padding),
-                          child: SwitcherButton(
-                            onColor: B.colors[8],
-                            offColor: Theme.of(context).primaryColorDark,
-                            size: switchSize,
-                            value: B.isBlack,
-                            onChange: (bool value) async {
-                              value ? {AdaptiveTheme.of(context).setTheme(light: light, dark: amoled)} : {AdaptiveTheme.of(context).setTheme(light: light, dark: normalDark)};
-                              final prefs = await SharedPreferences.getInstance();
-                              await prefs.setBool("isBlack", value);
-                              B.isBlack = value;
-                              B.prefsChanged();
-                            },
-                          ),
-                        )),
-                  ),
-                ),
-              ),
-              B.divider(context),
-              SizedBox(
-                height: height,
-                child: Center(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: padding),
-                    child: ListTile(
-                        title: Text(
-                          "Darker Colors".tr(),
-                          style: TextStyle(fontSize: title, fontWeight: FontWeight.w500),
-                        ),
-                        subtitle: Text(
-                          "sDarker Colors".tr(),
-                          style: TextStyle(fontSize: subtitle, fontWeight: FontWeight.w400),
-                        ),
-                        trailing: Padding(
-                          padding: EdgeInsets.only(right: padding),
-                          child: SwitcherButton(
-                            onColor: B.colors[6],
-                            offColor: Theme.of(context).primaryColorDark,
-                            size: switchSize,
-                            value: B.darkColors,
-                            onChange: (bool value) async {
-                              final prefs = await SharedPreferences.getInstance();
-                              await prefs.setBool("darkColors", value);
-                              B.darkColors = value;
-                              B.startDatabase();
-                              B.prefsChanged();
-                            },
-                          ),
-                        )),
-                  ),
-                ),
-              ),
-              B.divider(context),
+              // SizedBox(
+              //   height: height,
+              //   child: Center(
+              //     child: Padding(
+              //       padding: EdgeInsets.symmetric(horizontal: padding),
+              //       child: ListTile(
+              //           title: Text(
+              //             "App Theme".tr(),
+              //             style: TextStyle(fontSize: title, fontWeight: FontWeight.w500),
+              //           ),
+              //           subtitle: Text(
+              //             "sApp Theme".tr(),
+              //             style: TextStyle(fontSize: subtitle, fontWeight: FontWeight.w400),
+              //           ),
+              //           trailing: DropdownButton(
+              //             iconSize: iconSize,
+              //             itemHeight: itemHeight,
+              //             borderRadius: BorderRadius.circular(10),
+              //             alignment: Alignment.center,
+              //             underline: Container(),
+              //             style: TextStyle(color: Theme.of(context).textTheme.bodyMedium?.color, fontSize: fontSize, fontWeight: FontWeight.w400),
+              //             dropdownColor: Theme.of(context).canvasColor,
+              //             elevation: 0,
+              //             isDense: true,
+              //             iconEnabledColor: Theme.of(context).textTheme.bodyMedium?.color,
+              //             value: dropDownTheme = currentTheme,
+              //             icon: const Icon(Icons.keyboard_arrow_down),
+              //             items: themes.map((String items) {
+              //               return DropdownMenuItem(
+              //                   value: items,
+              //                   child: MediaQuery(
+              //                     data: MediaQuery.of(context).copyWith(textScaleFactor: isTablet ? 2.0 : 1.0),
+              //                     child: Text(items).tr(),
+              //                   ));
+              //             }).toList(),
+              //             onChanged: (String? newValue) {
+              //               newValue == 'Light'
+              //                   ? AdaptiveTheme.of(context).setLight()
+              //                   : newValue == 'Dark'
+              //                       ? AdaptiveTheme.of(context).setDark()
+              //                       : AdaptiveTheme.of(context).setSystem();
+              //               dropDownTheme = newValue!;
+              //               B.prefsChanged();
+              //             },
+              //           )),
+              //     ),
+              //   ),
+              // ),
+              // B.divider(context),
+              // SizedBox(
+              //   height: height,
+              //   child: Center(
+              //     child: Padding(
+              //       padding: EdgeInsets.symmetric(horizontal: padding),
+              //       child: ListTile(
+              //           title: Text(
+              //             "Amoled Mode".tr(),
+              //             style: TextStyle(fontSize: title, fontWeight: FontWeight.w500),
+              //           ),
+              //           subtitle: Text(
+              //             "sAmoled Mode".tr(),
+              //             style: TextStyle(fontSize: subtitle, fontWeight: FontWeight.w400),
+              //           ),
+              //           trailing: Padding(
+              //             padding: EdgeInsets.only(right: padding),
+              //             child: SwitcherButton(
+              //               onColor: B.colors[8],
+              //               offColor: Theme.of(context).primaryColorDark,
+              //               size: switchSize,
+              //               value: B.isBlack,
+              //               onChange: (bool value) async {
+              //                 value ? {AdaptiveTheme.of(context).setTheme(light: light, dark: amoled)} : {AdaptiveTheme.of(context).setTheme(light: light, dark: normalDark)};
+              //                 final prefs = await SharedPreferences.getInstance();
+              //                 await prefs.setBool("isBlack", value);
+              //                 B.isBlack = value;
+              //                 B.prefsChanged();
+              //               },
+              //             ),
+              //           )),
+              //     ),
+              //   ),
+              // ),
+              // B.divider(context),
               SizedBox(
                 height: height,
                 child: Center(
@@ -369,17 +339,19 @@ class SettingsPage extends StatelessWidget {
                     child: ListTile(
                         title: Text(
                           "Show Date".tr(),
-                          style: TextStyle(fontSize: title, fontWeight: FontWeight.w500),
+                          style: TextStyle(fontSize: title, fontWeight: FontWeight.w500, color: textColor),
                         ),
                         subtitle: Text(
                           "sShow Date".tr(),
-                          style: TextStyle(fontSize: subtitle, fontWeight: FontWeight.w400),
+                          style: TextStyle(fontSize: subtitle, fontWeight: FontWeight.w400, color: textColor),
                         ),
                         trailing: Padding(
                           padding: EdgeInsets.only(right: padding),
                           child: SwitcherButton(
-                            onColor: B.colors[0],
-                            offColor: Theme.of(context).primaryColorDark,
+                            onColor: Theme.of(context).colorScheme.primary,
+                            offColor: Theme.of(context).colorScheme.primaryContainer,
+                            // onColor: B.colors[0],
+                            // offColor: Theme.of(context).primaryColorDark,
                             size: switchSize,
                             value: B.showDate,
                             onChange: (bool value) async {
@@ -401,18 +373,55 @@ class SettingsPage extends StatelessWidget {
                     padding: EdgeInsets.symmetric(horizontal: padding),
                     child: ListTile(
                         title: Text(
-                          "Show Shadow".tr(),
-                          style: TextStyle(fontSize: title, fontWeight: FontWeight.w500),
+                          "Show Edited".tr(),
+                          style: TextStyle(fontSize: title, fontWeight: FontWeight.w500, color: textColor),
                         ),
                         subtitle: Text(
-                          "sShow Shadow".tr(),
-                          style: TextStyle(fontSize: subtitle, fontWeight: FontWeight.w400),
+                          "sShow Edited".tr(),
+                          style: TextStyle(fontSize: subtitle, fontWeight: FontWeight.w400, color: textColor),
                         ),
                         trailing: Padding(
                           padding: EdgeInsets.only(right: padding),
                           child: SwitcherButton(
-                            onColor: B.colors[1],
-                            offColor: Theme.of(context).primaryColorDark,
+                            onColor: Theme.of(context).colorScheme.primary,
+                            offColor: Theme.of(context).colorScheme.primaryContainer,
+                            // onColor: B.colors[2],
+                            // offColor: Theme.of(context).primaryColorDark,
+                            size: switchSize,
+                            value: B.showEdited,
+                            onChange: (bool value) async {
+                              final prefs = await SharedPreferences.getInstance();
+                              await prefs.setBool("showEdit", value);
+                              B.showEdited = value;
+                              B.prefsChanged();
+                            },
+                          ),
+                        )),
+                  ),
+                ),
+              ),
+              B.divider(context),
+              SizedBox(
+                height: height,
+                child: Center(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: padding),
+                    child: ListTile(
+                        title: Text(
+                          "Show Shadow".tr(),
+                          style: TextStyle(fontSize: title, fontWeight: FontWeight.w500, color: textColor),
+                        ),
+                        subtitle: Text(
+                          "sShow Shadow".tr(),
+                          style: TextStyle(fontSize: subtitle, fontWeight: FontWeight.w400, color: textColor),
+                        ),
+                        trailing: Padding(
+                          padding: EdgeInsets.only(right: padding),
+                          child: SwitcherButton(
+                            onColor: Theme.of(context).colorScheme.primary,
+                            offColor: Theme.of(context).colorScheme.primaryContainer,
+                            // onColor: B.colors[1],
+                            // offColor: Theme.of(context).primaryColorDark,
                             size: switchSize,
                             value: B.showShadow,
                             onChange: (bool value) async {
@@ -434,24 +443,27 @@ class SettingsPage extends StatelessWidget {
                     padding: EdgeInsets.symmetric(horizontal: padding),
                     child: ListTile(
                         title: Text(
-                          "Show Edited".tr(),
-                          style: TextStyle(fontSize: title, fontWeight: FontWeight.w500),
+                          "Darker Colors".tr(),
+                          style: TextStyle(fontSize: title, fontWeight: FontWeight.w500, color: textColor),
                         ),
                         subtitle: Text(
-                          "sShow Edited".tr(),
-                          style: TextStyle(fontSize: subtitle, fontWeight: FontWeight.w400),
+                          "sDarker Colors".tr(),
+                          style: TextStyle(fontSize: subtitle, fontWeight: FontWeight.w400, color: textColor),
                         ),
                         trailing: Padding(
                           padding: EdgeInsets.only(right: padding),
                           child: SwitcherButton(
-                            onColor: B.colors[2],
-                            offColor: Theme.of(context).primaryColorDark,
+                            onColor: Theme.of(context).colorScheme.primary,
+                            offColor: Theme.of(context).colorScheme.primaryContainer,
+                            //onColor: B.colors[6],
+                            //offColor: Theme.of(context).primaryColorDark,
                             size: switchSize,
-                            value: B.showEdited,
+                            value: B.darkColors,
                             onChange: (bool value) async {
                               final prefs = await SharedPreferences.getInstance();
-                              await prefs.setBool("showEdit", value);
-                              B.showEdited = value;
+                              await prefs.setBool("darkColors", value);
+                              B.darkColors = value;
+                              B.startDatabase();
                               B.prefsChanged();
                             },
                           ),

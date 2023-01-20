@@ -5,16 +5,15 @@ import 'dart:io';
 
 // import 'package:path/path.dart' as path;
 import 'package:adaptive_theme/adaptive_theme.dart';
+import 'package:dynamic_color/dynamic_color.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 // import 'package:external_path/external_path.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:huawei_ml_language/huawei_ml_language.dart';
-
-//import 'package:huawei_ml_text/huawei_ml_text.dart';
-//import 'package:image_picker/image_picker.dart';
 import 'package:material_dialogs/material_dialogs.dart';
 import 'package:material_dialogs/widgets/buttons/icon_button.dart';
 import 'package:material_dialogs/widgets/buttons/icon_outline_button.dart';
@@ -48,6 +47,7 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
   late bool showShadow;
   late bool showEdited;
   late bool darkColors;
+  late bool isDarkMode;
   List<Map> allNotesMap = [];
   List<Map> voiceMap = [];
   List<Map> notesMap = [];
@@ -60,10 +60,11 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
   bool loading = true;
   late String openPage;
   late String lang;
-  String detectedLanguage= 'en';
+  String detectedLanguage = 'en';
   String capturedText = "";
   bool isTablet = getDeviceType() == 'tablet' ? true : false;
   GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+  var brightness = SchedulerBinding.instance.window.platformBrightness;
 
   static NotesBloc get(context) => BlocProvider.of(context);
 
@@ -152,10 +153,9 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
       if (kDebugMode) {
         print("not exist");
       }
-      if (await Permission.storage.request().isGranted) {
-        // Either the permission was already granted before or the user just granted it.
-        await voice.create();
-      }
+      await Permission.storage.request();
+      // Either the permission was already granted before or the user just granted it.
+      await voice.create(recursive: true);
     }
   }
 
@@ -228,84 +228,6 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
     }
   }
 
-//
-//   Future<void> checkCamPerms() async {
-//     var status = await Permission.camera.status;
-//     if (status.isDenied) {
-//       if (kDebugMode) {
-//         print("denied");
-//       }
-//     }
-//
-// // You can can also directly ask the permission about its status.
-//     if (await Permission.location.isRestricted) {
-//       if (kDebugMode) {
-//         print("restricted");
-//       }
-//     }
-//   }
-//
-//   Future getImageGallery(String chLang) async {
-//     final ImagePicker picker = ImagePicker();
-//     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-//     if (pickedFile != null) {
-//       chLang == 'en' ? captureText(pickedFile.path) : captureTextCloud(pickedFile.path);
-//     } else {
-//       if (kDebugMode) {
-//         print('No image selected.');
-//       }
-//     }
-//   }
-//
-//   Future getImageCamera(String chLang) async {
-//     final ImagePicker picker = ImagePicker();
-//     final pickedFile = await picker.pickImage(source: ImageSource.camera);
-//     if (pickedFile != null) {
-//       chLang == 'en' ? await captureText(pickedFile.path) : await captureTextCloud(pickedFile.path);
-//     } else {
-//       if (kDebugMode) {
-//         print('No image selected.');
-//       }
-//     }
-//   }
-//
-//   Future<void> captureTextCloud(String path) async {
-//     // Create an MLTextAnalyzer object.
-//     MLTextAnalyzer analyzer = MLTextAnalyzer();
-//     // Create an MLTextAnalyzerSetting object to configure the recognition.
-//     final setting = MLTextAnalyzerSetting.remote(path: path);
-//     setting.language = 'ar';
-//     // Call asyncAnalyzeFrame to recognize text asynchronously.
-//     try {
-//       MLText text = await analyzer.asyncAnalyseFrame(setting);
-//       capturedText = text.stringValue.toString();
-//     } on Exception catch (e) {
-//       if (kDebugMode) {
-//         print(e.toString());
-//       }
-//     }
-//     //bool result =
-//     await analyzer.destroy();
-//   }
-//
-//   Future<void> captureText(String path) async {
-//     // Create an MLTextAnalyzer object.
-//     MLTextAnalyzer analyzer = MLTextAnalyzer();
-//     // Create an MLTextAnalyzerSetting object to configure the recognition.
-//     final setting = MLTextAnalyzerSetting.local(path: path, language: "en");
-//     // Call asyncAnalyzeFrame to recognize text asynchronously.
-//     try {
-//       MLText text = await analyzer.asyncAnalyseFrame(setting);
-//       capturedText = text.stringValue.toString();
-//     } on Exception catch (e) {
-//       if (kDebugMode) {
-//         print(e.toString());
-//       }
-//     }
-//     //bool result =
-//     await analyzer.destroy();
-//   }
-
   Future<void> detectLanguage(String source) async {
     // Create an MLLangDetector object.
     MLLangDetector detector = MLLangDetector();
@@ -317,9 +239,6 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
     final String? res = await detector.firstBestDetect(setting: setting);
 
     detectedLanguage = res!;
-
-// Get multi-language detection results based on the supplied text.
-//     List<MLDetectedLang> res = await detector.probabilityDetect(setting: setting);
 
 // After the detection ends, stop the detector.
     await detector.stop();
@@ -335,6 +254,7 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
         iconData: Icons.cancel_outlined,
         textStyle: const TextStyle(color: Colors.grey),
         iconColor: Colors.grey,
+        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0))),
       ),
       IconsButton(
         onPressed: () async {
@@ -351,9 +271,11 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
         },
         text: 'Delete'.tr(),
         iconData: Icons.delete,
-        color: colors[notes[index]['cindex']],
+        color: colors[notes[index]['cindex']].harmonizeWith(Theme.of(context).colorScheme.primary),
         textStyle: const TextStyle(color: Colors.white),
         iconColor: Colors.white,
+        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0))),
+        padding: const EdgeInsets.symmetric(vertical: 10),
       ),
     ]);
   }
@@ -407,6 +329,7 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
       await db.execute('CREATE TABLE Notes (id INTEGER PRIMARY KEY, title TEXT, content TEXT, time Text, cindex INTEGER, tindex INTEGER, type INTEGER, edited Text, layout INTEGER, extra Text)');
     }, onOpen: (db) async {})
         .then((value) => database = value);
+    isDarkMode = brightness == Brightness.dark;
     viewIndex = prefs.getInt('viewIndex') ?? 0;
     viewIndexN = prefs.getInt('viewIndexN') ?? 0;
     viewIndexV = prefs.getInt('viewIndexV') ?? 0;
@@ -418,9 +341,7 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
     showShadow = prefs.getBool('showShadow') ?? false;
     showEdited = prefs.getBool('showEdit') ?? true;
     darkColors = prefs.getBool('darkColors') ?? false;
-    colors = darkColors
-        ? darkerColors
-        : lightColors;
+    colors = darkColors ? darkerColors : lightColors;
     await refreshDatabase();
   }
 
@@ -484,7 +405,7 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
       height: 20,
       child: Divider(
         thickness: 1,
-        color: Theme.of(context).highlightColor.withOpacity(0.3),
+        color: Theme.of(context).colorScheme.outline.withOpacity(0.2), //Theme.of(context).highlightColor.withOpacity(0.3),
       ),
     );
   }
@@ -511,7 +432,7 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
             children: [
               Text(
                 title,
-                style: const TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onSurfaceVariant),
               ),
               Padding(
                 padding: const EdgeInsets.only(right: 5),

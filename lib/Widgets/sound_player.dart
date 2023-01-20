@@ -277,6 +277,7 @@ class _SoundPlayerState extends State<SoundPlayer> {
                     child: SizedBox(
                       width: double.infinity,
                       child: Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           FittedBox(
                             child: SizedBox(

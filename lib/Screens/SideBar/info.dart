@@ -1,3 +1,4 @@
+import 'package:dynamic_color/dynamic_color.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,15 +14,16 @@ class InfoPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<NotesBloc, NotesState>(
       listener: (context, state) {
-        // TODO: implement listener
       },
       builder: (context, state) {
         var B = NotesBloc.get(context);
+        Color textColor = Theme.of(context).colorScheme.onSurfaceVariant;
         return Scaffold(
+          backgroundColor: B.isDarkMode ? Theme.of(context).colorScheme.background : Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.6),
           body: ListView(
             padding: EdgeInsets.zero,
             children: [
-              B.customAppBar(context, "Info".tr(), 66),
+              B.customAppBar(context, "Info".tr(), 65),
               Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 35.0, vertical: 20),
                   child: Column(
@@ -29,10 +31,10 @@ class InfoPage extends StatelessWidget {
                     children: [
                       RichText(
                           text: TextSpan(
-                        style: TextStyle(fontSize: B.isTablet ? 30 : 20, fontWeight: FontWeight.w300, color: Theme.of(context).textTheme.bodyMedium!.color),
+                        style: TextStyle(fontSize: B.isTablet ? 30 : 20, fontWeight: FontWeight.w300, color: textColor),
                         children: <TextSpan>[
                           TextSpan(text: "I1".tr()),
-                          TextSpan(text: "I2".tr(), style: TextStyle(color: B.colors[2])),
+                          TextSpan(text: "I2".tr(), style: TextStyle(color: B.colors[2].harmonizeWith(Theme.of(context).colorScheme.primary))),
                           TextSpan(text: "I3".tr()),
                         ],
                       )),
@@ -41,10 +43,10 @@ class InfoPage extends StatelessWidget {
                       ),
                       RichText(
                           text: TextSpan(
-                        style: TextStyle(fontSize: B.isTablet ? 30 : 20, fontWeight: FontWeight.w300, color: Theme.of(context).textTheme.bodyMedium!.color),
+                        style: TextStyle(fontSize: B.isTablet ? 30 : 20, fontWeight: FontWeight.w300, color: textColor),
                         children: <TextSpan>[
                           TextSpan(text: "I6".tr()),
-                          TextSpan(text: "I7".tr(), style: TextStyle(color: B.colors[1])),
+                          TextSpan(text: "I7".tr(), style: TextStyle(color: B.colors[1].harmonizeWith(Theme.of(context).colorScheme.primary))),
                           TextSpan(text: "I8".tr()),
                         ],
                       )),
@@ -53,12 +55,12 @@ class InfoPage extends StatelessWidget {
                       ),
                       RichText(
                           text: TextSpan(
-                        style: TextStyle(fontSize: B.isTablet ? 30 : 20, fontWeight: FontWeight.w300, color: Theme.of(context).textTheme.bodyMedium!.color),
+                        style: TextStyle(fontSize: B.isTablet ? 30 : 20, fontWeight: FontWeight.w300, color: textColor),
                         children: <TextSpan>[
                           TextSpan(
                             text: "I9".tr(),
                           ),
-                          TextSpan(text: "I10".tr(), style: TextStyle(color: B.colors[3])),
+                          TextSpan(text: "I10".tr(), style: TextStyle(color: B.colors[3].harmonizeWith(Theme.of(context).colorScheme.primary))),
                           TextSpan(text: "I13".tr()),
                         ],
                       )),

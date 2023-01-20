@@ -1,3 +1,4 @@
+import 'package:dynamic_color/dynamic_color.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -41,7 +42,7 @@ class VoiceNotesPage extends StatelessWidget {
                 icon: Icon(
                   Icons.search,
                   size: 30,
-                  color: searchOn ? const Color(0xffff8b34) : Theme.of(context).textTheme.bodyMedium!.color,
+                  color: searchOn ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.onSurfaceVariant, //Theme.of(context).textTheme.bodyMedium!.color,
                 ),
               ),
               IconButton(
@@ -55,8 +56,8 @@ class VoiceNotesPage extends StatelessWidget {
                 icon: B.viewIndexV == 0
                     ? const Icon(Icons.view_agenda)
                     : B.viewIndexV == 1
-                    ? const Icon(Icons.view_day)
-                    : const Icon(Icons.grid_view_sharp),
+                        ? const Icon(Icons.view_day)
+                        : const Icon(Icons.grid_view_sharp),
               )
             ],
           );
@@ -70,30 +71,19 @@ class VoiceNotesPage extends StatelessWidget {
         }
 
         return Scaffold(
+          backgroundColor: B.isDarkMode ? Theme.of(context).colorScheme.background : Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.6),
           floatingActionButtonLocation: B.fabIndex == 0 ? FloatingActionButtonLocation.endFloat : FloatingActionButtonLocation.startFloat,
-          floatingActionButton: Container(
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              boxShadow: [
-                BoxShadow(
-                  color: B.shadeColors[3].withOpacity(0.3),
-                  spreadRadius: 5,
-                  blurRadius: 10,
-                  offset: const Offset(0, 4),
-                ),
-              ],
-            ),
-            child: FloatingActionButton(
-              splashColor: B.colors[1],
-              elevation: 0,
-              backgroundColor: B.colors[3],
-              onPressed: () async {
-                showBottomSheet(enableDrag: false, context: context, builder: (context) => createVoice(context));
-              },
-              child: const Icon(
-                Icons.add,
-                color: Colors.white,
-              ),
+          floatingActionButton: FloatingActionButton(
+            splashColor: B.colors[1].harmonizeWith(Theme.of(context).colorScheme.primary),
+            elevation: 0,
+            backgroundColor: Theme.of(context).colorScheme.primary,
+            //B.colors[3].harmonizeWith(Theme.of(context).colorScheme.primary),
+            onPressed: () async {
+              showBottomSheet(enableDrag: false, context: context, builder: (context) => createVoice(context));
+            },
+            child: Icon(
+              Icons.add,
+              color: Theme.of(context).colorScheme.surfaceVariant,
             ),
           ),
           body: ListView(
@@ -262,7 +252,7 @@ class VoiceNotesPage extends StatelessWidget {
                       child: Center(
                           child: Text(
                         "N3".tr(),
-                        style: TextStyle(color: B.colors[3], fontWeight: FontWeight.w400),
+                        style: TextStyle(color: Theme.of(context).colorScheme.primary, fontWeight: FontWeight.w400), //B.colors[3]
                       )),
                     ),
               const SizedBox(

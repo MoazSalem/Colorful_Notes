@@ -51,6 +51,7 @@ dependencies:
   huawei_ml_language: ^3.7.0+300
   external_path: ^1.0.3
   path: ^1.8.2
+  dynamic_color: ^1.5.4
 
 dev_dependencies:
   flutter_test:

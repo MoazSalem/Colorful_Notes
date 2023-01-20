@@ -1,3 +1,4 @@
+import 'package:dynamic_color/dynamic_color.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -25,7 +26,7 @@ Widget createVoice(BuildContext context) {
       double height = MediaQuery.of(context).size.height;
       return Scaffold(
         resizeToAvoidBottomInset: false,
-        backgroundColor: B.colors[chosenIndex],
+        backgroundColor: B.colors[chosenIndex].harmonizeWith(Theme.of(context).colorScheme.primary),
         body: Padding(
           padding: const EdgeInsets.only(top: 40.0),
           child: Column(
@@ -38,9 +39,10 @@ Widget createVoice(BuildContext context) {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          IconButton(
-                              constraints: const BoxConstraints.tightFor(width: 60, height: 60),
-                              onPressed: () async {
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                            child: GestureDetector(
+                              onTap: () async {
                                 await record.stop();
                                 time = "";
                                 stopWatchTimer.onResetTimer();
@@ -50,18 +52,25 @@ Widget createVoice(BuildContext context) {
                                 Navigator.pop(context);
                                 B.onRecord();
                               },
-                              icon: const Icon(
-                                Icons.arrow_back,
-                                size: 40,
-                                color: Colors.white,
-                              )),
+                              child: CircleAvatar(
+                                backgroundColor: Colors.black54,
+                                radius: 25,
+                                child: Icon(
+                                  Icons.arrow_back,
+                                  color: B.colors[chosenIndex].harmonizeWith(Theme.of(context).colorScheme.primary),
+                                  size: 36,
+                                ),
+                              ),
+                            ),
+                          )
                         ],
                       )),
                   Expanded(
                     flex: 1,
-                    child: IconButton(
-                        constraints: const BoxConstraints.tightFor(width: 60, height: 60),
-                        onPressed: () async {
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                      child: GestureDetector(
+                        onTap: () async {
                           await record.stop();
                           title = titleC.text;
                           time == ""
@@ -78,19 +87,28 @@ Widget createVoice(BuildContext context) {
                                   B.onChanged()
                                 };
                         },
-                        icon: const Icon(
-                          Icons.done,
-                          size: 40,
-                          color: Colors.white,
-                        )),
+                        child: CircleAvatar(
+                          backgroundColor: Colors.white,
+                          radius: 25,
+                          child: Icon(
+                            Icons.done,
+                            color: B.colors[chosenIndex].harmonizeWith(Theme.of(context).colorScheme.primary),
+                            size: 36,
+                          ),
+                        ),
+                      ),
+                    ),
                   )
                 ],
+              ),
+              const SizedBox(
+                height: 8,
               ),
               Expanded(
                 child: Row(
                   children: [
                     Expanded(
-                      flex: 4,
+                      flex: B.isTablet ? 8 : 4,
                       child: ListView(children: [
                         Column(mainAxisAlignment: MainAxisAlignment.center, children: [
                           Padding(
@@ -104,7 +122,7 @@ Widget createVoice(BuildContext context) {
                                 textInputAction: TextInputAction.done,
                                 controller: titleC,
                                 style: TextStyle(color: Colors.white, fontSize: B.isTablet ? 60 : 36, fontWeight: FontWeight.w500),
-                                decoration: InputDecoration(border: InputBorder.none, hintText: "Title".tr())),
+                                decoration: InputDecoration(border: InputBorder.none, hintText: "Title".tr(), hintStyle: const TextStyle(color: Colors.black54))),
                           ),
                           SizedBox(
                             height: height * 0.8,
@@ -231,7 +249,7 @@ Widget createVoice(BuildContext context) {
                                 backgroundColor: chosenIndex == index ? Colors.white : Colors.white54,
                                 child: CircleAvatar(
                                   radius: 20,
-                                  backgroundColor: B.colors[index],
+                                  backgroundColor: B.colors[index].harmonizeWith(Theme.of(context).colorScheme.primary),
                                 ),
                               ),
                             ),

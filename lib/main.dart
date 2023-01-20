@@ -1,10 +1,10 @@
+import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:notes/Data/theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'Screens/home_screen.dart';
-import 'package:adaptive_theme/adaptive_theme.dart';
 import 'Screens/on_boarding.dart';
-import 'Data/theme.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 void main() async {
@@ -20,8 +20,6 @@ void main() async {
   final prefs = await SharedPreferences.getInstance();
   final bool showHome = prefs.getBool('showHome') ?? false;
   final bool isBlack = prefs.getBool('isBlack') ?? false;
-  // MLTextApplication app = MLTextApplication();
-  // app.setApiKey(apikey);
   runApp(EasyLocalization(
       useOnlyLangCode: true,
       supportedLocales: const [Locale('en'), Locale('ar')],
@@ -38,24 +36,25 @@ class MyApp extends StatelessWidget {
   final bool isBlack;
 
   const MyApp({Key? key, required this.showHome, required this.isBlack}) : super(key: key);
-
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return AdaptiveTheme(
-      light: light,
-      dark: isBlack ? amoled : normalDark,
-      initial: AdaptiveThemeMode.light,
-      builder: (theme, darkTheme) => MaterialApp(
+    return DynamicColorBuilder(builder: (lightColorScheme, darkColorScheme) {
+      return MaterialApp(
           initialRoute: '/',
           debugShowCheckedModeBanner: false,
           title: 'Colorful Notes',
-          theme: theme,
-          darkTheme: darkTheme,
+          theme: ThemeData(
+            colorScheme: lightColorScheme ?? defaultLightColorScheme,
+            useMaterial3: true,
+          ),
+          darkTheme: ThemeData(
+            colorScheme: darkColorScheme ?? defaultDarkColorScheme,
+            useMaterial3: true,
+          ),
           localizationsDelegates: context.localizationDelegates,
           supportedLocales: context.supportedLocales,
           locale: context.locale,
-          home: showHome ? const Home() : const IntroPage()),
-    );
+          home: showHome ? const Home() : const IntroPage());
+    });
   }
 }

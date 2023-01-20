@@ -16,162 +16,117 @@ Widget customFab(BuildContext context, bool openFab, colors, shadeColors, bool h
                 duration: const Duration(milliseconds: 200),
                 child: openFab
                     ? Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        action2();
-                      },
-                      child: Padding(
-                        padding: EdgeInsets.only(bottom: isTablet ? 8.0 : 0),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(left: 12.0, right: 12.0),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: shadeColors[3].withOpacity(0.3),
-                                      spreadRadius: 1,
-                                      blurRadius: 5,
-                                      offset: const Offset(0, 3),
-                                    ),
-                                  ],
-                                  borderRadius: BorderRadius.circular(40),
-                                  color: colors[3],
-                                ),
-                                width: isTablet ? 160 : 100,
-                                height: isTablet ? 40 : 30,
-                                child: Center(
-                                    child: Text(
-                                      "Voice Note".tr(),
-                                      style: const TextStyle(color: Colors.white),
-                                    )),
-                              ),
-                            ),
-                            Container(
-                              width: isTablet ? 60 : 40,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: shadeColors[3].withOpacity(0.3),
-                                    spreadRadius: 1,
-                                    blurRadius: 5,
-                                    offset: const Offset(0, 3),
-                                  ),
-                                ],
-                              ),
-                              child: FloatingActionButton(
-                                backgroundColor: colors[3],
-                                mini: isTablet ? false : true,
-                                onPressed: () {
-                                  action2();
-                                },
-                                elevation: 0,
-                                child: const Icon(
-                                  Icons.mic,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        action1();
-                      },
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.only(left: 12.0, right: 12.0),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: shadeColors[1].withOpacity(0.3),
-                                    spreadRadius: 1,
-                                    blurRadius: 5,
-                                    offset: const Offset(0, 3),
+                          GestureDetector(
+                            onTap: () {
+                              action2();
+                            },
+                            child: Padding(
+                              padding: EdgeInsets.only(bottom: isTablet ? 8.0 : 0),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 12.0, right: 12.0),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(12),
+                                        color: Theme.of(context).colorScheme.surfaceVariant,
+                                      ),
+                                      width: isTablet ? 160 : 100,
+                                      height: isTablet ? 50 : 40,
+                                      child: Center(
+                                          child: Text(
+                                        "Voice Note".tr(),
+                                        style: TextStyle(color: Theme.of(context).colorScheme.primary),
+                                      )),
+                                    ),
+                                  ),
+                                  Container(
+                                    width: isTablet ? 60 : 40,
+                                    child: FloatingActionButton(
+                                      backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
+                                      mini: isTablet ? false : true,
+                                      onPressed: () {
+                                        action2();
+                                      },
+                                      elevation: 0,
+                                      child: Icon(
+                                        Icons.mic,
+                                        color: Theme.of(context).colorScheme.primary,
+                                      ),
+                                    ),
                                   ),
                                 ],
-                                borderRadius: BorderRadius.circular(20),
-                                color: colors[1],
                               ),
-                              width: isTablet ? 160 : 100,
-                              height: isTablet ? 40 : 30,
-                              child: Center(
-                                  child: Text(
-                                    "Text Note".tr(),
-                                    style: const TextStyle(color: Colors.white),
-                                  )),
                             ),
                           ),
-                          Container(
-                            width: isTablet ? 60 : 40,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: shadeColors[1].withOpacity(0.3),
-                                  spreadRadius: 1,
-                                  blurRadius: 5,
-                                  offset: const Offset(0, 3),
+                          GestureDetector(
+                            onTap: () {
+                              action1();
+                            },
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 12.0, right: 12.0),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(12),
+                                      color: Theme.of(context).colorScheme.surfaceVariant, //colors[1],
+                                    ),
+                                    width: isTablet ? 160 : 100,
+                                    height: isTablet ? 50 : 40,
+                                    child: Center(
+                                        child: Text(
+                                      "Text Note".tr(),
+                                      style: TextStyle(color: Theme.of(context).colorScheme.primary),
+                                    )),
+                                  ),
+                                ),
+                                Container(
+                                  width: isTablet ? 60 : 40,
+                                  child: FloatingActionButton(
+                                    backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
+                                    //colors[1],
+                                    mini: isTablet ? false : true,
+                                    onPressed: () {
+                                      action1();
+                                    },
+                                    elevation: 0,
+                                    child: Icon(
+                                      Icons.sticky_note_2,
+                                      color: Theme.of(context).colorScheme.primary,
+                                    ),
+                                  ),
                                 ),
                               ],
                             ),
-                            child: FloatingActionButton(
-                              backgroundColor: colors[1],
-                              mini: isTablet ? false : true,
-                              onPressed: () {
-                                action1();
-                              },
-                              elevation: 0,
-                              child: const Icon(
-                                Icons.sticky_note_2,
-                                color: Colors.white,
-                              ),
-                            ),
                           ),
                         ],
-                      ),
-                    ),
-                  ],
-                )
+                      )
                     : Container(
-                  width: isTablet ? 200 : 160,
-                ),
+                        width: isTablet ? 200 : 160,
+                      ),
               )),
           Container(
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              boxShadow: [
-                BoxShadow(
-                  color: openFab ? shadeColors[afterTap].withOpacity(0.3) : shadeColors[main].withOpacity(0.3),
-                  spreadRadius: 5,
-                  blurRadius: 10,
-                  offset: const Offset(0, 4),
-                ),
-              ],
-            ),
             child: FloatingActionButton(
-              backgroundColor: openFab ? colors[afterTap] : colors[main],
-              splashColor: openFab ? colors[main] : colors[afterTap],
+              backgroundColor: Theme.of(context).colorScheme.primary,
+              //openFab ? colors[afterTap] : colors[main],
+              //splashColor: Theme.of(context).colorScheme.primaryContainer,
+              //openFab ? colors[main] : colors[afterTap],
               onPressed: () {
                 openFab = !openFab;
                 setState(() {});
               },
               elevation: 0,
-              child: const Icon(
+
+              child: Icon(
                 Icons.add,
-                color: Colors.white,
+                color: Theme.of(context).colorScheme.surfaceVariant, //white
               ),
             ),
           ),

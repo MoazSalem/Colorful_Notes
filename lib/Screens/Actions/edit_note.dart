@@ -1,3 +1,4 @@
+import 'package:dynamic_color/dynamic_color.dart';
 import 'package:easy_localization/easy_localization.dart' hide TextDirection;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,7 +18,7 @@ Widget editNote({required Map note}) {
       var B = NotesBloc.get(context);
       return Scaffold(
         resizeToAvoidBottomInset: false,
-        backgroundColor: B.colors[bIndex],
+        backgroundColor: B.colors[bIndex].harmonizeWith(Theme.of(context).colorScheme.primary),
         body: Padding(
           padding: const EdgeInsets.only(top: 40.0),
           child: Column(
@@ -30,26 +31,34 @@ Widget editNote({required Map note}) {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          IconButton(
-                              constraints: const BoxConstraints.tightFor(width: 60, height: 60),
-                              onPressed: () {
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                            child: GestureDetector(
+                              onTap: () {
                                 titleC.clear();
                                 contentC.clear();
                                 isEditing = false;
                                 Navigator.pop(context);
                               },
-                              icon: const Icon(
-                                Icons.arrow_back,
-                                size: 40,
-                                color: Colors.white,
-                              )),
+                              child: CircleAvatar(
+                                backgroundColor: Colors.black54,
+                                radius: 25,
+                                child: Icon(
+                                  Icons.arrow_back,
+                                  color: B.colors[bIndex].harmonizeWith(Theme.of(context).colorScheme.primary),
+                                  size: 36,
+                                ),
+                              ),
+                            ),
+                          )
                         ],
                       )),
                   Expanded(
                     flex: 1,
-                    child: IconButton(
-                        constraints: const BoxConstraints.tightFor(width: 60, height: 60),
-                        onPressed: isEditing
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                      child: GestureDetector(
+                        onTap: isEditing
                             ? () async {
                                 var time = DateTime.now().toString();
                                 titleC.text != note["title"] || contentC.text != note["content"]
@@ -73,13 +82,22 @@ Widget editNote({required Map note}) {
                                 isEditing = true;
                                 B.onCreateNote();
                               },
-                        icon: Icon(
-                          isEditing ? Icons.done : Icons.edit_note,
-                          size: 40,
-                          color: Colors.white,
-                        )),
+                        child: CircleAvatar(
+                          backgroundColor: Colors.white,
+                          radius: 25,
+                          child: Icon(
+                            isEditing ? Icons.done : Icons.edit_note,
+                            color: B.colors[bIndex].harmonizeWith(Theme.of(context).colorScheme.primary),
+                            size: 36,
+                          ),
+                        ),
+                      ),
+                    ),
                   )
                 ],
+              ),
+              const SizedBox(
+                height: 8,
               ),
               Expanded(
                 child: Row(
@@ -96,13 +114,14 @@ Widget editNote({required Map note}) {
                           child: TextFormField(
                               textDirection: note['layout'] == 0 ? TextDirection.ltr : TextDirection.rtl,
                               onSaved: B.onViewChanged(),
+                              textAlign: TextAlign.center,
                               maxLines: 2,
                               cursorColor: Colors.white,
                               readOnly: isEditing ? false : true,
                               textInputAction: TextInputAction.done,
                               controller: titleC,
                               style: TextStyle(color: Colors.white, fontSize: B.isTablet ? 60 : 36, fontWeight: FontWeight.w500),
-                              decoration: InputDecoration(border: InputBorder.none, hintText: "No Title".tr())),
+                              decoration: InputDecoration(border: InputBorder.none, hintText: "No Title".tr(), hintStyle: const TextStyle(color: Colors.black54))),
                         ),
                         const SizedBox(
                           height: 10,
@@ -121,7 +140,7 @@ Widget editNote({required Map note}) {
                               readOnly: isEditing ? false : true,
                               maxLines: 20,
                               style: TextStyle(color: Colors.white, fontSize: B.isTablet ? 40 : 24),
-                              decoration: InputDecoration(border: InputBorder.none, hintText: "Content".tr())),
+                              decoration: InputDecoration(border: InputBorder.none, hintText: "Content".tr(), hintStyle: const TextStyle(color: Colors.black54))),
                         ),
                       ]),
                     ),
@@ -143,7 +162,7 @@ Widget editNote({required Map note}) {
                                     backgroundColor: bIndex == index2 ? Colors.white : Colors.white54,
                                     child: CircleAvatar(
                                       radius: 20,
-                                      backgroundColor: B.colors[index2],
+                                      backgroundColor: B.colors[index2].harmonizeWith(Theme.of(context).colorScheme.primary),
                                     ),
                                   ),
                                 ),

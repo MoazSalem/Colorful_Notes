@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
@@ -9,23 +10,24 @@ import 'package:notes/Screens/SideBar/info.dart';
 import 'package:notes/Screens/SideBar/notes.dart';
 import 'package:notes/Screens/SideBar/settings.dart';
 import 'package:notes/Screens/SideBar/voice_notes.dart';
-import 'package:adaptive_theme/adaptive_theme.dart';
+//import 'package:notes/Test/colors.dart';
 import 'package:notes/Widgets/sideBar.dart';
 
 class Home extends StatelessWidget {
   const Home({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
+    var brightness = SchedulerBinding.instance.window.platformBrightness;
+    bool isDarkMode = brightness == Brightness.dark;
     return AnnotatedRegion<SystemUiOverlayStyle>(
         value: SystemUiOverlayStyle(
           statusBarColor: Colors.transparent,
-          statusBarIconBrightness: AdaptiveTheme.of(context).brightness == Brightness.light ? Brightness.dark : Brightness.light,
+          statusBarIconBrightness: isDarkMode ? Brightness.light : Brightness.dark,
           // For Android (dark icons)
-          statusBarBrightness: AdaptiveTheme.of(context).brightness,
+          statusBarBrightness: isDarkMode ? Brightness.light : Brightness.dark,
           // For iOS (dark icons)
-          systemNavigationBarIconBrightness: AdaptiveTheme.of(context).brightness == Brightness.light ? Brightness.dark : Brightness.light,
-          systemNavigationBarColor: Theme.of(context).cardColor,
+          systemNavigationBarIconBrightness: isDarkMode ? Brightness.light : Brightness.dark,
+          systemNavigationBarColor: Theme.of(context).colorScheme.surfaceVariant,
         ),
         child: BlocProvider(
           create: (context) => NotesBloc()..startPage(),
@@ -54,9 +56,9 @@ class Home extends StatelessWidget {
                 Builder(
                   builder: (context) {
                     return MediaQuery(
-                        data: MediaQuery.of(context).copyWith(textScaleFactor: B.isTablet ? 1.5 : 1.0),
+                        data: MediaQuery.of(context).copyWith(textScaleFactor: B.isTablet ? 1.5 : 1.0),//child: ColorsTest(),);
                         child: SettingsPage(
-                          currentTheme: B.getAppTheme(context),
+                          //currentTheme: B.getAppTheme(context),
                           black: B.isBlack ? "Amoled" : "Dark",
                           sB: B.sbIndex == 0
                               ? "Left"
@@ -81,8 +83,8 @@ class Home extends StatelessWidget {
                 body: B.loading
                     ? Center(
                         child: SizedBox(
-                          width: 100,
-                          height: 100,
+                          width: 200,
+                          height: 200,
                           child: Lottie.asset(
                             'assets/animations/loading.json',
                           ),
@@ -98,7 +100,7 @@ class Home extends StatelessWidget {
                                 Container(
                                   height: double.infinity,
                                   width: 1,
-                                  color: Theme.of(context).highlightColor.withOpacity(0.15),
+                                  color:Theme.of(context).colorScheme.outline.withOpacity(0.3), //Theme.of(context).highlightColor.withOpacity(0.15),
                                 ),
                                 sideBar(context, B.sbIndex == 3 ? true : false), // Divider
                               ]
@@ -107,7 +109,7 @@ class Home extends StatelessWidget {
                                 Container(
                                   height: double.infinity,
                                   width: 1,
-                                  color: Theme.of(context).highlightColor.withOpacity(0.15),
+                                  color:Theme.of(context).colorScheme.outline.withOpacity(0.3), //Theme.of(context).highlightColor.withOpacity(0.15),
                                 ), // Divider
                                 Expanded(
                                   flex: 5,
