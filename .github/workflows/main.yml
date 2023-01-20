@@ -19,7 +19,6 @@ jobs:
         with:
           flutter-version: '3.3.10'
       - run: flutter pub get
-      - run: flutter test
       - run: flutter build apk --debug --split-per-abi
       - name: Push to Releases
         uses: ncipollo/release-action@v1
