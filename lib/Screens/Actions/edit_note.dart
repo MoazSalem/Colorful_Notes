@@ -144,7 +144,7 @@ Widget editNote({required Map note}) {
                                   : EdgeInsets.only(right: B.isTablet ? 60 : 20)
                               : EdgeInsets.symmetric(horizontal: B.isTablet ? 60 : 20),
                           child: TextFormField(
-                              textDirection: note['layout'] == 0 ? TextDirection.ltr : TextDirection.rtl,
+                              textAlign: note["layout"] == 1 || note["layout"] == 2 ? TextAlign.right : TextAlign.left,
                               onSaved: B.onSearch(),
                               cursorColor: Colors.white,
                               controller: contentC,

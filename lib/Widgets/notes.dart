@@ -161,7 +161,7 @@ Widget smallListView({
             alignment: Alignment.bottomLeft,
             children: [
               Card(
-                color: colors[notes[reverseIndex]['cindex']],
+                color: colors[notes[reverseIndex]['cindex']].harmonizeWith(Theme.of(context).colorScheme.primary),
                 elevation: showShadow ? width * 0.01018 : 0,
                 shadowColor: colors[notes[reverseIndex]['cindex']],
                 shape: const RoundedRectangleBorder(

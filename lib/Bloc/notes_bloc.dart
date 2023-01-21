@@ -148,16 +148,15 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
   createVoiceFolder() async {
     Directory voice = Directory("${appDir.path}/Voice");
     if ((await voice.exists())) {
-      // print("Path exist");
-      var status = await Permission.storage.status;
-      if (!status.isGranted) {
-        await getStoragePermission();
+      if (kDebugMode) {
+        print("exist");
       }
     } else {
       if (kDebugMode) {
         print("not exist");
       }
-      await Permission.storage.request();
+      await Permission.storage.request().isGranted;
+
       // Either the permission was already granted before or the user just granted it.
       await voice.create(recursive: true);
     }

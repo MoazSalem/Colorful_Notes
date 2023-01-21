@@ -78,8 +78,6 @@ class Home extends StatelessWidget {
                 ),
               ];
               return Scaffold(
-
-                backgroundColor: Colors.black,
                 resizeToAvoidBottomInset: false,
                 key: B.scaffoldKey,
                 body: B.loading
