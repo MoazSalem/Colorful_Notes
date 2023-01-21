@@ -30,7 +30,7 @@ Widget editVoice({required Map note}) {
                 textInputAction: TextInputAction.done,
                 controller: titleC,
                 style: TextStyle(color: Colors.white, fontSize: B.isTablet ? 60 : 36, fontWeight: FontWeight.w500),
-                decoration: InputDecoration(border: InputBorder.none, hintText: "No Title".tr(),hintStyle: const TextStyle(color: Colors.black54))),
+                decoration: InputDecoration(border: InputBorder.none, hintText: "No Title".tr(), hintStyle: const TextStyle(color: Colors.black54))),
           ),
           SizedBox(
             height: B.isTablet ? 40 : 10,

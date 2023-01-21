@@ -29,6 +29,8 @@
   "Top Left": "Top Left",
   "Bottom Right": "Bottom R",
   "Bottom Left": "Bottom L",
+  "Right": "Right",
+  "Left": "Left",
   "Show Date": "Notes Date",
   "Show Shadow": "Notes Shadow",
   "Show Edited": "Edited Notes",
@@ -95,8 +97,5 @@
   "I3": "using flutter to learn new stuff!",
   "I6": "The app uses ",
   "I7": "Sqflite ",
-  "I8": "to make a database to store all of your notes data locally on your phone",
-  "I9": "The app also uses ",
-  "I10": "Huawei ML Language Kit ",
-  "I13": "to recognize text language and choose the correct layout."
+  "I8": "to make a database to store all of your notes data locally on your phone"
 }

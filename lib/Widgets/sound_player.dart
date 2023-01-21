@@ -1,3 +1,4 @@
+import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:notes/Widgets/notes.dart';
@@ -73,7 +74,7 @@ class _SoundPlayerState extends State<SoundPlayer> {
                                   min: 0,
                                   max: duration.inSeconds.toDouble(),
                                   onChanged: (value) {
-                                    setState(() async{
+                                    setState(() async {
                                       final position = Duration(seconds: value.toInt());
                                       await audioPlayer.seek(position);
                                       play = true;
@@ -147,7 +148,10 @@ class _SoundPlayerState extends State<SoundPlayer> {
                                     child: Center(
                                       child: Text(
                                         "${playbackSpeed.toString()}X",
-                                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: widget.colors[widget.voiceMap[widget.index]['cindex']]),
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 12,
+                                            color: widget.colors[widget.voiceMap[widget.index]['cindex']].harmonizeWith(Theme.of(context).colorScheme.primary)),
                                       ),
                                     ),
                                   ),
@@ -243,7 +247,10 @@ class _SoundPlayerState extends State<SoundPlayer> {
                                     child: Center(
                                       child: Text(
                                         "${playbackSpeed.toString()}X",
-                                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: widget.colors[widget.voiceMap[widget.index]['cindex']]),
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 12,
+                                            color: widget.colors[widget.voiceMap[widget.index]['cindex']].harmonizeWith(Theme.of(context).colorScheme.primary)),
                                       ),
                                     ),
                                   ),
@@ -368,7 +375,10 @@ class _SoundPlayerState extends State<SoundPlayer> {
                                           child: Center(
                                             child: Text(
                                               "${playbackSpeed.toString()}X",
-                                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: widget.colors[widget.voiceMap[widget.index]['cindex']]),
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 12,
+                                                  color: widget.colors[widget.voiceMap[widget.index]['cindex']].harmonizeWith(Theme.of(context).colorScheme.primary)),
                                             ),
                                           ),
                                         ),

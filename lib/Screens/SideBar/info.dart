@@ -53,20 +53,6 @@ class InfoPage extends StatelessWidget {
                       const SizedBox(
                         height: 20,
                       ),
-                      RichText(
-                          text: TextSpan(
-                        style: TextStyle(fontSize: B.isTablet ? 30 : 20, fontWeight: FontWeight.w300, color: textColor),
-                        children: <TextSpan>[
-                          TextSpan(
-                            text: "I9".tr(),
-                          ),
-                          TextSpan(text: "I10".tr(), style: TextStyle(color: B.colors[3].harmonizeWith(Theme.of(context).colorScheme.primary))),
-                          TextSpan(text: "I13".tr()),
-                        ],
-                      )),
-                      const SizedBox(
-                        height: 20,
-                      ),
                       GestureDetector(
                          onTap: () => _launchUrl(),
                          child: Text(

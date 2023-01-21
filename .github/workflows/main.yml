@@ -5,6 +5,8 @@ on:
   push:
     branches:
       - Release
+env:
+  app_ver: v1.1.4
 name: "Build & Release"
 jobs:
   build:
@@ -19,15 +21,17 @@ jobs:
         with:
           flutter-version: '3.3.10'
       - run: flutter pub get
-      - run: flutter build apk --debug --split-per-abi
-      - name: Rename Packages
-        run:  |
-        mv ./build/app/outputs/apk/debug/app-arm64-v8a-debug.apk ./build/app/outputs/apk/debug/Colorful_Notes_$GITHUB_REF_NAME-arm64-v8a.apk
-        mv ./build/app/outputs/apk/debug/app-armeabi-v7a-debug.apk ./build/app/outputs/apk/debug/Colorful_Notes_$GITHUB_REF_NAME-armeabi-v7a.apk
-        mv ./build/app/outputs/apk/debug/app-x86_64-debug.apk ./build/app/outputs/apk/debug/Colorful_Notes_$GITHUB_REF_NAME-x86_64.apk
+      - run: |
+         flutter build apk --release
+         mv ./build/app/outputs/apk/release/app-release.apk ./Colorful_Notes_$app_ver.apk
+         flutter build apk --release --split-per-abi
+         mv ./build/app/outputs/apk/release/app-arm64-v8a-release.apk ./build/app/outputs/apk/release/Colorful_Notes_$app_ver-arm64-v8a.apk
+         mv ./build/app/outputs/apk/release/app-armeabi-v7a-release.apk ./build/app/outputs/apk/release/Colorful_Notes_$app_ver-armeabi-v7a.apk
+         mv ./build/app/outputs/apk/release/app-x86_64-release.apk ./build/app/outputs/apk/release/Colorful_Notes_$app_ver-x86_64.apk
+         mv ./Colorful_Notes_$app_ver.apk ./build/app/outputs/apk/release/Colorful_Notes_$app_ver.apk
       - name: Push to Releases
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "build/app/outputs/apk/debug/*"
-          tag: v1.1.3
+          artifacts: "build/app/outputs/apk/release/*"
+          tag: ${{ env.app_ver }}
           token: ${{ secrets.TOKEN }}

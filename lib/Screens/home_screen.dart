@@ -10,11 +10,13 @@ import 'package:notes/Screens/SideBar/info.dart';
 import 'package:notes/Screens/SideBar/notes.dart';
 import 'package:notes/Screens/SideBar/settings.dart';
 import 'package:notes/Screens/SideBar/voice_notes.dart';
+
 //import 'package:notes/Test/colors.dart';
 import 'package:notes/Widgets/sideBar.dart';
 
 class Home extends StatelessWidget {
   const Home({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     var brightness = SchedulerBinding.instance.window.platformBrightness;
@@ -56,7 +58,7 @@ class Home extends StatelessWidget {
                 Builder(
                   builder: (context) {
                     return MediaQuery(
-                        data: MediaQuery.of(context).copyWith(textScaleFactor: B.isTablet ? 1.5 : 1.0),//child: ColorsTest(),);
+                        data: MediaQuery.of(context).copyWith(textScaleFactor: B.isTablet ? 1.5 : 1.0), //child: ColorsTest(),);
                         child: SettingsPage(
                           //currentTheme: B.getAppTheme(context),
                           black: B.isBlack ? "Amoled" : "Dark",
@@ -78,6 +80,9 @@ class Home extends StatelessWidget {
                 ),
               ];
               return Scaffold(
+                backgroundColor: B.loading
+                    ? Theme.of(context).colorScheme.background
+                    : null,
                 resizeToAvoidBottomInset: false,
                 key: B.scaffoldKey,
                 body: B.loading

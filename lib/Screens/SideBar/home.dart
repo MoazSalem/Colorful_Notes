@@ -42,7 +42,7 @@ class HomePage extends StatelessWidget {
                 icon: Icon(
                   Icons.search,
                   size: 30,
-                  color: searchOn ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.onSurfaceVariant,//const Color(0xffff8b34)
+                  color: searchOn ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.onSurfaceVariant, //const Color(0xffff8b34)
                 ),
               ),
               IconButton(
@@ -191,7 +191,7 @@ class HomePage extends StatelessWidget {
                                                 horizontal: B.isTablet
                                                     ? 8.0
                                                     : notes[reverseIndex]["layout"] == 0 || notes[reverseIndex]["layout"] == 2
-                                                    ? 10
+                                                        ? 10
                                                         : 0,
                                                 vertical: B.isTablet ? 8.0 : 0),
                                             child: IconButton(
@@ -228,7 +228,7 @@ class HomePage extends StatelessWidget {
                                 int dateValue = B.calculateDifference(notes[reverseIndex]["time"]);
                                 String date = B.parseDate(notes[reverseIndex]["time"]);
                                 return Stack(
-                                  alignment: notes[reverseIndex]["layout"] == 0 || notes[reverseIndex]["layout"] == 2  ? Alignment.topRight : Alignment.topLeft,
+                                  alignment: notes[reverseIndex]["layout"] == 0 || notes[reverseIndex]["layout"] == 2 ? Alignment.topRight : Alignment.topLeft,
                                   children: [
                                     GestureDetector(
                                       onTap: () => edit(reverseIndex),
@@ -250,7 +250,7 @@ class HomePage extends StatelessWidget {
                                           horizontal: B.isTablet
                                               ? 8.0
                                               : notes[reverseIndex]["layout"] == 0 || notes[reverseIndex]["layout"] == 2
-                                              ? 10
+                                                  ? 10
                                                   : 0,
                                           vertical: B.isTablet ? 8.0 : 0),
                                       child: IconButton(

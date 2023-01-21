@@ -64,8 +64,6 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
   bool loading = true;
   late String openPage;
   late String lang;
-  String detectedLanguage = 'en';
-  String capturedText = "";
   bool isTablet = getDeviceType() == 'tablet' ? true : false;
   GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   var brightness = SchedulerBinding.instance.window.platformBrightness;

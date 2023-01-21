@@ -36,6 +36,7 @@ class MyApp extends StatelessWidget {
   final bool isBlack;
 
   const MyApp({Key? key, required this.showHome, required this.isBlack}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return DynamicColorBuilder(builder: (lightColorScheme, darkColorScheme) {

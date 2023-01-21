@@ -21,8 +21,8 @@ bool isLoading = false;
 String chLang = 'en';
 
 Widget createNote(BuildContext context, bool isML) {
-  _titleDir= ValueNotifier(TextDirection.ltr);
-  _contentDir= ValueNotifier(TextDirection.ltr);
+  _titleDir = ValueNotifier(TextDirection.ltr);
+  _contentDir = ValueNotifier(TextDirection.ltr);
   return BlocConsumer<NotesBloc, NotesState>(
     listener: (context, state) {},
     builder: (context, state) {
@@ -215,15 +215,15 @@ int getLayout() {
   } else if (_titleDir.value == TextDirection.rtl && _contentDir.value == TextDirection.rtl) {
     layout = 1;
   } else if (_titleDir.value == TextDirection.ltr && _contentDir.value == TextDirection.rtl) {
-    if(title == ""){
+    if (title == "") {
       layout = 1;
-    }else {
+    } else {
       layout = 2;
     }
   } else {
-    if(content == ""){
+    if (content == "") {
       layout = 1;
-    }else {
+    } else {
       layout = 3;
     }
   }
