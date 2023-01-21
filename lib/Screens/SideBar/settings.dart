@@ -14,7 +14,7 @@ late String darkTheme;
 var lang = ["English", "Arabic"];
 var themes = ["Light", "Dark", "System"];
 var dark = ["Dark", "Amoled"];
-var sb = ["Left", "Left Inv", "Right", "Right Inv"];
+var sb = ["Top Left", "Bottom Left", "Top Right", "Bottom Right"];
 var fab = ["Right", "Left"];
 var pages = ["Home", "Text", "Voice"];
 
@@ -184,11 +184,11 @@ class SettingsPage extends StatelessWidget {
                                 ));
                           }).toList(),
                           onChanged: (String? newValue) async {
-                            newValue == 'Left'
+                            newValue == 'Top Left'
                                 ? B.sbIndex = 0
-                                : newValue == 'Left Inv'
+                                : newValue == 'Bottom Left'
                                     ? B.sbIndex = 1
-                                    : newValue == 'Right'
+                                    : newValue == 'Top Right'
                                         ? B.sbIndex = 2
                                         : B.sbIndex = 3;
                             sB = newValue!;
@@ -463,6 +463,42 @@ class SettingsPage extends StatelessWidget {
                               final prefs = await SharedPreferences.getInstance();
                               await prefs.setBool("darkColors", value);
                               B.darkColors = value;
+                              B.startDatabase();
+                              B.prefsChanged();
+                            },
+                          ),
+                        )),
+                  ),
+                ),
+              ),
+              B.divider(context),
+              SizedBox(
+                height: height,
+                child: Center(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: padding),
+                    child: ListTile(
+                        title: Text(
+                          "harmonized Colors".tr(),
+                          style: TextStyle(fontSize: title, fontWeight: FontWeight.w500, color: textColor),
+                        ),
+                        subtitle: Text(
+                          "sHarmonizedColors".tr(),
+                          style: TextStyle(fontSize: subtitle, fontWeight: FontWeight.w400, color: textColor),
+                        ),
+                        trailing: Padding(
+                          padding: EdgeInsets.only(right: padding),
+                          child: SwitcherButton(
+                            onColor: Theme.of(context).colorScheme.primary,
+                            offColor: Theme.of(context).colorScheme.primaryContainer,
+                            //onColor: B.colors[6],
+                            //offColor: Theme.of(context).primaryColorDark,
+                            size: switchSize,
+                            value: B.harmonizeColor,
+                            onChange: (bool value) async {
+                              final prefs = await SharedPreferences.getInstance();
+                              await prefs.setBool("harmonizeColor", value);
+                              B.harmonizeColor = value;
                               B.startDatabase();
                               B.prefsChanged();
                             },

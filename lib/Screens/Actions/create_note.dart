@@ -8,6 +8,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 final TextEditingController titleC = TextEditingController();
 final TextEditingController contentC = TextEditingController();
+final ValueNotifier<TextDirection> _titleDir = ValueNotifier(TextDirection.ltr);
+final ValueNotifier<TextDirection> _contentDir = ValueNotifier(TextDirection.ltr);
+
 late String title;
 late String content;
 late String time;
@@ -48,8 +51,7 @@ Widget createNote(BuildContext context, bool isML) {
                                 content = contentC.text;
                                 titleC.text != "" || contentC.text != ""
                                     ? {
-                                        await B.detectLanguage("$title $content"),
-                                        await B.insertToDatabase(title: title, time: time, content: content, index: chosenIndex, layout: B.detectedLanguage == 'ar' ? 1 : 0),
+                                        await B.insertToDatabase(title: title, time: time, content: content, index: chosenIndex, layout: getLayout()),
                                         titleC.text = "",
                                         contentC.text = "",
                                         await prefs.setInt("adCounter", B.adCounter),
@@ -82,8 +84,7 @@ Widget createNote(BuildContext context, bool isML) {
                           content = contentC.text;
                           titleC.text != "" || contentC.text != ""
                               ? {
-                                  await B.detectLanguage("$title $content"),
-                                  await B.insertToDatabase(title: title, time: time, content: content, index: chosenIndex, layout: B.detectedLanguage == 'ar' ? 1 : 0),
+                                  await B.insertToDatabase(title: title, time: time, content: content, index: chosenIndex, layout: getLayout()),
                                   titleC.text = "",
                                   contentC.text = "",
                                   Navigator.pop(context),
@@ -116,16 +117,25 @@ Widget createNote(BuildContext context, bool isML) {
                       child: ListView(children: [
                         Padding(
                           padding: B.lang == 'en' ? EdgeInsets.only(left: B.isTablet ? 60 : 20) : EdgeInsets.only(right: B.isTablet ? 60 : 20),
-                          child: TextFormField(
-                              maxLines: 2,
-                              textAlign: TextAlign.center,
-                              textDirection: B.lang == 'en' ? TextDirection.ltr : TextDirection.rtl,
-                              cursorColor: Colors.white,
-                              autofocus: true,
-                              textInputAction: TextInputAction.done,
-                              controller: titleC,
-                              style: TextStyle(color: Colors.white, fontSize: B.isTablet ? 60 : 36, fontWeight: FontWeight.w500),
-                              decoration: InputDecoration(border: InputBorder.none, hintText: "Title".tr(), hintStyle: const TextStyle(color: Colors.black54))),
+                          child: ValueListenableBuilder<TextDirection>(
+                            valueListenable: _titleDir,
+                            builder: (context, value, child) => TextFormField(
+                                maxLines: 2,
+                                textAlign: TextAlign.center,
+                                textDirection: value,
+                                onChanged: (input) {
+                                  if (input.trim().length < 2) {
+                                    final dir = B.getDirection(input);
+                                    if (dir != value) _titleDir.value = dir;
+                                  }
+                                },
+                                cursorColor: Colors.white,
+                                autofocus: true,
+                                textInputAction: TextInputAction.done,
+                                controller: titleC,
+                                style: TextStyle(color: Colors.white, fontSize: B.isTablet ? 60 : 36, fontWeight: FontWeight.w500),
+                                decoration: InputDecoration(border: InputBorder.none, hintText: "Title".tr(), hintStyle: const TextStyle(color: Colors.black54))),
+                          ),
                         ),
                         const SizedBox(
                           height: 10,
@@ -142,14 +152,23 @@ Widget createNote(BuildContext context, bool isML) {
                               )
                             : Padding(
                                 padding: B.lang == 'en' ? EdgeInsets.only(left: B.isTablet ? 60 : 20) : EdgeInsets.only(right: B.isTablet ? 60 : 20),
-                                child: TextFormField(
-                                    textDirection: B.lang == 'en' ? TextDirection.ltr : TextDirection.rtl,
-                                    cursorColor: Colors.white,
-                                    controller: contentC,
-                                    maxLines: 20,
-                                    showCursor: true,
-                                    style: TextStyle(color: Colors.white, fontSize: B.isTablet ? 40 : 24),
-                                    decoration: InputDecoration(border: InputBorder.none, hintText: "Content".tr(), hintStyle: const TextStyle(color: Colors.black54))),
+                                child: ValueListenableBuilder<TextDirection>(
+                                  valueListenable: _contentDir,
+                                  builder: (context, value, child) => TextFormField(
+                                      textDirection: value,
+                                      onChanged: (input) {
+                                        if (input.trim().length < 2) {
+                                          final dir = B.getDirection(input);
+                                          if (dir != value) _contentDir.value = dir;
+                                        }
+                                      },
+                                      cursorColor: Colors.white,
+                                      controller: contentC,
+                                      maxLines: 20,
+                                      showCursor: true,
+                                      style: TextStyle(color: Colors.white, fontSize: B.isTablet ? 40 : 24),
+                                      decoration: InputDecoration(border: InputBorder.none, hintText: "Content".tr(), hintStyle: const TextStyle(color: Colors.black54))),
+                                ),
                               ),
                       ]),
                     ),
@@ -185,4 +204,18 @@ Widget createNote(BuildContext context, bool isML) {
       );
     },
   );
+}
+
+int getLayout() {
+  int layout = 0;
+  if (_titleDir.value == TextDirection.ltr && _contentDir.value == TextDirection.ltr) {
+    layout = 0;
+  } else if (_titleDir.value == TextDirection.rtl && _contentDir.value == TextDirection.rtl) {
+    layout = 1;
+  } else if (_titleDir.value == TextDirection.ltr && _contentDir.value == TextDirection.rtl) {
+    layout = 2;
+  } else {
+    layout = 3;
+  }
+  return layout;
 }

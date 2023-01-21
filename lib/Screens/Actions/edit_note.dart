@@ -6,6 +6,8 @@ import 'package:notes/Bloc/notes_bloc.dart';
 
 final TextEditingController titleC = TextEditingController();
 final TextEditingController contentC = TextEditingController();
+final ValueNotifier<TextDirection> _titleDir = ValueNotifier(TextDirection.ltr);
+final ValueNotifier<TextDirection> _contentDir = ValueNotifier(TextDirection.ltr);
 bool isEditing = false;
 
 Widget editNote({required Map note}) {
@@ -63,8 +65,8 @@ Widget editNote({required Map note}) {
                                 var time = DateTime.now().toString();
                                 titleC.text != note["title"] || contentC.text != note["content"]
                                     ? {
-                                        await B.detectLanguage("${titleC.text} ${contentC.text}"),
-                                        await B.insertToDatabase(title: titleC.text, time: time, content: contentC.text, index: bIndex, edited: 'yes', layout: B.detectedLanguage == 'ar' ? 1 : 0),
+                                        await B.insertToDatabase(
+                                            title: titleC.text, time: time, content: contentC.text, index: bIndex, edited: 'yes', layout: getLayout()),
                                         await B.deleteFromDatabase(id: note["id"]),
                                         isEditing = false,
                                         B.onCreateNote(),
@@ -111,17 +113,26 @@ Widget editNote({required Map note}) {
                                   ? EdgeInsets.only(left: B.isTablet ? 60 : 20)
                                   : EdgeInsets.only(right: B.isTablet ? 60 : 20)
                               : EdgeInsets.symmetric(horizontal: B.isTablet ? 60 : 20),
-                          child: TextFormField(
-                              textDirection: note['layout'] == 0 ? TextDirection.ltr : TextDirection.rtl,
-                              onSaved: B.onViewChanged(),
-                              textAlign: TextAlign.center,
-                              maxLines: 2,
-                              cursorColor: Colors.white,
-                              readOnly: isEditing ? false : true,
-                              textInputAction: TextInputAction.done,
-                              controller: titleC,
-                              style: TextStyle(color: Colors.white, fontSize: B.isTablet ? 60 : 36, fontWeight: FontWeight.w500),
-                              decoration: InputDecoration(border: InputBorder.none, hintText: "No Title".tr(), hintStyle: const TextStyle(color: Colors.black54))),
+                          child: ValueListenableBuilder<TextDirection>(
+                            valueListenable: _titleDir,
+                            builder: (context, value, child) => TextFormField(
+                                textDirection: value,
+                                onChanged: (input) {
+                                  if (input.trim().length < 2) {
+                                    final dir = B.getDirection(input);
+                                    if (dir != value) _titleDir.value = dir;
+                                  }
+                                },
+                                onSaved: B.onViewChanged(),
+                                textAlign: TextAlign.center,
+                                maxLines: 2,
+                                cursorColor: Colors.white,
+                                readOnly: isEditing ? false : true,
+                                textInputAction: TextInputAction.done,
+                                controller: titleC,
+                                style: TextStyle(color: Colors.white, fontSize: B.isTablet ? 60 : 36, fontWeight: FontWeight.w500),
+                                decoration: InputDecoration(border: InputBorder.none, hintText: "No Title".tr(), hintStyle: const TextStyle(color: Colors.black54))),
+                          ),
                         ),
                         const SizedBox(
                           height: 10,
@@ -178,4 +189,18 @@ Widget editNote({required Map note}) {
       );
     },
   );
+}
+
+int getLayout() {
+  int layout = 0;
+  if (_titleDir.value == TextDirection.ltr && _contentDir.value == TextDirection.ltr) {
+    layout = 0;
+  } else if (_titleDir.value == TextDirection.rtl && _contentDir.value == TextDirection.rtl) {
+    layout = 1;
+  } else if (_titleDir.value == TextDirection.ltr && _contentDir.value == TextDirection.rtl) {
+    layout = 2;
+  } else {
+    layout = 3;
+  }
+  return layout;
 }

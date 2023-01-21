@@ -61,12 +61,12 @@ class Home extends StatelessWidget {
                           //currentTheme: B.getAppTheme(context),
                           black: B.isBlack ? "Amoled" : "Dark",
                           sB: B.sbIndex == 0
-                              ? "Left"
+                              ? "Top Left"
                               : B.sbIndex == 1
-                                  ? "Left Inv"
+                                  ? "Bottom Left"
                                   : B.sbIndex == 2
-                                      ? "Right"
-                                      : "Right Inv",
+                                      ? "Top Right"
+                                      : "Bottom Right",
                           fabLoc: B.fabIndex == 0 ? "Right" : "Left",
                         ));
                   },
@@ -78,6 +78,8 @@ class Home extends StatelessWidget {
                 ),
               ];
               return Scaffold(
+
+                backgroundColor: Colors.black,
                 resizeToAvoidBottomInset: false,
                 key: B.scaffoldKey,
                 body: B.loading
@@ -97,20 +99,20 @@ class Home extends StatelessWidget {
                                   flex: 5,
                                   child: page[B.currentIndex],
                                 ),
-                                Container(
-                                  height: double.infinity,
-                                  width: 1,
-                                  color:Theme.of(context).colorScheme.outline.withOpacity(0.3), //Theme.of(context).highlightColor.withOpacity(0.15),
-                                ),
+                                // Container(
+                                //   height: double.infinity,
+                                //   width: 1,
+                                //   color:Theme.of(context).colorScheme.outline.withOpacity(0.2), //Theme.of(context).highlightColor.withOpacity(0.15),
+                                // ),
                                 sideBar(context, B.sbIndex == 3 ? true : false), // Divider
                               ]
                             : [
                                 sideBar(context, B.sbIndex == 1 ? true : false),
-                                Container(
-                                  height: double.infinity,
-                                  width: 1,
-                                  color:Theme.of(context).colorScheme.outline.withOpacity(0.3), //Theme.of(context).highlightColor.withOpacity(0.15),
-                                ), // Divider
+                                // Container(
+                                //   height: double.infinity,
+                                //   width: 1,
+                                //   color:Theme.of(context).colorScheme.outline.withOpacity(0.2), //Theme.of(context).highlightColor.withOpacity(0.15),
+                                // ), // Divider
                                 Expanded(
                                   flex: 5,
                                   child: page[B.currentIndex],

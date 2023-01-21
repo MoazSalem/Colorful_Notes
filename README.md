@@ -1,8 +1,8 @@
-# **Colorful Notes **
+# Colorful Notes
 
 A Clean looking modren and colorful notes app using a local database with sqflite.
 
-# ** Features **
+# Features
 
 ### - Modern Design</br>
 
@@ -16,10 +16,10 @@ A Clean looking modren and colorful notes app using a local database with sqflit
 
 ### - Tablet Suppoet</br>
 
-# ** Screenshots **
+# Screenshots
 
 To Be Changed
 
-# ** TODO Later **
+# TODO Later
 
 To Be Changed

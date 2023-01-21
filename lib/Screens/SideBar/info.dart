@@ -3,9 +3,9 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:notes/Bloc/notes_bloc.dart';
-// import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-// final Uri _url = Uri.parse('https://github.com/MoazSalem/Notes_FlutterApp');
+final Uri _url = Uri.parse('https://github.com/MoazSalem/Colorful_Notes');
 
 class InfoPage extends StatelessWidget {
   const InfoPage({Key? key}) : super(key: key);
@@ -67,13 +67,13 @@ class InfoPage extends StatelessWidget {
                       const SizedBox(
                         height: 20,
                       ),
-                      // GestureDetector(
-                      //   onTap: () => _launchUrl(),
-                      //   child: Text(
-                      //     "Click here to Check The App on Github.",
-                      //     style: TextStyle(fontSize: 20, fontWeight: FontWeight.w300, color: B.colors[3]),
-                      //   ),
-                      // ),
+                      GestureDetector(
+                         onTap: () => _launchUrl(),
+                         child: Text(
+                           "Click here to Check The App on Github.",
+                           style: TextStyle(fontSize: 20, fontWeight: FontWeight.w300, color: B.colors[5].harmonizeWith(Theme.of(context).colorScheme.primary)),
+                         ),
+                       ),
                     ],
                   ))
             ],
@@ -84,8 +84,8 @@ class InfoPage extends StatelessWidget {
   }
 }
 
-// Future<void> _launchUrl() async {
-//   if (!await launchUrl(_url)) {
-//     throw 'Could not launch $_url';
-//   }
-// }
+Future<void> _launchUrl() async {
+  if (!await launchUrl(_url)) {
+    throw 'Could not launch $_url';
+  }
+}

@@ -129,7 +129,7 @@ class HomePage extends StatelessWidget {
                                 String date = B.parseDate(notes[reverseIndex]["time"]);
                                 Widget chosenView = B.viewIndex == 0
                                     ? Stack(
-                                        alignment: notes[reverseIndex]["layout"] == 0 ? Alignment.topRight : Alignment.topLeft,
+                                        alignment: notes[reverseIndex]["layout"] == 0 || notes[reverseIndex]["layout"] == 2 ? Alignment.topRight : Alignment.topLeft,
                                         children: [
                                           GestureDetector(
                                             onTap: () => edit(reverseIndex),
@@ -148,7 +148,7 @@ class HomePage extends StatelessWidget {
                                           ),
                                           Padding(
                                             padding: EdgeInsets.symmetric(
-                                                horizontal: notes[reverseIndex]["layout"] == 0
+                                                horizontal: notes[reverseIndex]["layout"] == 0 || notes[reverseIndex]["layout"] == 2
                                                     ? 20
                                                     : B.isTablet
                                                         ? 15
@@ -169,7 +169,7 @@ class HomePage extends StatelessWidget {
                                         ],
                                       )
                                     : Stack(
-                                        alignment: notes[reverseIndex]["layout"] == 0 ? Alignment.topRight : Alignment.topLeft,
+                                        alignment: notes[reverseIndex]["layout"] == 0 || notes[reverseIndex]["layout"] == 2 ? Alignment.topRight : Alignment.topLeft,
                                         children: [
                                           GestureDetector(
                                             onTap: () => edit(reverseIndex),
@@ -190,8 +190,8 @@ class HomePage extends StatelessWidget {
                                             padding: EdgeInsets.symmetric(
                                                 horizontal: B.isTablet
                                                     ? 8.0
-                                                    : notes[reverseIndex]["layout"] == 0
-                                                        ? 10
+                                                    : notes[reverseIndex]["layout"] == 0 || notes[reverseIndex]["layout"] == 2
+                                                    ? 10
                                                         : 0,
                                                 vertical: B.isTablet ? 8.0 : 0),
                                             child: IconButton(
@@ -228,7 +228,7 @@ class HomePage extends StatelessWidget {
                                 int dateValue = B.calculateDifference(notes[reverseIndex]["time"]);
                                 String date = B.parseDate(notes[reverseIndex]["time"]);
                                 return Stack(
-                                  alignment: notes[reverseIndex]["layout"] == 0 ? Alignment.topRight : Alignment.topLeft,
+                                  alignment: notes[reverseIndex]["layout"] == 0 || notes[reverseIndex]["layout"] == 2  ? Alignment.topRight : Alignment.topLeft,
                                   children: [
                                     GestureDetector(
                                       onTap: () => edit(reverseIndex),
@@ -249,8 +249,8 @@ class HomePage extends StatelessWidget {
                                       padding: EdgeInsets.symmetric(
                                           horizontal: B.isTablet
                                               ? 8.0
-                                              : notes[reverseIndex]["layout"] == 0
-                                                  ? 10
+                                              : notes[reverseIndex]["layout"] == 0 || notes[reverseIndex]["layout"] == 2
+                                              ? 10
                                                   : 0,
                                           vertical: B.isTablet ? 8.0 : 0),
                                       child: IconButton(

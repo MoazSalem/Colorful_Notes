@@ -6,14 +6,13 @@ import 'dart:io';
 // import 'package:path/path.dart' as path;
 import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:dynamic_color/dynamic_color.dart';
-import 'package:easy_localization/easy_localization.dart';
+import 'package:easy_localization/easy_localization.dart' hide TextDirection;
 
 // import 'package:external_path/external_path.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:huawei_ml_language/huawei_ml_language.dart';
 import 'package:material_dialogs/material_dialogs.dart';
 import 'package:material_dialogs/widgets/buttons/icon_button.dart';
 import 'package:material_dialogs/widgets/buttons/icon_outline_button.dart';
@@ -21,6 +20,8 @@ import 'package:notes/Data/colors.dart';
 import 'package:notes/Screens/SideBar/home.dart';
 import 'package:notes/Screens/SideBar/notes.dart';
 import 'package:notes/Screens/SideBar/voice_notes.dart';
+
+//import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -48,6 +49,7 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
   late bool showEdited;
   late bool darkColors;
   late bool isDarkMode;
+  late bool harmonizeColor;
   List<Map> allNotesMap = [];
   List<Map> voiceMap = [];
   List<Map> notesMap = [];
@@ -55,6 +57,8 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
   List<Map> searchedNotes = [];
   List<Map> searchedVoice = [];
   late List<Color> colors;
+  late List<Color> lHColors;
+  late List<Color> dHColors;
   List<Color> shadeColors = darkerColors;
   int currentIndex = 0;
   bool loading = true;
@@ -228,20 +232,34 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
     }
   }
 
-  Future<void> detectLanguage(String source) async {
-    // Create an MLLangDetector object.
-    MLLangDetector detector = MLLangDetector();
-
-// Create MLLangDetectorSetting to configure detection.
-    final setting = MLLangDetectorSetting.create(sourceText: source, isRemote: false);
-
-// Get detection result with the highest confidence.
-    final String? res = await detector.firstBestDetect(setting: setting);
-
-    detectedLanguage = res!;
-
-// After the detection ends, stop the detector.
-    await detector.stop();
+  TextDirection getDirection(String v) {
+    final string = v.trim();
+    if (string.isEmpty) return TextDirection.ltr;
+    final firstUnit = string.codeUnitAt(0);
+    if (firstUnit > 0x0600 && firstUnit < 0x06FF ||
+        firstUnit > 0x0750 && firstUnit < 0x077F ||
+        firstUnit > 0x07C0 && firstUnit < 0x07EA ||
+        firstUnit > 0x0840 && firstUnit < 0x085B ||
+        firstUnit > 0x08A0 && firstUnit < 0x08B4 ||
+        firstUnit > 0x08E3 && firstUnit < 0x08FF ||
+        firstUnit > 0xFB50 && firstUnit < 0xFBB1 ||
+        firstUnit > 0xFBD3 && firstUnit < 0xFD3D ||
+        firstUnit > 0xFD50 && firstUnit < 0xFD8F ||
+        firstUnit > 0xFD92 && firstUnit < 0xFDC7 ||
+        firstUnit > 0xFDF0 && firstUnit < 0xFDFC ||
+        firstUnit > 0xFE70 && firstUnit < 0xFE74 ||
+        firstUnit > 0xFE76 && firstUnit < 0xFEFC ||
+        firstUnit > 0x10800 && firstUnit < 0x10805 ||
+        firstUnit > 0x1B000 && firstUnit < 0x1B0FF ||
+        firstUnit > 0x1D165 && firstUnit < 0x1D169 ||
+        firstUnit > 0x1D16D && firstUnit < 0x1D172 ||
+        firstUnit > 0x1D17B && firstUnit < 0x1D182 ||
+        firstUnit > 0x1D185 && firstUnit < 0x1D18B ||
+        firstUnit > 0x1D1AA && firstUnit < 0x1D1AD ||
+        firstUnit > 0x1D242 && firstUnit < 0x1D244) {
+      return TextDirection.rtl;
+    }
+    return TextDirection.ltr;
   }
 
   showDeleteDialog(BuildContext context, List<Map> notes, int index) {
@@ -304,6 +322,18 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
     onSearch();
   }
 
+  void harmonizeColors(BuildContext context) {
+    List<Color> hColors = [];
+    for (var color in lightColors) {
+      hColors.add(color.harmonizeWith(Theme.of(context).colorScheme.primary));
+    }
+    lHColors = hColors;
+    for (var color in darkerColors) {
+      hColors.add(color.harmonizeWith(Theme.of(context).colorScheme.primary));
+    }
+    dHColors = hColors;
+  }
+
   void searchNotes(String query) {
     final searched = notesMap.where((note) {
       final title = note['title'].toString().toLowerCase();
@@ -341,7 +371,15 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
     showShadow = prefs.getBool('showShadow') ?? false;
     showEdited = prefs.getBool('showEdit') ?? true;
     darkColors = prefs.getBool('darkColors') ?? false;
+    harmonizeColor = prefs.getBool('harmonizeColor') ?? false;
     colors = darkColors ? darkerColors : lightColors;
+    // colors = darkColors
+    //     ? harmonizeColor
+    //     ? dHColors
+    //     : darkerColors
+    //     : harmonizeColor
+    //     ? lHColors
+    //     : lightColors;
     await refreshDatabase();
   }
 
@@ -615,3 +653,6 @@ String getDeviceType() {
   final data = MediaQueryData.fromWindow(WidgetsBinding.instance.window);
   return data.size.shortestSide < 750 ? 'phone' : 'tablet';
 }
+
+// Directory? appDocumentsDirectory = await getExternalStorageDirectory();
+// print(appDocumentsDirectory);
