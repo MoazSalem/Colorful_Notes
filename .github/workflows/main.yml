@@ -5,6 +5,8 @@ on:
   push:
     branches:
       - Release
+env:
+  app_ver: v1.1.3
 name: "Build & Release"
 jobs:
   build:
@@ -22,12 +24,12 @@ jobs:
       - run: flutter build apk --debug --split-per-abi
       - name: Rename Packages
         run:  |
-        mv ./build/app/outputs/apk/debug/app-arm64-v8a-debug.apk ./build/app/outputs/apk/debug/Colorful_Notes_$GITHUB_REF_NAME-arm64-v8a.apk
-        mv ./build/app/outputs/apk/debug/app-armeabi-v7a-debug.apk ./build/app/outputs/apk/debug/Colorful_Notes_$GITHUB_REF_NAME-armeabi-v7a.apk
-        mv ./build/app/outputs/apk/debug/app-x86_64-debug.apk ./build/app/outputs/apk/debug/Colorful_Notes_$GITHUB_REF_NAME-x86_64.apk
+         mv ./build/app/outputs/apk/debug/app-arm64-v8a-debug.apk ./build/app/outputs/apk/debug/Colorful_Notes_$app_ver-arm64-v8a.apk
+         mv ./build/app/outputs/apk/debug/app-armeabi-v7a-debug.apk ./build/app/outputs/apk/debug/Colorful_Notes_$app_ver-armeabi-v7a.apk
+         mv ./build/app/outputs/apk/debug/app-x86_64-debug.apk ./build/app/outputs/apk/debug/Colorful_Notes_$app_ver-x86_64.apk
       - name: Push to Releases
         uses: ncipollo/release-action@v1
         with:
           artifacts: "build/app/outputs/apk/debug/*"
-          tag: v1.1.3
+          tag: $app_ver
           token: ${{ secrets.TOKEN }}
