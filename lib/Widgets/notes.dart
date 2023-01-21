@@ -1,5 +1,5 @@
 import 'package:dynamic_color/dynamic_color.dart';
-import 'package:easy_localization/easy_localization.dart';
+import 'package:easy_localization/easy_localization.dart' hide TextDirection;
 import 'package:flutter/material.dart';
 import 'package:notes/Widgets/sound_player.dart';
 
@@ -50,6 +50,7 @@ Widget listView({
                                   : 2,
                               overflow: TextOverflow.ellipsis,
                               textAlign: TextAlign.center,
+                              textDirection: notes[reverseIndex]["layout"] == 0 || notes[reverseIndex]["layout"] == 2 ? TextDirection.ltr : TextDirection.rtl,
                               style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 24, color: Colors.white)),
                         ),
                       ),
@@ -65,6 +66,7 @@ Widget listView({
                                       : "فارغ"
                                   : notes[reverseIndex]["content"],
                               textAlign: notes[reverseIndex]["layout"] == 1 || notes[reverseIndex]["layout"] == 2 ? TextAlign.right : TextAlign.left,
+                              textDirection: notes[reverseIndex]["layout"] == 1 || notes[reverseIndex]["layout"] == 2 ? TextDirection.rtl : TextDirection.ltr,
                               maxLines: showDate
                                   ? isTablet
                                       ? 20
@@ -202,6 +204,7 @@ Widget smallListView({
                                             forceStrutHeight: notes[reverseIndex]["layout"] == 0 ? false : true,
                                           ),
                                           textAlign: notes[reverseIndex]["layout"] == 0 || notes[reverseIndex]["layout"] == 2 ? TextAlign.left : TextAlign.right,
+                                          textDirection: notes[reverseIndex]["layout"] == 0 || notes[reverseIndex]["layout"] == 2 ? TextDirection.ltr : TextDirection.rtl,
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
                                           style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 22, color: Colors.white)),
@@ -226,6 +229,7 @@ Widget smallListView({
                                         forceStrutHeight: notes[reverseIndex]["layout"] == 0 || notes[reverseIndex]["layout"] == 1 ? false : true,
                                       ),
                                       textAlign: notes[reverseIndex]["layout"] == 1 || notes[reverseIndex]["layout"] == 2 ? TextAlign.right : TextAlign.left,
+                                      textDirection: notes[reverseIndex]["layout"] == 1 || notes[reverseIndex]["layout"] == 2 ? TextDirection.rtl : TextDirection.ltr,
                                       maxLines: noTitle
                                           ? showDate
                                               ? isTablet
@@ -368,6 +372,7 @@ Widget gridView({
                             width: double.infinity,
                             child: Text(notes[reverseIndex]["title"],
                                 textAlign: notes[reverseIndex]["layout"] == 0 || notes[reverseIndex]["layout"] == 2 ? TextAlign.left : TextAlign.right,
+                                textDirection: notes[reverseIndex]["layout"] == 0 || notes[reverseIndex]["layout"] == 2 ? TextDirection.ltr : TextDirection.rtl,
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
                                 style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 18, color: Colors.white))),
@@ -386,6 +391,7 @@ Widget gridView({
                                         : "فارغ"
                                     : notes[reverseIndex]["content"],
                                 textAlign: notes[reverseIndex]["layout"] == 1 || notes[reverseIndex]["layout"] == 2 ? TextAlign.right : TextAlign.left,
+                                textDirection: notes[reverseIndex]["layout"] == 1 || notes[reverseIndex]["layout"] == 2 ? TextDirection.rtl : TextDirection.ltr,
                                 maxLines: noTitle
                                     ? showDate
                                         ? isTablet
