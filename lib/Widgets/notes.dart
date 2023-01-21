@@ -184,15 +184,22 @@ Widget smallListView({
                           ? Container()
                           : notes[reverseIndex]["type"] == 0
                               ? Padding(
-                                  padding: EdgeInsets.only(right: notes[reverseIndex]["layout"] == 0  || notes[reverseIndex]["layout"] == 2 ? width * 0.050926 : 0, left: notes[reverseIndex]["layout"] == 0 || notes[reverseIndex]["layout"] == 2 ? 0 : width * 0.050926),
+                                  padding: EdgeInsets.only(
+                                      right: notes[reverseIndex]["layout"] == 0 || notes[reverseIndex]["layout"] == 2 ? width * 0.050926 : 0,
+                                      left: notes[reverseIndex]["layout"] == 0 || notes[reverseIndex]["layout"] == 2 ? 0 : width * 0.050926),
                                   child: SizedBox(
                                     width: double.infinity,
                                     child: Padding(
                                       padding: EdgeInsets.only(
-                                          top: notes[reverseIndex]["layout"] == 0   ? 0 : width * 0.02546, bottom: notes[reverseIndex]["layout"] == 0 ? 0 : notes[reverseIndex]["layout"] == 2 ? width * 0.01273 : width * 0.02037),
+                                          top: notes[reverseIndex]["layout"] == 0 ? 0 : width * 0.02546,
+                                          bottom: notes[reverseIndex]["layout"] == 0
+                                              ? 0
+                                              : notes[reverseIndex]["layout"] == 2
+                                                  ? width * 0.01273
+                                                  : width * 0.02037),
                                       child: Text(notes[reverseIndex]["title"],
                                           strutStyle: StrutStyle(
-                                            forceStrutHeight: notes[reverseIndex]["layout"] == 0  ? false : true,
+                                            forceStrutHeight: notes[reverseIndex]["layout"] == 0 ? false : true,
                                           ),
                                           textAlign: notes[reverseIndex]["layout"] == 0 || notes[reverseIndex]["layout"] == 2 ? TextAlign.left : TextAlign.right,
                                           maxLines: 1,
@@ -216,7 +223,7 @@ Widget smallListView({
                                               : "فارغ"
                                           : notes[reverseIndex]["content"],
                                       strutStyle: StrutStyle(
-                                        forceStrutHeight: notes[reverseIndex]["layout"] == 0 ? false : true,
+                                        forceStrutHeight: notes[reverseIndex]["layout"] == 0 || notes[reverseIndex]["layout"] == 1 ? false : true,
                                       ),
                                       textAlign: notes[reverseIndex]["layout"] == 1 || notes[reverseIndex]["layout"] == 2 ? TextAlign.right : TextAlign.left,
                                       maxLines: noTitle
@@ -353,8 +360,10 @@ Widget gridView({
                 noTitle || notes[reverseIndex]["type"] == 1
                     ? Container()
                     : Padding(
-                        padding:
-                            EdgeInsets.only(bottom: width * 0.01528, right: notes[reverseIndex]["layout"] == 0 || notes[reverseIndex]["layout"] == 2  ? width * 0.050926 : 0, left: notes[reverseIndex]["layout"] == 0 || notes[reverseIndex]["layout"] == 2 ? 0 : width * 0.050926),
+                        padding: EdgeInsets.only(
+                            bottom: width * 0.01528,
+                            right: notes[reverseIndex]["layout"] == 0 || notes[reverseIndex]["layout"] == 2 ? width * 0.050926 : 0,
+                            left: notes[reverseIndex]["layout"] == 0 || notes[reverseIndex]["layout"] == 2 ? 0 : width * 0.050926),
                         child: SizedBox(
                             width: double.infinity,
                             child: Text(notes[reverseIndex]["title"],

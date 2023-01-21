@@ -6,14 +6,16 @@ import 'package:notes/Bloc/notes_bloc.dart';
 
 final TextEditingController titleC = TextEditingController();
 final TextEditingController contentC = TextEditingController();
-final ValueNotifier<TextDirection> _titleDir = ValueNotifier(TextDirection.ltr);
-final ValueNotifier<TextDirection> _contentDir = ValueNotifier(TextDirection.ltr);
+late ValueNotifier<TextDirection> _titleDir;
+late ValueNotifier<TextDirection> _contentDir;
 bool isEditing = false;
 
 Widget editNote({required Map note}) {
   titleC.text = note["title"];
   contentC.text = note["content"];
   int bIndex = note["cindex"];
+  _titleDir = note["layout"] == 0 || note["layout"] == 2 ? ValueNotifier(TextDirection.ltr) : ValueNotifier(TextDirection.rtl);
+  _contentDir = note["layout"] == 0 || note["layout"] == 3 ? ValueNotifier(TextDirection.ltr) : ValueNotifier(TextDirection.rtl);
   return BlocConsumer<NotesBloc, NotesState>(
     listener: (context, state) {},
     builder: (context, state) {
@@ -65,8 +67,7 @@ Widget editNote({required Map note}) {
                                 var time = DateTime.now().toString();
                                 titleC.text != note["title"] || contentC.text != note["content"]
                                     ? {
-                                        await B.insertToDatabase(
-                                            title: titleC.text, time: time, content: contentC.text, index: bIndex, edited: 'yes', layout: getLayout()),
+                                        await B.insertToDatabase(title: titleC.text, time: time, content: contentC.text, index: bIndex, edited: 'yes', layout: getLayout()),
                                         await B.deleteFromDatabase(id: note["id"]),
                                         isEditing = false,
                                         B.onCreateNote(),
@@ -143,15 +144,24 @@ Widget editNote({required Map note}) {
                                   ? EdgeInsets.only(left: B.isTablet ? 60 : 20)
                                   : EdgeInsets.only(right: B.isTablet ? 60 : 20)
                               : EdgeInsets.symmetric(horizontal: B.isTablet ? 60 : 20),
-                          child: TextFormField(
-                              textAlign: note["layout"] == 1 || note["layout"] == 2 ? TextAlign.right : TextAlign.left,
-                              onSaved: B.onSearch(),
-                              cursorColor: Colors.white,
-                              controller: contentC,
-                              readOnly: isEditing ? false : true,
-                              maxLines: 20,
-                              style: TextStyle(color: Colors.white, fontSize: B.isTablet ? 40 : 24),
-                              decoration: InputDecoration(border: InputBorder.none, hintText: "Content".tr(), hintStyle: const TextStyle(color: Colors.black54))),
+                          child: ValueListenableBuilder<TextDirection>(
+                            valueListenable: _contentDir,
+                            builder: (context, value, child) => TextFormField(
+                                textDirection: value,
+                                onChanged: (input) {
+                                  if (input.trim().length < 2) {
+                                    final dir = B.getDirection(input);
+                                    if (dir != value) _contentDir.value = dir;
+                                  }
+                                },
+                                onSaved: B.onSearch(),
+                                cursorColor: Colors.white,
+                                controller: contentC,
+                                readOnly: isEditing ? false : true,
+                                maxLines: 20,
+                                style: TextStyle(color: Colors.white, fontSize: B.isTablet ? 40 : 24),
+                                decoration: InputDecoration(border: InputBorder.none, hintText: "Content".tr(), hintStyle: const TextStyle(color: Colors.black54))),
+                          ),
                         ),
                       ]),
                     ),
@@ -198,9 +208,17 @@ int getLayout() {
   } else if (_titleDir.value == TextDirection.rtl && _contentDir.value == TextDirection.rtl) {
     layout = 1;
   } else if (_titleDir.value == TextDirection.ltr && _contentDir.value == TextDirection.rtl) {
-    layout = 2;
+    if (titleC.text == "") {
+      layout = 1;
+    } else {
+      layout = 2;
+    }
   } else {
-    layout = 3;
+    if (contentC.text == "") {
+      layout = 1;
+    } else {
+      layout = 3;
+    }
   }
   return layout;
 }

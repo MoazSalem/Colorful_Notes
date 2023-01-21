@@ -8,8 +8,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 final TextEditingController titleC = TextEditingController();
 final TextEditingController contentC = TextEditingController();
-final ValueNotifier<TextDirection> _titleDir = ValueNotifier(TextDirection.ltr);
-final ValueNotifier<TextDirection> _contentDir = ValueNotifier(TextDirection.ltr);
+late ValueNotifier<TextDirection> _titleDir;
+late ValueNotifier<TextDirection> _contentDir;
 
 late String title;
 late String content;
@@ -21,6 +21,8 @@ bool isLoading = false;
 String chLang = 'en';
 
 Widget createNote(BuildContext context, bool isML) {
+  _titleDir= ValueNotifier(TextDirection.ltr);
+  _contentDir= ValueNotifier(TextDirection.ltr);
   return BlocConsumer<NotesBloc, NotesState>(
     listener: (context, state) {},
     builder: (context, state) {
@@ -213,9 +215,17 @@ int getLayout() {
   } else if (_titleDir.value == TextDirection.rtl && _contentDir.value == TextDirection.rtl) {
     layout = 1;
   } else if (_titleDir.value == TextDirection.ltr && _contentDir.value == TextDirection.rtl) {
-    layout = 2;
+    if(title == ""){
+      layout = 1;
+    }else {
+      layout = 2;
+    }
   } else {
-    layout = 3;
+    if(content == ""){
+      layout = 1;
+    }else {
+      layout = 3;
+    }
   }
   return layout;
 }
