@@ -55,9 +55,7 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
   List<Map> searchedALL = [];
   List<Map> searchedNotes = [];
   List<Map> searchedVoice = [];
-  late List<Color> colors;
-  late List<Color> lHColors;
-  late List<Color> dHColors;
+  late List<Color> colors = lightColors;
   List<Color> shadeColors = darkerColors;
   int currentIndex = 0;
   bool loading = true;
@@ -233,21 +231,13 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
     showEdited = box.get('showEdit') ?? true;
     colorful = box.get('colorful') ?? true;
     darkColors = box.get('darkColors') ?? false;
-    harmonizeColor = box.get('harmonizeColor') ?? false;
-    colors = darkColors ? darkerColors : lightColors;
+    harmonizeColor = box.get('harmonizeColor') ?? true;
     var c = box.get('themeMode') ?? 2;
     c == 0
         ? {themeMode = ThemeMode.light, currentTheme = "Light"}
         : c == 1
             ? {themeMode = ThemeMode.dark, currentTheme = "Dark"}
             : {themeMode = ThemeMode.system, currentTheme = "System"};
-    // colors = darkColors
-    //     ? harmonizeColor
-    //     ? dHColors
-    //     : darkerColors
-    //     : harmonizeColor
-    //     ? lHColors
-    //     : lightColors;
   }
 
   TextDirection getDirection(String v) {
@@ -314,7 +304,7 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
             text: 'Delete'.tr(),
             iconData: Icons.delete,
             color:
-                colors[notes[index]['cindex']].harmonizeWith(Theme.of(context).colorScheme.primary),
+                colors[notes[index]['cindex']],
             textStyle: const TextStyle(color: Colors.white),
             iconColor: Colors.white,
             shape:
@@ -353,15 +343,22 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
   }
 
   void harmonizeColors(BuildContext context) {
-    List<Color> hColors = [];
+    List<Color> hlColors = [];
+    List<Color> hdColors = [];
     for (var color in lightColors) {
-      hColors.add(color.harmonizeWith(Theme.of(context).colorScheme.primary));
+      hlColors.add(color.harmonizeWith(Theme.of(context).colorScheme.primary));
     }
-    lHColors = hColors;
     for (var color in darkerColors) {
-      hColors.add(color.harmonizeWith(Theme.of(context).colorScheme.primary));
+      hdColors.add(color.harmonizeWith(Theme.of(context).colorScheme.primary));
     }
-    dHColors = hColors;
+    colors = darkColors
+        ? harmonizeColor
+            ? hdColors
+            : darkerColors
+        : harmonizeColor
+            ? hlColors
+            : lightColors;
+    emit(ColorsHarmonized());
   }
 
   void searchNotes(String query) {

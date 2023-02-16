@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:dynamic_color/dynamic_color.dart';
 import 'package:easy_localization/easy_localization.dart' hide TextDirection;
 import 'package:notes/Widgets/sound_player.dart';
 
@@ -27,7 +26,7 @@ Widget listView({
         SizedBox(
           height: isTablet ? width * 0.9 : width * 0.7639,
           child: Card(
-            color: colors[notes[reverseIndex]['cindex']].harmonizeWith(Theme.of(context).colorScheme.primary),
+            color: colors[notes[reverseIndex]['cindex']],
             elevation: showShadow ? 4 : 0,
             shadowColor: colors[notes[reverseIndex]['cindex']],
             shape: const RoundedRectangleBorder(
@@ -163,7 +162,7 @@ Widget smallListView({
             alignment: Alignment.bottomLeft,
             children: [
               Card(
-                color: colors[notes[reverseIndex]['cindex']].harmonizeWith(Theme.of(context).colorScheme.primary),
+                color: colors[notes[reverseIndex]['cindex']],
                 elevation: showShadow ? width * 0.01018 : 0,
                 shadowColor: colors[notes[reverseIndex]['cindex']],
                 shape: const RoundedRectangleBorder(
@@ -344,9 +343,9 @@ Widget gridView({
           height: width * 0.4584,
           width: width * 0.4584,
           child: Card(
-            color: colors[notes[reverseIndex]['cindex']].harmonizeWith(Theme.of(context).colorScheme.primary),
+            color: colors[notes[reverseIndex]['cindex']],
             elevation: showShadow ? width * 0.01018 : 0,
-            shadowColor: colors[notes[reverseIndex]['cindex']].harmonizeWith(Theme.of(context).colorScheme.primary),
+            shadowColor: colors[notes[reverseIndex]['cindex']],
             shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(0)),
             ),

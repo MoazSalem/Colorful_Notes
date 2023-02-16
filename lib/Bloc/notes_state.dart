@@ -30,3 +30,5 @@ class OnRecord extends NotesState {}
 class OnChanged extends NotesState {}
 
 class OnDelete extends NotesState {}
+
+class ColorsHarmonized extends NotesState {}

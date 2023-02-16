@@ -36,11 +36,11 @@ class SettingsPage extends StatelessWidget {
         String sB = B.sbIndex == 0
             ? "Top Left"
             : B.sbIndex == 1
-            ? "Bottom Left"
-            : B.sbIndex == 2
-            ? "Top Right"
-            : "Bottom Right";
-            String fabLoc = B.fabIndex == 0 ? "Right" : "Left";
+                ? "Bottom Left"
+                : B.sbIndex == 2
+                    ? "Top Right"
+                    : "Bottom Right";
+        String fabLoc = B.fabIndex == 0 ? "Right" : "Left";
         return Scaffold(
           backgroundColor: B.isDarkMode
               ? Theme.of(context).colorScheme.background
@@ -457,7 +457,6 @@ class SettingsPage extends StatelessWidget {
                             onChange: (bool value) {
                               B.box.put("darkColors", value);
                               B.darkColors = value;
-                              B.startDatabase();
                               B.prefsChanged();
                             },
                           ),
@@ -473,12 +472,12 @@ class SettingsPage extends StatelessWidget {
                     padding: EdgeInsets.symmetric(horizontal: padding),
                     child: ListTile(
                         title: Text(
-                          "harmonized Colors".tr(),
+                          "harmonize Colors".tr(),
                           style: TextStyle(
                               fontSize: title, fontWeight: FontWeight.w500, color: textColor),
                         ),
                         subtitle: Text(
-                          "sHarmonizedColors".tr(),
+                          "sHarmonizeColors".tr(),
                           style: TextStyle(
                               fontSize: subtitle, fontWeight: FontWeight.w400, color: textColor),
                         ),
@@ -494,7 +493,7 @@ class SettingsPage extends StatelessWidget {
                             onChange: (bool value) {
                               B.box.put("harmonizeColor", value);
                               B.harmonizeColor = value;
-                              B.startDatabase();
+                              B.harmonizeColors(context);
                               B.prefsChanged();
                             },
                           ),

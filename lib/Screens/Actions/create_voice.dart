@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:dynamic_color/dynamic_color.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'package:notes/Bloc/notes_bloc.dart';
@@ -26,7 +25,7 @@ Widget createVoice(BuildContext context) {
       double height = MediaQuery.of(context).size.height;
       return Scaffold(
         resizeToAvoidBottomInset: false,
-        backgroundColor: B.colors[chosenIndex].harmonizeWith(Theme.of(context).colorScheme.primary),
+        backgroundColor: B.colors[chosenIndex],
         body: Padding(
           padding: const EdgeInsets.only(top: 40.0),
           child: Column(
@@ -48,7 +47,9 @@ Widget createVoice(BuildContext context) {
                                 stopWatchTimer.onResetTimer();
                                 titleC.text = "";
                                 isRecording = false;
-                                name == "" ? null : B.deleteFile("${B.appDir.path}/Voice/$name.m4a");
+                                name == ""
+                                    ? null
+                                    : B.deleteFile("${B.appDir.path}/Voice/$name.m4a");
                                 Navigator.pop(context);
                                 B.onRecord();
                               },
@@ -57,7 +58,7 @@ Widget createVoice(BuildContext context) {
                                 radius: 25,
                                 child: Icon(
                                   Icons.arrow_back,
-                                  color: B.colors[chosenIndex].harmonizeWith(Theme.of(context).colorScheme.primary),
+                                  color: B.colors[chosenIndex],
                                   size: 36,
                                 ),
                               ),
@@ -77,7 +78,13 @@ Widget createVoice(BuildContext context) {
                               ? Navigator.pop(context)
                               : {
                                   content = "${B.appDir.path}/Voice/$name.m4a",
-                                  await B.insertToDatabase(title: title, time: time, content: content, index: chosenIndex, type: 1, layout: 0),
+                                  await B.insertToDatabase(
+                                      title: title,
+                                      time: time,
+                                      content: content,
+                                      index: chosenIndex,
+                                      type: 1,
+                                      layout: 0),
                                   stopWatchTimer.onResetTimer(),
                                   isRecording = false,
                                   titleC.text = "",
@@ -92,7 +99,7 @@ Widget createVoice(BuildContext context) {
                           radius: 25,
                           child: Icon(
                             Icons.done,
-                            color: B.colors[chosenIndex].harmonizeWith(Theme.of(context).colorScheme.primary),
+                            color: B.colors[chosenIndex],
                             size: 36,
                           ),
                         ),
@@ -121,8 +128,14 @@ Widget createVoice(BuildContext context) {
                                 autofocus: true,
                                 textInputAction: TextInputAction.done,
                                 controller: titleC,
-                                style: TextStyle(color: Colors.white, fontSize: B.isTablet ? 60 : 36, fontWeight: FontWeight.w500),
-                                decoration: InputDecoration(border: InputBorder.none, hintText: "Title".tr(), hintStyle: const TextStyle(color: Colors.black54))),
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: B.isTablet ? 60 : 36,
+                                    fontWeight: FontWeight.w500),
+                                decoration: InputDecoration(
+                                    border: InputBorder.none,
+                                    hintText: "Title".tr(),
+                                    hintStyle: const TextStyle(color: Colors.black54))),
                           ),
                           SizedBox(
                             height: height * 0.8,
@@ -142,7 +155,10 @@ Widget createVoice(BuildContext context) {
                                           padding: const EdgeInsets.all(8),
                                           child: Text(
                                             displayTime[0],
-                                            style: TextStyle(fontSize: B.isTablet ? 80 : 40, fontWeight: FontWeight.w500, color: value == 0 ? Colors.black54 : Colors.white),
+                                            style: TextStyle(
+                                                fontSize: B.isTablet ? 80 : 40,
+                                                fontWeight: FontWeight.w500,
+                                                color: value == 0 ? Colors.black54 : Colors.white),
                                           ),
                                         ),
                                       ],
@@ -154,7 +170,8 @@ Widget createVoice(BuildContext context) {
                                   child: isRecording
                                       ? isPaused
                                           ? IconButton(
-                                              constraints: const BoxConstraints.tightFor(height: 120, width: 120),
+                                              constraints: const BoxConstraints.tightFor(
+                                                  height: 120, width: 120),
                                               onPressed: () async {
                                                 await record.resume();
                                                 stopWatchTimer.onStartTimer();
@@ -167,7 +184,8 @@ Widget createVoice(BuildContext context) {
                                                 color: Colors.white,
                                               ))
                                           : IconButton(
-                                              constraints: const BoxConstraints.tightFor(height: 120, width: 120),
+                                              constraints: const BoxConstraints.tightFor(
+                                                  height: 120, width: 120),
                                               onPressed: () async {
                                                 await record.pause();
                                                 stopWatchTimer.onStopTimer();
@@ -180,12 +198,21 @@ Widget createVoice(BuildContext context) {
                                                 color: Colors.white,
                                               ))
                                       : IconButton(
-                                          constraints: const BoxConstraints.tightFor(height: 120, width: 120),
+                                          constraints: const BoxConstraints.tightFor(
+                                              height: 120, width: 120),
                                           onPressed: () async {
                                             titleFocusNode.unfocus();
                                             time == ""
-                                                ? {time = DateTime.now().toString(), name = parseDate(time).toString()}
-                                                : {stopWatchTimer.onResetTimer(), B.deleteFile(context), time = DateTime.now().toString(), name = parseDate(time).toString()};
+                                                ? {
+                                                    time = DateTime.now().toString(),
+                                                    name = parseDate(time).toString()
+                                                  }
+                                                : {
+                                                    stopWatchTimer.onResetTimer(),
+                                                    B.deleteFile(context),
+                                                    time = DateTime.now().toString(),
+                                                    name = parseDate(time).toString()
+                                                  };
                                             if (await record.hasPermission()) {
                                               await B.createVoiceFolder();
                                               // Start timer.
@@ -211,7 +238,8 @@ Widget createVoice(BuildContext context) {
                                 Padding(
                                   padding: EdgeInsets.only(bottom: height * 0.06964),
                                   child: IconButton(
-                                      constraints: const BoxConstraints.tightFor(height: 120, width: 120),
+                                      constraints:
+                                          const BoxConstraints.tightFor(height: 120, width: 120),
                                       onPressed: () async {
                                         // Stop timer.
                                         stopWatchTimer.onStopTimer();
@@ -246,10 +274,11 @@ Widget createVoice(BuildContext context) {
                               padding: const EdgeInsets.all(6.0),
                               child: CircleAvatar(
                                 radius: 25,
-                                backgroundColor: chosenIndex == index ? Colors.white : Colors.white54,
+                                backgroundColor:
+                                    chosenIndex == index ? Colors.white : Colors.white54,
                                 child: CircleAvatar(
                                   radius: 20,
-                                  backgroundColor: B.colors[index].harmonizeWith(Theme.of(context).colorScheme.primary),
+                                  backgroundColor: B.colors[index],
                                 ),
                               ),
                             ),

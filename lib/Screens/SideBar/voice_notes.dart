@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:dynamic_color/dynamic_color.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:notes/Bloc/notes_bloc.dart';
 import 'package:notes/Screens/Actions/edit_voice.dart';
@@ -80,10 +79,10 @@ class VoiceNotesPage extends StatelessWidget {
               ? FloatingActionButtonLocation.endFloat
               : FloatingActionButtonLocation.startFloat,
           floatingActionButton: FloatingActionButton(
-            splashColor: B.colors[1].harmonizeWith(Theme.of(context).colorScheme.primary),
+            splashColor: B.colors[1],
             elevation: 0,
             backgroundColor: Theme.of(context).colorScheme.primary,
-            //B.colors[3].harmonizeWith(Theme.of(context).colorScheme.primary),
+            //B.colors[3],
             onPressed: () async {
               showBottomSheet(
                   enableDrag: false, context: context, builder: (context) => createVoice(context));

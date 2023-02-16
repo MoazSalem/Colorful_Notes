@@ -44,6 +44,7 @@ class Home extends StatelessWidget {
             var B = NotesBloc.get(context);
             B.lang = context.locale.toString();
             B.getScreenWidth(context);
+            B.harmonizeColors(context);
             List<Widget> page = [
               Builder(
                 builder: (context) {

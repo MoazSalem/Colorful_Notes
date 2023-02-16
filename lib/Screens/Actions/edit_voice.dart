@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:dynamic_color/dynamic_color.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:notes/Bloc/notes_bloc.dart';
 
@@ -15,7 +14,7 @@ Widget editVoice({required Map note}) {
     builder: (context, state) {
       var B = NotesBloc.get(context);
       return Container(
-        color: B.colors[bIndex].harmonizeWith(Theme.of(context).colorScheme.primary),
+        color: B.colors[bIndex],
         child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.stretch, children: [
           SizedBox(
             height: B.isTablet ? 50 : 30,
@@ -89,7 +88,7 @@ Widget editVoice({required Map note}) {
                               backgroundColor: bIndex == (index3 + 5) ? Colors.white : Colors.white54,
                               child: CircleAvatar(
                                 radius: 25,
-                                backgroundColor: B.colors[index3 + 5].harmonizeWith(Theme.of(context).colorScheme.primary),
+                                backgroundColor: B.colors[index3 + 5],
                               ),
                             ),
                           ),

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
-import 'package:dynamic_color/dynamic_color.dart';
 import 'package:notes/Widgets/notes.dart';
 
 class SoundPlayer extends StatefulWidget {
@@ -9,7 +8,13 @@ class SoundPlayer extends StatefulWidget {
   final List<Color> colors;
   final int viewMode;
 
-  const SoundPlayer({Key? key, required this.voiceMap, required this.index, required this.colors, required this.viewMode}) : super(key: key);
+  const SoundPlayer(
+      {Key? key,
+      required this.voiceMap,
+      required this.index,
+      required this.colors,
+      required this.viewMode})
+      : super(key: key);
 
   @override
   State<SoundPlayer> createState() => _SoundPlayerState();
@@ -63,8 +68,12 @@ class _SoundPlayerState extends State<SoundPlayer> {
                               child: SliderTheme(
                                 data: SliderThemeData(
                                   trackHeight: width * 0.025463,
-                                  thumbShape: RoundSliderThumbShape(enabledThumbRadius: width * 0.01567, elevation: 0, pressedElevation: 0),
-                                  overlayShape: RoundSliderOverlayShape(overlayRadius: width * 0.03565),
+                                  thumbShape: RoundSliderThumbShape(
+                                      enabledThumbRadius: width * 0.01567,
+                                      elevation: 0,
+                                      pressedElevation: 0),
+                                  overlayShape:
+                                      RoundSliderOverlayShape(overlayRadius: width * 0.03565),
                                 ),
                                 child: Slider(
                                   activeColor: Colors.white,
@@ -91,7 +100,8 @@ class _SoundPlayerState extends State<SoundPlayer> {
                           Padding(
                             padding: EdgeInsets.only(right: width * 0.030556),
                             child: IconButton(
-                                constraints: BoxConstraints.tightForFinite(height: width * 0.229167, width: width * 0.229167),
+                                constraints: BoxConstraints.tightForFinite(
+                                    height: width * 0.229167, width: width * 0.229167),
                                 onPressed: () async {
                                   play = !play;
                                   play
@@ -135,7 +145,9 @@ class _SoundPlayerState extends State<SoundPlayer> {
                                   onTap: () async {
                                     currentState == PlayerState.playing
                                         ? {
-                                            playbackSpeed < 2.0 ? playbackSpeed += 0.5 : playbackSpeed = 1.0,
+                                            playbackSpeed < 2.0
+                                                ? playbackSpeed += 0.5
+                                                : playbackSpeed = 1.0,
                                             await audioPlayer.setPlaybackRate(playbackSpeed),
                                           }
                                         : null;
@@ -144,14 +156,17 @@ class _SoundPlayerState extends State<SoundPlayer> {
                                   child: Container(
                                     height: width * 0.07639,
                                     width: width * 0.10185,
-                                    decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(width * 0.050926)),
+                                    decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(width * 0.050926)),
                                     child: Center(
                                       child: Text(
                                         "${playbackSpeed.toString()}X",
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 12,
-                                            color: widget.colors[widget.voiceMap[widget.index]['cindex']].harmonizeWith(Theme.of(context).colorScheme.primary)),
+                                            color: widget
+                                                .colors[widget.voiceMap[widget.index]['cindex']]),
                                       ),
                                     ),
                                   ),
@@ -183,7 +198,8 @@ class _SoundPlayerState extends State<SoundPlayer> {
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 IconButton(
-                                    constraints: BoxConstraints.tightForFinite(height: width * 0.15278, width: width * 0.1324),
+                                    constraints: BoxConstraints.tightForFinite(
+                                        height: width * 0.15278, width: width * 0.1324),
                                     onPressed: () async {
                                       play = !play;
                                       play
@@ -213,8 +229,13 @@ class _SoundPlayerState extends State<SoundPlayer> {
                                       child: SliderTheme(
                                         data: SliderThemeData(
                                           trackHeight: 10,
-                                          thumbShape: RoundSliderThumbShape(enabledThumbRadius: width * 0.015878, elevation: 0, pressedElevation: 0),
-                                          overlayShape: RoundSliderOverlayShape(overlayRadius: isTablet ? width * 0.030649 : width * 0.035649),
+                                          thumbShape: RoundSliderThumbShape(
+                                              enabledThumbRadius: width * 0.015878,
+                                              elevation: 0,
+                                              pressedElevation: 0),
+                                          overlayShape: RoundSliderOverlayShape(
+                                              overlayRadius:
+                                                  isTablet ? width * 0.030649 : width * 0.035649),
                                         ),
                                         child: Slider(
                                           activeColor: Colors.white,
@@ -234,7 +255,9 @@ class _SoundPlayerState extends State<SoundPlayer> {
                                   onTap: () async {
                                     currentState == PlayerState.playing
                                         ? {
-                                            playbackSpeed < 2.0 ? playbackSpeed += 0.5 : playbackSpeed = 1.0,
+                                            playbackSpeed < 2.0
+                                                ? playbackSpeed += 0.5
+                                                : playbackSpeed = 1.0,
                                             await audioPlayer.setPlaybackRate(playbackSpeed),
                                           }
                                         : null;
@@ -243,14 +266,17 @@ class _SoundPlayerState extends State<SoundPlayer> {
                                   child: Container(
                                     height: width * 0.07639,
                                     width: width * 0.10185,
-                                    decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(width * 0.050926)),
+                                    decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(width * 0.050926)),
                                     child: Center(
                                       child: Text(
                                         "${playbackSpeed.toString()}X",
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 12,
-                                            color: widget.colors[widget.voiceMap[widget.index]['cindex']].harmonizeWith(Theme.of(context).colorScheme.primary)),
+                                            color: widget
+                                                .colors[widget.voiceMap[widget.index]['cindex']]),
                                       ),
                                     ),
                                   ),
@@ -260,7 +286,9 @@ class _SoundPlayerState extends State<SoundPlayer> {
                           ),
                           FittedBox(
                             child: Padding(
-                              padding: EdgeInsets.only(right: isTablet ? width * 0.3037 : width * 0.2037, bottom: width * 0.015278),
+                              padding: EdgeInsets.only(
+                                  right: isTablet ? width * 0.3037 : width * 0.2037,
+                                  bottom: width * 0.015278),
                               child: Text(
                                 play
                                     ? parseTime(position)
@@ -293,8 +321,12 @@ class _SoundPlayerState extends State<SoundPlayer> {
                                 child: SliderTheme(
                                   data: SliderThemeData(
                                     trackHeight: 10,
-                                    thumbShape: RoundSliderThumbShape(enabledThumbRadius: width * 0.015278, elevation: 0, pressedElevation: 0),
-                                    overlayShape: RoundSliderOverlayShape(overlayRadius: width * 0.035649),
+                                    thumbShape: RoundSliderThumbShape(
+                                        enabledThumbRadius: width * 0.015278,
+                                        elevation: 0,
+                                        pressedElevation: 0),
+                                    overlayShape:
+                                        RoundSliderOverlayShape(overlayRadius: width * 0.035649),
                                   ),
                                   child: Slider(
                                     activeColor: Colors.white,
@@ -318,7 +350,8 @@ class _SoundPlayerState extends State<SoundPlayer> {
                                 Padding(
                                   padding: EdgeInsets.only(right: width * 0.03056),
                                   child: IconButton(
-                                      constraints: BoxConstraints.tightForFinite(height: width * 0.229166, width: width * 0.229166),
+                                      constraints: BoxConstraints.tightForFinite(
+                                          height: width * 0.229166, width: width * 0.229166),
                                       onPressed: () async {
                                         play = !play;
                                         play
@@ -362,7 +395,9 @@ class _SoundPlayerState extends State<SoundPlayer> {
                                         onTap: () async {
                                           currentState == PlayerState.playing
                                               ? {
-                                                  playbackSpeed < 2.0 ? playbackSpeed += 0.5 : playbackSpeed = 1.0,
+                                                  playbackSpeed < 2.0
+                                                      ? playbackSpeed += 0.5
+                                                      : playbackSpeed = 1.0,
                                                   await audioPlayer.setPlaybackRate(playbackSpeed),
                                                 }
                                               : null;
@@ -371,14 +406,18 @@ class _SoundPlayerState extends State<SoundPlayer> {
                                         child: Container(
                                           height: width * 0.07639,
                                           width: width * 0.10185,
-                                          decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(width * 0.050926)),
+                                          decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius:
+                                                  BorderRadius.circular(width * 0.050926)),
                                           child: Center(
                                             child: Text(
                                               "${playbackSpeed.toString()}X",
                                               style: TextStyle(
                                                   fontWeight: FontWeight.bold,
                                                   fontSize: 12,
-                                                  color: widget.colors[widget.voiceMap[widget.index]['cindex']].harmonizeWith(Theme.of(context).colorScheme.primary)),
+                                                  color: widget.colors[widget.voiceMap[widget.index]
+                                                      ['cindex']]),
                                             ),
                                           ),
                                         ),

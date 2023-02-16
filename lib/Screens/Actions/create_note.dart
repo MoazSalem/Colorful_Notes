@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
-import 'package:dynamic_color/dynamic_color.dart';
 import 'package:easy_localization/easy_localization.dart' hide TextDirection;
 import 'package:notes/Bloc/notes_bloc.dart';
 
@@ -30,7 +29,7 @@ Widget createNote(BuildContext context, bool isML) {
       double width = MediaQuery.of(context).size.width;
       return Scaffold(
         resizeToAvoidBottomInset: false,
-        backgroundColor: B.colors[chosenIndex].harmonizeWith(Theme.of(context).colorScheme.primary),
+        backgroundColor: B.colors[chosenIndex],
         body: Padding(
           padding: const EdgeInsets.only(top: 40.0),
           child: Column(
@@ -70,8 +69,7 @@ Widget createNote(BuildContext context, bool isML) {
                                 radius: 25,
                                 child: Icon(
                                   Icons.arrow_back,
-                                  color: B.colors[chosenIndex]
-                                      .harmonizeWith(Theme.of(context).colorScheme.primary),
+                                  color: B.colors[chosenIndex],
                                   size: 36,
                                 ),
                               ),
@@ -108,8 +106,7 @@ Widget createNote(BuildContext context, bool isML) {
                           radius: 25,
                           child: Icon(
                             Icons.done,
-                            color: B.colors[chosenIndex]
-                                .harmonizeWith(Theme.of(context).colorScheme.primary),
+                            color: B.colors[chosenIndex],
                             size: 36,
                           ),
                         ),
@@ -216,8 +213,7 @@ Widget createNote(BuildContext context, bool isML) {
                                     chosenIndex == index ? Colors.white : Colors.white54,
                                 child: CircleAvatar(
                                   radius: 20,
-                                  backgroundColor: B.colors[index]
-                                      .harmonizeWith(Theme.of(context).colorScheme.primary),
+                                  backgroundColor: B.colors[index],
                                 ),
                               ),
                             ),

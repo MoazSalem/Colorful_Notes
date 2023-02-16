@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:dynamic_color/dynamic_color.dart';
 import 'package:easy_localization/easy_localization.dart' hide TextDirection;
 import 'package:notes/Bloc/notes_bloc.dart';
 
@@ -22,7 +21,7 @@ Widget editNote({required Map note}) {
       var B = NotesBloc.get(context);
       return Scaffold(
         resizeToAvoidBottomInset: false,
-        backgroundColor: B.colors[bIndex].harmonizeWith(Theme.of(context).colorScheme.primary),
+        backgroundColor: B.colors[bIndex],
         body: Padding(
           padding: const EdgeInsets.only(top: 40.0),
           child: Column(
@@ -49,7 +48,7 @@ Widget editNote({required Map note}) {
                                 radius: 25,
                                 child: Icon(
                                   Icons.arrow_back,
-                                  color: B.colors[bIndex].harmonizeWith(Theme.of(context).colorScheme.primary),
+                                  color: B.colors[bIndex],
                                   size: 36,
                                 ),
                               ),
@@ -90,7 +89,7 @@ Widget editNote({required Map note}) {
                           radius: 25,
                           child: Icon(
                             isEditing ? Icons.done : Icons.edit_note,
-                            color: B.colors[bIndex].harmonizeWith(Theme.of(context).colorScheme.primary),
+                            color: B.colors[bIndex],
                             size: 36,
                           ),
                         ),
@@ -183,7 +182,7 @@ Widget editNote({required Map note}) {
                                     backgroundColor: bIndex == index2 ? Colors.white : Colors.white54,
                                     child: CircleAvatar(
                                       radius: 20,
-                                      backgroundColor: B.colors[index2].harmonizeWith(Theme.of(context).colorScheme.primary),
+                                      backgroundColor: B.colors[index2],
                                     ),
                                   ),
                                 ),
