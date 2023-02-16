@@ -12,13 +12,13 @@ import 'package:hive/hive.dart';
 import 'package:material_dialogs/material_dialogs.dart';
 import 'package:material_dialogs/widgets/buttons/icon_button.dart';
 import 'package:material_dialogs/widgets/buttons/icon_outline_button.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:sqflite/sqflite.dart';
 import 'package:notes/Data/colors.dart';
 import 'package:notes/Screens/SideBar/home.dart';
 import 'package:notes/Screens/SideBar/notes.dart';
 import 'package:notes/Screens/SideBar/voice_notes.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:sqflite/sqflite.dart';
 
 // import 'package:path/path.dart' as path;
 // import 'package:path/path.dart';
@@ -66,9 +66,7 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
   bool isTablet = getDeviceType() == 'tablet' ? true : false;
   GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   var brightness = SchedulerBinding.instance.window.platformBrightness;
-
-  // If themeMode is null it follows system theme
-  var themeMode;
+  var themeMode = ThemeMode.system;
   String currentTheme = "System";
 
   static NotesBloc get(context) => BlocProvider.of(context);
@@ -79,10 +77,10 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
   }
 
   startPage() async {
+    setSettings();
     await startDatabase();
     await localPath();
     await getHomePage();
-    await Future.delayed(const Duration(seconds: 1));
     loading = false;
     emit(AppInitial());
   }
@@ -219,6 +217,37 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
         print(e);
       }
     }
+  }
+
+  setSettings() {
+    isDarkMode = brightness == Brightness.dark;
+    viewIndex = box.get('viewIndex') ?? 0;
+    viewIndexN = box.get('viewIndexN') ?? 0;
+    viewIndexV = box.get('viewIndexV') ?? 0;
+    adCounter = box.get('adCounter') ?? 0;
+    sbIndex = box.get('sbIndex') ?? 0;
+    fabIndex = box.get('fabIndex') ?? 0;
+    isBlack = box.get('isBlack') ?? false;
+    showDate = box.get('showDate') ?? true;
+    showShadow = box.get('showShadow') ?? false;
+    showEdited = box.get('showEdit') ?? true;
+    colorful = box.get('colorful') ?? true;
+    darkColors = box.get('darkColors') ?? false;
+    harmonizeColor = box.get('harmonizeColor') ?? false;
+    colors = darkColors ? darkerColors : lightColors;
+    var c = box.get('themeMode') ?? 2;
+    c == 0
+        ? {themeMode = ThemeMode.light, currentTheme = "Light"}
+        : c == 1
+            ? {themeMode = ThemeMode.dark, currentTheme = "Dark"}
+            : {themeMode = ThemeMode.system, currentTheme = "System"};
+    // colors = darkColors
+    //     ? harmonizeColor
+    //     ? dHColors
+    //     : darkerColors
+    //     : harmonizeColor
+    //     ? lHColors
+    //     : lightColors;
   }
 
   TextDirection getDirection(String v) {
@@ -360,34 +389,6 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
           'CREATE TABLE Notes (id INTEGER PRIMARY KEY, title TEXT, content TEXT, time Text, cindex INTEGER, tindex INTEGER, type INTEGER, edited Text, layout INTEGER, extra Text)');
     }, onOpen: (db) async {})
         .then((value) => database = value);
-    isDarkMode = brightness == Brightness.dark;
-    viewIndex = box.get('viewIndex') ?? 0;
-    viewIndexN = box.get('viewIndexN') ?? 0;
-    viewIndexV = box.get('viewIndexV') ?? 0;
-    adCounter = box.get('adCounter') ?? 0;
-    sbIndex = box.get('sbIndex') ?? 0;
-    fabIndex = box.get('fabIndex') ?? 0;
-    isBlack = box.get('isBlack') ?? false;
-    showDate = box.get('showDate') ?? true;
-    showShadow = box.get('showShadow') ?? false;
-    showEdited = box.get('showEdit') ?? true;
-    colorful = box.get('colorful') ?? true;
-    darkColors = box.get('darkColors') ?? false;
-    harmonizeColor = box.get('harmonizeColor') ?? false;
-    colors = darkColors ? darkerColors : lightColors;
-    var c = box.get('themeMode') ?? 2;
-    c == 0
-        ? {themeMode = ThemeMode.light, currentTheme = "Light"}
-        : c == 1
-            ? {themeMode = ThemeMode.dark, currentTheme = "Dark"}
-            : {themeMode = null, currentTheme = "System"};
-    // colors = darkColors
-    //     ? harmonizeColor
-    //     ? dHColors
-    //     : darkerColors
-    //     : harmonizeColor
-    //     ? lHColors
-    //     : lightColors;
     await refreshDatabase();
   }
 
