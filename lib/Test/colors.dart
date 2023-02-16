@@ -11,8 +11,9 @@ class ColorsTest extends StatefulWidget {
 class _ColorsTestState extends State<ColorsTest> {
   @override
   Widget build(BuildContext context) {
+    ColorScheme theme = Theme.of(context).colorScheme;
     return Scaffold(
-        backgroundColor: Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.6),
+        backgroundColor: theme.surfaceVariant.withOpacity(0.6),
         body: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
@@ -21,56 +22,27 @@ class _ColorsTestState extends State<ColorsTest> {
               children: [
                 CircleAvatar(
                   radius: 20,
-                  backgroundColor: Theme.of(context).colorScheme.primary,
+                  backgroundColor: theme.primary,
                 ),
                 CircleAvatar(
                   radius: 20,
-                  backgroundColor: Theme.of(context).colorScheme.secondary,
+                  backgroundColor: theme.secondary,
                 ),
                 CircleAvatar(
                   radius: 20,
-                  backgroundColor: Theme.of(context).colorScheme.tertiary,
+                  backgroundColor: theme.tertiary,
                 ),
                 CircleAvatar(
                   radius: 20,
-                  backgroundColor: Theme.of(context).colorScheme.error,
+                  backgroundColor: theme.error,
                 ),
                 CircleAvatar(
                   radius: 20,
-                  backgroundColor: Theme.of(context).colorScheme.background,
+                  backgroundColor: theme.background,
                 ),
                 CircleAvatar(
                   radius: 20,
-                  backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
-                ),
-              ],
-            ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                CircleAvatar(
-                  radius: 20,
-                  backgroundColor: Theme.of(context).colorScheme.onPrimary,
-                ),
-                CircleAvatar(
-                  radius: 20,
-                  backgroundColor: Theme.of(context).colorScheme.onSecondary,
-                ),
-                CircleAvatar(
-                  radius: 20,
-                  backgroundColor: Theme.of(context).colorScheme.onTertiary,
-                ),
-                CircleAvatar(
-                  radius: 20,
-                  backgroundColor: Theme.of(context).colorScheme.onError,
-                ),
-                CircleAvatar(
-                  radius: 20,
-                  backgroundColor: Theme.of(context).colorScheme.onBackground,
-                ),
-                CircleAvatar(
-                  radius: 20,
-                  backgroundColor: Theme.of(context).colorScheme.onSurfaceVariant,
+                  backgroundColor: theme.surfaceVariant,
                 ),
               ],
             ),
@@ -79,27 +51,27 @@ class _ColorsTestState extends State<ColorsTest> {
               children: [
                 CircleAvatar(
                   radius: 20,
-                  backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+                  backgroundColor: theme.onPrimary,
                 ),
                 CircleAvatar(
                   radius: 20,
-                  backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
+                  backgroundColor: theme.onSecondary,
                 ),
                 CircleAvatar(
                   radius: 20,
-                  backgroundColor: Theme.of(context).colorScheme.tertiaryContainer,
+                  backgroundColor: theme.onTertiary,
                 ),
                 CircleAvatar(
                   radius: 20,
-                  backgroundColor: Theme.of(context).colorScheme.errorContainer,
+                  backgroundColor: theme.onError,
                 ),
                 CircleAvatar(
                   radius: 20,
-                  backgroundColor: Theme.of(context).colorScheme.surface,
+                  backgroundColor: theme.onBackground,
                 ),
                 CircleAvatar(
                   radius: 20,
-                  backgroundColor: Theme.of(context).colorScheme.outline,
+                  backgroundColor: theme.onSurfaceVariant,
                 ),
               ],
             ),
@@ -108,27 +80,56 @@ class _ColorsTestState extends State<ColorsTest> {
               children: [
                 CircleAvatar(
                   radius: 20,
-                  backgroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
+                  backgroundColor: theme.primaryContainer,
                 ),
                 CircleAvatar(
                   radius: 20,
-                  backgroundColor: Theme.of(context).colorScheme.onSecondaryContainer,
+                  backgroundColor: theme.secondaryContainer,
                 ),
                 CircleAvatar(
                   radius: 20,
-                  backgroundColor: Theme.of(context).colorScheme.onTertiaryContainer,
+                  backgroundColor: theme.tertiaryContainer,
                 ),
                 CircleAvatar(
                   radius: 20,
-                  backgroundColor: Theme.of(context).colorScheme.onErrorContainer,
+                  backgroundColor: theme.errorContainer,
                 ),
                 CircleAvatar(
                   radius: 20,
-                  backgroundColor: Theme.of(context).colorScheme.onSurface,
+                  backgroundColor: theme.surface,
                 ),
                 CircleAvatar(
                   radius: 20,
-                  backgroundColor: Theme.of(context).colorScheme.outline,
+                  backgroundColor: theme.outline,
+                ),
+              ],
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                CircleAvatar(
+                  radius: 20,
+                  backgroundColor: theme.onPrimaryContainer,
+                ),
+                CircleAvatar(
+                  radius: 20,
+                  backgroundColor: theme.onSecondaryContainer,
+                ),
+                CircleAvatar(
+                  radius: 20,
+                  backgroundColor: theme.onTertiaryContainer,
+                ),
+                CircleAvatar(
+                  radius: 20,
+                  backgroundColor: theme.onErrorContainer,
+                ),
+                CircleAvatar(
+                  radius: 20,
+                  backgroundColor: theme.onSurface,
+                ),
+                CircleAvatar(
+                  radius: 20,
+                  backgroundColor: theme.outline,
                 )
               ],
             ),

@@ -31,6 +31,7 @@ part 'notes_state.dart';
 class NotesBloc extends Bloc<NotesEvent, NotesState> {
   late Database database;
   late Box box;
+  late ColorScheme theme;
   late int viewIndex;
   late int viewIndexN;
   late int viewIndexV;
@@ -56,7 +57,6 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
   List<Map> searchedNotes = [];
   List<Map> searchedVoice = [];
   late List<Color> colors = lightColors;
-  List<Color> shadeColors = darkerColors;
   int currentIndex = 0;
   bool loading = true;
   late String openPage;
@@ -229,7 +229,7 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
     showDate = box.get('showDate') ?? true;
     showShadow = box.get('showShadow') ?? false;
     showEdited = box.get('showEdit') ?? true;
-    colorful = box.get('colorful') ?? true;
+    colorful = box.get('colorful') ?? false;
     darkColors = box.get('darkColors') ?? false;
     harmonizeColor = box.get('harmonizeColor') ?? true;
     var c = box.get('themeMode') ?? 2;
@@ -303,8 +303,7 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
             },
             text: 'Delete'.tr(),
             iconData: Icons.delete,
-            color:
-                colors[notes[index]['cindex']],
+            color: colors[notes[index]['cindex']],
             textStyle: const TextStyle(color: Colors.white),
             iconColor: Colors.white,
             shape:
@@ -342,14 +341,14 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
     onSearch();
   }
 
-  void harmonizeColors(BuildContext context) {
+  void harmonizeColors() {
     List<Color> hlColors = [];
     List<Color> hdColors = [];
     for (var color in lightColors) {
-      hlColors.add(color.harmonizeWith(Theme.of(context).colorScheme.primary));
+      hlColors.add(color.harmonizeWith(theme.primary));
     }
     for (var color in darkerColors) {
-      hdColors.add(color.harmonizeWith(Theme.of(context).colorScheme.primary));
+      hdColors.add(color.harmonizeWith(theme.primary));
     }
     colors = darkColors
         ? harmonizeColor
@@ -453,20 +452,17 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
     await refreshDatabase();
   }
 
-  Widget divider(BuildContext context) {
+  Widget divider() {
     return SizedBox(
       height: 20,
       child: Divider(
         thickness: 1,
-        color: Theme.of(context)
-            .colorScheme
-            .outline
-            .withOpacity(0.2), //Theme.of(context).highlightColor.withOpacity(0.3),
+        color: theme.outline.withOpacity(0.2), //Theme.of(context).highlightColor.withOpacity(0.3),
       ),
     );
   }
 
-  Widget customAppBar(BuildContext context, String title, double top, [Widget? leading]) {
+  Widget customAppBar(String title, double top, [Widget? leading]) {
     return Column(
       children: [
         Padding(
@@ -489,9 +485,7 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
               Text(
                 title,
                 style: TextStyle(
-                    fontSize: 40,
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context).colorScheme.onSurfaceVariant),
+                    fontSize: 40, fontWeight: FontWeight.bold, color: theme.onSurfaceVariant),
               ),
               Padding(
                 padding: const EdgeInsets.only(right: 5),
@@ -500,7 +494,7 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
             ],
           ),
         ),
-        divider(context),
+        divider(),
       ],
     );
   }

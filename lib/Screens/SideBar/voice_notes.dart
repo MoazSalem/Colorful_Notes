@@ -15,6 +15,7 @@ class VoiceNotesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ColorScheme theme = Theme.of(context).colorScheme;
     return BlocConsumer<NotesBloc, NotesState>(
       listener: (context, state) {},
       builder: (context, state) {
@@ -41,10 +42,10 @@ class VoiceNotesPage extends StatelessWidget {
                   Icons.search,
                   size: 30,
                   color: searchOn
-                      ? Theme.of(context).colorScheme.primary
-                      : Theme.of(context)
-                          .colorScheme
-                          .onSurfaceVariant, //Theme.of(context).textTheme.bodyMedium!.color,
+                      ? B.colorful
+                          ? B.colors[3]
+                          : theme.primary
+                      : theme.onSurfaceVariant, //Theme.of(context).textTheme.bodyMedium!.color,
                 ),
               ),
               IconButton(
@@ -72,30 +73,27 @@ class VoiceNotesPage extends StatelessWidget {
         }
 
         return Scaffold(
-          backgroundColor: B.isDarkMode
-              ? Theme.of(context).colorScheme.background
-              : Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.6),
+          backgroundColor: B.isDarkMode ? theme.background : theme.surfaceVariant.withOpacity(0.6),
           floatingActionButtonLocation: B.fabIndex == 0
               ? FloatingActionButtonLocation.endFloat
               : FloatingActionButtonLocation.startFloat,
           floatingActionButton: FloatingActionButton(
             splashColor: B.colors[1],
             elevation: 0,
-            backgroundColor: Theme.of(context).colorScheme.primary,
-            //B.colors[3],
+            backgroundColor: B.colorful ? B.colors[3] : theme.primary,
             onPressed: () async {
               showBottomSheet(
                   enableDrag: false, context: context, builder: (context) => createVoice(context));
             },
             child: Icon(
               Icons.add,
-              color: Theme.of(context).colorScheme.surfaceVariant,
+              color: theme.surfaceVariant,
             ),
           ),
           body: ListView(
             padding: EdgeInsets.zero,
             children: [
-              B.customAppBar(context, "Voice".tr(), 65, leading()),
+              B.customAppBar("Voice".tr(), 65, leading()),
               searchOn
                   ? Center(
                       child: Padding(
@@ -277,7 +275,7 @@ class VoiceNotesPage extends StatelessWidget {
                           child: Text(
                         "N3".tr(),
                         style: TextStyle(
-                            color: Theme.of(context).colorScheme.primary,
+                            color: B.colorful ? B.colors[3] : theme.primary,
                             fontWeight: FontWeight.w400), //B.colors[3]
                       )),
                     ),

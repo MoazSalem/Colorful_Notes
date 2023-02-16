@@ -33,7 +33,11 @@ Widget listView({
               borderRadius: BorderRadius.all(Radius.circular(0)),
             ),
             child: Padding(
-              padding: EdgeInsets.only(left: width * 0.05092, right: width * 0.05092, top: width * 0.07639, bottom: showDate ? width * 0.03819 : width * 0.02546),
+              padding: EdgeInsets.only(
+                  left: width * 0.05092,
+                  right: width * 0.05092,
+                  top: width * 0.07639,
+                  bottom: showDate ? width * 0.03819 : width * 0.02546),
               child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                 noTitle
                     ? Container()
@@ -49,8 +53,12 @@ Widget listView({
                                   : 2,
                               overflow: TextOverflow.ellipsis,
                               textAlign: TextAlign.center,
-                              textDirection: notes[reverseIndex]["layout"] == 0 || notes[reverseIndex]["layout"] == 2 ? TextDirection.ltr : TextDirection.rtl,
-                              style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 24, color: Colors.white)),
+                              textDirection: notes[reverseIndex]["layout"] == 0 ||
+                                      notes[reverseIndex]["layout"] == 2
+                                  ? TextDirection.ltr
+                                  : TextDirection.rtl,
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.w800, fontSize: 24, color: Colors.white)),
                         ),
                       ),
                 notes[reverseIndex]["type"] == 0
@@ -64,8 +72,14 @@ Widget listView({
                                       ? "Empty"
                                       : "فارغ"
                                   : notes[reverseIndex]["content"],
-                              textAlign: notes[reverseIndex]["layout"] == 1 || notes[reverseIndex]["layout"] == 2 ? TextAlign.right : TextAlign.left,
-                              textDirection: notes[reverseIndex]["layout"] == 1 || notes[reverseIndex]["layout"] == 2 ? TextDirection.rtl : TextDirection.ltr,
+                              textAlign: notes[reverseIndex]["layout"] == 1 ||
+                                      notes[reverseIndex]["layout"] == 2
+                                  ? TextAlign.right
+                                  : TextAlign.left,
+                              textDirection: notes[reverseIndex]["layout"] == 1 ||
+                                      notes[reverseIndex]["layout"] == 2
+                                  ? TextDirection.rtl
+                                  : TextDirection.ltr,
                               maxLines: showDate
                                   ? isTablet
                                       ? 20
@@ -74,7 +88,9 @@ Widget listView({
                                       ? 20
                                       : 9,
                               overflow: TextOverflow.ellipsis,
-                              style: TextStyle(color: noContent ? Colors.white38 : Colors.white, fontSize: noTitle ? 21 : 16)),
+                              style: TextStyle(
+                                  color: noContent ? Colors.white38 : Colors.white,
+                                  fontSize: noTitle ? 21 : 16)),
                         ),
                       )
                     : Expanded(
@@ -89,7 +105,11 @@ Widget listView({
                                           ? width * 0.063657
                                           : 0
                                       : 0),
-                              child: SoundPlayer(index: reverseIndex, voiceMap: notes, colors: colors, viewMode: 0),
+                              child: SoundPlayer(
+                                  index: reverseIndex,
+                                  voiceMap: notes,
+                                  colors: colors,
+                                  viewMode: 0),
                             ),
                           ],
                         ),
@@ -186,13 +206,21 @@ Widget smallListView({
                           : notes[reverseIndex]["type"] == 0
                               ? Padding(
                                   padding: EdgeInsets.only(
-                                      right: notes[reverseIndex]["layout"] == 0 || notes[reverseIndex]["layout"] == 2 ? width * 0.050926 : 0,
-                                      left: notes[reverseIndex]["layout"] == 0 || notes[reverseIndex]["layout"] == 2 ? 0 : width * 0.050926),
+                                      right: notes[reverseIndex]["layout"] == 0 ||
+                                              notes[reverseIndex]["layout"] == 2
+                                          ? width * 0.050926
+                                          : 0,
+                                      left: notes[reverseIndex]["layout"] == 0 ||
+                                              notes[reverseIndex]["layout"] == 2
+                                          ? 0
+                                          : width * 0.050926),
                                   child: SizedBox(
                                     width: double.infinity,
                                     child: Padding(
                                       padding: EdgeInsets.only(
-                                          top: notes[reverseIndex]["layout"] == 0 ? 0 : width * 0.02546,
+                                          top: notes[reverseIndex]["layout"] == 0
+                                              ? 0
+                                              : width * 0.02546,
                                           bottom: notes[reverseIndex]["layout"] == 0
                                               ? 0
                                               : notes[reverseIndex]["layout"] == 2
@@ -200,13 +228,23 @@ Widget smallListView({
                                                   : width * 0.02037),
                                       child: Text(notes[reverseIndex]["title"],
                                           strutStyle: StrutStyle(
-                                            forceStrutHeight: notes[reverseIndex]["layout"] == 0 ? false : true,
+                                            forceStrutHeight:
+                                                notes[reverseIndex]["layout"] == 0 ? false : true,
                                           ),
-                                          textAlign: notes[reverseIndex]["layout"] == 0 || notes[reverseIndex]["layout"] == 2 ? TextAlign.left : TextAlign.right,
-                                          textDirection: notes[reverseIndex]["layout"] == 0 || notes[reverseIndex]["layout"] == 2 ? TextDirection.ltr : TextDirection.rtl,
+                                          textAlign: notes[reverseIndex]["layout"] == 0 ||
+                                                  notes[reverseIndex]["layout"] == 2
+                                              ? TextAlign.left
+                                              : TextAlign.right,
+                                          textDirection: notes[reverseIndex]["layout"] == 0 ||
+                                                  notes[reverseIndex]["layout"] == 2
+                                              ? TextDirection.ltr
+                                              : TextDirection.rtl,
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
-                                          style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 22, color: Colors.white)),
+                                          style: const TextStyle(
+                                              fontWeight: FontWeight.w800,
+                                              fontSize: 22,
+                                              color: Colors.white)),
                                     ),
                                   ),
                                 )
@@ -225,10 +263,19 @@ Widget smallListView({
                                               : "فارغ"
                                           : notes[reverseIndex]["content"],
                                       strutStyle: StrutStyle(
-                                        forceStrutHeight: notes[reverseIndex]["layout"] == 0 || notes[reverseIndex]["layout"] == 1 ? false : true,
+                                        forceStrutHeight: notes[reverseIndex]["layout"] == 0 ||
+                                                notes[reverseIndex]["layout"] == 1
+                                            ? false
+                                            : true,
                                       ),
-                                      textAlign: notes[reverseIndex]["layout"] == 1 || notes[reverseIndex]["layout"] == 2 ? TextAlign.right : TextAlign.left,
-                                      textDirection: notes[reverseIndex]["layout"] == 1 || notes[reverseIndex]["layout"] == 2 ? TextDirection.rtl : TextDirection.ltr,
+                                      textAlign: notes[reverseIndex]["layout"] == 1 ||
+                                              notes[reverseIndex]["layout"] == 2
+                                          ? TextAlign.right
+                                          : TextAlign.left,
+                                      textDirection: notes[reverseIndex]["layout"] == 1 ||
+                                              notes[reverseIndex]["layout"] == 2
+                                          ? TextDirection.rtl
+                                          : TextDirection.ltr,
                                       maxLines: noTitle
                                           ? showDate
                                               ? isTablet
@@ -259,7 +306,11 @@ Widget smallListView({
                                 children: [
                                   Padding(
                                     padding: EdgeInsets.symmetric(horizontal: width * 0.02037),
-                                    child: SoundPlayer(index: reverseIndex, voiceMap: notes, colors: colors, viewMode: 1),
+                                    child: SoundPlayer(
+                                        index: reverseIndex,
+                                        voiceMap: notes,
+                                        colors: colors,
+                                        viewMode: 1),
                                   ),
                                 ],
                               ),
@@ -270,7 +321,8 @@ Widget smallListView({
               ),
               showDate
                   ? Padding(
-                      padding: EdgeInsets.symmetric(vertical: width * 0.030555, horizontal: width * 0.050926),
+                      padding: EdgeInsets.symmetric(
+                          vertical: width * 0.030555, horizontal: width * 0.050926),
                       child: Stack(
                         alignment: lang == 'en' ? Alignment.centerLeft : Alignment.centerRight,
                         children: [
@@ -305,14 +357,17 @@ Widget smallListView({
         noTitle
             ? Container()
             : Padding(
-                padding: EdgeInsets.symmetric(vertical: showDate ? width * 0.03564 : width * 0.04074, horizontal: width * 0.203703),
+                padding: EdgeInsets.symmetric(
+                    vertical: showDate ? width * 0.03564 : width * 0.04074,
+                    horizontal: width * 0.203703),
                 child: notes[reverseIndex]["type"] == 0
                     ? Container()
                     : Text(
                         notes[reverseIndex]["title"],
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+                        style: const TextStyle(
+                            color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
                       ),
               ),
       ]),
@@ -365,16 +420,31 @@ Widget gridView({
                     : Padding(
                         padding: EdgeInsets.only(
                             bottom: width * 0.01528,
-                            right: notes[reverseIndex]["layout"] == 0 || notes[reverseIndex]["layout"] == 2 ? width * 0.050926 : 0,
-                            left: notes[reverseIndex]["layout"] == 0 || notes[reverseIndex]["layout"] == 2 ? 0 : width * 0.050926),
+                            right: notes[reverseIndex]["layout"] == 0 ||
+                                    notes[reverseIndex]["layout"] == 2
+                                ? width * 0.050926
+                                : 0,
+                            left: notes[reverseIndex]["layout"] == 0 ||
+                                    notes[reverseIndex]["layout"] == 2
+                                ? 0
+                                : width * 0.050926),
                         child: SizedBox(
                             width: double.infinity,
                             child: Text(notes[reverseIndex]["title"],
-                                textAlign: notes[reverseIndex]["layout"] == 0 || notes[reverseIndex]["layout"] == 2 ? TextAlign.left : TextAlign.right,
-                                textDirection: notes[reverseIndex]["layout"] == 0 || notes[reverseIndex]["layout"] == 2 ? TextDirection.ltr : TextDirection.rtl,
+                                textAlign: notes[reverseIndex]["layout"] == 0 ||
+                                        notes[reverseIndex]["layout"] == 2
+                                    ? TextAlign.left
+                                    : TextAlign.right,
+                                textDirection: notes[reverseIndex]["layout"] == 0 ||
+                                        notes[reverseIndex]["layout"] == 2
+                                    ? TextDirection.ltr
+                                    : TextDirection.rtl,
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 18, color: Colors.white))),
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w800,
+                                    fontSize: 18,
+                                    color: Colors.white))),
                       ),
                 notes[reverseIndex]["type"] == 0
                     ? Expanded(
@@ -389,8 +459,14 @@ Widget gridView({
                                         ? "Empty"
                                         : "فارغ"
                                     : notes[reverseIndex]["content"],
-                                textAlign: notes[reverseIndex]["layout"] == 1 || notes[reverseIndex]["layout"] == 2 ? TextAlign.right : TextAlign.left,
-                                textDirection: notes[reverseIndex]["layout"] == 1 || notes[reverseIndex]["layout"] == 2 ? TextDirection.rtl : TextDirection.ltr,
+                                textAlign: notes[reverseIndex]["layout"] == 1 ||
+                                        notes[reverseIndex]["layout"] == 2
+                                    ? TextAlign.right
+                                    : TextAlign.left,
+                                textDirection: notes[reverseIndex]["layout"] == 1 ||
+                                        notes[reverseIndex]["layout"] == 2
+                                    ? TextDirection.rtl
+                                    : TextDirection.ltr,
                                 maxLines: noTitle
                                     ? showDate
                                         ? isTablet
@@ -407,7 +483,9 @@ Widget gridView({
                                             ? 10
                                             : 4,
                                 overflow: TextOverflow.ellipsis,
-                                style: TextStyle(color: noContent ? Colors.white38 : Colors.white, fontSize: noTitle ? 18 : 13)),
+                                style: TextStyle(
+                                    color: noContent ? Colors.white38 : Colors.white,
+                                    fontSize: noTitle ? 18 : 13)),
                           ),
                         ),
                       )
@@ -430,7 +508,9 @@ Widget gridView({
                                 : dateValue == -1
                                     ? "Yesterday".tr()
                                     : date,
-                            style: TextStyle(color: Colors.white, fontSize: notes[reverseIndex]["type"] == 0 ? 15 : 14),
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: notes[reverseIndex]["type"] == 0 ? 15 : 14),
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.end,

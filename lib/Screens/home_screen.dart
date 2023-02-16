@@ -20,6 +20,7 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ColorScheme theme = Theme.of(context).colorScheme;
     var brightness = SchedulerBinding.instance.window.platformBrightness;
     bool isDarkMode = brightness == Brightness.dark
         ? currentTheme == "Light"
@@ -36,15 +37,16 @@ class Home extends StatelessWidget {
           statusBarBrightness: isDarkMode ? Brightness.light : Brightness.dark,
           // For iOS (dark icons)
           systemNavigationBarIconBrightness: isDarkMode ? Brightness.light : Brightness.dark,
-          systemNavigationBarColor: Theme.of(context).colorScheme.surfaceVariant,
+          systemNavigationBarColor: theme.surfaceVariant,
         ),
         child: BlocConsumer<NotesBloc, NotesState>(
           listener: (context, state) {},
           builder: (context, state) {
             var B = NotesBloc.get(context);
+            B.theme = theme;
             B.lang = context.locale.toString();
             B.getScreenWidth(context);
-            B.harmonizeColors(context);
+            B.harmonizeColors();
             List<Widget> page = [
               Builder(
                 builder: (context) {
@@ -94,9 +96,7 @@ class Home extends StatelessWidget {
                   ? Container(
                       width: double.infinity,
                       height: double.infinity,
-                      color: isDarkMode
-                          ? Theme.of(context).colorScheme.background
-                          : Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.6),
+                      color: isDarkMode ? theme.background : theme.surfaceVariant.withOpacity(0.6),
                       child: Center(
                         child: SizedBox(
                           width: 200,
@@ -117,17 +117,17 @@ class Home extends StatelessWidget {
                               // Container(
                               //   height: double.infinity,
                               //   width: 1,
-                              //   color:Theme.of(context).colorScheme.outline.withOpacity(0.2), //Theme.of(context).highlightColor.withOpacity(0.15),
+                              //   color:theme.outline.withOpacity(0.2), //Theme.of(context).highlightColor.withOpacity(0.15),
                               // ),
-                              sideBar(context, B.sbIndex == 3 ? true : false),
+                              sideBar(theme, B.sbIndex == 3 ? true : false),
                               // Divider
                             ]
                           : [
-                              sideBar(context, B.sbIndex == 1 ? true : false),
+                              sideBar(theme, B.sbIndex == 1 ? true : false),
                               // Container(
                               //   height: double.infinity,
                               //   width: 1,
-                              //   color:Theme.of(context).colorScheme.outline.withOpacity(0.2), //Theme.of(context).highlightColor.withOpacity(0.15),
+                              //   color:theme.outline.withOpacity(0.2), //Theme.of(context).highlightColor.withOpacity(0.15),
                               // ), // Divider
                               Expanded(
                                 flex: 5,

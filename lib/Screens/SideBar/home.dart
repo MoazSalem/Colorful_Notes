@@ -21,6 +21,7 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ColorScheme theme = Theme.of(context).colorScheme;
     return BlocConsumer<NotesBloc, NotesState>(
       listener: (context, state) {},
       builder: (context, state) {
@@ -42,8 +43,10 @@ class HomePage extends StatelessWidget {
                   Icons.search,
                   size: 30,
                   color: searchOn
-                      ? Theme.of(context).colorScheme.primary
-                      : Theme.of(context).colorScheme.onSurfaceVariant, //const Color(0xffff8b34)
+                      ? B.colorful
+                          ? B.colors[0]
+                          : theme.primary
+                      : theme.onSurfaceVariant, //const Color(0xffff8b34)
                 ),
               ),
               IconButton(
@@ -64,7 +67,7 @@ class HomePage extends StatelessWidget {
         }
 
         create1() {
-          showBottomSheet(context: context, builder: (context) => createNote(context, false));
+          showBottomSheet(context: context, builder: (context) => createNote(context));
         }
 
         create2() {
@@ -86,22 +89,19 @@ class HomePage extends StatelessWidget {
         }
 
         return Scaffold(
-          backgroundColor: B.isDarkMode
-              ? Theme.of(context).colorScheme.background
-              : Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.6),
+          backgroundColor: B.isDarkMode ? theme.background : theme.surfaceVariant.withOpacity(0.6),
           floatingActionButtonLocation: B.fabIndex == 0
               ? FloatingActionButtonLocation.endFloat
               : FloatingActionButtonLocation.startFloat,
           floatingActionButton: B.fabIndex == 0
-              ? customFab(context, openFab, B.colors, B.shadeColors, false, 0, 2, create1, create2)
+              ? customFab(theme, B.colors, create1, create2, B.colorful)
               : Directionality(
                   textDirection: B.lang == 'en' ? ui.TextDirection.rtl : ui.TextDirection.ltr,
-                  child: customFab(
-                      context, openFab, B.colors, B.shadeColors, false, 0, 2, create1, create2)),
+                  child: customFab(theme, B.colors, create1, create2, B.colorful)),
           body: ListView(
             padding: EdgeInsets.zero,
             children: [
-              B.customAppBar(context, "Home".tr(), 65, leading()),
+              B.customAppBar("Home".tr(), 65, leading()),
               searchOn
                   ? Center(
                       child: Padding(
@@ -313,8 +313,8 @@ class HomePage extends StatelessWidget {
                           child: Text(
                         "N1".tr(),
                         style: TextStyle(
-                            color: Theme.of(context).colorScheme.primary,
-                            fontWeight: FontWeight.w400), //B.colors[0]
+                            color: B.colorful ? B.colors[0] : theme.primary,
+                            fontWeight: FontWeight.w400),
                       )),
                     ),
               const SizedBox(

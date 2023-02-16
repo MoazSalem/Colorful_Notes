@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:notes/Widgets/notes.dart';
 
-Widget customFab(BuildContext context, bool openFab, colors, shadeColors, bool hide, int main,
-    int afterTap, action1, action2) {
+bool openFab = false;
+
+Widget customFab(ColorScheme theme, colors, action1, action2, bool colorful) {
   return StatefulBuilder(
     builder: (context, setState) => SizedBox(
       child: Column(
@@ -35,7 +36,7 @@ Widget customFab(BuildContext context, bool openFab, colors, shadeColors, bool h
                                     child: Container(
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(12),
-                                        color: Theme.of(context).colorScheme.surfaceVariant,
+                                        color: theme.surfaceVariant,
                                       ),
                                       width: isTablet ? 160 : 100,
                                       height: isTablet ? 50 : 40,
@@ -43,14 +44,14 @@ Widget customFab(BuildContext context, bool openFab, colors, shadeColors, bool h
                                           child: Text(
                                         "Voice Note".tr(),
                                         style:
-                                            TextStyle(color: Theme.of(context).colorScheme.primary),
+                                            TextStyle(color: colorful ? colors[3] : theme.primary),
                                       )),
                                     ),
                                   ),
                                   SizedBox(
                                     width: isTablet ? 60 : 40,
                                     child: FloatingActionButton(
-                                      backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
+                                      backgroundColor: theme.surfaceVariant,
                                       mini: isTablet ? false : true,
                                       onPressed: () {
                                         action2();
@@ -58,7 +59,7 @@ Widget customFab(BuildContext context, bool openFab, colors, shadeColors, bool h
                                       elevation: 0,
                                       child: Icon(
                                         Icons.mic,
-                                        color: Theme.of(context).colorScheme.primary,
+                                        color: colorful ? colors[3] : theme.primary,
                                       ),
                                     ),
                                   ),
@@ -79,23 +80,21 @@ Widget customFab(BuildContext context, bool openFab, colors, shadeColors, bool h
                                   child: Container(
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(12),
-                                      color:
-                                          Theme.of(context).colorScheme.surfaceVariant, //colors[1],
+                                      color: theme.surfaceVariant, //colors[1],
                                     ),
                                     width: isTablet ? 160 : 100,
                                     height: isTablet ? 50 : 40,
                                     child: Center(
                                         child: Text(
                                       "Text Note".tr(),
-                                      style:
-                                          TextStyle(color: Theme.of(context).colorScheme.primary),
+                                      style: TextStyle(color: colorful ? colors[1] : theme.primary),
                                     )),
                                   ),
                                 ),
                                 SizedBox(
                                   width: isTablet ? 60 : 40,
                                   child: FloatingActionButton(
-                                    backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
+                                    backgroundColor: theme.surfaceVariant,
                                     //colors[1],
                                     mini: isTablet ? false : true,
                                     onPressed: () {
@@ -104,7 +103,7 @@ Widget customFab(BuildContext context, bool openFab, colors, shadeColors, bool h
                                     elevation: 0,
                                     child: Icon(
                                       Icons.sticky_note_2,
-                                      color: Theme.of(context).colorScheme.primary,
+                                      color: colorful ? colors[1] : theme.primary,
                                     ),
                                   ),
                                 ),
@@ -118,9 +117,9 @@ Widget customFab(BuildContext context, bool openFab, colors, shadeColors, bool h
                       ),
               )),
           FloatingActionButton(
-            backgroundColor: Theme.of(context).colorScheme.primary,
+            backgroundColor: colorful ? colors[0] : theme.primary,
             //openFab ? colors[afterTap] : colors[main],
-            //splashColor: Theme.of(context).colorScheme.primaryContainer,
+            //splashColor: theme.primaryContainer,
             //openFab ? colors[main] : colors[afterTap],
             onPressed: () {
               openFab = !openFab;
@@ -130,7 +129,7 @@ Widget customFab(BuildContext context, bool openFab, colors, shadeColors, bool h
 
             child: Icon(
               Icons.add,
-              color: Theme.of(context).colorScheme.surfaceVariant, //white
+              color: theme.surfaceVariant, //white
             ),
           ),
         ],

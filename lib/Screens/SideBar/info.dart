@@ -11,19 +11,18 @@ class InfoPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ColorScheme theme = Theme.of(context).colorScheme;
     return BlocConsumer<NotesBloc, NotesState>(
       listener: (context, state) {},
       builder: (context, state) {
         var B = NotesBloc.get(context);
-        Color textColor = Theme.of(context).colorScheme.onSurfaceVariant;
+        Color textColor = theme.onSurfaceVariant;
         return Scaffold(
-          backgroundColor: B.isDarkMode
-              ? Theme.of(context).colorScheme.background
-              : Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.6),
+          backgroundColor: B.isDarkMode ? theme.background : theme.surfaceVariant.withOpacity(0.6),
           body: ListView(
             padding: EdgeInsets.zero,
             children: [
-              B.customAppBar(context, "Info".tr(), 65),
+              B.customAppBar("Info".tr(), 65),
               Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 35.0, vertical: 20),
                   child: Column(

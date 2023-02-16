@@ -19,6 +19,7 @@ class SettingsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ColorScheme theme = Theme.of(context).colorScheme;
     return BlocConsumer<NotesBloc, NotesState>(
       listener: (context, state) {},
       builder: (context, state) {
@@ -31,8 +32,8 @@ class SettingsPage extends StatelessWidget {
         double itemHeight = isTablet ? 80 : 50.0;
         double fontSize = B.isTablet ? 10 : 14;
         double padding = B.isTablet ? 24 : 10;
-        Color textColor = Theme.of(context).colorScheme.onSurfaceVariant;
-        Color dropDownColor = Theme.of(context).colorScheme.surfaceVariant;
+        Color textColor = theme.onSurfaceVariant;
+        Color dropDownColor = theme.surfaceVariant;
         String sB = B.sbIndex == 0
             ? "Top Left"
             : B.sbIndex == 1
@@ -42,13 +43,11 @@ class SettingsPage extends StatelessWidget {
                     : "Bottom Right";
         String fabLoc = B.fabIndex == 0 ? "Right" : "Left";
         return Scaffold(
-          backgroundColor: B.isDarkMode
-              ? Theme.of(context).colorScheme.background
-              : Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.6),
+          backgroundColor: B.isDarkMode ? theme.background : theme.surfaceVariant.withOpacity(0.6),
           body: ListView(
             padding: EdgeInsets.zero,
             children: [
-              B.customAppBar(context, "Settings".tr(), 65),
+              B.customAppBar("Settings".tr(), 65),
               SizedBox(
                 height: height,
                 child: Center(
@@ -99,7 +98,7 @@ class SettingsPage extends StatelessWidget {
                   ),
                 ),
               ),
-              B.divider(context),
+              B.divider(),
               SizedBox(
                 height: height,
                 child: Center(
@@ -154,7 +153,7 @@ class SettingsPage extends StatelessWidget {
                   ),
                 ),
               ),
-              B.divider(context),
+              B.divider(),
               SizedBox(
                 height: height,
                 child: Center(
@@ -214,7 +213,7 @@ class SettingsPage extends StatelessWidget {
                   ),
                 ),
               ),
-              B.divider(context),
+              B.divider(),
               SizedBox(
                 height: height,
                 child: Center(
@@ -270,7 +269,7 @@ class SettingsPage extends StatelessWidget {
                   ),
                 ),
               ),
-              B.divider(context),
+              B.divider(),
               SizedBox(
                 height: height,
                 child: Center(
@@ -320,7 +319,7 @@ class SettingsPage extends StatelessWidget {
                   ),
                 ),
               ),
-              B.divider(context),
+              B.divider(),
               SizedBox(
                 height: height,
                 child: Center(
@@ -328,27 +327,25 @@ class SettingsPage extends StatelessWidget {
                     padding: EdgeInsets.symmetric(horizontal: padding),
                     child: ListTile(
                         title: Text(
-                          "Show Date".tr(),
+                          "Colorful".tr(),
                           style: TextStyle(
                               fontSize: title, fontWeight: FontWeight.w500, color: textColor),
                         ),
                         subtitle: Text(
-                          "sShow Date".tr(),
+                          "sColorful".tr(),
                           style: TextStyle(
                               fontSize: subtitle, fontWeight: FontWeight.w400, color: textColor),
                         ),
                         trailing: Padding(
                           padding: EdgeInsets.only(right: padding),
                           child: SwitcherButton(
-                            onColor: Theme.of(context).colorScheme.primary,
-                            offColor: Theme.of(context).colorScheme.primaryContainer,
-                            // onColor: B.colors[0],
-                            // offColor: Theme.of(context).primaryColorDark,
+                            onColor: B.colorful ? B.colors[8] : theme.primary,
+                            offColor: theme.primaryContainer,
                             size: switchSize,
-                            value: B.showDate,
+                            value: B.colorful,
                             onChange: (bool value) {
-                              B.box.put("showDate", value);
-                              B.showDate = value;
+                              B.box.put("colorful", value);
+                              B.colorful = value;
                               B.prefsChanged();
                             },
                           ),
@@ -356,79 +353,7 @@ class SettingsPage extends StatelessWidget {
                   ),
                 ),
               ),
-              B.divider(context),
-              SizedBox(
-                height: height,
-                child: Center(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: padding),
-                    child: ListTile(
-                        title: Text(
-                          "Show Edited".tr(),
-                          style: TextStyle(
-                              fontSize: title, fontWeight: FontWeight.w500, color: textColor),
-                        ),
-                        subtitle: Text(
-                          "sShow Edited".tr(),
-                          style: TextStyle(
-                              fontSize: subtitle, fontWeight: FontWeight.w400, color: textColor),
-                        ),
-                        trailing: Padding(
-                          padding: EdgeInsets.only(right: padding),
-                          child: SwitcherButton(
-                            onColor: Theme.of(context).colorScheme.primary,
-                            offColor: Theme.of(context).colorScheme.primaryContainer,
-                            // onColor: B.colors[2],
-                            // offColor: Theme.of(context).primaryColorDark,
-                            size: switchSize,
-                            value: B.showEdited,
-                            onChange: (bool value) {
-                              B.box.put("showEdit", value);
-                              B.showEdited = value;
-                              B.prefsChanged();
-                            },
-                          ),
-                        )),
-                  ),
-                ),
-              ),
-              B.divider(context),
-              SizedBox(
-                height: height,
-                child: Center(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: padding),
-                    child: ListTile(
-                        title: Text(
-                          "Show Shadow".tr(),
-                          style: TextStyle(
-                              fontSize: title, fontWeight: FontWeight.w500, color: textColor),
-                        ),
-                        subtitle: Text(
-                          "sShow Shadow".tr(),
-                          style: TextStyle(
-                              fontSize: subtitle, fontWeight: FontWeight.w400, color: textColor),
-                        ),
-                        trailing: Padding(
-                          padding: EdgeInsets.only(right: padding),
-                          child: SwitcherButton(
-                            onColor: Theme.of(context).colorScheme.primary,
-                            offColor: Theme.of(context).colorScheme.primaryContainer,
-                            // onColor: B.colors[1],
-                            // offColor: Theme.of(context).primaryColorDark,
-                            size: switchSize,
-                            value: B.showShadow,
-                            onChange: (bool value) {
-                              B.box.put("showShadow", value);
-                              B.showShadow = value;
-                              B.prefsChanged();
-                            },
-                          ),
-                        )),
-                  ),
-                ),
-              ),
-              B.divider(context),
+              B.divider(),
               SizedBox(
                 height: height,
                 child: Center(
@@ -448,10 +373,8 @@ class SettingsPage extends StatelessWidget {
                         trailing: Padding(
                           padding: EdgeInsets.only(right: padding),
                           child: SwitcherButton(
-                            onColor: Theme.of(context).colorScheme.primary,
-                            offColor: Theme.of(context).colorScheme.primaryContainer,
-                            //onColor: B.colors[6],
-                            //offColor: Theme.of(context).primaryColorDark,
+                            onColor: B.colorful ? B.colors[6] : theme.primary,
+                            offColor: theme.primaryContainer,
                             size: switchSize,
                             value: B.darkColors,
                             onChange: (bool value) {
@@ -464,7 +387,7 @@ class SettingsPage extends StatelessWidget {
                   ),
                 ),
               ),
-              B.divider(context),
+              B.divider(),
               SizedBox(
                 height: height,
                 child: Center(
@@ -484,16 +407,14 @@ class SettingsPage extends StatelessWidget {
                         trailing: Padding(
                           padding: EdgeInsets.only(right: padding),
                           child: SwitcherButton(
-                            onColor: Theme.of(context).colorScheme.primary,
-                            offColor: Theme.of(context).colorScheme.primaryContainer,
-                            //onColor: B.colors[6],
-                            //offColor: Theme.of(context).primaryColorDark,
+                            onColor: B.colorful ? B.colors[4] : theme.primary,
+                            offColor: theme.primaryContainer,
                             size: switchSize,
                             value: B.harmonizeColor,
                             onChange: (bool value) {
                               B.box.put("harmonizeColor", value);
                               B.harmonizeColor = value;
-                              B.harmonizeColors(context);
+                              B.harmonizeColors();
                               B.prefsChanged();
                             },
                           ),
@@ -501,7 +422,110 @@ class SettingsPage extends StatelessWidget {
                   ),
                 ),
               ),
-              B.divider(context),
+              B.divider(),
+              SizedBox(
+                height: height,
+                child: Center(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: padding),
+                    child: ListTile(
+                        title: Text(
+                          "Show Date".tr(),
+                          style: TextStyle(
+                              fontSize: title, fontWeight: FontWeight.w500, color: textColor),
+                        ),
+                        subtitle: Text(
+                          "sShow Date".tr(),
+                          style: TextStyle(
+                              fontSize: subtitle, fontWeight: FontWeight.w400, color: textColor),
+                        ),
+                        trailing: Padding(
+                          padding: EdgeInsets.only(right: padding),
+                          child: SwitcherButton(
+                            onColor: B.colorful ? B.colors[0] : theme.primary,
+                            offColor: theme.primaryContainer,
+                            // offColor: Theme.of(context).primaryColorDark,
+                            size: switchSize,
+                            value: B.showDate,
+                            onChange: (bool value) {
+                              B.box.put("showDate", value);
+                              B.showDate = value;
+                              B.prefsChanged();
+                            },
+                          ),
+                        )),
+                  ),
+                ),
+              ),
+              B.divider(),
+              SizedBox(
+                height: height,
+                child: Center(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: padding),
+                    child: ListTile(
+                        title: Text(
+                          "Show Edited".tr(),
+                          style: TextStyle(
+                              fontSize: title, fontWeight: FontWeight.w500, color: textColor),
+                        ),
+                        subtitle: Text(
+                          "sShow Edited".tr(),
+                          style: TextStyle(
+                              fontSize: subtitle, fontWeight: FontWeight.w400, color: textColor),
+                        ),
+                        trailing: Padding(
+                          padding: EdgeInsets.only(right: padding),
+                          child: SwitcherButton(
+                            onColor: B.colorful ? B.colors[2] : theme.primary,
+                            offColor: theme.primaryContainer,
+                            size: switchSize,
+                            value: B.showEdited,
+                            onChange: (bool value) {
+                              B.box.put("showEdit", value);
+                              B.showEdited = value;
+                              B.prefsChanged();
+                            },
+                          ),
+                        )),
+                  ),
+                ),
+              ),
+              B.divider(),
+              SizedBox(
+                height: height,
+                child: Center(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: padding),
+                    child: ListTile(
+                        title: Text(
+                          "Show Shadow".tr(),
+                          style: TextStyle(
+                              fontSize: title, fontWeight: FontWeight.w500, color: textColor),
+                        ),
+                        subtitle: Text(
+                          "sShow Shadow".tr(),
+                          style: TextStyle(
+                              fontSize: subtitle, fontWeight: FontWeight.w400, color: textColor),
+                        ),
+                        trailing: Padding(
+                          padding: EdgeInsets.only(right: padding),
+                          child: SwitcherButton(
+                            onColor: B.colorful ? B.colors[1] : theme.primary,
+                            offColor: theme.primaryContainer,
+                            size: switchSize,
+                            value: B.showShadow,
+                            onChange: (bool value) {
+                              B.box.put("showShadow", value);
+                              B.showShadow = value;
+                              B.prefsChanged();
+                            },
+                          ),
+                        )),
+                  ),
+                ),
+              ),
+              B.divider(),
               // SizedBox(
               //   height: height,
               //   child: Center(

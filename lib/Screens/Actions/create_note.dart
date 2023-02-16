@@ -18,7 +18,7 @@ int chosenIndex = 0;
 bool isLoading = false;
 String chLang = 'en';
 
-Widget createNote(BuildContext context, bool isML) {
+Widget createNote(BuildContext context) {
   _titleDir = ValueNotifier(TextDirection.ltr);
   _contentDir = ValueNotifier(TextDirection.ltr);
   return BlocConsumer<NotesBloc, NotesState>(

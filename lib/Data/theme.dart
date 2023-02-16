@@ -4,11 +4,16 @@ ThemeData light = ThemeData(
     useMaterial3: true,
     brightness: Brightness.light,
     primaryColorDark: const Color(0xfff2f2f2),
-    colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.amber).copyWith(secondary: Colors.amber),
+    colorScheme:
+        ColorScheme.fromSwatch(primarySwatch: Colors.amber).copyWith(secondary: Colors.amber),
     backgroundColor: Colors.white);
 
-ThemeData normalDark =
-    ThemeData(brightness: Brightness.dark, primarySwatch: Colors.amber, primaryColorDark: const Color(0xFF424242), accentColor: Colors.amber, backgroundColor: const Color(0xFF424242));
+ThemeData normalDark = ThemeData(
+    brightness: Brightness.dark,
+    primarySwatch: Colors.amber,
+    primaryColorDark: const Color(0xFF424242),
+    accentColor: Colors.amber,
+    backgroundColor: const Color(0xFF424242));
 
 ThemeData amoled = ThemeData(
     useMaterial3: true,

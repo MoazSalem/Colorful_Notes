@@ -13,8 +13,12 @@ Widget editNote({required Map note}) {
   titleC.text = note["title"];
   contentC.text = note["content"];
   int bIndex = note["cindex"];
-  _titleDir = note["layout"] == 0 || note["layout"] == 2 ? ValueNotifier(TextDirection.ltr) : ValueNotifier(TextDirection.rtl);
-  _contentDir = note["layout"] == 0 || note["layout"] == 3 ? ValueNotifier(TextDirection.ltr) : ValueNotifier(TextDirection.rtl);
+  _titleDir = note["layout"] == 0 || note["layout"] == 2
+      ? ValueNotifier(TextDirection.ltr)
+      : ValueNotifier(TextDirection.rtl);
+  _contentDir = note["layout"] == 0 || note["layout"] == 3
+      ? ValueNotifier(TextDirection.ltr)
+      : ValueNotifier(TextDirection.rtl);
   return BlocConsumer<NotesBloc, NotesState>(
     listener: (context, state) {},
     builder: (context, state) {
@@ -66,7 +70,13 @@ Widget editNote({required Map note}) {
                                 var time = DateTime.now().toString();
                                 titleC.text != note["title"] || contentC.text != note["content"]
                                     ? {
-                                        await B.insertToDatabase(title: titleC.text, time: time, content: contentC.text, index: bIndex, edited: 'yes', layout: getLayout()),
+                                        await B.insertToDatabase(
+                                            title: titleC.text,
+                                            time: time,
+                                            content: contentC.text,
+                                            index: bIndex,
+                                            edited: 'yes',
+                                            layout: getLayout()),
                                         await B.deleteFromDatabase(id: note["id"]),
                                         isEditing = false,
                                         B.onCreateNote(),
@@ -74,7 +84,14 @@ Widget editNote({required Map note}) {
                                     : bIndex != note["cindex"]
                                         ? {
                                             await B.editDatabaseItem(
-                                                time: note['time'], content: note['content'], id: note["id"], title: note['title'], index: bIndex, type: 0, edited: 'no', layout: note['layout']),
+                                                time: note['time'],
+                                                content: note['content'],
+                                                id: note["id"],
+                                                title: note['title'],
+                                                index: bIndex,
+                                                type: 0,
+                                                edited: 'no',
+                                                layout: note['layout']),
                                             isEditing = false,
                                             B.onCreateNote()
                                           }
@@ -130,8 +147,14 @@ Widget editNote({required Map note}) {
                                 readOnly: isEditing ? false : true,
                                 textInputAction: TextInputAction.done,
                                 controller: titleC,
-                                style: TextStyle(color: Colors.white, fontSize: B.isTablet ? 60 : 36, fontWeight: FontWeight.w500),
-                                decoration: InputDecoration(border: InputBorder.none, hintText: "No Title".tr(), hintStyle: const TextStyle(color: Colors.black54))),
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: B.isTablet ? 60 : 36,
+                                    fontWeight: FontWeight.w500),
+                                decoration: InputDecoration(
+                                    border: InputBorder.none,
+                                    hintText: "No Title".tr(),
+                                    hintStyle: const TextStyle(color: Colors.black54))),
                           ),
                         ),
                         const SizedBox(
@@ -158,8 +181,12 @@ Widget editNote({required Map note}) {
                                 controller: contentC,
                                 readOnly: isEditing ? false : true,
                                 maxLines: 20,
-                                style: TextStyle(color: Colors.white, fontSize: B.isTablet ? 40 : 24),
-                                decoration: InputDecoration(border: InputBorder.none, hintText: "Content".tr(), hintStyle: const TextStyle(color: Colors.black54))),
+                                style:
+                                    TextStyle(color: Colors.white, fontSize: B.isTablet ? 40 : 24),
+                                decoration: InputDecoration(
+                                    border: InputBorder.none,
+                                    hintText: "Content".tr(),
+                                    hintStyle: const TextStyle(color: Colors.black54))),
                           ),
                         ),
                       ]),
@@ -179,7 +206,8 @@ Widget editNote({required Map note}) {
                                   padding: const EdgeInsets.all(6.0),
                                   child: CircleAvatar(
                                     radius: 25,
-                                    backgroundColor: bIndex == index2 ? Colors.white : Colors.white54,
+                                    backgroundColor:
+                                        bIndex == index2 ? Colors.white : Colors.white54,
                                     child: CircleAvatar(
                                       radius: 20,
                                       backgroundColor: B.colors[index2],
