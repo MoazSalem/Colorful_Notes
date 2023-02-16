@@ -19,7 +19,6 @@ import 'package:notes/Data/colors.dart';
 import 'package:notes/Screens/SideBar/home.dart';
 import 'package:notes/Screens/SideBar/notes.dart';
 import 'package:notes/Screens/SideBar/voice_notes.dart';
-
 // import 'package:path/path.dart' as path;
 // import 'package:path/path.dart';
 // import 'package:external_path/external_path.dart';
@@ -35,14 +34,10 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
   late int viewIndex;
   late int viewIndexN;
   late int viewIndexV;
-  late int adCounter;
   late int sbIndex;
   late int fabIndex;
   late double width;
   late Directory appDir;
-
-  // late List<String> extDir;
-  late bool isBlack;
   late bool showDate;
   late bool showShadow;
   late bool showEdited;
@@ -62,10 +57,10 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
   late String openPage;
   late String lang;
   bool isTablet = getDeviceType() == 'tablet' ? true : false;
-  GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   var brightness = SchedulerBinding.instance.window.platformBrightness;
   var themeMode = ThemeMode.system;
   String currentTheme = "System";
+  // late List<String> extDir;
 
   static NotesBloc get(context) => BlocProvider.of(context);
 
@@ -222,10 +217,8 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
     viewIndex = box.get('viewIndex') ?? 0;
     viewIndexN = box.get('viewIndexN') ?? 0;
     viewIndexV = box.get('viewIndexV') ?? 0;
-    adCounter = box.get('adCounter') ?? 0;
     sbIndex = box.get('sbIndex') ?? 0;
     fabIndex = box.get('fabIndex') ?? 0;
-    isBlack = box.get('isBlack') ?? false;
     showDate = box.get('showDate') ?? true;
     showShadow = box.get('showShadow') ?? false;
     showEdited = box.get('showEdit') ?? true;
@@ -668,6 +661,3 @@ String getDeviceType() {
   final data = MediaQueryData.fromWindow(WidgetsBinding.instance.window);
   return data.size.shortestSide < 750 ? 'phone' : 'tablet';
 }
-
-// Directory? appDocumentsDirectory = await getExternalStorageDirectory();
-// print(appDocumentsDirectory);

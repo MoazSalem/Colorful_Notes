@@ -91,7 +91,6 @@ class Home extends StatelessWidget {
             ];
             return Scaffold(
               resizeToAvoidBottomInset: false,
-              key: B.scaffoldKey,
               body: B.loading
                   ? Container(
                       width: double.infinity,
