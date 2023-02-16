@@ -19,7 +19,7 @@ jobs:
           java-version: '12.x'
       - uses: subosito/flutter-action@v1
         with:
-          flutter-version: '3.3.10'
+          flutter-version: '3.7.3'
       - run: flutter pub get
       - run: |
          flutter build apk --release
