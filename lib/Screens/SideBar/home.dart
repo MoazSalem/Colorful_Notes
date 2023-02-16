@@ -1,11 +1,10 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:notes/Bloc/notes_bloc.dart';
 import 'package:notes/Screens/Actions/edit_note.dart';
 import 'package:notes/Screens/Actions/edit_voice.dart';
 import 'package:notes/Widgets/custom_fab.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:notes/Widgets/notes.dart';
 import 'package:notes/Screens/Actions/create_note.dart';
 import 'package:notes/Screens/Actions/create_voice.dart';
@@ -42,14 +41,15 @@ class HomePage extends StatelessWidget {
                 icon: Icon(
                   Icons.search,
                   size: 30,
-                  color: searchOn ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.onSurfaceVariant, //const Color(0xffff8b34)
+                  color: searchOn
+                      ? Theme.of(context).colorScheme.primary
+                      : Theme.of(context).colorScheme.onSurfaceVariant, //const Color(0xffff8b34)
                 ),
               ),
               IconButton(
-                onPressed: () async {
+                onPressed: () {
                   value < 2 ? value++ : value = 0;
-                  final prefs = await SharedPreferences.getInstance();
-                  await prefs.setInt("viewIndex", value);
+                  B.box.put("viewIndex", value);
                   B.viewIndex = value;
                   B.onViewChanged();
                 },
@@ -68,13 +68,16 @@ class HomePage extends StatelessWidget {
         }
 
         create2() {
-          showBottomSheet(enableDrag: false, context: context, builder: (context) => createVoice(context));
+          showBottomSheet(
+              enableDrag: false, context: context, builder: (context) => createVoice(context));
         }
 
         edit(reverseIndex) {
           showBottomSheet(
             context: context,
-            builder: (context) => notes[reverseIndex]['type'] == 0 ? editNote(note: notes[reverseIndex]) : editVoice(note: notes[reverseIndex]),
+            builder: (context) => notes[reverseIndex]['type'] == 0
+                ? editNote(note: notes[reverseIndex])
+                : editVoice(note: notes[reverseIndex]),
           );
         }
 
@@ -83,11 +86,18 @@ class HomePage extends StatelessWidget {
         }
 
         return Scaffold(
-          backgroundColor: B.isDarkMode ? Theme.of(context).colorScheme.background : Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.6),
-          floatingActionButtonLocation: B.fabIndex == 0 ? FloatingActionButtonLocation.endFloat : FloatingActionButtonLocation.startFloat,
+          backgroundColor: B.isDarkMode
+              ? Theme.of(context).colorScheme.background
+              : Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.6),
+          floatingActionButtonLocation: B.fabIndex == 0
+              ? FloatingActionButtonLocation.endFloat
+              : FloatingActionButtonLocation.startFloat,
           floatingActionButton: B.fabIndex == 0
               ? customFab(context, openFab, B.colors, B.shadeColors, false, 0, 2, create1, create2)
-              : Directionality(textDirection: B.lang == 'en' ? ui.TextDirection.rtl : ui.TextDirection.ltr, child: customFab(context, openFab, B.colors, B.shadeColors, false, 0, 2, create1, create2)),
+              : Directionality(
+                  textDirection: B.lang == 'en' ? ui.TextDirection.rtl : ui.TextDirection.ltr,
+                  child: customFab(
+                      context, openFab, B.colors, B.shadeColors, false, 0, 2, create1, create2)),
           body: ListView(
             padding: EdgeInsets.zero,
             children: [
@@ -102,8 +112,11 @@ class HomePage extends StatelessWidget {
                             onChanged: B.searchHome,
                             maxLines: 1,
                             decoration: InputDecoration(
-                              contentPadding: EdgeInsets.symmetric(vertical: B.isTablet ? 20 : 5, horizontal: 20),
-                              enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.grey.shade300), borderRadius: BorderRadius.circular(0)),
+                              contentPadding: EdgeInsets.symmetric(
+                                  vertical: B.isTablet ? 20 : 5, horizontal: 20),
+                              enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.grey.shade300),
+                                  borderRadius: BorderRadius.circular(0)),
                               hintText: "Search".tr(),
                               filled: true,
                               fillColor: Theme.of(context).cardColor,
@@ -123,13 +136,20 @@ class HomePage extends StatelessWidget {
                               itemCount: notes.length,
                               itemBuilder: (context, index) {
                                 int reverseIndex = notes.length - index - 1;
-                                notes[reverseIndex]["title"] == "" ? noTitle = true : noTitle = false;
-                                notes[reverseIndex]["content"] == "" ? noContent = true : noContent = false;
+                                notes[reverseIndex]["title"] == ""
+                                    ? noTitle = true
+                                    : noTitle = false;
+                                notes[reverseIndex]["content"] == ""
+                                    ? noContent = true
+                                    : noContent = false;
                                 int dateValue = B.calculateDifference(notes[reverseIndex]["time"]);
                                 String date = B.parseDate(notes[reverseIndex]["time"]);
                                 Widget chosenView = B.viewIndex == 0
                                     ? Stack(
-                                        alignment: notes[reverseIndex]["layout"] == 0 || notes[reverseIndex]["layout"] == 2 ? Alignment.topRight : Alignment.topLeft,
+                                        alignment: notes[reverseIndex]["layout"] == 0 ||
+                                                notes[reverseIndex]["layout"] == 2
+                                            ? Alignment.topRight
+                                            : Alignment.topLeft,
                                         children: [
                                           GestureDetector(
                                             onTap: () => edit(reverseIndex),
@@ -148,14 +168,17 @@ class HomePage extends StatelessWidget {
                                           ),
                                           Padding(
                                             padding: EdgeInsets.symmetric(
-                                                horizontal: notes[reverseIndex]["layout"] == 0 || notes[reverseIndex]["layout"] == 2
+                                                horizontal: notes[reverseIndex]["layout"] == 0 ||
+                                                        notes[reverseIndex]["layout"] == 2
                                                     ? 20
                                                     : B.isTablet
                                                         ? 15
                                                         : 10,
                                                 vertical: B.width * 0.02037),
                                             child: IconButton(
-                                                constraints: BoxConstraints.tightFor(width: B.width * 0.083, height: B.width * 0.083),
+                                                constraints: BoxConstraints.tightFor(
+                                                    width: B.width * 0.083,
+                                                    height: B.width * 0.083),
                                                 focusColor: Colors.blue,
                                                 onPressed: () async {
                                                   showDelete(reverseIndex);
@@ -169,7 +192,10 @@ class HomePage extends StatelessWidget {
                                         ],
                                       )
                                     : Stack(
-                                        alignment: notes[reverseIndex]["layout"] == 0 || notes[reverseIndex]["layout"] == 2 ? Alignment.topRight : Alignment.topLeft,
+                                        alignment: notes[reverseIndex]["layout"] == 0 ||
+                                                notes[reverseIndex]["layout"] == 2
+                                            ? Alignment.topRight
+                                            : Alignment.topLeft,
                                         children: [
                                           GestureDetector(
                                             onTap: () => edit(reverseIndex),
@@ -190,12 +216,15 @@ class HomePage extends StatelessWidget {
                                             padding: EdgeInsets.symmetric(
                                                 horizontal: B.isTablet
                                                     ? 8.0
-                                                    : notes[reverseIndex]["layout"] == 0 || notes[reverseIndex]["layout"] == 2
+                                                    : notes[reverseIndex]["layout"] == 0 ||
+                                                            notes[reverseIndex]["layout"] == 2
                                                         ? 10
                                                         : 0,
                                                 vertical: B.isTablet ? 8.0 : 0),
                                             child: IconButton(
-                                                constraints: BoxConstraints.tightFor(width: B.width * 0.083, height: B.width * 0.083),
+                                                constraints: BoxConstraints.tightFor(
+                                                    width: B.width * 0.083,
+                                                    height: B.width * 0.083),
                                                 focusColor: Colors.blue,
                                                 onPressed: () async {
                                                   showDelete(reverseIndex);
@@ -223,12 +252,19 @@ class HomePage extends StatelessWidget {
                               itemCount: notes.length,
                               itemBuilder: (context, index) {
                                 int reverseIndex = notes.length - index - 1;
-                                notes[reverseIndex]["title"] == "" ? noTitle = true : noTitle = false;
-                                notes[reverseIndex]["content"] == "" ? noContent = true : noContent = false;
+                                notes[reverseIndex]["title"] == ""
+                                    ? noTitle = true
+                                    : noTitle = false;
+                                notes[reverseIndex]["content"] == ""
+                                    ? noContent = true
+                                    : noContent = false;
                                 int dateValue = B.calculateDifference(notes[reverseIndex]["time"]);
                                 String date = B.parseDate(notes[reverseIndex]["time"]);
                                 return Stack(
-                                  alignment: notes[reverseIndex]["layout"] == 0 || notes[reverseIndex]["layout"] == 2 ? Alignment.topRight : Alignment.topLeft,
+                                  alignment: notes[reverseIndex]["layout"] == 0 ||
+                                          notes[reverseIndex]["layout"] == 2
+                                      ? Alignment.topRight
+                                      : Alignment.topLeft,
                                   children: [
                                     GestureDetector(
                                       onTap: () => edit(reverseIndex),
@@ -249,12 +285,14 @@ class HomePage extends StatelessWidget {
                                       padding: EdgeInsets.symmetric(
                                           horizontal: B.isTablet
                                               ? 8.0
-                                              : notes[reverseIndex]["layout"] == 0 || notes[reverseIndex]["layout"] == 2
+                                              : notes[reverseIndex]["layout"] == 0 ||
+                                                      notes[reverseIndex]["layout"] == 2
                                                   ? 10
                                                   : 0,
                                           vertical: B.isTablet ? 8.0 : 0),
                                       child: IconButton(
-                                          constraints: BoxConstraints.tightFor(width: B.width * 0.083, height: B.width * 0.083),
+                                          constraints: BoxConstraints.tightFor(
+                                              width: B.width * 0.083, height: B.width * 0.083),
                                           focusColor: Colors.blue,
                                           onPressed: () async {
                                             showDelete(reverseIndex);
@@ -274,7 +312,9 @@ class HomePage extends StatelessWidget {
                       child: Center(
                           child: Text(
                         "N1".tr(),
-                        style: TextStyle(color: Theme.of(context).colorScheme.primary, fontWeight: FontWeight.w400), //B.colors[0]
+                        style: TextStyle(
+                            color: Theme.of(context).colorScheme.primary,
+                            fontWeight: FontWeight.w400), //B.colors[0]
                       )),
                     ),
               const SizedBox(

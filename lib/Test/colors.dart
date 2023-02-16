@@ -7,8 +7,6 @@ class ColorsTest extends StatefulWidget {
   State<ColorsTest> createState() => _ColorsTestState();
 }
 
-
-
 // This Page is used to test material 3 colors
 class _ColorsTestState extends State<ColorsTest> {
   @override

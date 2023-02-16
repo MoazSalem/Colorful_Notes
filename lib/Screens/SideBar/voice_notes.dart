@@ -1,12 +1,11 @@
-import 'package:dynamic_color/dynamic_color.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:dynamic_color/dynamic_color.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:notes/Bloc/notes_bloc.dart';
 import 'package:notes/Screens/Actions/edit_voice.dart';
 import 'package:notes/Widgets/notes.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import '../Actions/create_voice.dart';
+import 'package:notes/Screens/Actions/create_voice.dart';
 
 late bool noTitle;
 bool searchOn = false;
@@ -42,14 +41,17 @@ class VoiceNotesPage extends StatelessWidget {
                 icon: Icon(
                   Icons.search,
                   size: 30,
-                  color: searchOn ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.onSurfaceVariant, //Theme.of(context).textTheme.bodyMedium!.color,
+                  color: searchOn
+                      ? Theme.of(context).colorScheme.primary
+                      : Theme.of(context)
+                          .colorScheme
+                          .onSurfaceVariant, //Theme.of(context).textTheme.bodyMedium!.color,
                 ),
               ),
               IconButton(
-                onPressed: () async {
+                onPressed: () {
                   value < 2 ? value++ : value = 0;
-                  final prefs = await SharedPreferences.getInstance();
-                  await prefs.setInt("viewIndex", value);
+                  B.box.put("viewIndexV", value);
                   B.viewIndexV = value;
                   B.onViewChanged();
                 },
@@ -71,15 +73,20 @@ class VoiceNotesPage extends StatelessWidget {
         }
 
         return Scaffold(
-          backgroundColor: B.isDarkMode ? Theme.of(context).colorScheme.background : Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.6),
-          floatingActionButtonLocation: B.fabIndex == 0 ? FloatingActionButtonLocation.endFloat : FloatingActionButtonLocation.startFloat,
+          backgroundColor: B.isDarkMode
+              ? Theme.of(context).colorScheme.background
+              : Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.6),
+          floatingActionButtonLocation: B.fabIndex == 0
+              ? FloatingActionButtonLocation.endFloat
+              : FloatingActionButtonLocation.startFloat,
           floatingActionButton: FloatingActionButton(
             splashColor: B.colors[1].harmonizeWith(Theme.of(context).colorScheme.primary),
             elevation: 0,
             backgroundColor: Theme.of(context).colorScheme.primary,
             //B.colors[3].harmonizeWith(Theme.of(context).colorScheme.primary),
             onPressed: () async {
-              showBottomSheet(enableDrag: false, context: context, builder: (context) => createVoice(context));
+              showBottomSheet(
+                  enableDrag: false, context: context, builder: (context) => createVoice(context));
             },
             child: Icon(
               Icons.add,
@@ -100,8 +107,11 @@ class VoiceNotesPage extends StatelessWidget {
                             onChanged: B.searchVoice,
                             maxLines: 1,
                             decoration: InputDecoration(
-                              contentPadding: EdgeInsets.symmetric(vertical: B.isTablet ? 20 : 5, horizontal: 20),
-                              enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.grey.shade300), borderRadius: BorderRadius.circular(0)),
+                              contentPadding: EdgeInsets.symmetric(
+                                  vertical: B.isTablet ? 20 : 5, horizontal: 20),
+                              enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.grey.shade300),
+                                  borderRadius: BorderRadius.circular(0)),
                               hintText: "Search".tr(),
                               filled: true,
                               fillColor: Theme.of(context).cardColor,
@@ -121,7 +131,9 @@ class VoiceNotesPage extends StatelessWidget {
                               itemCount: notes.length,
                               itemBuilder: (context, index) {
                                 int reverseIndex = notes.length - index - 1;
-                                notes[reverseIndex]["title"] == "" ? noTitle = true : noTitle = false;
+                                notes[reverseIndex]["title"] == ""
+                                    ? noTitle = true
+                                    : noTitle = false;
                                 int dateValue = B.calculateDifference(notes[reverseIndex]["time"]);
                                 String date = B.parseDate(notes[reverseIndex]["time"]);
                                 Widget chosenView = B.viewIndexV == 0
@@ -144,9 +156,13 @@ class VoiceNotesPage extends StatelessWidget {
                                                 showEdited: B.showEdited),
                                           ),
                                           Padding(
-                                            padding: EdgeInsets.symmetric(horizontal: B.isTablet ? 15 : 20, vertical: B.width * 0.02037),
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: B.isTablet ? 15 : 20,
+                                                vertical: B.width * 0.02037),
                                             child: IconButton(
-                                                constraints: BoxConstraints.tightFor(width: B.width * 0.083, height: B.width * 0.083),
+                                                constraints: BoxConstraints.tightFor(
+                                                    width: B.width * 0.083,
+                                                    height: B.width * 0.083),
                                                 focusColor: Colors.blue,
                                                 onPressed: () async {
                                                   showDelete(reverseIndex);
@@ -178,9 +194,13 @@ class VoiceNotesPage extends StatelessWidget {
                                                 showEdited: B.showEdited),
                                           ),
                                           Padding(
-                                            padding: EdgeInsets.symmetric(horizontal: B.isTablet ? 8.0 : 10, vertical: B.isTablet ? 8.0 : 0),
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: B.isTablet ? 8.0 : 10,
+                                                vertical: B.isTablet ? 8.0 : 0),
                                             child: IconButton(
-                                                constraints: BoxConstraints.tightFor(width: B.width * 0.083, height: B.width * 0.083),
+                                                constraints: BoxConstraints.tightFor(
+                                                    width: B.width * 0.083,
+                                                    height: B.width * 0.083),
                                                 focusColor: Colors.blue,
                                                 onPressed: () async {
                                                   showDelete(reverseIndex);
@@ -208,7 +228,9 @@ class VoiceNotesPage extends StatelessWidget {
                               itemCount: notes.length,
                               itemBuilder: (context, index) {
                                 int reverseIndex = notes.length - index - 1;
-                                notes[reverseIndex]["title"] == "" ? noTitle = true : noTitle = false;
+                                notes[reverseIndex]["title"] == ""
+                                    ? noTitle = true
+                                    : noTitle = false;
                                 int dateValue = B.calculateDifference(notes[reverseIndex]["time"]);
                                 String date = B.parseDate(notes[reverseIndex]["time"]);
                                 return Stack(
@@ -230,9 +252,12 @@ class VoiceNotesPage extends StatelessWidget {
                                           showEdited: B.showEdited),
                                     ),
                                     Padding(
-                                      padding: EdgeInsets.symmetric(horizontal: B.isTablet ? 8.0 : 10, vertical: B.isTablet ? 8.0 : 0),
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: B.isTablet ? 8.0 : 10,
+                                          vertical: B.isTablet ? 8.0 : 0),
                                       child: IconButton(
-                                          constraints: BoxConstraints.tightFor(width: B.width * 0.083, height: B.width * 0.083),
+                                          constraints: BoxConstraints.tightFor(
+                                              width: B.width * 0.083, height: B.width * 0.083),
                                           focusColor: Colors.blue,
                                           onPressed: () async {
                                             showDelete(reverseIndex);
@@ -252,7 +277,9 @@ class VoiceNotesPage extends StatelessWidget {
                       child: Center(
                           child: Text(
                         "N3".tr(),
-                        style: TextStyle(color: Theme.of(context).colorScheme.primary, fontWeight: FontWeight.w400), //B.colors[3]
+                        style: TextStyle(
+                            color: Theme.of(context).colorScheme.primary,
+                            fontWeight: FontWeight.w400), //B.colors[3]
                       )),
                     ),
               const SizedBox(

@@ -1,10 +1,9 @@
-import 'package:dynamic_color/dynamic_color.dart';
-import 'package:easy_localization/easy_localization.dart' hide TextDirection;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
+import 'package:dynamic_color/dynamic_color.dart';
+import 'package:easy_localization/easy_localization.dart' hide TextDirection;
 import 'package:notes/Bloc/notes_bloc.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 final TextEditingController titleC = TextEditingController();
 final TextEditingController contentC = TextEditingController();
@@ -48,15 +47,19 @@ Widget createNote(BuildContext context, bool isML) {
                             padding: const EdgeInsets.symmetric(horizontal: 12.0),
                             child: GestureDetector(
                               onTap: () async {
-                                final prefs = await SharedPreferences.getInstance(), time = DateTime.now().toString();
+                                time = DateTime.now().toString();
                                 title = titleC.text;
                                 content = contentC.text;
                                 titleC.text != "" || contentC.text != ""
                                     ? {
-                                        await B.insertToDatabase(title: title, time: time, content: content, index: chosenIndex, layout: getLayout()),
+                                        await B.insertToDatabase(
+                                            title: title,
+                                            time: time,
+                                            content: content,
+                                            index: chosenIndex,
+                                            layout: getLayout()),
                                         titleC.text = "",
                                         contentC.text = "",
-                                        await prefs.setInt("adCounter", B.adCounter),
                                         Navigator.pop(context),
                                         B.onCreateNote()
                                       }
@@ -67,7 +70,8 @@ Widget createNote(BuildContext context, bool isML) {
                                 radius: 25,
                                 child: Icon(
                                   Icons.arrow_back,
-                                  color: B.colors[chosenIndex].harmonizeWith(Theme.of(context).colorScheme.primary),
+                                  color: B.colors[chosenIndex]
+                                      .harmonizeWith(Theme.of(context).colorScheme.primary),
                                   size: 36,
                                 ),
                               ),
@@ -86,7 +90,12 @@ Widget createNote(BuildContext context, bool isML) {
                           content = contentC.text;
                           titleC.text != "" || contentC.text != ""
                               ? {
-                                  await B.insertToDatabase(title: title, time: time, content: content, index: chosenIndex, layout: getLayout()),
+                                  await B.insertToDatabase(
+                                      title: title,
+                                      time: time,
+                                      content: content,
+                                      index: chosenIndex,
+                                      layout: getLayout()),
                                   titleC.text = "",
                                   contentC.text = "",
                                   Navigator.pop(context),
@@ -99,7 +108,8 @@ Widget createNote(BuildContext context, bool isML) {
                           radius: 25,
                           child: Icon(
                             Icons.done,
-                            color: B.colors[chosenIndex].harmonizeWith(Theme.of(context).colorScheme.primary),
+                            color: B.colors[chosenIndex]
+                                .harmonizeWith(Theme.of(context).colorScheme.primary),
                             size: 36,
                           ),
                         ),
@@ -118,7 +128,9 @@ Widget createNote(BuildContext context, bool isML) {
                       flex: B.isTablet ? 8 : 4,
                       child: ListView(children: [
                         Padding(
-                          padding: B.lang == 'en' ? EdgeInsets.only(left: B.isTablet ? 60 : 20) : EdgeInsets.only(right: B.isTablet ? 60 : 20),
+                          padding: B.lang == 'en'
+                              ? EdgeInsets.only(left: B.isTablet ? 60 : 20)
+                              : EdgeInsets.only(right: B.isTablet ? 60 : 20),
                           child: ValueListenableBuilder<TextDirection>(
                             valueListenable: _titleDir,
                             builder: (context, value, child) => TextFormField(
@@ -135,8 +147,14 @@ Widget createNote(BuildContext context, bool isML) {
                                 autofocus: true,
                                 textInputAction: TextInputAction.done,
                                 controller: titleC,
-                                style: TextStyle(color: Colors.white, fontSize: B.isTablet ? 60 : 36, fontWeight: FontWeight.w500),
-                                decoration: InputDecoration(border: InputBorder.none, hintText: "Title".tr(), hintStyle: const TextStyle(color: Colors.black54))),
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: B.isTablet ? 60 : 36,
+                                    fontWeight: FontWeight.w500),
+                                decoration: InputDecoration(
+                                    border: InputBorder.none,
+                                    hintText: "Title".tr(),
+                                    hintStyle: const TextStyle(color: Colors.black54))),
                           ),
                         ),
                         const SizedBox(
@@ -153,7 +171,9 @@ Widget createNote(BuildContext context, bool isML) {
                                 ),
                               )
                             : Padding(
-                                padding: B.lang == 'en' ? EdgeInsets.only(left: B.isTablet ? 60 : 20) : EdgeInsets.only(right: B.isTablet ? 60 : 20),
+                                padding: B.lang == 'en'
+                                    ? EdgeInsets.only(left: B.isTablet ? 60 : 20)
+                                    : EdgeInsets.only(right: B.isTablet ? 60 : 20),
                                 child: ValueListenableBuilder<TextDirection>(
                                   valueListenable: _contentDir,
                                   builder: (context, value, child) => TextFormField(
@@ -168,8 +188,12 @@ Widget createNote(BuildContext context, bool isML) {
                                       controller: contentC,
                                       maxLines: 20,
                                       showCursor: true,
-                                      style: TextStyle(color: Colors.white, fontSize: B.isTablet ? 40 : 24),
-                                      decoration: InputDecoration(border: InputBorder.none, hintText: "Content".tr(), hintStyle: const TextStyle(color: Colors.black54))),
+                                      style: TextStyle(
+                                          color: Colors.white, fontSize: B.isTablet ? 40 : 24),
+                                      decoration: InputDecoration(
+                                          border: InputBorder.none,
+                                          hintText: "Content".tr(),
+                                          hintStyle: const TextStyle(color: Colors.black54))),
                                 ),
                               ),
                       ]),
@@ -188,10 +212,12 @@ Widget createNote(BuildContext context, bool isML) {
                               padding: const EdgeInsets.all(6.0),
                               child: CircleAvatar(
                                 radius: 25,
-                                backgroundColor: chosenIndex == index ? Colors.white : Colors.white54,
+                                backgroundColor:
+                                    chosenIndex == index ? Colors.white : Colors.white54,
                                 child: CircleAvatar(
                                   radius: 20,
-                                  backgroundColor: B.colors[index].harmonizeWith(Theme.of(context).colorScheme.primary),
+                                  backgroundColor: B.colors[index]
+                                      .harmonizeWith(Theme.of(context).colorScheme.primary),
                                 ),
                               ),
                             ),

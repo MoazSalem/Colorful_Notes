@@ -1,6 +1,6 @@
+import 'package:flutter/material.dart';
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:easy_localization/easy_localization.dart' hide TextDirection;
-import 'package:flutter/material.dart';
 import 'package:notes/Widgets/sound_player.dart';
 
 bool isTablet = getDeviceType() == 'tablet' ? true : false;

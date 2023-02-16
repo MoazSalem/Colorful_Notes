@@ -1,10 +1,10 @@
-import 'package:dynamic_color/dynamic_color.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:dynamic_color/dynamic_color.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'package:notes/Bloc/notes_bloc.dart';
 import 'package:record/record.dart';
-import 'package:stop_watch_timer/stop_watch_timer.dart';
 
 final record = Record();
 final TextEditingController titleC = TextEditingController();

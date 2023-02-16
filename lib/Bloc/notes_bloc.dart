@@ -8,6 +8,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive/hive.dart';
 import 'package:material_dialogs/material_dialogs.dart';
 import 'package:material_dialogs/widgets/buttons/icon_button.dart';
 import 'package:material_dialogs/widgets/buttons/icon_outline_button.dart';
@@ -17,8 +18,8 @@ import 'package:notes/Screens/SideBar/notes.dart';
 import 'package:notes/Screens/SideBar/voice_notes.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
+
 // import 'package:path/path.dart' as path;
 // import 'package:path/path.dart';
 // import 'package:external_path/external_path.dart';
@@ -29,6 +30,7 @@ part 'notes_state.dart';
 
 class NotesBloc extends Bloc<NotesEvent, NotesState> {
   late Database database;
+  late Box box;
   late int viewIndex;
   late int viewIndexN;
   late int viewIndexV;
@@ -71,8 +73,9 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
 
   static NotesBloc get(context) => BlocProvider.of(context);
 
-  NotesBloc() : super(NotesInitial()) {
+  NotesBloc({required Box gBox}) : super(NotesInitial()) {
     on<NotesEvent>((event, emit) {});
+    box = gBox;
   }
 
   startPage() async {
@@ -162,8 +165,7 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
   }
 
   getHomePage() async {
-    final prefs = await SharedPreferences.getInstance();
-    openPage = prefs.getString('Pages') ?? 'Home';
+    openPage = box.get('Pages') ?? 'Home';
     openPage == 'Home'
         ? currentIndex = 0
         : openPage == 'Text'
@@ -250,45 +252,55 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
   }
 
   showDeleteDialog(BuildContext context, List<Map> notes, int index) {
-    return Dialogs.materialDialog(msg: "msg".tr(), title: "DeleteN".tr(), color: Theme.of(context).cardColor, context: context, actions: [
-      IconsOutlineButton(
-        onPressed: () {
-          Navigator.of(context).pop();
-        },
-        text: 'Cancel'.tr(),
-        iconData: Icons.cancel_outlined,
-        textStyle: const TextStyle(color: Colors.grey),
-        iconColor: Colors.grey,
-        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0))),
-      ),
-      IconsButton(
-        onPressed: () async {
-          notes[index]["type"] == 1
-              ? {
-                  await deleteFile(notes[index]["content"]),
-                  await deleteFromDatabase(id: notes[index]["id"]),
-                }
-              : {
-                  await deleteFromDatabase(id: notes[index]["id"]),
-                };
-          Navigator.of(context).pop();
-          onDelete();
-        },
-        text: 'Delete'.tr(),
-        iconData: Icons.delete,
-        color: colors[notes[index]['cindex']].harmonizeWith(Theme.of(context).colorScheme.primary),
-        textStyle: const TextStyle(color: Colors.white),
-        iconColor: Colors.white,
-        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0))),
-        padding: const EdgeInsets.symmetric(vertical: 10),
-      ),
-    ]);
+    return Dialogs.materialDialog(
+        msg: "msg".tr(),
+        title: "DeleteN".tr(),
+        color: Theme.of(context).cardColor,
+        context: context,
+        actions: [
+          IconsOutlineButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            text: 'Cancel'.tr(),
+            iconData: Icons.cancel_outlined,
+            textStyle: const TextStyle(color: Colors.grey),
+            iconColor: Colors.grey,
+            shape:
+                const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0))),
+          ),
+          IconsButton(
+            onPressed: () async {
+              notes[index]["type"] == 1
+                  ? {
+                      await deleteFile(notes[index]["content"]),
+                      await deleteFromDatabase(id: notes[index]["id"]),
+                    }
+                  : {
+                      await deleteFromDatabase(id: notes[index]["id"]),
+                    };
+              Navigator.of(context).pop();
+              onDelete();
+            },
+            text: 'Delete'.tr(),
+            iconData: Icons.delete,
+            color:
+                colors[notes[index]['cindex']].harmonizeWith(Theme.of(context).colorScheme.primary),
+            textStyle: const TextStyle(color: Colors.white),
+            iconColor: Colors.white,
+            shape:
+                const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0))),
+            padding: const EdgeInsets.symmetric(vertical: 10),
+          ),
+        ]);
   }
 
   int calculateDifference(String stringDate) {
     var date = DateTime.parse(stringDate);
     DateTime now = DateTime.now();
-    return DateTime(date.year, date.month, date.day).difference(DateTime(now.year, now.month, now.day)).inDays;
+    return DateTime(date.year, date.month, date.day)
+        .difference(DateTime(now.year, now.month, now.day))
+        .inDays;
   }
 
   String parseDate(String stringDate) {
@@ -303,7 +315,9 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
     final searched = allNotesMap.where((note) {
       final title = note['title'].toString().toLowerCase();
       final content = note['content'].toString().toLowerCase();
-      return note['type'] == 0 ? title.contains(query.toLowerCase()) || content.contains(query.toLowerCase()) : title.contains(query.toLowerCase());
+      return note['type'] == 0
+          ? title.contains(query.toLowerCase()) || content.contains(query.toLowerCase())
+          : title.contains(query.toLowerCase());
     }).toList();
     searchedALL = searched;
     onSearch();
@@ -341,27 +355,27 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
   }
 
   Future<void> startDatabase() async {
-    final prefs = await SharedPreferences.getInstance();
     await openDatabase('notes.db', version: 1, onCreate: (db, version) async {
-      await db.execute('CREATE TABLE Notes (id INTEGER PRIMARY KEY, title TEXT, content TEXT, time Text, cindex INTEGER, tindex INTEGER, type INTEGER, edited Text, layout INTEGER, extra Text)');
+      await db.execute(
+          'CREATE TABLE Notes (id INTEGER PRIMARY KEY, title TEXT, content TEXT, time Text, cindex INTEGER, tindex INTEGER, type INTEGER, edited Text, layout INTEGER, extra Text)');
     }, onOpen: (db) async {})
         .then((value) => database = value);
     isDarkMode = brightness == Brightness.dark;
-    viewIndex = prefs.getInt('viewIndex') ?? 0;
-    viewIndexN = prefs.getInt('viewIndexN') ?? 0;
-    viewIndexV = prefs.getInt('viewIndexV') ?? 0;
-    adCounter = prefs.getInt('adCounter') ?? 0;
-    sbIndex = prefs.getInt('sbIndex') ?? 0;
-    fabIndex = prefs.getInt('fabIndex') ?? 0;
-    isBlack = prefs.getBool('isBlack') ?? false;
-    showDate = prefs.getBool('showDate') ?? true;
-    showShadow = prefs.getBool('showShadow') ?? false;
-    showEdited = prefs.getBool('showEdit') ?? true;
-    colorful = prefs.getBool('colorful') ?? true;
-    darkColors = prefs.getBool('darkColors') ?? false;
-    harmonizeColor = prefs.getBool('harmonizeColor') ?? false;
+    viewIndex = box.get('viewIndex') ?? 0;
+    viewIndexN = box.get('viewIndexN') ?? 0;
+    viewIndexV = box.get('viewIndexV') ?? 0;
+    adCounter = box.get('adCounter') ?? 0;
+    sbIndex = box.get('sbIndex') ?? 0;
+    fabIndex = box.get('fabIndex') ?? 0;
+    isBlack = box.get('isBlack') ?? false;
+    showDate = box.get('showDate') ?? true;
+    showShadow = box.get('showShadow') ?? false;
+    showEdited = box.get('showEdit') ?? true;
+    colorful = box.get('colorful') ?? true;
+    darkColors = box.get('darkColors') ?? false;
+    harmonizeColor = box.get('harmonizeColor') ?? false;
     colors = darkColors ? darkerColors : lightColors;
-    var c = prefs.getInt('themeMode') ?? 2;
+    var c = box.get('themeMode') ?? 2;
     c == 0
         ? {themeMode = ThemeMode.light, currentTheme = "Light"}
         : c == 1
@@ -387,10 +401,18 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
   }
 
   Future<void> insertToDatabase(
-      {required String title, required String content, required int index, required String time, required int layout, int? type = 0, int? tIndex = 0, String? edited = 'no'}) async {
+      {required String title,
+      required String content,
+      required int index,
+      required String time,
+      required int layout,
+      int? type = 0,
+      int? tIndex = 0,
+      String? edited = 'no'}) async {
     await database.transaction((txn) async {
       txn
-          .rawInsert('INSERT INTO Notes(title, content, cindex, tindex, type, time, edited ,layout, extra) VALUES("$title", "$content", "$index", "$tIndex", "$type","$time","$edited","$layout","")')
+          .rawInsert(
+              'INSERT INTO Notes(title, content, cindex, tindex, type, time, edited ,layout, extra) VALUES("$title", "$content", "$index", "$tIndex", "$type","$time","$edited","$layout","")')
           .then((value) {});
     });
     await refreshDatabase();
@@ -421,7 +443,8 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
       required int layout,
       int? tIndex = 0,
       String? edited = 'yes'}) async {
-    await database.rawUpdate('UPDATE Notes SET title = ?, content = ?, time = ?, cindex = ?, tindex = ?, type = ?, edited = ?, layout = ?, extra = ? WHERE id = ?',
+    await database.rawUpdate(
+        'UPDATE Notes SET title = ?, content = ?, time = ?, cindex = ?, tindex = ?, type = ?, edited = ?, layout = ?, extra = ? WHERE id = ?',
         [title, content, time, index, tIndex, type, edited, layout, "", id]);
     await refreshDatabase();
   }
@@ -437,7 +460,10 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
       height: 20,
       child: Divider(
         thickness: 1,
-        color: Theme.of(context).colorScheme.outline.withOpacity(0.2), //Theme.of(context).highlightColor.withOpacity(0.3),
+        color: Theme.of(context)
+            .colorScheme
+            .outline
+            .withOpacity(0.2), //Theme.of(context).highlightColor.withOpacity(0.3),
       ),
     );
   }
@@ -464,7 +490,10 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
             children: [
               Text(
                 title,
-                style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onSurfaceVariant),
+                style: TextStyle(
+                    fontSize: 40,
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).colorScheme.onSurfaceVariant),
               ),
               Padding(
                 padding: const EdgeInsets.only(right: 5),

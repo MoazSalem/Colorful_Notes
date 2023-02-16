@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:dynamic_color/dynamic_color.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:notes/Bloc/notes_bloc.dart';
 import 'package:notes/Data/theme.dart';
@@ -11,9 +11,9 @@ import 'Screens/on_boarding.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
-  final prefs = await SharedPreferences.getInstance();
-  final bool showHome = prefs.getBool('showHome') ?? false;
-  final bool isBlack = prefs.getBool('isBlack') ?? false;
+  await Hive.initFlutter();
+  Box box = await Hive.openBox("settingsBox");
+  final bool showHome = box.get('showHome') ?? false;
   runApp(EasyLocalization(
       useOnlyLangCode: true,
       supportedLocales: const [Locale('en'), Locale('ar')],
@@ -21,20 +21,20 @@ void main() async {
       fallbackLocale: const Locale('en'),
       child: MyApp(
         showHome: showHome,
-        isBlack: isBlack,
+        box: box,
       )));
 }
 
 class MyApp extends StatelessWidget {
   final bool showHome;
-  final bool isBlack;
+  final Box box;
 
-  const MyApp({Key? key, required this.showHome, required this.isBlack}) : super(key: key);
+  const MyApp({Key? key, required this.showHome, required this.box}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => NotesBloc()..startPage(),
+      create: (context) => NotesBloc(gBox: box)..startPage(),
       child: BlocConsumer<NotesBloc, NotesState>(
         listener: (context, state) {},
         builder: (context, state) {
@@ -56,7 +56,12 @@ class MyApp extends StatelessWidget {
                 localizationsDelegates: context.localizationDelegates,
                 supportedLocales: context.supportedLocales,
                 locale: context.locale,
-                home: showHome ? Home(currentTheme: B.currentTheme) : IntroPage(currentTheme: B.currentTheme));
+                home: showHome
+                    ? Home(currentTheme: B.currentTheme)
+                    : IntroPage(
+                        currentTheme: B.currentTheme,
+                        box: box,
+                      ));
           });
         },
       ),

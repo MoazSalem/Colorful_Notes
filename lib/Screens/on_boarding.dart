@@ -1,18 +1,20 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:hive/hive.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'home_screen.dart';
 import 'package:lottie/lottie.dart';
+import 'package:notes/Screens/home_screen.dart';
 
 bool isLastPage = false;
 bool lang = false;
 
 class IntroPage extends StatefulWidget {
   final String currentTheme;
-  const IntroPage({Key? key, required this.currentTheme}) : super(key: key);
+  final Box box;
+
+  const IntroPage({Key? key, required this.currentTheme, required this.box}) : super(key: key);
 
   @override
   State<IntroPage> createState() => _IntroPageState();
@@ -27,7 +29,9 @@ class _IntroPageState extends State<IntroPage> {
     bool isDarkMode = brightness == Brightness.dark;
     return AnnotatedRegion<SystemUiOverlayStyle>(
         value: SystemUiOverlayStyle(
-          statusBarColor: isDarkMode ? Theme.of(context).colorScheme.background : Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.6),
+          statusBarColor: isDarkMode
+              ? Theme.of(context).colorScheme.background
+              : Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.6),
           statusBarIconBrightness: isDarkMode ? Brightness.light : Brightness.dark,
           // For Android (dark icons)
           statusBarBrightness: isDarkMode ? Brightness.light : Brightness.dark,
@@ -51,7 +55,9 @@ class _IntroPageState extends State<IntroPage> {
                     Padding(
                       padding: EdgeInsets.only(bottom: lang ? 0 : 20),
                       child: Container(
-                        color: isDarkMode ? Theme.of(context).colorScheme.background : Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.6),
+                        color: isDarkMode
+                            ? Theme.of(context).colorScheme.background
+                            : Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.6),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -60,7 +66,9 @@ class _IntroPageState extends State<IntroPage> {
                                 height: 370,
                                 child: Center(
                                   child: Lottie.asset(
-                                    lang ? 'assets/animations/hello2.json' : 'assets/animations/hello.json',
+                                    lang
+                                        ? 'assets/animations/hello2.json'
+                                        : 'assets/animations/hello.json',
                                     reverse: true,
                                   ),
                                 )),
@@ -69,7 +77,10 @@ class _IntroPageState extends State<IntroPage> {
                               child: Text(
                                 textAlign: TextAlign.center,
                                 "T1".tr(),
-                                style: TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 24, fontWeight: FontWeight.bold),
+                                style: TextStyle(
+                                    color: Theme.of(context).colorScheme.primary,
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold),
                               ),
                             ),
                             Padding(
@@ -77,7 +88,10 @@ class _IntroPageState extends State<IntroPage> {
                               child: Text(
                                 textAlign: TextAlign.center,
                                 "B1".tr(),
-                                style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant, fontSize: 16, fontWeight: FontWeight.w400),
+                                style: TextStyle(
+                                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w400),
                               ),
                             ),
                           ],
@@ -85,7 +99,9 @@ class _IntroPageState extends State<IntroPage> {
                       ),
                     ),
                     Container(
-                      color: isDarkMode ? Theme.of(context).colorScheme.background : Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.6),
+                      color: isDarkMode
+                          ? Theme.of(context).colorScheme.background
+                          : Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.6),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -102,7 +118,10 @@ class _IntroPageState extends State<IntroPage> {
                             child: Text(
                               textAlign: TextAlign.center,
                               "T2".tr(),
-                              style: TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 24, fontWeight: FontWeight.bold),
+                              style: TextStyle(
+                                  color: Theme.of(context).colorScheme.primary,
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold),
                             ),
                           ),
                           Padding(
@@ -110,14 +129,19 @@ class _IntroPageState extends State<IntroPage> {
                             child: Text(
                               textAlign: TextAlign.center,
                               "B2".tr(),
-                              style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant, fontSize: 16, fontWeight: FontWeight.w400),
+                              style: TextStyle(
+                                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w400),
                             ),
                           ),
                         ],
                       ),
                     ),
                     Container(
-                      color: isDarkMode ? Theme.of(context).colorScheme.background : Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.6),
+                      color: isDarkMode
+                          ? Theme.of(context).colorScheme.background
+                          : Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.6),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -139,7 +163,10 @@ class _IntroPageState extends State<IntroPage> {
                             child: Text(
                               textAlign: TextAlign.center,
                               "T3".tr(),
-                              style: TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 24, fontWeight: FontWeight.bold),
+                              style: TextStyle(
+                                  color: Theme.of(context).colorScheme.primary,
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold),
                             ),
                           ),
                           Padding(
@@ -147,14 +174,19 @@ class _IntroPageState extends State<IntroPage> {
                             child: Text(
                               textAlign: TextAlign.center,
                               "B3".tr(),
-                              style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant, fontSize: 16, fontWeight: FontWeight.w400),
+                              style: TextStyle(
+                                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w400),
                             ),
                           ),
                         ],
                       ),
                     ),
                     Container(
-                      color: isDarkMode ? Theme.of(context).colorScheme.background : Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.6),
+                      color: isDarkMode
+                          ? Theme.of(context).colorScheme.background
+                          : Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.6),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -173,7 +205,10 @@ class _IntroPageState extends State<IntroPage> {
                             child: Text(
                               textAlign: TextAlign.center,
                               "T5".tr(),
-                              style: TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 24, fontWeight: FontWeight.bold),
+                              style: TextStyle(
+                                  color: Theme.of(context).colorScheme.primary,
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold),
                             ),
                           ),
                           const Padding(
@@ -181,7 +216,8 @@ class _IntroPageState extends State<IntroPage> {
                             child: Text(
                               textAlign: TextAlign.center,
                               "",
-                              style: TextStyle(color: Colors.grey, fontSize: 18, fontWeight: FontWeight.w400),
+                              style: TextStyle(
+                                  color: Colors.grey, fontSize: 18, fontWeight: FontWeight.w400),
                             ),
                           ),
                           Padding(
@@ -192,9 +228,11 @@ class _IntroPageState extends State<IntroPage> {
                                 child: ElevatedButton(
                                   child: const Text("START"),
                                   onPressed: () async {
-                                    final prefs = await SharedPreferences.getInstance();
-                                    prefs.setBool("showHome", true);
-                                    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => Home(currentTheme: widget.currentTheme,)));
+                                    widget.box.put("showHome", true);
+                                    Navigator.of(context).pushReplacement(MaterialPageRoute(
+                                        builder: (context) => Home(
+                                              currentTheme: widget.currentTheme,
+                                            )));
                                   },
                                 ),
                               ))
@@ -217,9 +255,15 @@ class _IntroPageState extends State<IntroPage> {
                       child: lang
                           ? Text(
                               "عر",
-                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 19, color: Theme.of(context).colorScheme.primary),
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 19,
+                                  color: Theme.of(context).colorScheme.primary),
                             )
-                          : Text("En", style: TextStyle(fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.primary)),
+                          : Text("En",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Theme.of(context).colorScheme.primary)),
                     ),
                   ),
                 )
@@ -237,7 +281,10 @@ class _IntroPageState extends State<IntroPage> {
                       TextButton(
                         child: Text(
                           "Skip".tr(),
-                          style: TextStyle(fontWeight: FontWeight.w700, fontSize: 20, color: Theme.of(context).colorScheme.primary),
+                          style: TextStyle(
+                              fontWeight: FontWeight.w700,
+                              fontSize: 20,
+                              color: Theme.of(context).colorScheme.primary),
                         ),
                         onPressed: () => controller.jumpToPage(3),
                       ),
@@ -245,12 +292,21 @@ class _IntroPageState extends State<IntroPage> {
                         child: SmoothPageIndicator(
                           controller: controller,
                           count: 4,
-                          effect: WormEffect(activeDotColor: Theme.of(context).colorScheme.primary, dotHeight: 5, dotWidth: 10, spacing: 5),
+                          effect: WormEffect(
+                              activeDotColor: Theme.of(context).colorScheme.primary,
+                              dotHeight: 5,
+                              dotWidth: 10,
+                              spacing: 5),
                         ),
                       ),
                       TextButton(
-                        child: Text("Next".tr(), style: TextStyle(fontWeight: FontWeight.w600, fontSize: 20, color: Theme.of(context).colorScheme.primary)),
-                        onPressed: () => controller.nextPage(duration: const Duration(milliseconds: 500), curve: Curves.easeInOut),
+                        child: Text("Next".tr(),
+                            style: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                fontSize: 20,
+                                color: Theme.of(context).colorScheme.primary)),
+                        onPressed: () => controller.nextPage(
+                            duration: const Duration(milliseconds: 500), curve: Curves.easeInOut),
                       )
                     ]),
                   ),

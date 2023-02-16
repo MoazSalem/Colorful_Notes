@@ -1,11 +1,10 @@
-import 'package:dynamic_color/dynamic_color.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:dynamic_color/dynamic_color.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:notes/Bloc/notes_bloc.dart';
 import 'package:notes/Screens/Actions/create_note.dart';
 import 'package:notes/Screens/Actions/edit_note.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:notes/Widgets/notes.dart';
 
 bool noTitle = false;
@@ -39,14 +38,15 @@ class NotesPage extends StatelessWidget {
                 icon: Icon(
                   Icons.search,
                   size: 30,
-                  color: searchOn ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.onSurfaceVariant,
+                  color: searchOn
+                      ? Theme.of(context).colorScheme.primary
+                      : Theme.of(context).colorScheme.onSurfaceVariant,
                 ),
               ),
               IconButton(
-                onPressed: () async {
+                onPressed: () {
                   value < 2 ? value++ : value = 0;
-                  final prefs = await SharedPreferences.getInstance();
-                  await prefs.setInt("viewIndex", value);
+                  B.box.put("viewIndexN", value);
                   B.viewIndexN = value;
                   B.onViewChanged();
                 },
@@ -76,8 +76,12 @@ class NotesPage extends StatelessWidget {
         }
 
         return Scaffold(
-          backgroundColor: B.isDarkMode ? Theme.of(context).colorScheme.background : Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.6),
-          floatingActionButtonLocation: B.fabIndex == 0 ? FloatingActionButtonLocation.endFloat : FloatingActionButtonLocation.startFloat,
+          backgroundColor: B.isDarkMode
+              ? Theme.of(context).colorScheme.background
+              : Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.6),
+          floatingActionButtonLocation: B.fabIndex == 0
+              ? FloatingActionButtonLocation.endFloat
+              : FloatingActionButtonLocation.startFloat,
           floatingActionButton: FloatingActionButton(
             splashColor: B.colors[0].harmonizeWith(Theme.of(context).colorScheme.primary),
             elevation: 0,
@@ -105,8 +109,11 @@ class NotesPage extends StatelessWidget {
                             onChanged: B.searchNotes,
                             maxLines: 1,
                             decoration: InputDecoration(
-                              contentPadding: EdgeInsets.symmetric(vertical: B.isTablet ? 20 : 5, horizontal: 20),
-                              enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.grey.shade300), borderRadius: BorderRadius.circular(0)),
+                              contentPadding: EdgeInsets.symmetric(
+                                  vertical: B.isTablet ? 20 : 5, horizontal: 20),
+                              enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.grey.shade300),
+                                  borderRadius: BorderRadius.circular(0)),
                               hintText: "Search".tr(),
                               filled: true,
                               fillColor: Theme.of(context).cardColor,
@@ -126,13 +133,19 @@ class NotesPage extends StatelessWidget {
                               itemCount: notes.length,
                               itemBuilder: (context, index) {
                                 int reverseIndex = notes.length - index - 1;
-                                notes[reverseIndex]["title"] == "" ? noTitle = true : noTitle = false;
-                                notes[reverseIndex]["content"] == "" ? noContent = true : noContent = false;
+                                notes[reverseIndex]["title"] == ""
+                                    ? noTitle = true
+                                    : noTitle = false;
+                                notes[reverseIndex]["content"] == ""
+                                    ? noContent = true
+                                    : noContent = false;
                                 int dateValue = B.calculateDifference(notes[reverseIndex]["time"]);
                                 String date = B.parseDate(notes[reverseIndex]["time"]);
                                 Widget chosenView = B.viewIndexN == 0
                                     ? Stack(
-                                        alignment: notes[reverseIndex]["layout"] == 0 ? Alignment.topRight : Alignment.topLeft,
+                                        alignment: notes[reverseIndex]["layout"] == 0
+                                            ? Alignment.topRight
+                                            : Alignment.topLeft,
                                         children: [
                                           GestureDetector(
                                             onTap: () => edit(reverseIndex),
@@ -159,7 +172,9 @@ class NotesPage extends StatelessWidget {
                                                         : 10,
                                                 vertical: B.width * 0.02037),
                                             child: IconButton(
-                                                constraints: BoxConstraints.tightFor(width: B.width * 0.083, height: B.width * 0.083),
+                                                constraints: BoxConstraints.tightFor(
+                                                    width: B.width * 0.083,
+                                                    height: B.width * 0.083),
                                                 focusColor: Colors.blue,
                                                 onPressed: () async {
                                                   showDelete(reverseIndex);
@@ -173,7 +188,9 @@ class NotesPage extends StatelessWidget {
                                         ],
                                       )
                                     : Stack(
-                                        alignment: notes[reverseIndex]["layout"] == 0 ? Alignment.topRight : Alignment.topLeft,
+                                        alignment: notes[reverseIndex]["layout"] == 0
+                                            ? Alignment.topRight
+                                            : Alignment.topLeft,
                                         children: [
                                           GestureDetector(
                                             onTap: () => edit(reverseIndex),
@@ -200,7 +217,9 @@ class NotesPage extends StatelessWidget {
                                                         : 0,
                                                 vertical: B.isTablet ? 8.0 : 0),
                                             child: IconButton(
-                                                constraints: BoxConstraints.tightFor(width: B.width * 0.083, height: B.width * 0.083),
+                                                constraints: BoxConstraints.tightFor(
+                                                    width: B.width * 0.083,
+                                                    height: B.width * 0.083),
                                                 focusColor: Colors.blue,
                                                 onPressed: () async {
                                                   showDelete(reverseIndex);
@@ -228,12 +247,18 @@ class NotesPage extends StatelessWidget {
                               itemCount: notes.length,
                               itemBuilder: (context, index) {
                                 int reverseIndex = notes.length - index - 1;
-                                notes[reverseIndex]["title"] == "" ? noTitle = true : noTitle = false;
-                                notes[reverseIndex]["content"] == "" ? noContent = true : noContent = false;
+                                notes[reverseIndex]["title"] == ""
+                                    ? noTitle = true
+                                    : noTitle = false;
+                                notes[reverseIndex]["content"] == ""
+                                    ? noContent = true
+                                    : noContent = false;
                                 int dateValue = B.calculateDifference(notes[reverseIndex]["time"]);
                                 String date = B.parseDate(notes[reverseIndex]["time"]);
                                 return Stack(
-                                  alignment: notes[reverseIndex]["layout"] == 0 ? Alignment.topRight : Alignment.topLeft,
+                                  alignment: notes[reverseIndex]["layout"] == 0
+                                      ? Alignment.topRight
+                                      : Alignment.topLeft,
                                   children: [
                                     GestureDetector(
                                       onTap: () => edit(reverseIndex),
@@ -259,7 +284,8 @@ class NotesPage extends StatelessWidget {
                                                   : 0,
                                           vertical: B.isTablet ? 8.0 : 0),
                                       child: IconButton(
-                                          constraints: BoxConstraints.tightFor(width: B.width * 0.083, height: B.width * 0.083),
+                                          constraints: BoxConstraints.tightFor(
+                                              width: B.width * 0.083, height: B.width * 0.083),
                                           focusColor: Colors.blue,
                                           onPressed: () async {
                                             showDelete(reverseIndex);
@@ -279,7 +305,9 @@ class NotesPage extends StatelessWidget {
                       child: Center(
                           child: Text(
                         "N2".tr(),
-                        style: TextStyle(color: Theme.of(context).colorScheme.primary, fontWeight: FontWeight.w400), //B.colors[1]
+                        style: TextStyle(
+                            color: Theme.of(context).colorScheme.primary,
+                            fontWeight: FontWeight.w400), //B.colors[1]
                       )),
                     ),
               const SizedBox(

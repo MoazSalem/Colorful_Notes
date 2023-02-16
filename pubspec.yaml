@@ -30,27 +30,28 @@ dependencies:
   flutter:
     sdk: flutter
 
-  bloc: ^8.1.0
-  flutter_bloc: ^8.1.1
+  bloc: ^8.1.1
+  flutter_bloc: ^8.1.2
   cupertino_icons: ^1.0.5
-  sqflite: ^2.2.3
+  sqflite: ^2.2.4+1
   intl: ^0.17.0
   flutter_launcher_icons: ^0.11.0
-  shared_preferences: ^2.0.17
-  smooth_page_indicator: ^1.0.0+2
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+  smooth_page_indicator: ^1.0.1
   lottie: ^2.2.0
   record: ^4.4.4
-  audioplayers: ^2.0.0
+  audioplayers: ^3.0.1
   permission_handler: ^10.2.0
-  path_provider: ^2.0.11
+  path_provider: ^2.0.12
   stop_watch_timer: ^2.0.0
   material_dialogs: ^1.1.4
   switcher_button: ^0.0.4
   easy_localization: ^3.0.1
   external_path: ^1.0.3
   path: ^1.8.2
-  dynamic_color: ^1.5.4
-  url_launcher: ^6.1.8
+  dynamic_color: ^1.6.2
+  url_launcher: ^6.1.9
 
 dev_dependencies:
   flutter_test:
@@ -62,6 +63,8 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^2.0.1
+  hive_generator: ^2.0.0
+  build_runner: ^2.3.3
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
