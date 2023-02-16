@@ -11,7 +11,8 @@ bool isLastPage = false;
 bool lang = false;
 
 class IntroPage extends StatefulWidget {
-  const IntroPage({Key? key}) : super(key: key);
+  final String currentTheme;
+  const IntroPage({Key? key, required this.currentTheme}) : super(key: key);
 
   @override
   State<IntroPage> createState() => _IntroPageState();
@@ -193,7 +194,7 @@ class _IntroPageState extends State<IntroPage> {
                                   onPressed: () async {
                                     final prefs = await SharedPreferences.getInstance();
                                     prefs.setBool("showHome", true);
-                                    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const Home()));
+                                    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => Home(currentTheme: widget.currentTheme,)));
                                   },
                                 ),
                               ))

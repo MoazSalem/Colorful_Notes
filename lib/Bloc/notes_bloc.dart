@@ -2,13 +2,8 @@
 
 import 'dart:async';
 import 'dart:io';
-
-// import 'package:path/path.dart' as path;
-import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:easy_localization/easy_localization.dart' hide TextDirection;
-
-// import 'package:external_path/external_path.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -20,12 +15,13 @@ import 'package:notes/Data/colors.dart';
 import 'package:notes/Screens/SideBar/home.dart';
 import 'package:notes/Screens/SideBar/notes.dart';
 import 'package:notes/Screens/SideBar/voice_notes.dart';
-
-//import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
+// import 'package:path/path.dart' as path;
+// import 'package:path/path.dart';
+// import 'package:external_path/external_path.dart';
 
 part 'notes_event.dart';
 
@@ -49,6 +45,7 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
   late bool showEdited;
   late bool darkColors;
   late bool isDarkMode;
+  late bool colorful;
   late bool harmonizeColor;
   List<Map> allNotesMap = [];
   List<Map> voiceMap = [];
@@ -67,6 +64,10 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
   bool isTablet = getDeviceType() == 'tablet' ? true : false;
   GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   var brightness = SchedulerBinding.instance.window.platformBrightness;
+
+  // If themeMode is null it follows system theme
+  var themeMode;
+  String currentTheme = "System";
 
   static NotesBloc get(context) => BlocProvider.of(context);
 
@@ -172,17 +173,6 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
 
   getScreenWidth(context) {
     width = MediaQuery.of(context).size.width;
-  }
-
-  String getAppTheme(context) {
-    var currentTheme = AdaptiveTheme.of(context).mode;
-    late String theme;
-    currentTheme == AdaptiveThemeMode.light
-        ? theme = "Light"
-        : currentTheme == AdaptiveThemeMode.dark
-            ? theme = "Dark"
-            : theme = "System";
-    return theme;
   }
 
   Future getStoragePermission() async {
@@ -367,9 +357,16 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
     showDate = prefs.getBool('showDate') ?? true;
     showShadow = prefs.getBool('showShadow') ?? false;
     showEdited = prefs.getBool('showEdit') ?? true;
+    colorful = prefs.getBool('colorful') ?? true;
     darkColors = prefs.getBool('darkColors') ?? false;
     harmonizeColor = prefs.getBool('harmonizeColor') ?? false;
     colors = darkColors ? darkerColors : lightColors;
+    var c = prefs.getInt('themeMode') ?? 2;
+    c == 0
+        ? {themeMode = ThemeMode.light, currentTheme = "Light"}
+        : c == 1
+            ? {themeMode = ThemeMode.dark, currentTheme = "Dark"}
+            : {themeMode = null, currentTheme = "System"};
     // colors = darkColors
     //     ? harmonizeColor
     //     ? dHColors

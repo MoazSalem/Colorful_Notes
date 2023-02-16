@@ -1,13 +1,10 @@
-//import 'package:adaptive_theme/adaptive_theme.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-//import 'package:notes/Data/theme.dart';
-import 'package:notes/Bloc/notes_bloc.dart';
-import 'package:notes/Widgets/notes.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:switcher_button/switcher_button.dart';
+import 'package:notes/Bloc/notes_bloc.dart';
+import 'package:notes/Widgets/notes.dart';
 
 late String dropDownTheme;
 late String darkTheme;
@@ -20,7 +17,6 @@ var pages = ["Home", "Text", "Voice"];
 
 // ignore: must_be_immutable
 class SettingsPage extends StatelessWidget {
-  //final String currentTheme;  required this.currentTheme,
   final String black;
   late String sB;
   late String fabLoc;
@@ -155,6 +151,63 @@ class SettingsPage extends StatelessWidget {
                     padding: EdgeInsets.symmetric(horizontal: padding),
                     child: ListTile(
                         title: Text(
+                          "App Theme".tr(),
+                          style: TextStyle(fontSize: title, fontWeight: FontWeight.w500, color: textColor),
+                        ),
+                        subtitle: Text(
+                          "sApp Theme".tr(),
+                          style: TextStyle(fontSize: subtitle, fontWeight: FontWeight.w400, color: textColor),
+                        ),
+                        trailing: DropdownButton(
+                          iconSize: iconSize,
+                          itemHeight: itemHeight,
+                          borderRadius: BorderRadius.circular(10),
+                          alignment: Alignment.center,
+                          underline: Container(),
+                          style: TextStyle(color: textColor, fontSize: fontSize, fontWeight: FontWeight.w400),
+                          dropdownColor: dropDownColor,
+                          elevation: 0,
+                          isDense: true,
+                          iconEnabledColor: textColor,
+                          value: B.currentTheme,
+                          icon: const Icon(Icons.keyboard_arrow_down),
+                          items: themes.map((String items) {
+                            return DropdownMenuItem(
+                                value: items,
+                                child: MediaQuery(
+                                  data: MediaQuery.of(context).copyWith(textScaleFactor: isTablet ? 2.0 : 1.0),
+                                  child: Text(items).tr(),
+                                ));
+                          }).toList(),
+                          onChanged: (String? newValue) async {
+                            // I need to relearn Bloc and reImplement this :(
+                            int c;
+                            newValue == 'Light'
+                                ? {c = 0, B.themeMode = ThemeMode.light}
+                                : newValue == 'Dark'
+                                ? {c = 1, B.themeMode = ThemeMode.dark}
+                                : c = 2;
+                            B.currentTheme = newValue!;
+                            final prefs = await SharedPreferences.getInstance();
+                            await prefs.setInt("themeMode", c);
+                            B.prefsChanged();
+                            SnackBar snackBar = const SnackBar(
+                              content: Text('Restart App For Changes to Take Effect'),
+                            );
+                            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                          },
+                        )),
+                  ),
+                ),
+              ),
+              B.divider(context),
+              SizedBox(
+                height: height,
+                child: Center(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: padding),
+                    child: ListTile(
+                        title: Text(
                           "Side Bar".tr(),
                           style: TextStyle(fontSize: title, fontWeight: FontWeight.w500, color: textColor),
                         ),
@@ -248,55 +301,6 @@ class SettingsPage extends StatelessWidget {
                 ),
               ),
               B.divider(context),
-              // SizedBox(
-              //   height: height,
-              //   child: Center(
-              //     child: Padding(
-              //       padding: EdgeInsets.symmetric(horizontal: padding),
-              //       child: ListTile(
-              //           title: Text(
-              //             "App Theme".tr(),
-              //             style: TextStyle(fontSize: title, fontWeight: FontWeight.w500),
-              //           ),
-              //           subtitle: Text(
-              //             "sApp Theme".tr(),
-              //             style: TextStyle(fontSize: subtitle, fontWeight: FontWeight.w400),
-              //           ),
-              //           trailing: DropdownButton(
-              //             iconSize: iconSize,
-              //             itemHeight: itemHeight,
-              //             borderRadius: BorderRadius.circular(10),
-              //             alignment: Alignment.center,
-              //             underline: Container(),
-              //             style: TextStyle(color: Theme.of(context).textTheme.bodyMedium?.color, fontSize: fontSize, fontWeight: FontWeight.w400),
-              //             dropdownColor: Theme.of(context).canvasColor,
-              //             elevation: 0,
-              //             isDense: true,
-              //             iconEnabledColor: Theme.of(context).textTheme.bodyMedium?.color,
-              //             value: dropDownTheme = currentTheme,
-              //             icon: const Icon(Icons.keyboard_arrow_down),
-              //             items: themes.map((String items) {
-              //               return DropdownMenuItem(
-              //                   value: items,
-              //                   child: MediaQuery(
-              //                     data: MediaQuery.of(context).copyWith(textScaleFactor: isTablet ? 2.0 : 1.0),
-              //                     child: Text(items).tr(),
-              //                   ));
-              //             }).toList(),
-              //             onChanged: (String? newValue) {
-              //               newValue == 'Light'
-              //                   ? AdaptiveTheme.of(context).setLight()
-              //                   : newValue == 'Dark'
-              //                       ? AdaptiveTheme.of(context).setDark()
-              //                       : AdaptiveTheme.of(context).setSystem();
-              //               dropDownTheme = newValue!;
-              //               B.prefsChanged();
-              //             },
-              //           )),
-              //     ),
-              //   ),
-              // ),
-              // B.divider(context),
               // SizedBox(
               //   height: height,
               //   child: Center(

@@ -1,22 +1,16 @@
-import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:notes/Data/theme.dart';
+import 'package:dynamic_color/dynamic_color.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:notes/Bloc/notes_bloc.dart';
+import 'package:notes/Data/theme.dart';
 import 'Screens/home_screen.dart';
 import 'Screens/on_boarding.dart';
-import 'package:easy_localization/easy_localization.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
-  SystemChrome.setSystemUIOverlayStyle(
-    const SystemUiOverlayStyle(
-      statusBarColor: Colors.transparent,
-      statusBarIconBrightness: Brightness.dark, // For Android (dark icons)
-      statusBarBrightness: Brightness.light, // For iOS (dark icons)
-    ),
-  );
   final prefs = await SharedPreferences.getInstance();
   final bool showHome = prefs.getBool('showHome') ?? false;
   final bool isBlack = prefs.getBool('isBlack') ?? false;
@@ -39,23 +33,33 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DynamicColorBuilder(builder: (lightColorScheme, darkColorScheme) {
-      return MaterialApp(
-          initialRoute: '/',
-          debugShowCheckedModeBanner: false,
-          title: 'Colorful Notes',
-          theme: ThemeData(
-            colorScheme: lightColorScheme ?? defaultLightColorScheme,
-            useMaterial3: true,
-          ),
-          darkTheme: ThemeData(
-            colorScheme: darkColorScheme ?? defaultDarkColorScheme,
-            useMaterial3: true,
-          ),
-          localizationsDelegates: context.localizationDelegates,
-          supportedLocales: context.supportedLocales,
-          locale: context.locale,
-          home: showHome ? const Home() : const IntroPage());
-    });
+    return BlocProvider(
+      create: (context) => NotesBloc()..startPage(),
+      child: BlocConsumer<NotesBloc, NotesState>(
+        listener: (context, state) {},
+        builder: (context, state) {
+          var B = NotesBloc.get(context);
+          return DynamicColorBuilder(builder: (lightColorScheme, darkColorScheme) {
+            return MaterialApp(
+                initialRoute: '/',
+                debugShowCheckedModeBanner: false,
+                title: 'Colorful Notes',
+                theme: ThemeData(
+                  colorScheme: lightColorScheme ?? defaultLightColorScheme,
+                  useMaterial3: true,
+                ),
+                darkTheme: ThemeData(
+                  colorScheme: darkColorScheme ?? defaultDarkColorScheme,
+                  useMaterial3: true,
+                ),
+                themeMode: B.themeMode,
+                localizationsDelegates: context.localizationDelegates,
+                supportedLocales: context.supportedLocales,
+                locale: context.locale,
+                home: showHome ? Home(currentTheme: B.currentTheme) : IntroPage(currentTheme: B.currentTheme));
+          });
+        },
+      ),
+    );
   }
 }

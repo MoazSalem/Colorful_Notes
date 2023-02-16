@@ -10,17 +10,17 @@ import 'package:notes/Screens/SideBar/info.dart';
 import 'package:notes/Screens/SideBar/notes.dart';
 import 'package:notes/Screens/SideBar/settings.dart';
 import 'package:notes/Screens/SideBar/voice_notes.dart';
-
-//import 'package:notes/Test/colors.dart';
 import 'package:notes/Widgets/sideBar.dart';
+//import 'package:notes/Test/colors.dart';
 
 class Home extends StatelessWidget {
-  const Home({Key? key}) : super(key: key);
+  final String currentTheme;
+  const Home({Key? key, required this.currentTheme}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     var brightness = SchedulerBinding.instance.window.platformBrightness;
-    bool isDarkMode = brightness == Brightness.dark;
+    bool isDarkMode = brightness == Brightness.dark ? currentTheme == "Light" ? false : true : currentTheme == "Dark" ? true : false;
     return AnnotatedRegion<SystemUiOverlayStyle>(
         value: SystemUiOverlayStyle(
           statusBarColor: Colors.transparent,
@@ -80,13 +80,14 @@ class Home extends StatelessWidget {
                 ),
               ];
               return Scaffold(
-                backgroundColor: B.loading
-                    ? Theme.of(context).colorScheme.background
-                    : null,
                 resizeToAvoidBottomInset: false,
                 key: B.scaffoldKey,
                 body: B.loading
-                    ? Center(
+                    ? Container(
+                      width: double.infinity,
+                      height: double.infinity,
+                      color: isDarkMode ? Theme.of(context).colorScheme.background : Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.6),
+                      child: Center(
                         child: SizedBox(
                           width: 200,
                           height: 200,
@@ -94,7 +95,8 @@ class Home extends StatelessWidget {
                             'assets/animations/loading.json',
                           ),
                         ),
-                      )
+                      ),
+                    )
                     : Row(
                         children: B.sbIndex == 2 || B.sbIndex == 3
                             ? [
