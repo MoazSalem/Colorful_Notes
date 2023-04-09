@@ -6,14 +6,30 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:notes/Bloc/notes_bloc.dart';
 import 'package:notes/Data/theme.dart';
 import 'package:responsive_framework/responsive_wrapper.dart';
+import 'package:notes/Services/flex_colors/theme_controller.dart';
+import 'package:notes/Services/flex_colors/theme_service.dart';
+import 'package:notes/Services/flex_colors/theme_service_hive.dart';
+import 'package:notes/Data/flex_themes.dart';
 import 'Screens/home_screen.dart';
 import 'Screens/on_boarding.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // Initialize the Localization services.
   await EasyLocalization.ensureInitialized();
+  // Initialize the Hive services.
   await Hive.initFlutter();
+  // open a named hive box to store settings
   Box box = await Hive.openBox("settingsBox");
+  // open another box for themes
+  final ThemeService themeService = ThemeServiceHive('flexColorsBox');
+  // Initialize the theme service.
+  await themeService.init();
+  // Create a ThemeController that uses the ThemeService.
+  final ThemeController themeController = ThemeController(themeService);
+  // Load preferred theme settings, this prevents a theme change when the app is first displayed.
+  await themeController.loadAll();
+  // Skip Starting screen if not first time
   final bool showHome = box.get('showHome') ?? false;
   runApp(EasyLocalization(
       useOnlyLangCode: true,
@@ -21,6 +37,7 @@ void main() async {
       path: 'assets/translations',
       fallbackLocale: const Locale('en'),
       child: MyApp(
+        themeController: themeController,
         showHome: showHome,
         box: box,
       )));
@@ -29,8 +46,10 @@ void main() async {
 class MyApp extends StatelessWidget {
   final bool showHome;
   final Box box;
+  final ThemeController themeController;
 
-  const MyApp({Key? key, required this.showHome, required this.box}) : super(key: key);
+  const MyApp({Key? key, required this.showHome, required this.themeController, required this.box})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -40,6 +59,7 @@ class MyApp extends StatelessWidget {
         listener: (context, state) {},
         builder: (context, state) {
           var B = NotesBloc.get(context);
+          B.themeController = themeController;
           return DynamicColorBuilder(builder: (lightColorScheme, darkColorScheme) {
             return MaterialApp(
                 builder: (context, child) => ResponsiveWrapper.builder(child,
@@ -56,15 +76,18 @@ class MyApp extends StatelessWidget {
                 initialRoute: '/',
                 debugShowCheckedModeBanner: false,
                 title: 'Colorful Notes',
-                theme: ThemeData(
-                  colorScheme: lightColorScheme ?? defaultLightColorScheme,
-                  useMaterial3: true,
+                theme: flexTheme(
+                    mode: "light",
+                    themeController: themeController,
+                    dScheme: lightColorScheme ?? defaultLightColorScheme,
+                    isDynamic: box.get("isDynamic") ?? false),
+                darkTheme: flexTheme(
+                  mode: "dark",
+                  themeController: themeController,
+                  dScheme: darkColorScheme ?? defaultDarkColorScheme,
+                  isDynamic: box.get("isDynamic") ?? false,
                 ),
-                darkTheme: ThemeData(
-                  colorScheme: darkColorScheme ?? defaultDarkColorScheme,
-                  useMaterial3: true,
-                ),
-                themeMode: B.themeMode,
+                themeMode: themeController.themeMode,
                 localizationsDelegates: context.localizationDelegates,
                 supportedLocales: context.supportedLocales,
                 locale: context.locale,

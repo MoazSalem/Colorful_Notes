@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:notes/Widgets/theme_popup_menu.dart';
 import 'package:switcher_button/switcher_button.dart';
 import 'package:notes/Bloc/notes_bloc.dart';
 import 'package:notes/Widgets/notes.dart';
@@ -197,19 +198,53 @@ class SettingsPage extends StatelessWidget {
                             // I need to relearn Bloc and reImplement this :(
                             int c;
                             newValue == 'Light'
-                                ? {c = 0, B.themeMode = ThemeMode.light}
+                                ? {c = 0, B.themeController.setThemeMode(ThemeMode.light)}
                                 : newValue == 'Dark'
-                                    ? {c = 1, B.themeMode = ThemeMode.dark}
-                                    : c = 2;
+                                    ? {c = 1, B.themeController.setThemeMode(ThemeMode.dark)}
+                                    : {
+                                        c = 2,
+                                        B.themeController.setThemeMode(ThemeMode.system),
+                                      };
                             B.currentTheme = newValue!;
                             B.box.put("themeMode", c);
                             B.prefsChanged();
-                            SnackBar snackBar = const SnackBar(
-                              content: Text('Restart App For Changes to Take Effect'),
-                            );
-                            ScaffoldMessenger.of(context).showSnackBar(snackBar);
                           },
                         )),
+                  ),
+                ),
+              ),
+              B.divider(),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: padding),
+                child: ThemePopupMenu(
+                  textColor: textColor,
+                  isTablet: B.isTablet,
+                  schemeIndex: B.themeController.schemeIndex,
+                  onChanged: (value) {
+                    B.themeController.setSchemeIndex(value);
+                    B.prefsChanged();
+                  },
+                ),
+              ),
+              B.divider(),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: padding),
+                child: ListTile(
+                  title: Text("Dynamic Colors".tr(),
+                      style: TextStyle(fontSize: title, color: textColor)),
+                  subtitle: Text(
+                    "DC".tr(),
+                    style: TextStyle(fontSize: subtitle, color: textColor),
+                  ),
+                  trailing: SwitcherButton(
+                    onColor: B.colorful ? B.colors[6] : theme.primary,
+                    offColor: theme.primaryContainer,
+                    size: switchSize,
+                    value: B.box.get("isDynamic") ?? false,
+                    onChange: (bool value) {
+                      B.box.put("isDynamic", value);
+                      B.prefsChanged();
+                    },
                   ),
                 ),
               ),

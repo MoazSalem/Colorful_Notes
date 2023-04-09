@@ -12,6 +12,7 @@ import 'package:hive/hive.dart';
 import 'package:material_dialogs/material_dialogs.dart';
 import 'package:material_dialogs/widgets/buttons/icon_button.dart';
 import 'package:material_dialogs/widgets/buttons/icon_outline_button.dart';
+import 'package:notes/Services/flex_colors/theme_controller.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:sqflite/sqflite.dart';
@@ -29,6 +30,7 @@ part 'notes_state.dart';
 
 class NotesBloc extends Bloc<NotesEvent, NotesState> {
   late Database database;
+  late ThemeController themeController;
   late Box box;
   late ColorScheme theme;
   late int viewIndex;

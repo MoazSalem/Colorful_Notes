@@ -12,6 +12,7 @@
   "sStart In": "Change where app starts",
   "App Theme": "App Theme",
   "sApp Theme": "Change apps brightness",
+  "Current Theme": "Current Theme",
   "Amoled Mode": "Amoled Mode",
   "sAmoled Mode": "Change dark modes style",
   "Darker Colors": "Darker Colors",
@@ -102,5 +103,7 @@
   "I3": "using flutter to learn new stuff!",
   "I6": "The app uses ",
   "I7": "Sqflite ",
-  "I8": "to make a database to store all of your notes data locally on your phone"
+  "I8": "to make a database to store all of your notes data locally on your phone",
+  "Dynamic Colors": "Dynamic Colors",
+  "DC": "Use systems theme, this will only work as intended on android 12+"
 }
