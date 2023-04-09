@@ -5,6 +5,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:notes/Bloc/notes_bloc.dart';
 import 'package:notes/Data/theme.dart';
+import 'package:responsive_framework/responsive_wrapper.dart';
 import 'Screens/home_screen.dart';
 import 'Screens/on_boarding.dart';
 
@@ -41,6 +42,17 @@ class MyApp extends StatelessWidget {
           var B = NotesBloc.get(context);
           return DynamicColorBuilder(builder: (lightColorScheme, darkColorScheme) {
             return MaterialApp(
+                builder: (context, child) => ResponsiveWrapper.builder(child,
+                    maxWidth: 1200,
+                    minWidth: 400,
+                    defaultScale: true,
+                    breakpoints: [
+                      const ResponsiveBreakpoint.autoScale(600, scaleFactor: 0.9),
+                      const ResponsiveBreakpoint.autoScale(800, scaleFactor: 1.0),
+                      const ResponsiveBreakpoint.autoScale(1000, scaleFactor: 1.0),
+                      const ResponsiveBreakpoint.autoScale(1200, scaleFactor: 1.0),
+                    ],
+                    background: Container(color: Colors.black)),
                 initialRoute: '/',
                 debugShowCheckedModeBanner: false,
                 title: 'Colorful Notes',

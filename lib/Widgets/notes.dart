@@ -68,9 +68,8 @@ Widget listView({
                           width: double.infinity,
                           child: Text(
                               noContent
-                                  ? notes[reverseIndex]["layout"] == 0
-                                      ? "Empty"
-                                      : "فارغ"
+                                  ? "Empty".tr()
+
                                   : notes[reverseIndex]["content"],
                               textAlign: notes[reverseIndex]["layout"] == 1 ||
                                       notes[reverseIndex]["layout"] == 2
@@ -258,9 +257,7 @@ Widget smallListView({
                                   padding: EdgeInsets.only(top: isTablet ? 8 : 0),
                                   child: Text(
                                       noContent
-                                          ? notes[reverseIndex]["layout"] == 0
-                                              ? "Empty"
-                                              : "فارغ"
+                                          ? "Empty".tr()
                                           : notes[reverseIndex]["content"],
                                       strutStyle: StrutStyle(
                                         forceStrutHeight: notes[reverseIndex]["layout"] == 0 ||
@@ -455,9 +452,7 @@ Widget gridView({
                             width: double.infinity,
                             child: Text(
                                 noContent
-                                    ? notes[reverseIndex]["layout"] == 0
-                                        ? "Empty"
-                                        : "فارغ"
+                                    ? "Empty".tr()
                                     : notes[reverseIndex]["content"],
                                 textAlign: notes[reverseIndex]["layout"] == 1 ||
                                         notes[reverseIndex]["layout"] == 2
