@@ -6,7 +6,7 @@ on:
     branches:
       - Release
 env:
-  app_ver: v1.1.7
+  app_ver: v1.1.8
 name: "Build & Release"
 jobs:
   build:
@@ -19,7 +19,7 @@ jobs:
           java-version: '12.x'
       - uses: subosito/flutter-action@v1
         with:
-          flutter-version: '3.7.3'
+          flutter-version: '3.7.10'
       - run: flutter pub get
       - run: |
          flutter build apk --release

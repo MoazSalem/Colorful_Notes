@@ -17,12 +17,10 @@ int chosenIndex = 0;
 bool isRecording = false;
 bool isPaused = false;
 
-Widget createVoice(BuildContext context) {
+Widget createVoice({required BuildContext context, required double height, required NotesBloc B}) {
   return BlocConsumer<NotesBloc, NotesState>(
     listener: (context, state) {},
     builder: (context, state) {
-      var B = NotesBloc.get(context);
-      double height = MediaQuery.of(context).size.height;
       return Scaffold(
         resizeToAvoidBottomInset: false,
         backgroundColor: B.colors[chosenIndex],

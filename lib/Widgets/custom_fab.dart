@@ -23,7 +23,9 @@ Widget customFab(ColorScheme theme, colors, action1, action2, bool colorful) {
                         children: [
                           GestureDetector(
                             onTap: () {
+                              openFab = !openFab;
                               action2();
+                              setState(() {});
                             },
                             child: Padding(
                               padding: EdgeInsets.only(bottom: isTablet ? 8.0 : 0),
@@ -54,7 +56,9 @@ Widget customFab(ColorScheme theme, colors, action1, action2, bool colorful) {
                                       backgroundColor: theme.surfaceVariant,
                                       mini: isTablet ? false : true,
                                       onPressed: () {
+                                        openFab = !openFab;
                                         action2();
+                                        setState(() {});
                                       },
                                       elevation: 0,
                                       child: Icon(
@@ -69,7 +73,9 @@ Widget customFab(ColorScheme theme, colors, action1, action2, bool colorful) {
                           ),
                           GestureDetector(
                             onTap: () {
+                              openFab = !openFab;
                               action1();
+                              setState(() {});
                             },
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
@@ -98,7 +104,9 @@ Widget customFab(ColorScheme theme, colors, action1, action2, bool colorful) {
                                     //colors[1],
                                     mini: isTablet ? false : true,
                                     onPressed: () {
+                                      openFab = !openFab;
                                       action1();
+                                      setState(() {});
                                     },
                                     elevation: 0,
                                     child: Icon(

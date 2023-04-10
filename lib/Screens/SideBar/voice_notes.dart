@@ -68,7 +68,7 @@ class VoiceNotesPage extends StatelessWidget {
         edit(index) {
           showBottomSheet(
             context: context,
-            builder: (context) => editVoice(note: notes[index]),
+            builder: (context) => EditVoice(note: notes[index]),
           );
         }
 
@@ -83,7 +83,10 @@ class VoiceNotesPage extends StatelessWidget {
             backgroundColor: B.colorful ? B.colors[3] : theme.primary,
             onPressed: () async {
               showBottomSheet(
-                  enableDrag: false, context: context, builder: (context) => createVoice(context));
+                  enableDrag: false,
+                  context: context,
+                  builder: (context) => createVoice(
+                      context: context, B: B, height: MediaQuery.of(context).size.height));
             },
             child: Icon(
               Icons.add,

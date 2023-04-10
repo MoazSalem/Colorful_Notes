@@ -67,20 +67,23 @@ class HomePage extends StatelessWidget {
         }
 
         create1() {
-          showBottomSheet(context: context, builder: (context) => createNote(context));
+          showBottomSheet(context: context, builder: (context) => const CreateNote());
         }
 
         create2() {
           showBottomSheet(
-              enableDrag: false, context: context, builder: (context) => createVoice(context));
+              enableDrag: false,
+              context: context,
+              builder: (context) =>
+                  createVoice(context: context, B: B, height: MediaQuery.of(context).size.height));
         }
 
         edit(reverseIndex) {
           showBottomSheet(
             context: context,
             builder: (context) => notes[reverseIndex]['type'] == 0
-                ? editNote(note: notes[reverseIndex])
-                : editVoice(note: notes[reverseIndex]),
+                ? EditNote(note: notes[reverseIndex])
+                : EditVoice(note: notes[reverseIndex]),
           );
         }
 

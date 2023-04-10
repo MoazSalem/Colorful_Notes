@@ -63,13 +63,13 @@ class NotesPage extends StatelessWidget {
         }
 
         create() {
-          showBottomSheet(context: context, builder: (context) => createNote(context));
+          showBottomSheet(context: context, builder: (context) => const CreateNote());
         }
 
         edit(reverseIndex) {
           showBottomSheet(
             context: context,
-            builder: (context) => editNote(note: notes[reverseIndex]),
+            builder: (context) => EditNote(note: notes[reverseIndex]),
           );
         }
 
