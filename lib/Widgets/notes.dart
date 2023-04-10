@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart' hide TextDirection;
 import 'package:notes/Widgets/sound_player.dart';
 
-bool isTablet = getDeviceType() == 'tablet' ? true : false;
-
 Widget listView({
   required BuildContext context,
   required List<Map> notes,
@@ -16,9 +14,10 @@ Widget listView({
   required bool showDate,
   required bool showShadow,
   required bool showEdited,
+  required String lang,
+  required double width,
+  required bool isTablet,
 }) {
-  String lang = context.locale.toString();
-  double width = MediaQuery.of(context).size.width;
   return Center(
     child: Padding(
       padding: EdgeInsets.symmetric(vertical: showShadow ? width * 0.0051 : 0),
@@ -66,11 +65,7 @@ Widget listView({
                         flex: 7,
                         child: SizedBox(
                           width: double.infinity,
-                          child: Text(
-                              noContent
-                                  ? "Empty".tr()
-
-                                  : notes[reverseIndex]["content"],
+                          child: Text(noContent ? "Empty".tr() : notes[reverseIndex]["content"],
                               textAlign: notes[reverseIndex]["layout"] == 1 ||
                                       notes[reverseIndex]["layout"] == 2
                                   ? TextAlign.right
@@ -105,10 +100,12 @@ Widget listView({
                                           : 0
                                       : 0),
                               child: SoundPlayer(
-                                  index: reverseIndex,
-                                  voiceMap: notes,
-                                  colors: colors,
-                                  viewMode: 0),
+                                index: reverseIndex,
+                                voiceMap: notes,
+                                colors: colors,
+                                viewMode: 0,
+                                isTablet: isTablet,
+                              ),
                             ),
                           ],
                         ),
@@ -167,9 +164,10 @@ Widget smallListView({
   required bool showDate,
   required bool showShadow,
   required bool showEdited,
+  required String lang,
+  required double width,
+  required bool isTablet,
 }) {
-  String lang = context.locale.toString();
-  double width = MediaQuery.of(context).size.width;
   return Center(
     child: Padding(
       padding: EdgeInsets.symmetric(vertical: showShadow ? width * 0.0051 : 0),
@@ -256,9 +254,7 @@ Widget smallListView({
                                 child: Padding(
                                   padding: EdgeInsets.only(top: isTablet ? 8 : 0),
                                   child: Text(
-                                      noContent
-                                          ? "Empty".tr()
-                                          : notes[reverseIndex]["content"],
+                                      noContent ? "Empty".tr() : notes[reverseIndex]["content"],
                                       strutStyle: StrutStyle(
                                         forceStrutHeight: notes[reverseIndex]["layout"] == 0 ||
                                                 notes[reverseIndex]["layout"] == 1
@@ -304,10 +300,12 @@ Widget smallListView({
                                   Padding(
                                     padding: EdgeInsets.symmetric(horizontal: width * 0.02037),
                                     child: SoundPlayer(
-                                        index: reverseIndex,
-                                        voiceMap: notes,
-                                        colors: colors,
-                                        viewMode: 1),
+                                      index: reverseIndex,
+                                      voiceMap: notes,
+                                      colors: colors,
+                                      viewMode: 1,
+                                      isTablet: isTablet,
+                                    ),
                                   ),
                                 ],
                               ),
@@ -384,9 +382,10 @@ Widget gridView({
   required bool showDate,
   required bool showShadow,
   required bool showEdited,
+  required String lang,
+  required double width,
+  required bool isTablet,
 }) {
-  String lang = context.locale.toString();
-  double width = MediaQuery.of(context).size.width;
   return Center(
     child: Padding(
       padding: EdgeInsets.symmetric(vertical: showShadow ? width * 0.0051 : 0),
@@ -450,10 +449,7 @@ Widget gridView({
                           padding: EdgeInsets.only(right: noTitle ? width * 0.020926 : 0),
                           child: SizedBox(
                             width: double.infinity,
-                            child: Text(
-                                noContent
-                                    ? "Empty".tr()
-                                    : notes[reverseIndex]["content"],
+                            child: Text(noContent ? "Empty".tr() : notes[reverseIndex]["content"],
                                 textAlign: notes[reverseIndex]["layout"] == 1 ||
                                         notes[reverseIndex]["layout"] == 2
                                     ? TextAlign.right
@@ -491,6 +487,7 @@ Widget gridView({
                           voiceMap: notes,
                           colors: colors,
                           viewMode: 3,
+                          isTablet: isTablet,
                         ),
                       ),
                 showDate
@@ -530,9 +527,4 @@ Widget gridView({
       ]),
     ),
   );
-}
-
-String getDeviceType() {
-  final data = MediaQueryData.fromWindow(WidgetsBinding.instance.window);
-  return data.size.shortestSide < 600 ? 'phone' : 'tablet';
 }

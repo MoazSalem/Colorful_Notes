@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:notes/Bloc/notes_bloc.dart';
 
-Widget sideBar(ColorScheme theme, bool inverted) {
+Widget sideBar(
+    {required ColorScheme theme,
+    required bool inverted,
+    required NotesBloc B,
+    required double sizeBox}) {
   return BlocConsumer<NotesBloc, NotesState>(
     listener: (context, state) {},
     builder: (context, state) {
-      var B = NotesBloc.get(context);
-      double sizeBox = B.isTablet ? 60 : 30;
       return inverted
           ? Container(
               width: B.isTablet ? 100 : 60,

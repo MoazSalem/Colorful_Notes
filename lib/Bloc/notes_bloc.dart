@@ -29,8 +29,8 @@ part 'notes_event.dart';
 part 'notes_state.dart';
 
 class NotesBloc extends Bloc<NotesEvent, NotesState> {
-  late Database database;
   late ThemeController themeController;
+  late Database database;
   late Box box;
   late ColorScheme theme;
   late int viewIndex;
@@ -47,21 +47,21 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
   late bool isDarkMode;
   late bool colorful;
   late bool harmonizeColor;
+  late String openPage;
+  late String lang;
+  late List<Color> colors = lightColors;
   List<Map> allNotesMap = [];
   List<Map> voiceMap = [];
   List<Map> notesMap = [];
   List<Map> searchedALL = [];
   List<Map> searchedNotes = [];
   List<Map> searchedVoice = [];
-  late List<Color> colors = lightColors;
+  String currentTheme = "System";
   int currentIndex = 0;
   bool loading = true;
-  late String openPage;
-  late String lang;
   bool isTablet = getDeviceType() == 'tablet' ? true : false;
-  var brightness = SchedulerBinding.instance.window.platformBrightness;
-  var themeMode = ThemeMode.system;
-  String currentTheme = "System";
+  Brightness brightness = SchedulerBinding.instance.window.platformBrightness;
+  ThemeMode themeMode = ThemeMode.system;
   // late List<String> extDir;
 
   static NotesBloc get(context) => BlocProvider.of(context);

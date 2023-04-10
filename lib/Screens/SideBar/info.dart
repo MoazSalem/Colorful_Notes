@@ -4,19 +4,37 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:notes/Bloc/notes_bloc.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-final Uri _url = Uri.parse('https://github.com/MoazSalem/Colorful_Notes');
-
-class InfoPage extends StatelessWidget {
+class InfoPage extends StatefulWidget {
   const InfoPage({Key? key}) : super(key: key);
 
   @override
+  State<InfoPage> createState() => _InfoPageState();
+}
+
+class _InfoPageState extends State<InfoPage> {
+  final Uri _url = Uri.parse('https://github.com/MoazSalem/Colorful_Notes');
+  late ColorScheme theme;
+  late Color textColor;
+  late NotesBloc B;
+
+  @override
+  void initState() {
+    B = NotesBloc.get(context);
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    theme = Theme.of(context).colorScheme;
+    textColor = theme.onSurfaceVariant;
+    super.didChangeDependencies();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    ColorScheme theme = Theme.of(context).colorScheme;
     return BlocConsumer<NotesBloc, NotesState>(
       listener: (context, state) {},
       builder: (context, state) {
-        var B = NotesBloc.get(context);
-        Color textColor = theme.onSurfaceVariant;
         return Scaffold(
           backgroundColor: B.isDarkMode ? theme.background : theme.surfaceVariant.withOpacity(0.6),
           body: ListView(
@@ -74,10 +92,10 @@ class InfoPage extends StatelessWidget {
       },
     );
   }
-}
 
-Future<void> _launchUrl() async {
-  if (!await launchUrl(_url)) {
-    throw 'Could not launch $_url';
+  Future<void> _launchUrl() async {
+    if (!await launchUrl(_url)) {
+      throw 'Could not launch $_url';
+    }
   }
 }

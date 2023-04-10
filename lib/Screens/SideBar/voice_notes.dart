@@ -6,72 +6,42 @@ import 'package:notes/Screens/Actions/edit_voice.dart';
 import 'package:notes/Widgets/notes.dart';
 import 'package:notes/Screens/Actions/create_voice.dart';
 
-late bool noTitle;
-bool searchOn = false;
 final TextEditingController searchVC = TextEditingController();
 
-class VoiceNotesPage extends StatelessWidget {
+class VoiceNotesPage extends StatefulWidget {
   const VoiceNotesPage({Key? key}) : super(key: key);
 
   @override
+  State<VoiceNotesPage> createState() => _VoiceNotesPageState();
+}
+
+class _VoiceNotesPageState extends State<VoiceNotesPage> {
+  late bool noTitle;
+  late ColorScheme theme;
+  late NotesBloc B;
+  late int value;
+  late List<Map> notes;
+  bool searchOn = false;
+
+  @override
+  void initState() {
+    B = NotesBloc.get(context);
+    value = B.viewIndexV;
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    notes = searchOn ? B.searchedVoice : B.voiceMap;
+    theme = Theme.of(context).colorScheme;
+    super.didChangeDependencies();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    ColorScheme theme = Theme.of(context).colorScheme;
     return BlocConsumer<NotesBloc, NotesState>(
       listener: (context, state) {},
       builder: (context, state) {
-        var B = NotesBloc.get(context);
-        int value = B.viewIndexV;
-        List<Map> notes = searchOn ? B.searchedVoice : B.voiceMap;
-
-        showDelete(index) {
-          B.showDeleteDialog(context, notes, index);
-        }
-
-        Widget leading() {
-          return Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              IconButton(
-                onPressed: () {
-                  searchOn = !searchOn;
-                  B.searchVoice(searchVC.text);
-                  B.onSearch();
-                },
-                icon: Icon(
-                  Icons.search,
-                  size: 30,
-                  color: searchOn
-                      ? B.colorful
-                          ? B.colors[3]
-                          : theme.primary
-                      : theme.onSurfaceVariant, //Theme.of(context).textTheme.bodyMedium!.color,
-                ),
-              ),
-              IconButton(
-                onPressed: () {
-                  value < 2 ? value++ : value = 0;
-                  B.box.put("viewIndexV", value);
-                  B.viewIndexV = value;
-                  B.onViewChanged();
-                },
-                icon: B.viewIndexV == 0
-                    ? const Icon(Icons.view_agenda_sharp)
-                    : B.viewIndexV == 1
-                        ? const Icon(Icons.view_day_sharp)
-                        : const Icon(Icons.grid_view_sharp),
-              )
-            ],
-          );
-        }
-
-        edit(index) {
-          showBottomSheet(
-            context: context,
-            builder: (context) => EditVoice(note: notes[index]),
-          );
-        }
-
         return Scaffold(
           backgroundColor: B.isDarkMode ? theme.background : theme.surfaceVariant.withOpacity(0.6),
           floatingActionButtonLocation: B.fabIndex == 0
@@ -83,10 +53,7 @@ class VoiceNotesPage extends StatelessWidget {
             backgroundColor: B.colorful ? B.colors[3] : theme.primary,
             onPressed: () async {
               showBottomSheet(
-                  enableDrag: false,
-                  context: context,
-                  builder: (context) => createVoice(
-                      context: context, B: B, height: MediaQuery.of(context).size.height));
+                  enableDrag: false, context: context, builder: (context) => const CreateVoice());
             },
             child: Icon(
               Icons.add,
@@ -143,17 +110,21 @@ class VoiceNotesPage extends StatelessWidget {
                                           GestureDetector(
                                             onTap: () => edit(reverseIndex),
                                             child: listView(
-                                                context: context,
-                                                notes: notes,
-                                                colors: B.colors,
-                                                reverseIndex: reverseIndex,
-                                                dateValue: dateValue,
-                                                date: date,
-                                                noTitle: noTitle,
-                                                noContent: false,
-                                                showDate: B.showDate,
-                                                showShadow: B.showShadow,
-                                                showEdited: B.showEdited),
+                                              context: context,
+                                              notes: notes,
+                                              colors: B.colors,
+                                              reverseIndex: reverseIndex,
+                                              dateValue: dateValue,
+                                              date: date,
+                                              noTitle: noTitle,
+                                              noContent: false,
+                                              showDate: B.showDate,
+                                              showShadow: B.showShadow,
+                                              showEdited: B.showEdited,
+                                              isTablet: B.isTablet,
+                                              lang: context.locale.toString(),
+                                              width: B.width,
+                                            ),
                                           ),
                                           Padding(
                                             padding: EdgeInsets.symmetric(
@@ -181,17 +152,21 @@ class VoiceNotesPage extends StatelessWidget {
                                           GestureDetector(
                                             onTap: () => edit(reverseIndex),
                                             child: smallListView(
-                                                context: context,
-                                                notes: notes,
-                                                colors: B.colors,
-                                                reverseIndex: reverseIndex,
-                                                dateValue: dateValue,
-                                                date: date,
-                                                noTitle: noTitle,
-                                                noContent: false,
-                                                showDate: B.showDate,
-                                                showShadow: B.showShadow,
-                                                showEdited: B.showEdited),
+                                              context: context,
+                                              notes: notes,
+                                              colors: B.colors,
+                                              reverseIndex: reverseIndex,
+                                              dateValue: dateValue,
+                                              date: date,
+                                              noTitle: noTitle,
+                                              noContent: false,
+                                              showDate: B.showDate,
+                                              showShadow: B.showShadow,
+                                              showEdited: B.showEdited,
+                                              isTablet: B.isTablet,
+                                              lang: context.locale.toString(),
+                                              width: B.width,
+                                            ),
                                           ),
                                           Padding(
                                             padding: EdgeInsets.symmetric(
@@ -239,17 +214,21 @@ class VoiceNotesPage extends StatelessWidget {
                                     GestureDetector(
                                       onTap: () => edit(reverseIndex),
                                       child: gridView(
-                                          context: context,
-                                          notes: notes,
-                                          colors: B.colors,
-                                          reverseIndex: reverseIndex,
-                                          dateValue: dateValue,
-                                          date: date,
-                                          noTitle: noTitle,
-                                          noContent: false,
-                                          showDate: B.showDate,
-                                          showShadow: B.showShadow,
-                                          showEdited: B.showEdited),
+                                        context: context,
+                                        notes: notes,
+                                        colors: B.colors,
+                                        reverseIndex: reverseIndex,
+                                        dateValue: dateValue,
+                                        date: date,
+                                        noTitle: noTitle,
+                                        noContent: false,
+                                        showDate: B.showDate,
+                                        showShadow: B.showShadow,
+                                        showEdited: B.showEdited,
+                                        isTablet: B.isTablet,
+                                        lang: context.locale.toString(),
+                                        width: B.width,
+                                      ),
                                     ),
                                     Padding(
                                       padding: EdgeInsets.symmetric(
@@ -289,6 +268,55 @@ class VoiceNotesPage extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+
+  showDelete(index) {
+    B.showDeleteDialog(context, notes, index);
+  }
+
+  Widget leading() {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        IconButton(
+          onPressed: () {
+            searchOn = !searchOn;
+            B.searchVoice(searchVC.text);
+            B.onSearch();
+          },
+          icon: Icon(
+            Icons.search,
+            size: 30,
+            color: searchOn
+                ? B.colorful
+                    ? B.colors[3]
+                    : theme.primary
+                : theme.onSurfaceVariant, //Theme.of(context).textTheme.bodyMedium!.color,
+          ),
+        ),
+        IconButton(
+          onPressed: () {
+            value < 2 ? value++ : value = 0;
+            B.box.put("viewIndexV", value);
+            B.viewIndexV = value;
+            B.onViewChanged();
+          },
+          icon: B.viewIndexV == 0
+              ? const Icon(Icons.view_agenda_sharp)
+              : B.viewIndexV == 1
+                  ? const Icon(Icons.view_day_sharp)
+                  : const Icon(Icons.grid_view_sharp),
+        )
+      ],
+    );
+  }
+
+  edit(index) {
+    showBottomSheet(
+      context: context,
+      builder: (context) => EditVoice(note: notes[index]),
     );
   }
 }

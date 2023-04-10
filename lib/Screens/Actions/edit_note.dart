@@ -3,14 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_localization/easy_localization.dart' hide TextDirection;
 import 'package:notes/Bloc/notes_bloc.dart';
 
-final TextEditingController titleC = TextEditingController();
-final TextEditingController contentC = TextEditingController();
-late ValueNotifier<TextDirection> _titleDir;
-late ValueNotifier<TextDirection> _contentDir;
-late int bIndex;
-late NotesBloc B;
-bool isEditing = false;
-
 class EditNote extends StatefulWidget {
   final Map note;
 
@@ -21,6 +13,14 @@ class EditNote extends StatefulWidget {
 }
 
 class _EditNoteState extends State<EditNote> {
+  final TextEditingController titleC = TextEditingController();
+  final TextEditingController contentC = TextEditingController();
+  late ValueNotifier<TextDirection> _titleDir;
+  late ValueNotifier<TextDirection> _contentDir;
+  late int bIndex;
+  late NotesBloc B;
+  bool isEditing = false;
+
   @override
   void initState() {
     B = NotesBloc.get(context);
@@ -246,26 +246,26 @@ class _EditNoteState extends State<EditNote> {
       },
     );
   }
-}
 
-int getLayout() {
-  int layout = 0;
-  if (_titleDir.value == TextDirection.ltr && _contentDir.value == TextDirection.ltr) {
-    layout = 0;
-  } else if (_titleDir.value == TextDirection.rtl && _contentDir.value == TextDirection.rtl) {
-    layout = 1;
-  } else if (_titleDir.value == TextDirection.ltr && _contentDir.value == TextDirection.rtl) {
-    if (titleC.text == "") {
+  int getLayout() {
+    int layout = 0;
+    if (_titleDir.value == TextDirection.ltr && _contentDir.value == TextDirection.ltr) {
+      layout = 0;
+    } else if (_titleDir.value == TextDirection.rtl && _contentDir.value == TextDirection.rtl) {
       layout = 1;
+    } else if (_titleDir.value == TextDirection.ltr && _contentDir.value == TextDirection.rtl) {
+      if (titleC.text == "") {
+        layout = 1;
+      } else {
+        layout = 2;
+      }
     } else {
-      layout = 2;
+      if (contentC.text == "") {
+        layout = 1;
+      } else {
+        layout = 3;
+      }
     }
-  } else {
-    if (contentC.text == "") {
-      layout = 1;
-    } else {
-      layout = 3;
-    }
+    return layout;
   }
-  return layout;
 }

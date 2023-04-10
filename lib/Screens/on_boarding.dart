@@ -7,9 +7,6 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:lottie/lottie.dart';
 import 'package:notes/Screens/home_screen.dart';
 
-bool isLastPage = false;
-bool lang = false;
-
 class IntroPage extends StatefulWidget {
   final String currentTheme;
   final Box box;
@@ -22,12 +19,27 @@ class IntroPage extends StatefulWidget {
 
 class _IntroPageState extends State<IntroPage> {
   final controller = PageController();
+  bool isLastPage = false;
+  bool lang = false;
+  late bool isDarkMode;
+  late Brightness brightness;
+  late ColorScheme theme;
+
+  @override
+  void initState() {
+    brightness = SchedulerBinding.instance.window.platformBrightness;
+    isDarkMode = brightness == Brightness.dark;
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    theme = Theme.of(context).colorScheme;
+    super.didChangeDependencies();
+  }
 
   @override
   Widget build(BuildContext context) {
-    ColorScheme theme = Theme.of(context).colorScheme;
-    var brightness = SchedulerBinding.instance.window.platformBrightness;
-    bool isDarkMode = brightness == Brightness.dark;
     return AnnotatedRegion<SystemUiOverlayStyle>(
         value: SystemUiOverlayStyle(
           statusBarColor: isDarkMode ? theme.background : theme.surfaceVariant.withOpacity(0.6),

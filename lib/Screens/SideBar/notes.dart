@@ -6,77 +6,44 @@ import 'package:notes/Screens/Actions/create_note.dart';
 import 'package:notes/Screens/Actions/edit_note.dart';
 import 'package:notes/Widgets/notes.dart';
 
-bool noTitle = false;
-bool noContent = false;
-bool searchOn = false;
-bool openFab = false;
 final TextEditingController searchC = TextEditingController();
 
-class NotesPage extends StatelessWidget {
+class NotesPage extends StatefulWidget {
   const NotesPage({Key? key}) : super(key: key);
 
   @override
+  State<NotesPage> createState() => _NotesPageState();
+}
+
+class _NotesPageState extends State<NotesPage> {
+  late ColorScheme theme;
+  late NotesBloc B;
+  late int value;
+  late List<Map> notes;
+  bool noTitle = false;
+  bool noContent = false;
+  bool searchOn = false;
+  bool openFab = false;
+
+  @override
+  void initState() {
+    B = NotesBloc.get(context);
+    value = B.viewIndexN;
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    notes = searchOn ? B.searchedNotes : B.notesMap;
+    theme = Theme.of(context).colorScheme;
+    super.didChangeDependencies();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    ColorScheme theme = Theme.of(context).colorScheme;
     return BlocConsumer<NotesBloc, NotesState>(
       listener: (context, state) {},
       builder: (context, state) {
-        var B = NotesBloc.get(context);
-        int value = B.viewIndexN;
-        List<Map> notes = searchOn ? B.searchedNotes : B.notesMap;
-        Widget leading() {
-          return Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              IconButton(
-                onPressed: () {
-                  searchOn = !searchOn;
-                  B.searchNotes(searchC.text);
-                  B.onSearch();
-                },
-                icon: Icon(
-                  Icons.search,
-                  size: 30,
-                  color: searchOn
-                      ? B.colorful
-                          ? B.colors[1]
-                          : theme.primary
-                      : theme.onSurfaceVariant,
-                ),
-              ),
-              IconButton(
-                onPressed: () {
-                  value < 2 ? value++ : value = 0;
-                  B.box.put("viewIndexN", value);
-                  B.viewIndexN = value;
-                  B.onViewChanged();
-                },
-                icon: B.viewIndexN == 0
-                    ? const Icon(Icons.view_agenda_sharp)
-                    : B.viewIndexN == 1
-                        ? const Icon(Icons.view_day_sharp)
-                        : const Icon(Icons.grid_view_sharp),
-              )
-            ],
-          );
-        }
-
-        create() {
-          showBottomSheet(context: context, builder: (context) => const CreateNote());
-        }
-
-        edit(reverseIndex) {
-          showBottomSheet(
-            context: context,
-            builder: (context) => EditNote(note: notes[reverseIndex]),
-          );
-        }
-
-        showDelete(index) {
-          B.showDeleteDialog(context, notes, index);
-        }
-
         return Scaffold(
           backgroundColor: B.isDarkMode ? theme.background : theme.surfaceVariant.withOpacity(0.6),
           floatingActionButtonLocation: B.fabIndex == 0
@@ -160,6 +127,9 @@ class NotesPage extends StatelessWidget {
                                               showDate: B.showDate,
                                               showShadow: B.showShadow,
                                               showEdited: B.showEdited,
+                                              isTablet: B.isTablet,
+                                              lang: context.locale.toString(),
+                                              width: B.width,
                                             ),
                                           ),
                                           Padding(
@@ -205,6 +175,9 @@ class NotesPage extends StatelessWidget {
                                               showDate: B.showDate,
                                               showShadow: B.showShadow,
                                               showEdited: B.showEdited,
+                                              isTablet: B.isTablet,
+                                              lang: context.locale.toString(),
+                                              width: B.width,
                                             ),
                                           ),
                                           Padding(
@@ -262,17 +235,21 @@ class NotesPage extends StatelessWidget {
                                     GestureDetector(
                                       onTap: () => edit(reverseIndex),
                                       child: gridView(
-                                          context: context,
-                                          notes: notes,
-                                          colors: B.colors,
-                                          reverseIndex: reverseIndex,
-                                          dateValue: dateValue,
-                                          date: date,
-                                          noTitle: noTitle,
-                                          noContent: noContent,
-                                          showDate: B.showDate,
-                                          showShadow: B.showShadow,
-                                          showEdited: B.showEdited),
+                                        context: context,
+                                        notes: notes,
+                                        colors: B.colors,
+                                        reverseIndex: reverseIndex,
+                                        dateValue: dateValue,
+                                        date: date,
+                                        noTitle: noTitle,
+                                        noContent: noContent,
+                                        showDate: B.showDate,
+                                        showShadow: B.showShadow,
+                                        showEdited: B.showEdited,
+                                        isTablet: B.isTablet,
+                                        lang: context.locale.toString(),
+                                        width: B.width,
+                                      ),
                                     ),
                                     Padding(
                                       padding: EdgeInsets.symmetric(
@@ -317,5 +294,58 @@ class NotesPage extends StatelessWidget {
         );
       },
     );
+  }
+
+  Widget leading() {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        IconButton(
+          onPressed: () {
+            searchOn = !searchOn;
+            B.searchNotes(searchC.text);
+            B.onSearch();
+          },
+          icon: Icon(
+            Icons.search,
+            size: 30,
+            color: searchOn
+                ? B.colorful
+                    ? B.colors[1]
+                    : theme.primary
+                : theme.onSurfaceVariant,
+          ),
+        ),
+        IconButton(
+          onPressed: () {
+            value < 2 ? value++ : value = 0;
+            B.box.put("viewIndexN", value);
+            B.viewIndexN = value;
+            B.onViewChanged();
+          },
+          icon: B.viewIndexN == 0
+              ? const Icon(Icons.view_agenda_sharp)
+              : B.viewIndexN == 1
+                  ? const Icon(Icons.view_day_sharp)
+                  : const Icon(Icons.grid_view_sharp),
+        )
+      ],
+    );
+  }
+
+  create() {
+    showBottomSheet(context: context, builder: (context) => const CreateNote());
+  }
+
+  edit(reverseIndex) {
+    showBottomSheet(
+      context: context,
+      builder: (context) => EditNote(note: notes[reverseIndex]),
+    );
+  }
+
+  showDelete(index) {
+    B.showDeleteDialog(context, notes, index);
   }
 }

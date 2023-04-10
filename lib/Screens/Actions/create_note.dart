@@ -3,16 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_localization/easy_localization.dart' hide TextDirection;
 import 'package:notes/Bloc/notes_bloc.dart';
 
-final TextEditingController titleC = TextEditingController();
-final TextEditingController contentC = TextEditingController();
-late ValueNotifier<TextDirection> titleDir;
-late ValueNotifier<TextDirection> contentDir;
-late String title;
-late String content;
-late String time;
-late NotesBloc B;
-int chosenIndex = 0;
-
 class CreateNote extends StatefulWidget {
   const CreateNote({Key? key}) : super(key: key);
 
@@ -21,6 +11,16 @@ class CreateNote extends StatefulWidget {
 }
 
 class _CreateNoteState extends State<CreateNote> {
+  final TextEditingController titleC = TextEditingController();
+  final TextEditingController contentC = TextEditingController();
+  late ValueNotifier<TextDirection> titleDir;
+  late ValueNotifier<TextDirection> contentDir;
+  late String title;
+  late String content;
+  late String time;
+  late NotesBloc B;
+  int chosenIndex = 0;
+
   @override
   void initState() {
     titleDir = ValueNotifier(TextDirection.ltr);
@@ -90,6 +90,7 @@ class _CreateNoteState extends State<CreateNote> {
                                         layout: getLayout()),
                                     titleC.text = "",
                                     contentC.text = "",
+                                    B.onCreateNote(),
                                     Navigator.pop(context),
                                     B.onCreateNote()
                                   }
@@ -213,26 +214,26 @@ class _CreateNoteState extends State<CreateNote> {
       },
     );
   }
-}
 
-int getLayout() {
-  int layout = 0;
-  if (titleDir.value == TextDirection.ltr && contentDir.value == TextDirection.ltr) {
-    layout = 0;
-  } else if (titleDir.value == TextDirection.rtl && contentDir.value == TextDirection.rtl) {
-    layout = 1;
-  } else if (titleDir.value == TextDirection.ltr && contentDir.value == TextDirection.rtl) {
-    if (title == "") {
+  int getLayout() {
+    int layout = 0;
+    if (titleDir.value == TextDirection.ltr && contentDir.value == TextDirection.ltr) {
+      layout = 0;
+    } else if (titleDir.value == TextDirection.rtl && contentDir.value == TextDirection.rtl) {
       layout = 1;
+    } else if (titleDir.value == TextDirection.ltr && contentDir.value == TextDirection.rtl) {
+      if (title == "") {
+        layout = 1;
+      } else {
+        layout = 2;
+      }
     } else {
-      layout = 2;
+      if (content == "") {
+        layout = 1;
+      } else {
+        layout = 3;
+      }
     }
-  } else {
-    if (content == "") {
-      layout = 1;
-    } else {
-      layout = 3;
-    }
+    return layout;
   }
-  return layout;
 }

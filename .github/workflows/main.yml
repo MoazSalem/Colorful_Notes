@@ -6,7 +6,7 @@ on:
     branches:
       - Release
 env:
-  app_ver: v1.1.8
+  app_ver: v1.1.9
 name: "Build & Release"
 jobs:
   build:

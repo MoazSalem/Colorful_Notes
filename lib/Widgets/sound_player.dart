@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
-import 'package:notes/Widgets/notes.dart';
 
 class SoundPlayer extends StatefulWidget {
   final List<Map> voiceMap;
   final int index;
   final List<Color> colors;
   final int viewMode;
+  final bool isTablet;
 
   const SoundPlayer(
       {Key? key,
       required this.voiceMap,
       required this.index,
       required this.colors,
-      required this.viewMode})
+      required this.viewMode,
+      required this.isTablet})
       : super(key: key);
 
   @override
@@ -224,7 +225,7 @@ class _SoundPlayerState extends State<SoundPlayer> {
                                 Padding(
                                   padding: EdgeInsets.only(bottom: width * 0.030555),
                                   child: SizedBox(
-                                      width: isTablet ? width * 0.47468 : width * 0.39468,
+                                      width: widget.isTablet ? width * 0.47468 : width * 0.39468,
                                       height: width * 0.101852,
                                       child: SliderTheme(
                                         data: SliderThemeData(
@@ -234,8 +235,9 @@ class _SoundPlayerState extends State<SoundPlayer> {
                                               elevation: 0,
                                               pressedElevation: 0),
                                           overlayShape: RoundSliderOverlayShape(
-                                              overlayRadius:
-                                                  isTablet ? width * 0.030649 : width * 0.035649),
+                                              overlayRadius: widget.isTablet
+                                                  ? width * 0.030649
+                                                  : width * 0.035649),
                                         ),
                                         child: Slider(
                                           activeColor: Colors.white,
@@ -287,7 +289,7 @@ class _SoundPlayerState extends State<SoundPlayer> {
                           FittedBox(
                             child: Padding(
                               padding: EdgeInsets.only(
-                                  right: isTablet ? width * 0.3037 : width * 0.2037,
+                                  right: widget.isTablet ? width * 0.3037 : width * 0.2037,
                                   bottom: width * 0.015278),
                               child: Text(
                                 play

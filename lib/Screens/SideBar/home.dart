@@ -10,97 +10,68 @@ import 'package:notes/Screens/Actions/create_note.dart';
 import 'package:notes/Screens/Actions/create_voice.dart';
 import 'dart:ui' as ui;
 
-bool noTitle = false;
-bool noContent = false;
-bool searchOn = false;
-bool openFab = false;
 final TextEditingController searchAC = TextEditingController();
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
   @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  late NotesBloc B;
+  late int value;
+  late List<Map> notes;
+  late ColorScheme theme;
+  bool noTitle = false;
+  bool noContent = false;
+  bool searchOn = false;
+  bool openFab = false;
+
+  @override
+  void initState() {
+    B = NotesBloc.get(context);
+    value = B.viewIndex;
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    notes = searchOn ? B.searchedALL : B.allNotesMap;
+    theme = Theme.of(context).colorScheme;
+    super.didChangeDependencies();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    ColorScheme theme = Theme.of(context).colorScheme;
     return BlocConsumer<NotesBloc, NotesState>(
       listener: (context, state) {},
       builder: (context, state) {
-        var B = NotesBloc.get(context);
-        int value = B.viewIndex;
-        List<Map> notes = searchOn ? B.searchedALL : B.allNotesMap;
-        Widget leading() {
-          return Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              IconButton(
-                onPressed: () {
-                  searchOn = !searchOn;
-                  B.searchHome(searchAC.text);
-                  B.onSearch();
-                },
-                icon: Icon(
-                  Icons.search,
-                  size: 30,
-                  color: searchOn
-                      ? B.colorful
-                          ? B.colors[0]
-                          : theme.primary
-                      : theme.onSurfaceVariant, //const Color(0xffff8b34)
-                ),
-              ),
-              IconButton(
-                onPressed: () {
-                  value < 2 ? value++ : value = 0;
-                  B.box.put("viewIndex", value);
-                  B.viewIndex = value;
-                  B.onViewChanged();
-                },
-                icon: B.viewIndex == 0
-                    ? const Icon(Icons.view_agenda_sharp)
-                    : B.viewIndex == 1
-                        ? const Icon(Icons.view_day_sharp)
-                        : const Icon(Icons.grid_view_sharp),
-              )
-            ],
-          );
-        }
-
-        create1() {
-          showBottomSheet(context: context, builder: (context) => const CreateNote());
-        }
-
-        create2() {
-          showBottomSheet(
-              enableDrag: false,
-              context: context,
-              builder: (context) =>
-                  createVoice(context: context, B: B, height: MediaQuery.of(context).size.height));
-        }
-
-        edit(reverseIndex) {
-          showBottomSheet(
-            context: context,
-            builder: (context) => notes[reverseIndex]['type'] == 0
-                ? EditNote(note: notes[reverseIndex])
-                : EditVoice(note: notes[reverseIndex]),
-          );
-        }
-
-        showDelete(index) {
-          B.showDeleteDialog(context, notes, index);
-        }
-
         return Scaffold(
           backgroundColor: B.isDarkMode ? theme.background : theme.surfaceVariant.withOpacity(0.6),
           floatingActionButtonLocation: B.fabIndex == 0
               ? FloatingActionButtonLocation.endFloat
               : FloatingActionButtonLocation.startFloat,
           floatingActionButton: B.fabIndex == 0
-              ? customFab(theme, B.colors, create1, create2, B.colorful)
+              ? customFab(
+                  theme: theme,
+                  colors: B.colors,
+                  action1: create1,
+                  action2: create2,
+                  colorful: B.colorful,
+                  isTablet: B.isTablet,
+                )
               : Directionality(
                   textDirection: B.lang == 'en' ? ui.TextDirection.rtl : ui.TextDirection.ltr,
-                  child: customFab(theme, B.colors, create1, create2, B.colorful)),
+                  child: customFab(
+                    theme: theme,
+                    colors: B.colors,
+                    action1: create1,
+                    action2: create2,
+                    colorful: B.colorful,
+                    isTablet: B.isTablet,
+                  )),
           body: ListView(
             padding: EdgeInsets.zero,
             children: [
@@ -157,17 +128,21 @@ class HomePage extends StatelessWidget {
                                           GestureDetector(
                                             onTap: () => edit(reverseIndex),
                                             child: listView(
-                                                context: context,
-                                                notes: notes,
-                                                colors: B.colors,
-                                                reverseIndex: reverseIndex,
-                                                dateValue: dateValue,
-                                                date: date,
-                                                noTitle: noTitle,
-                                                noContent: noContent,
-                                                showDate: B.showDate,
-                                                showShadow: B.showShadow,
-                                                showEdited: B.showEdited),
+                                              context: context,
+                                              notes: notes,
+                                              colors: B.colors,
+                                              reverseIndex: reverseIndex,
+                                              dateValue: dateValue,
+                                              date: date,
+                                              noTitle: noTitle,
+                                              noContent: noContent,
+                                              showDate: B.showDate,
+                                              showShadow: B.showShadow,
+                                              showEdited: B.showEdited,
+                                              isTablet: B.isTablet,
+                                              lang: context.locale.toString(),
+                                              width: B.width,
+                                            ),
                                           ),
                                           Padding(
                                             padding: EdgeInsets.symmetric(
@@ -203,17 +178,21 @@ class HomePage extends StatelessWidget {
                                           GestureDetector(
                                             onTap: () => edit(reverseIndex),
                                             child: smallListView(
-                                                context: context,
-                                                notes: notes,
-                                                colors: B.colors,
-                                                reverseIndex: reverseIndex,
-                                                dateValue: dateValue,
-                                                date: date,
-                                                noTitle: noTitle,
-                                                noContent: noContent,
-                                                showDate: B.showDate,
-                                                showShadow: B.showShadow,
-                                                showEdited: B.showEdited),
+                                              context: context,
+                                              notes: notes,
+                                              colors: B.colors,
+                                              reverseIndex: reverseIndex,
+                                              dateValue: dateValue,
+                                              date: date,
+                                              noTitle: noTitle,
+                                              noContent: noContent,
+                                              showDate: B.showDate,
+                                              showShadow: B.showShadow,
+                                              showEdited: B.showEdited,
+                                              isTablet: B.isTablet,
+                                              lang: context.locale.toString(),
+                                              width: B.width,
+                                            ),
                                           ),
                                           Padding(
                                             padding: EdgeInsets.symmetric(
@@ -272,17 +251,21 @@ class HomePage extends StatelessWidget {
                                     GestureDetector(
                                       onTap: () => edit(reverseIndex),
                                       child: gridView(
-                                          context: context,
-                                          notes: notes,
-                                          colors: B.colors,
-                                          reverseIndex: reverseIndex,
-                                          dateValue: dateValue,
-                                          date: date,
-                                          noTitle: noTitle,
-                                          noContent: noContent,
-                                          showDate: B.showDate,
-                                          showShadow: B.showShadow,
-                                          showEdited: B.showEdited),
+                                        context: context,
+                                        notes: notes,
+                                        colors: B.colors,
+                                        reverseIndex: reverseIndex,
+                                        dateValue: dateValue,
+                                        date: date,
+                                        noTitle: noTitle,
+                                        noContent: noContent,
+                                        showDate: B.showDate,
+                                        showShadow: B.showShadow,
+                                        showEdited: B.showEdited,
+                                        isTablet: B.isTablet,
+                                        lang: context.locale.toString(),
+                                        width: B.width,
+                                      ),
                                     ),
                                     Padding(
                                       padding: EdgeInsets.symmetric(
@@ -328,5 +311,64 @@ class HomePage extends StatelessWidget {
         );
       },
     );
+  }
+
+  Widget leading() {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        IconButton(
+          onPressed: () {
+            searchOn = !searchOn;
+            B.searchHome(searchAC.text);
+            B.onSearch();
+          },
+          icon: Icon(
+            Icons.search,
+            size: 30,
+            color: searchOn
+                ? B.colorful
+                    ? B.colors[0]
+                    : theme.primary
+                : theme.onSurfaceVariant, //const Color(0xffff8b34)
+          ),
+        ),
+        IconButton(
+          onPressed: () {
+            value < 2 ? value++ : value = 0;
+            B.box.put("viewIndex", value);
+            B.viewIndex = value;
+            B.onViewChanged();
+          },
+          icon: B.viewIndex == 0
+              ? const Icon(Icons.view_agenda_sharp)
+              : B.viewIndex == 1
+                  ? const Icon(Icons.view_day_sharp)
+                  : const Icon(Icons.grid_view_sharp),
+        )
+      ],
+    );
+  }
+
+  create1() {
+    showBottomSheet(context: context, builder: (context) => const CreateNote());
+  }
+
+  create2() {
+    showBottomSheet(enableDrag: false, context: context, builder: (context) => const CreateVoice());
+  }
+
+  edit(reverseIndex) {
+    showBottomSheet(
+      context: context,
+      builder: (context) => notes[reverseIndex]['type'] == 0
+          ? EditNote(note: notes[reverseIndex])
+          : EditVoice(note: notes[reverseIndex]),
+    );
+  }
+
+  showDelete(index) {
+    B.showDeleteDialog(context, notes, index);
   }
 }

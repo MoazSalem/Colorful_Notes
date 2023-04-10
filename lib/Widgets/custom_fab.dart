@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:notes/Widgets/notes.dart';
 
 bool openFab = false;
 
-Widget customFab(ColorScheme theme, colors, action1, action2, bool colorful) {
+Widget customFab({
+  required ColorScheme theme,
+  required colors,
+  required bool colorful,
+  required bool isTablet,
+  required action1,
+  required action2,
+}) {
   return StatefulBuilder(
     builder: (context, setState) => SizedBox(
       child: Column(

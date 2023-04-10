@@ -10,25 +10,88 @@ import 'package:notes/Screens/SideBar/info.dart';
 import 'package:notes/Screens/SideBar/notes.dart';
 import 'package:notes/Screens/SideBar/settings.dart';
 import 'package:notes/Screens/SideBar/voice_notes.dart';
-import 'package:notes/Widgets/sideBar.dart';
-//import 'package:notes/Test/colors.dart';
+import 'package:notes/Widgets/sidebar.dart';
 
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
   final String currentTheme;
 
   const Home({Key? key, required this.currentTheme}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    ColorScheme theme = Theme.of(context).colorScheme;
-    var brightness = SchedulerBinding.instance.window.platformBrightness;
-    bool isDarkMode = brightness == Brightness.dark
-        ? currentTheme == "Light"
+  State<Home> createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+  late Brightness brightness;
+  late bool isDarkMode;
+  late ColorScheme theme;
+  late NotesBloc B;
+  late List<Widget> page;
+
+  @override
+  void initState() {
+    brightness = SchedulerBinding.instance.window.platformBrightness;
+    isDarkMode = brightness == Brightness.dark
+        ? widget.currentTheme == "Light"
             ? false
             : true
-        : currentTheme == "Dark"
+        : widget.currentTheme == "Dark"
             ? true
             : false;
+    B = NotesBloc.get(context);
+    page = [
+      Builder(
+        builder: (context) {
+          return MediaQuery(
+              data: MediaQuery.of(context).copyWith(textScaleFactor: B.isTablet ? 1.5 : 1.0),
+              child: const HomePage());
+        },
+      ),
+      Builder(
+        builder: (context) {
+          return MediaQuery(
+              data: MediaQuery.of(context).copyWith(textScaleFactor: B.isTablet ? 1.5 : 1.0),
+              child: const NotesPage());
+        },
+      ),
+      Builder(
+        builder: (context) {
+          return MediaQuery(
+              data: MediaQuery.of(context).copyWith(textScaleFactor: B.isTablet ? 1.5 : 1.0),
+              child: const VoiceNotesPage());
+        },
+      ),
+      Builder(
+        builder: (context) {
+          return MediaQuery(
+              data: MediaQuery.of(context)
+                  .copyWith(textScaleFactor: B.isTablet ? 1.5 : 1.0), //child: ColorsTest(),);
+              child: const SettingsPage());
+        },
+      ),
+      Builder(
+        builder: (context) {
+          return MediaQuery(
+              data: MediaQuery.of(context).copyWith(textScaleFactor: B.isTablet ? 1.5 : 1.0),
+              child: const InfoPage());
+        },
+      ),
+    ];
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    theme = Theme.of(context).colorScheme;
+    B.theme = theme;
+    B.lang = context.locale.toString();
+    B.getScreenWidth(context);
+    B.harmonizeColors();
+    super.didChangeDependencies();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return AnnotatedRegion<SystemUiOverlayStyle>(
         value: SystemUiOverlayStyle(
           statusBarColor: Colors.transparent,
@@ -42,53 +105,6 @@ class Home extends StatelessWidget {
         child: BlocConsumer<NotesBloc, NotesState>(
           listener: (context, state) {},
           builder: (context, state) {
-            var B = NotesBloc.get(context);
-            B.theme = theme;
-            B.lang = context.locale.toString();
-            B.getScreenWidth(context);
-            B.harmonizeColors();
-            List<Widget> page = [
-              Builder(
-                builder: (context) {
-                  return MediaQuery(
-                      data:
-                          MediaQuery.of(context).copyWith(textScaleFactor: B.isTablet ? 1.5 : 1.0),
-                      child: const HomePage());
-                },
-              ),
-              Builder(
-                builder: (context) {
-                  return MediaQuery(
-                      data:
-                          MediaQuery.of(context).copyWith(textScaleFactor: B.isTablet ? 1.5 : 1.0),
-                      child: const NotesPage());
-                },
-              ),
-              Builder(
-                builder: (context) {
-                  return MediaQuery(
-                      data:
-                          MediaQuery.of(context).copyWith(textScaleFactor: B.isTablet ? 1.5 : 1.0),
-                      child: const VoiceNotesPage());
-                },
-              ),
-              Builder(
-                builder: (context) {
-                  return MediaQuery(
-                      data: MediaQuery.of(context).copyWith(
-                          textScaleFactor: B.isTablet ? 1.5 : 1.0), //child: ColorsTest(),);
-                      child: const SettingsPage());
-                },
-              ),
-              Builder(
-                builder: (context) {
-                  return MediaQuery(
-                      data:
-                          MediaQuery.of(context).copyWith(textScaleFactor: B.isTablet ? 1.5 : 1.0),
-                      child: const InfoPage());
-                },
-              ),
-            ];
             return Scaffold(
               resizeToAvoidBottomInset: false,
               body: B.loading
@@ -113,21 +129,18 @@ class Home extends StatelessWidget {
                                 flex: 5,
                                 child: page[B.currentIndex],
                               ),
-                              // Container(
-                              //   height: double.infinity,
-                              //   width: 1,
-                              //   color:theme.outline.withOpacity(0.2), //Theme.of(context).highlightColor.withOpacity(0.15),
-                              // ),
-                              sideBar(theme, B.sbIndex == 3 ? true : false),
-                              // Divider
+                              sideBar(
+                                  theme: theme,
+                                  inverted: B.sbIndex == 3 ? true : false,
+                                  B: B,
+                                  sizeBox: B.isTablet ? 60 : 30),
                             ]
                           : [
-                              sideBar(theme, B.sbIndex == 1 ? true : false),
-                              // Container(
-                              //   height: double.infinity,
-                              //   width: 1,
-                              //   color:theme.outline.withOpacity(0.2), //Theme.of(context).highlightColor.withOpacity(0.15),
-                              // ), // Divider
+                              sideBar(
+                                  theme: theme,
+                                  inverted: B.sbIndex == 1 ? true : false,
+                                  B: B,
+                                  sizeBox: B.isTablet ? 60 : 30),
                               Expanded(
                                 flex: 5,
                                 child: page[B.currentIndex],
