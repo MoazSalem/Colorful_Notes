@@ -28,6 +28,7 @@ class AppColor {
     appBarColor: Color(0xFFC8DCF8),
     swapOnMaterial3: true,
   );
+
 // Create a corresponding custom flex scheme color for a dark theme.
   static const FlexSchemeColor _myScheme1Dark = FlexSchemeColor(
     primary: Color(0xFFB1CFF5),
@@ -126,7 +127,22 @@ class AppColor {
     // to a list of FlexSchemeData, where we can bundle each light and dark
     // theme that goes together and give it a name and description too.
     const FlexSchemeData(
-      name: 'Example Midnight',
+      name: 'Default Theme',
+      description: 'Default theme, used in older version of the app, enable Colorful option with this theme',
+      light: FlexSchemeColor(
+        primary: Colors.white,
+        secondary: Colors.amber,
+        swapOnMaterial3: true,
+      ),
+      dark: FlexSchemeColor(
+        primary: Colors.black,
+        secondary: Colors.amber,
+        swapOnMaterial3: true,
+      ),
+    ),
+
+    const FlexSchemeData(
+      name: 'Midnight Blue',
       description: 'Midnight blue theme, created as an in code example by '
           'using custom color values for all colors in the scheme',
       // FlexSchemeData holds separate defined color schemes for light and
@@ -138,7 +154,7 @@ class AppColor {
     ),
     // Do the same for our second custom scheme.
     FlexSchemeData(
-      name: 'Example Greens',
+      name: 'Vivid Greens',
       description: 'Vivid green theme, created as an in code example from one '
           'primary color in light mode and another primary for dark mode',
       light: _myScheme2Light,
@@ -147,7 +163,7 @@ class AppColor {
     // We also do the same for our 3rd custom scheme, BUT we create its matching
     // dark colors, from the light FlexSchemeColor with the toDark method.
     FlexSchemeData(
-      name: 'Example Red & Blue',
+      name: 'Red & Blue',
       description: 'Classic red and blue, created as an in code example from '
           'only light theme mode primary and secondary colors',
       light: _myScheme3Light,
@@ -212,29 +228,28 @@ class AppColor {
   /// when controller says we are using that as well, instead of the defined
   /// dark mode scheme. This simplifies our logic in the MaterialApp
   /// of example 5 and we get right dark colors in ThemeSelector and Popup too.
-  static FlexSchemeData schemeAtIndex(
-      final int index, final ThemeController controller) {
+  static FlexSchemeData schemeAtIndex(final int index, final ThemeController controller) {
     if (index == schemes.length - 1) {
       return controller.customScheme.copyWith(
-        // TODO(rydmike): Something fishy here! On copy dark to custom.
+          // TODO(rydmike): Something fishy here! On copy dark to custom.
           dark: controller.useKeyColors
               ?
-          // controller.useDarkColorsForSeed
-          //     ?
-          controller.customScheme.dark
-          //     :
-          // controller.customScheme.light
+              // controller.useDarkColorsForSeed
+              //     ?
+              controller.customScheme.dark
+              //     :
+              // controller.customScheme.light
               : controller.useToDarkMethod
-              ? controller.customScheme.light.defaultError.toDark(
-              controller.darkMethodLevel,
-              controller.toDarkSwapPrimaryAndContainer)
-              : null);
+                  ? controller.customScheme.light.defaultError
+                      .toDark(controller.darkMethodLevel, controller.toDarkSwapPrimaryAndContainer)
+                  : null);
     }
     return schemes[index].copyWith(
         dark: controller.useToDarkMethod
-            ? schemes[index].light.defaultError.toDark(
-            controller.darkMethodLevel,
-            controller.toDarkSwapPrimaryAndContainer)
+            ? schemes[index]
+                .light
+                .defaultError
+                .toDark(controller.darkMethodLevel, controller.toDarkSwapPrimaryAndContainer)
             : null);
   }
 
