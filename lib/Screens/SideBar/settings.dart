@@ -24,7 +24,6 @@ class _SettingsPageState extends State<SettingsPage> {
   late double iconSize;
   late double itemHeight;
   late double fontSize;
-  late double padding;
   late Color textColor;
   late Color dropDownColor;
   late String fabLoc;
@@ -46,7 +45,6 @@ class _SettingsPageState extends State<SettingsPage> {
     iconSize = B.isTablet ? 40 : 10.0;
     itemHeight = B.isTablet ? 80 : 50.0;
     fontSize = B.isTablet ? 10 : 14;
-    padding = B.isTablet ? 24 : 10;
     sB = B.sbIndex == 0
         ? "Top Left"
         : B.sbIndex == 1
@@ -80,18 +78,64 @@ class _SettingsPageState extends State<SettingsPage> {
               SizedBox(
                 height: height,
                 child: Center(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: padding),
-                    child: ListTile(
+                  child: ListTile(
+                    title: Text(
+                      "Language".tr(),
+                      style:
+                          TextStyle(fontSize: title, fontWeight: FontWeight.w400, color: textColor),
+                    ),
+                    subtitle: Text(
+                      "sLanguage".tr(),
+                      style: TextStyle(
+                          fontSize: subtitle, fontWeight: FontWeight.w300, color: textColor),
+                    ),
+                    trailing: DropdownButton(
+                      iconSize: iconSize,
+                      itemHeight: itemHeight,
+                      borderRadius: BorderRadius.circular(10),
+                      alignment: Alignment.center,
+                      underline: Container(),
+                      style: TextStyle(
+                          color: textColor, fontSize: fontSize, fontWeight: FontWeight.w400),
+                      dropdownColor: dropDownColor,
+                      elevation: 0,
+                      isDense: true,
+                      iconEnabledColor: textColor,
+                      value: B.lang == 'en' ? "English" : "Arabic",
+                      icon: const Icon(Icons.keyboard_arrow_down),
+                      items: lang.map((String items) {
+                        return DropdownMenuItem(
+                            value: items,
+                            child: MediaQuery(
+                              data: MediaQuery.of(context)
+                                  .copyWith(textScaleFactor: B.isTablet ? 2.0 : 1.0),
+                              child: Text(items).tr(),
+                            ));
+                      }).toList(),
+                      onChanged: (String? newValue) {
+                        B.lang = newValue! == 'English' ? 'en' : 'ar';
+                        context.setLocale(Locale(B.lang));
+                        B.lang = context.locale.toString();
+                        B.prefsChanged();
+                      },
+                    ),
+                  ),
+                ),
+              ),
+              B.divider(),
+              SizedBox(
+                height: height,
+                child: Center(
+                  child: ListTile(
                       title: Text(
-                        "Language".tr(),
+                        "Start In".tr(),
                         style: TextStyle(
-                            fontSize: title, fontWeight: FontWeight.w500, color: textColor),
+                            fontSize: title, fontWeight: FontWeight.w400, color: textColor),
                       ),
                       subtitle: Text(
-                        "sLanguage".tr(),
+                        "sStart In".tr(),
                         style: TextStyle(
-                            fontSize: subtitle, fontWeight: FontWeight.w400, color: textColor),
+                            fontSize: subtitle, fontWeight: FontWeight.w300, color: textColor),
                       ),
                       trailing: DropdownButton(
                         iconSize: iconSize,
@@ -105,9 +149,9 @@ class _SettingsPageState extends State<SettingsPage> {
                         elevation: 0,
                         isDense: true,
                         iconEnabledColor: textColor,
-                        value: B.lang == 'en' ? "English" : "Arabic",
+                        value: B.openPage,
                         icon: const Icon(Icons.keyboard_arrow_down),
-                        items: lang.map((String items) {
+                        items: pages.map((String items) {
                           return DropdownMenuItem(
                               value: items,
                               child: MediaQuery(
@@ -117,465 +161,380 @@ class _SettingsPageState extends State<SettingsPage> {
                               ));
                         }).toList(),
                         onChanged: (String? newValue) {
-                          B.lang = newValue! == 'English' ? 'en' : 'ar';
-                          context.setLocale(Locale(B.lang));
-                          B.lang = context.locale.toString();
+                          B.box.put(
+                              "Pages",
+                              newValue! == 'Home'
+                                  ? 'Home'
+                                  : newValue == 'Text'
+                                      ? 'Text'
+                                      : 'Voice');
+                          B.openPage = newValue;
                           B.prefsChanged();
                         },
+                      )),
+                ),
+              ),
+              B.divider(),
+              SizedBox(
+                height: height,
+                child: Center(
+                  child: ListTile(
+                      title: Text(
+                        "Side Bar".tr(),
+                        style: TextStyle(
+                            fontSize: title, fontWeight: FontWeight.w400, color: textColor),
                       ),
-                    ),
-                  ),
+                      subtitle: Text(
+                        "sSide Bar".tr(),
+                        style: TextStyle(
+                            fontSize: subtitle, fontWeight: FontWeight.w300, color: textColor),
+                      ),
+                      trailing: DropdownButton(
+                        iconSize: iconSize,
+                        itemHeight: itemHeight,
+                        borderRadius: BorderRadius.circular(10),
+                        alignment: Alignment.center,
+                        underline: Container(),
+                        style: TextStyle(
+                            color: textColor, fontSize: fontSize, fontWeight: FontWeight.w400),
+                        dropdownColor: dropDownColor,
+                        elevation: 0,
+                        isDense: true,
+                        iconEnabledColor: textColor,
+                        value: sB,
+                        icon: const Icon(Icons.keyboard_arrow_down),
+                        items: sb.map((String items) {
+                          return DropdownMenuItem(
+                              value: items,
+                              child: MediaQuery(
+                                data: MediaQuery.of(context)
+                                    .copyWith(textScaleFactor: B.isTablet ? 2.0 : 1.0),
+                                child: Text(items).tr(),
+                              ));
+                        }).toList(),
+                        onChanged: (String? newValue) {
+                          newValue == 'Top Left'
+                              ? B.sbIndex = 0
+                              : newValue == 'Bottom Left'
+                                  ? B.sbIndex = 1
+                                  : newValue == 'Top Right'
+                                      ? B.sbIndex = 2
+                                      : B.sbIndex = 3;
+                          sB = newValue!;
+                          B.box.put("sbIndex", B.sbIndex);
+                          B.prefsChanged();
+                        },
+                      )),
                 ),
               ),
               B.divider(),
               SizedBox(
                 height: height,
                 child: Center(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: padding),
-                    child: ListTile(
-                        title: Text(
-                          "Start In".tr(),
-                          style: TextStyle(
-                              fontSize: title, fontWeight: FontWeight.w500, color: textColor),
-                        ),
-                        subtitle: Text(
-                          "sStart In".tr(),
-                          style: TextStyle(
-                              fontSize: subtitle, fontWeight: FontWeight.w400, color: textColor),
-                        ),
-                        trailing: DropdownButton(
-                          iconSize: iconSize,
-                          itemHeight: itemHeight,
-                          borderRadius: BorderRadius.circular(10),
-                          alignment: Alignment.center,
-                          underline: Container(),
-                          style: TextStyle(
-                              color: textColor, fontSize: fontSize, fontWeight: FontWeight.w400),
-                          dropdownColor: dropDownColor,
-                          elevation: 0,
-                          isDense: true,
-                          iconEnabledColor: textColor,
-                          value: B.openPage,
-                          icon: const Icon(Icons.keyboard_arrow_down),
-                          items: pages.map((String items) {
-                            return DropdownMenuItem(
-                                value: items,
-                                child: MediaQuery(
-                                  data: MediaQuery.of(context)
-                                      .copyWith(textScaleFactor: B.isTablet ? 2.0 : 1.0),
-                                  child: Text(items).tr(),
-                                ));
-                          }).toList(),
-                          onChanged: (String? newValue) {
-                            B.box.put(
-                                "Pages",
-                                newValue! == 'Home'
-                                    ? 'Home'
-                                    : newValue == 'Text'
-                                        ? 'Text'
-                                        : 'Voice');
-                            B.openPage = newValue;
-                            B.prefsChanged();
-                          },
-                        )),
-                  ),
+                  child: ListTile(
+                      title: Text(
+                        "Create Button".tr(),
+                        style: TextStyle(
+                            fontSize: title, fontWeight: FontWeight.w400, color: textColor),
+                      ),
+                      subtitle: Text(
+                        "sCreate Button".tr(),
+                        style: TextStyle(
+                            fontSize: subtitle, fontWeight: FontWeight.w300, color: textColor),
+                      ),
+                      trailing: DropdownButton(
+                        iconSize: iconSize,
+                        itemHeight: itemHeight,
+                        borderRadius: BorderRadius.circular(10),
+                        alignment: Alignment.center,
+                        underline: Container(),
+                        style: TextStyle(
+                            color: textColor, fontSize: fontSize, fontWeight: FontWeight.w400),
+                        dropdownColor: dropDownColor,
+                        elevation: 0,
+                        isDense: true,
+                        iconEnabledColor: textColor,
+                        value: fabLoc,
+                        icon: const Icon(Icons.keyboard_arrow_down),
+                        items: fab.map((String items) {
+                          return DropdownMenuItem(
+                              value: items,
+                              child: MediaQuery(
+                                data: MediaQuery.of(context)
+                                    .copyWith(textScaleFactor: B.isTablet ? 2.0 : 1.0),
+                                child: Text(items).tr(),
+                              ));
+                        }).toList(),
+                        onChanged: (String? newValue) {
+                          newValue == 'Right' ? B.fabIndex = 0 : B.fabIndex = 1;
+                          fabLoc = newValue!;
+                          B.box.put("fabIndex", B.fabIndex);
+                          B.prefsChanged();
+                        },
+                      )),
                 ),
               ),
               B.divider(),
               SizedBox(
                 height: height,
                 child: Center(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: padding),
-                    child: ListTile(
-                        title: Text(
-                          "Side Bar".tr(),
-                          style: TextStyle(
-                              fontSize: title, fontWeight: FontWeight.w500, color: textColor),
-                        ),
-                        subtitle: Text(
-                          "sSide Bar".tr(),
-                          style: TextStyle(
-                              fontSize: subtitle, fontWeight: FontWeight.w400, color: textColor),
-                        ),
-                        trailing: DropdownButton(
-                          iconSize: iconSize,
-                          itemHeight: itemHeight,
-                          borderRadius: BorderRadius.circular(10),
-                          alignment: Alignment.center,
-                          underline: Container(),
-                          style: TextStyle(
-                              color: textColor, fontSize: fontSize, fontWeight: FontWeight.w400),
-                          dropdownColor: dropDownColor,
-                          elevation: 0,
-                          isDense: true,
-                          iconEnabledColor: textColor,
-                          value: sB,
-                          icon: const Icon(Icons.keyboard_arrow_down),
-                          items: sb.map((String items) {
-                            return DropdownMenuItem(
-                                value: items,
-                                child: MediaQuery(
-                                  data: MediaQuery.of(context)
-                                      .copyWith(textScaleFactor: B.isTablet ? 2.0 : 1.0),
-                                  child: Text(items).tr(),
-                                ));
-                          }).toList(),
-                          onChanged: (String? newValue) {
-                            newValue == 'Top Left'
-                                ? B.sbIndex = 0
-                                : newValue == 'Bottom Left'
-                                    ? B.sbIndex = 1
-                                    : newValue == 'Top Right'
-                                        ? B.sbIndex = 2
-                                        : B.sbIndex = 3;
-                            sB = newValue!;
-                            B.box.put("sbIndex", B.sbIndex);
-                            B.prefsChanged();
-                          },
-                        )),
-                  ),
+                  child: ListTile(
+                      title: Text(
+                        "App Theme".tr(),
+                        style: TextStyle(
+                            fontSize: title, fontWeight: FontWeight.w400, color: textColor),
+                      ),
+                      subtitle: Text(
+                        "sApp Theme".tr(),
+                        style: TextStyle(
+                            fontSize: subtitle, fontWeight: FontWeight.w300, color: textColor),
+                      ),
+                      trailing: DropdownButton(
+                        iconSize: iconSize,
+                        itemHeight: itemHeight,
+                        borderRadius: BorderRadius.circular(10),
+                        alignment: Alignment.center,
+                        underline: Container(),
+                        style: TextStyle(
+                            color: textColor, fontSize: fontSize, fontWeight: FontWeight.w400),
+                        dropdownColor: dropDownColor,
+                        elevation: 0,
+                        isDense: true,
+                        iconEnabledColor: textColor,
+                        value: B.currentTheme,
+                        icon: const Icon(Icons.keyboard_arrow_down),
+                        items: themes.map((String items) {
+                          return DropdownMenuItem(
+                              value: items,
+                              child: MediaQuery(
+                                data: MediaQuery.of(context)
+                                    .copyWith(textScaleFactor: B.isTablet ? 2.0 : 1.0),
+                                child: Text(items).tr(),
+                              ));
+                        }).toList(),
+                        onChanged: (String? newValue) {
+                          // I need to relearn Bloc and reImplement this :(
+                          int c;
+                          newValue == 'Light'
+                              ? {c = 0, B.themeController.setThemeMode(ThemeMode.light)}
+                              : newValue == 'Dark'
+                                  ? {c = 1, B.themeController.setThemeMode(ThemeMode.dark)}
+                                  : {
+                                      c = 2,
+                                      B.themeController.setThemeMode(ThemeMode.system),
+                                    };
+                          B.currentTheme = newValue!;
+                          B.box.put("themeMode", c);
+                          B.prefsChanged();
+                        },
+                      )),
+                ),
+              ),
+              B.divider(),
+              ThemePopupMenu(
+                textColor: textColor,
+                isTablet: B.isTablet,
+                schemeIndex: B.themeController.schemeIndex,
+                onChanged: (value) {
+                  B.themeController.setSchemeIndex(value);
+                  B.prefsChanged();
+                },
+              ),
+              B.divider(),
+              SizedBox(
+                height: height,
+                child: Center(
+                  child: ListTile(
+                      title: Text(
+                        "Dynamic Colors".tr(),
+                        style: TextStyle(
+                            fontSize: title, fontWeight: FontWeight.w400, color: textColor),
+                      ),
+                      subtitle: Text(
+                        "DC".tr(),
+                        style: TextStyle(
+                            fontSize: subtitle, fontWeight: FontWeight.w300, color: textColor),
+                      ),
+                      trailing: SwitcherButton(
+                        onColor: B.colorful ? B.colors[8] : theme.primary,
+                        offColor: theme.primaryContainer,
+                        size: switchSize,
+                        value: B.box.get("isDynamic") ?? false,
+                        onChange: (bool value) {
+                          B.box.put("isDynamic", value);
+                          B.prefsChanged();
+                        },
+                      )),
                 ),
               ),
               B.divider(),
               SizedBox(
                 height: height,
                 child: Center(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: padding),
-                    child: ListTile(
-                        title: Text(
-                          "Create Button".tr(),
-                          style: TextStyle(
-                              fontSize: title, fontWeight: FontWeight.w500, color: textColor),
-                        ),
-                        subtitle: Text(
-                          "sCreate Button".tr(),
-                          style: TextStyle(
-                              fontSize: subtitle, fontWeight: FontWeight.w400, color: textColor),
-                        ),
-                        trailing: DropdownButton(
-                          iconSize: iconSize,
-                          itemHeight: itemHeight,
-                          borderRadius: BorderRadius.circular(10),
-                          alignment: Alignment.center,
-                          underline: Container(),
-                          style: TextStyle(
-                              color: textColor, fontSize: fontSize, fontWeight: FontWeight.w400),
-                          dropdownColor: dropDownColor,
-                          elevation: 0,
-                          isDense: true,
-                          iconEnabledColor: textColor,
-                          value: fabLoc,
-                          icon: const Icon(Icons.keyboard_arrow_down),
-                          items: fab.map((String items) {
-                            return DropdownMenuItem(
-                                value: items,
-                                child: MediaQuery(
-                                  data: MediaQuery.of(context)
-                                      .copyWith(textScaleFactor: B.isTablet ? 2.0 : 1.0),
-                                  child: Text(items).tr(),
-                                ));
-                          }).toList(),
-                          onChanged: (String? newValue) {
-                            newValue == 'Right' ? B.fabIndex = 0 : B.fabIndex = 1;
-                            fabLoc = newValue!;
-                            B.box.put("fabIndex", B.fabIndex);
-                            B.prefsChanged();
-                          },
-                        )),
-                  ),
+                  child: ListTile(
+                      title: Text(
+                        "Darker Colors".tr(),
+                        style: TextStyle(
+                            fontSize: title, fontWeight: FontWeight.w400, color: textColor),
+                      ),
+                      subtitle: Text(
+                        "sDarker Colors".tr(),
+                        style: TextStyle(
+                            fontSize: subtitle, fontWeight: FontWeight.w300, color: textColor),
+                      ),
+                      trailing: SwitcherButton(
+                        onColor: B.colorful ? B.colors[6] : theme.primary,
+                        offColor: theme.primaryContainer,
+                        size: switchSize,
+                        value: B.darkColors,
+                        onChange: (bool value) {
+                          B.box.put("darkColors", value);
+                          B.darkColors = value;
+                          B.prefsChanged();
+                        },
+                      )),
                 ),
               ),
               B.divider(),
               SizedBox(
                 height: height,
                 child: Center(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: padding),
-                    child: ListTile(
-                        title: Text(
-                          "App Theme".tr(),
-                          style: TextStyle(
-                              fontSize: title, fontWeight: FontWeight.w500, color: textColor),
-                        ),
-                        subtitle: Text(
-                          "sApp Theme".tr(),
-                          style: TextStyle(
-                              fontSize: subtitle, fontWeight: FontWeight.w400, color: textColor),
-                        ),
-                        trailing: DropdownButton(
-                          iconSize: iconSize,
-                          itemHeight: itemHeight,
-                          borderRadius: BorderRadius.circular(10),
-                          alignment: Alignment.center,
-                          underline: Container(),
-                          style: TextStyle(
-                              color: textColor, fontSize: fontSize, fontWeight: FontWeight.w400),
-                          dropdownColor: dropDownColor,
-                          elevation: 0,
-                          isDense: true,
-                          iconEnabledColor: textColor,
-                          value: B.currentTheme,
-                          icon: const Icon(Icons.keyboard_arrow_down),
-                          items: themes.map((String items) {
-                            return DropdownMenuItem(
-                                value: items,
-                                child: MediaQuery(
-                                  data: MediaQuery.of(context)
-                                      .copyWith(textScaleFactor: B.isTablet ? 2.0 : 1.0),
-                                  child: Text(items).tr(),
-                                ));
-                          }).toList(),
-                          onChanged: (String? newValue) {
-                            // I need to relearn Bloc and reImplement this :(
-                            int c;
-                            newValue == 'Light'
-                                ? {c = 0, B.themeController.setThemeMode(ThemeMode.light)}
-                                : newValue == 'Dark'
-                                    ? {c = 1, B.themeController.setThemeMode(ThemeMode.dark)}
-                                    : {
-                                        c = 2,
-                                        B.themeController.setThemeMode(ThemeMode.system),
-                                      };
-                            B.currentTheme = newValue!;
-                            B.box.put("themeMode", c);
-                            B.prefsChanged();
-                          },
-                        )),
-                  ),
-                ),
-              ),
-              B.divider(),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: padding),
-                child: ThemePopupMenu(
-                  textColor: textColor,
-                  isTablet: B.isTablet,
-                  schemeIndex: B.themeController.schemeIndex,
-                  onChanged: (value) {
-                    B.themeController.setSchemeIndex(value);
-                    B.prefsChanged();
-                  },
+                  child: ListTile(
+                      title: Text(
+                        "harmonize Colors".tr(),
+                        style: TextStyle(
+                            fontSize: title, fontWeight: FontWeight.w400, color: textColor),
+                      ),
+                      subtitle: Text(
+                        "sHarmonizeColors".tr(),
+                        style: TextStyle(
+                            fontSize: subtitle, fontWeight: FontWeight.w300, color: textColor),
+                      ),
+                      trailing: SwitcherButton(
+                        onColor: B.colorful ? B.colors[4] : theme.primary,
+                        offColor: theme.primaryContainer,
+                        size: switchSize,
+                        value: B.harmonizeColor,
+                        onChange: (bool value) {
+                          B.box.put("harmonizeColor", value);
+                          B.harmonizeColor = value;
+                          B.harmonizeColors();
+                          B.prefsChanged();
+                        },
+                      )),
                 ),
               ),
               B.divider(),
               SizedBox(
                 height: height,
                 child: Center(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: padding),
-                    child: ListTile(
-                        title: Text(
-                          "Dynamic Colors".tr(),
-                          style: TextStyle(
-                              fontSize: title, fontWeight: FontWeight.w500, color: textColor),
-                        ),
-                        subtitle: Text(
-                          "DC".tr(),
-                          style: TextStyle(
-                              fontSize: subtitle, fontWeight: FontWeight.w400, color: textColor),
-                        ),
-                        trailing: SwitcherButton(
-                          onColor: B.colorful ? B.colors[8] : theme.primary,
-                          offColor: theme.primaryContainer,
-                          size: switchSize,
-                          value: B.box.get("isDynamic") ?? false,
-                          onChange: (bool value) {
-                            B.box.put("isDynamic", value);
-                            B.prefsChanged();
-                          },
-                        )),
-                  ),
+                  child: ListTile(
+                      title: Text(
+                        "Colorful".tr(),
+                        style: TextStyle(
+                            fontSize: title, fontWeight: FontWeight.w400, color: textColor),
+                      ),
+                      subtitle: Text(
+                        "sColorful".tr(),
+                        style: TextStyle(
+                            fontSize: subtitle, fontWeight: FontWeight.w300, color: textColor),
+                      ),
+                      trailing: SwitcherButton(
+                        onColor: B.colorful ? B.colors[8] : theme.primary,
+                        offColor: theme.primaryContainer,
+                        size: switchSize,
+                        value: B.colorful,
+                        onChange: (bool value) {
+                          B.box.put("colorful", value);
+                          B.colorful = value;
+                          B.prefsChanged();
+                        },
+                      )),
                 ),
               ),
               B.divider(),
               SizedBox(
                 height: height,
                 child: Center(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: padding),
-                    child: ListTile(
-                        title: Text(
-                          "Darker Colors".tr(),
-                          style: TextStyle(
-                              fontSize: title, fontWeight: FontWeight.w500, color: textColor),
-                        ),
-                        subtitle: Text(
-                          "sDarker Colors".tr(),
-                          style: TextStyle(
-                              fontSize: subtitle, fontWeight: FontWeight.w400, color: textColor),
-                        ),
-                        trailing: SwitcherButton(
-                          onColor: B.colorful ? B.colors[6] : theme.primary,
-                          offColor: theme.primaryContainer,
-                          size: switchSize,
-                          value: B.darkColors,
-                          onChange: (bool value) {
-                            B.box.put("darkColors", value);
-                            B.darkColors = value;
-                            B.prefsChanged();
-                          },
-                        )),
-                  ),
+                  child: ListTile(
+                      title: Text(
+                        "Show Date".tr(),
+                        style: TextStyle(
+                            fontSize: title, fontWeight: FontWeight.w400, color: textColor),
+                      ),
+                      subtitle: Text(
+                        "sShow Date".tr(),
+                        style: TextStyle(
+                            fontSize: subtitle, fontWeight: FontWeight.w300, color: textColor),
+                      ),
+                      trailing: SwitcherButton(
+                        onColor: B.colorful ? B.colors[0] : theme.primary,
+                        offColor: theme.primaryContainer,
+                        // offColor: Theme.of(context).primaryColorDark,
+                        size: switchSize,
+                        value: B.showDate,
+                        onChange: (bool value) {
+                          B.box.put("showDate", value);
+                          B.showDate = value;
+                          B.prefsChanged();
+                        },
+                      )),
                 ),
               ),
               B.divider(),
               SizedBox(
                 height: height,
                 child: Center(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: padding),
-                    child: ListTile(
-                        title: Text(
-                          "harmonize Colors".tr(),
-                          style: TextStyle(
-                              fontSize: title, fontWeight: FontWeight.w500, color: textColor),
-                        ),
-                        subtitle: Text(
-                          "sHarmonizeColors".tr(),
-                          style: TextStyle(
-                              fontSize: subtitle, fontWeight: FontWeight.w400, color: textColor),
-                        ),
-                        trailing: SwitcherButton(
-                          onColor: B.colorful ? B.colors[4] : theme.primary,
-                          offColor: theme.primaryContainer,
-                          size: switchSize,
-                          value: B.harmonizeColor,
-                          onChange: (bool value) {
-                            B.box.put("harmonizeColor", value);
-                            B.harmonizeColor = value;
-                            B.harmonizeColors();
-                            B.prefsChanged();
-                          },
-                        )),
-                  ),
+                  child: ListTile(
+                      title: Text(
+                        "Show Edited".tr(),
+                        style: TextStyle(
+                            fontSize: title, fontWeight: FontWeight.w400, color: textColor),
+                      ),
+                      subtitle: Text(
+                        "sShow Edited".tr(),
+                        style: TextStyle(
+                            fontSize: subtitle, fontWeight: FontWeight.w300, color: textColor),
+                      ),
+                      trailing: SwitcherButton(
+                        onColor: B.colorful ? B.colors[2] : theme.primary,
+                        offColor: theme.primaryContainer,
+                        size: switchSize,
+                        value: B.showEdited,
+                        onChange: (bool value) {
+                          B.box.put("showEdit", value);
+                          B.showEdited = value;
+                          B.prefsChanged();
+                        },
+                      )),
                 ),
               ),
               B.divider(),
               SizedBox(
                 height: height,
                 child: Center(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: padding),
-                    child: ListTile(
-                        title: Text(
-                          "Colorful".tr(),
-                          style: TextStyle(
-                              fontSize: title, fontWeight: FontWeight.w500, color: textColor),
-                        ),
-                        subtitle: Text(
-                          "sColorful".tr(),
-                          style: TextStyle(
-                              fontSize: subtitle, fontWeight: FontWeight.w400, color: textColor),
-                        ),
-                        trailing: SwitcherButton(
-                          onColor: B.colorful ? B.colors[8] : theme.primary,
-                          offColor: theme.primaryContainer,
-                          size: switchSize,
-                          value: B.colorful,
-                          onChange: (bool value) {
-                            B.box.put("colorful", value);
-                            B.colorful = value;
-                            B.prefsChanged();
-                          },
-                        )),
-                  ),
-                ),
-              ),
-              B.divider(),
-              SizedBox(
-                height: height,
-                child: Center(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: padding),
-                    child: ListTile(
-                        title: Text(
-                          "Show Date".tr(),
-                          style: TextStyle(
-                              fontSize: title, fontWeight: FontWeight.w500, color: textColor),
-                        ),
-                        subtitle: Text(
-                          "sShow Date".tr(),
-                          style: TextStyle(
-                              fontSize: subtitle, fontWeight: FontWeight.w400, color: textColor),
-                        ),
-                        trailing: SwitcherButton(
-                          onColor: B.colorful ? B.colors[0] : theme.primary,
-                          offColor: theme.primaryContainer,
-                          // offColor: Theme.of(context).primaryColorDark,
-                          size: switchSize,
-                          value: B.showDate,
-                          onChange: (bool value) {
-                            B.box.put("showDate", value);
-                            B.showDate = value;
-                            B.prefsChanged();
-                          },
-                        )),
-                  ),
-                ),
-              ),
-              B.divider(),
-              SizedBox(
-                height: height,
-                child: Center(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: padding),
-                    child: ListTile(
-                        title: Text(
-                          "Show Edited".tr(),
-                          style: TextStyle(
-                              fontSize: title, fontWeight: FontWeight.w500, color: textColor),
-                        ),
-                        subtitle: Text(
-                          "sShow Edited".tr(),
-                          style: TextStyle(
-                              fontSize: subtitle, fontWeight: FontWeight.w400, color: textColor),
-                        ),
-                        trailing: SwitcherButton(
-                          onColor: B.colorful ? B.colors[2] : theme.primary,
-                          offColor: theme.primaryContainer,
-                          size: switchSize,
-                          value: B.showEdited,
-                          onChange: (bool value) {
-                            B.box.put("showEdit", value);
-                            B.showEdited = value;
-                            B.prefsChanged();
-                          },
-                        )),
-                  ),
-                ),
-              ),
-              B.divider(),
-              SizedBox(
-                height: height,
-                child: Center(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: padding),
-                    child: ListTile(
-                        title: Text(
-                          "Show Shadow".tr(),
-                          style: TextStyle(
-                              fontSize: title, fontWeight: FontWeight.w500, color: textColor),
-                        ),
-                        subtitle: Text(
-                          "sShow Shadow".tr(),
-                          style: TextStyle(
-                              fontSize: subtitle, fontWeight: FontWeight.w400, color: textColor),
-                        ),
-                        trailing: SwitcherButton(
-                          onColor: B.colorful ? B.colors[1] : theme.primary,
-                          offColor: theme.primaryContainer,
-                          size: switchSize,
-                          value: B.showShadow,
-                          onChange: (bool value) {
-                            B.box.put("showShadow", value);
-                            B.showShadow = value;
-                            B.prefsChanged();
-                          },
-                        )),
-                  ),
+                  child: ListTile(
+                      title: Text(
+                        "Show Shadow".tr(),
+                        style: TextStyle(
+                            fontSize: title, fontWeight: FontWeight.w400, color: textColor),
+                      ),
+                      subtitle: Text(
+                        "sShow Shadow".tr(),
+                        style: TextStyle(
+                            fontSize: subtitle, fontWeight: FontWeight.w300, color: textColor),
+                      ),
+                      trailing: SwitcherButton(
+                        onColor: B.colorful ? B.colors[1] : theme.primary,
+                        offColor: theme.primaryContainer,
+                        size: switchSize,
+                        value: B.showShadow,
+                        onChange: (bool value) {
+                          B.box.put("showShadow", value);
+                          B.showShadow = value;
+                          B.prefsChanged();
+                        },
+                      )),
                 ),
               ),
               B.divider(),

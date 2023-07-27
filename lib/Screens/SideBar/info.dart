@@ -42,7 +42,7 @@ class _InfoPageState extends State<InfoPage> {
             children: [
               B.customAppBar("Info".tr(), 65),
               Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 35.0, vertical: 20),
+                  padding: const EdgeInsets.symmetric(horizontal: 22.0, vertical: 20),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -81,7 +81,7 @@ class _InfoPageState extends State<InfoPage> {
                         child: Text(
                           "Click here to Check The App on Github.",
                           style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.w300, color: B.colors[5]),
+                              fontSize: 20, fontWeight: FontWeight.w300, color: B.theme.primary),
                         ),
                       ),
                     ],

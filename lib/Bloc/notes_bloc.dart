@@ -480,7 +480,7 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
               Text(
                 title,
                 style: TextStyle(
-                    fontSize: 40, fontWeight: FontWeight.bold, color: theme.onSurfaceVariant),
+                    fontSize: 34, fontWeight: FontWeight.w600, color: theme.onSurfaceVariant),
               ),
               Padding(
                 padding: const EdgeInsets.only(right: 5),

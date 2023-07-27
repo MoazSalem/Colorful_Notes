@@ -52,11 +52,11 @@ class ThemePopupMenu extends StatelessWidget {
             style: TextStyle(
               color: textColor,
               fontSize: isTablet ? 26 : 22,
-              fontWeight: FontWeight.w500,
+              fontWeight: FontWeight.w400,
             )),
         subtitle: Text(
           AppColor.customSchemes[schemeIndex].description,
-          style: TextStyle(fontSize: isTablet ? 16 : 12, color: textColor),
+          style: TextStyle(fontSize: isTablet ? 16 : 12, color: textColor, fontWeight: FontWeight.w300),
         ),
         trailing: Icon(
           Icons.lens,

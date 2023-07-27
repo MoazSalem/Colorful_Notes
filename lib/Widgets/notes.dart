@@ -124,7 +124,7 @@ Widget listView({
                                   : dateValue == -1
                                       ? "Yesterday".tr()
                                       : date,
-                              style: const TextStyle(color: Colors.white),
+                              style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
                             ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.end,
@@ -327,7 +327,7 @@ Widget smallListView({
                                 : dateValue == -1
                                     ? "Yesterday".tr()
                                     : date,
-                            style: const TextStyle(color: Colors.white),
+                            style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.end,
@@ -502,7 +502,7 @@ Widget gridView({
                                     : date,
                             style: TextStyle(
                                 color: Colors.white,
-                                fontSize: notes[reverseIndex]["type"] == 0 ? 15 : 14),
+                                fontSize: notes[reverseIndex]["type"] == 0 ? 13 : 12, fontWeight: FontWeight.w500),
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.end,

@@ -53,7 +53,7 @@ Widget sideBar(
                                   size: B.isTablet ? 30 : 20,
                                 )
                               : Icon(
-                                  Icons.settings,
+                                  Icons.settings_rounded,
                                   color: B.colorful ? B.colors[2] : theme.onSurfaceVariant,
                                   size: B.isTablet ? 40 : 30,
                                 )),
@@ -91,7 +91,7 @@ Widget sideBar(
                                   size: B.isTablet ? 30 : 20,
                                 )
                               : Icon(
-                                  Icons.sticky_note_2,
+                                  Icons.sticky_note_2_sharp,
                                   color: B.colorful ? B.colors[1] : theme.onSurfaceVariant,
                                   size: B.isTablet ? 40 : 30,
                                 )),
@@ -165,7 +165,7 @@ Widget sideBar(
                                       size: B.isTablet ? 30 : 20,
                                     )
                                   : Icon(
-                                      Icons.sticky_note_2,
+                                      Icons.sticky_note_2_sharp,
                                       color: B.colorful ? B.colors[1] : theme.onSurfaceVariant,
                                       size: B.isTablet ? 40 : 30,
                                     )),
@@ -203,7 +203,7 @@ Widget sideBar(
                                       size: B.isTablet ? 30 : 20,
                                     )
                                   : Icon(
-                                      Icons.settings,
+                                      Icons.settings_rounded,
                                       color: B.colorful ? B.colors[2] : theme.onSurfaceVariant,
                                       size: B.isTablet ? 40 : 30,
                                     )),

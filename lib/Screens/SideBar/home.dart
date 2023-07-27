@@ -148,21 +148,18 @@ class _HomePageState extends State<HomePage> {
                                             padding: EdgeInsets.symmetric(
                                                 horizontal: notes[reverseIndex]["layout"] == 0 ||
                                                         notes[reverseIndex]["layout"] == 2
-                                                    ? 20
+                                                    ? 10
                                                     : B.isTablet
                                                         ? 15
                                                         : 10,
                                                 vertical: B.width * 0.02037),
                                             child: IconButton(
-                                                constraints: BoxConstraints.tightFor(
-                                                    width: B.width * 0.083,
-                                                    height: B.width * 0.083),
                                                 focusColor: Colors.blue,
                                                 onPressed: () async {
                                                   showDelete(reverseIndex);
                                                 },
                                                 icon: Icon(
-                                                  Icons.close,
+                                                  Icons.highlight_remove,
                                                   color: Colors.white,
                                                   size: B.width * 0.06620,
                                                 )),
@@ -196,23 +193,15 @@ class _HomePageState extends State<HomePage> {
                                           ),
                                           Padding(
                                             padding: EdgeInsets.symmetric(
-                                                horizontal: B.isTablet
-                                                    ? 8.0
-                                                    : notes[reverseIndex]["layout"] == 0 ||
-                                                            notes[reverseIndex]["layout"] == 2
-                                                        ? 10
-                                                        : 0,
+                                                horizontal: B.isTablet ? 8.0 : 0,
                                                 vertical: B.isTablet ? 8.0 : 0),
                                             child: IconButton(
-                                                constraints: BoxConstraints.tightFor(
-                                                    width: B.width * 0.083,
-                                                    height: B.width * 0.083),
                                                 focusColor: Colors.blue,
                                                 onPressed: () async {
                                                   showDelete(reverseIndex);
                                                 },
                                                 icon: Icon(
-                                                  Icons.close,
+                                                  Icons.highlight_remove,
                                                   color: Colors.white,
                                                   size: B.width * 0.0662,
                                                 )),
@@ -269,22 +258,15 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                     Padding(
                                       padding: EdgeInsets.symmetric(
-                                          horizontal: B.isTablet
-                                              ? 8.0
-                                              : notes[reverseIndex]["layout"] == 0 ||
-                                                      notes[reverseIndex]["layout"] == 2
-                                                  ? 10
-                                                  : 0,
+                                          horizontal: B.isTablet ? 8.0 : 0,
                                           vertical: B.isTablet ? 8.0 : 0),
                                       child: IconButton(
-                                          constraints: BoxConstraints.tightFor(
-                                              width: B.width * 0.083, height: B.width * 0.083),
                                           focusColor: Colors.blue,
                                           onPressed: () async {
                                             showDelete(reverseIndex);
                                           },
                                           icon: Icon(
-                                            Icons.close,
+                                            Icons.highlight_remove,
                                             color: Colors.white,
                                             size: B.width * 0.0662,
                                           )),
@@ -342,9 +324,9 @@ class _HomePageState extends State<HomePage> {
             B.onViewChanged();
           },
           icon: B.viewIndex == 0
-              ? const Icon(Icons.view_agenda_sharp)
+              ? const Icon(Icons.indeterminate_check_box_sharp)
               : B.viewIndex == 1
-                  ? const Icon(Icons.view_day_sharp)
+                  ? const Icon(Icons.view_agenda_sharp)
                   : const Icon(Icons.grid_view_sharp),
         )
       ],

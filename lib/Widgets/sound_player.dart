@@ -162,10 +162,10 @@ class _SoundPlayerState extends State<SoundPlayer> {
                                         borderRadius: BorderRadius.circular(width * 0.050926)),
                                     child: Center(
                                       child: Text(
-                                        "${playbackSpeed.toString()}X",
+                                        "${playbackSpeed % 1 == 0 ? playbackSpeed.toInt() : playbackSpeed.toStringAsFixed(1)}x",
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold,
-                                            fontSize: 12,
+                                            fontSize: 13,
                                             color: widget
                                                 .colors[widget.voiceMap[widget.index]['cindex']]),
                                       ),
@@ -273,10 +273,10 @@ class _SoundPlayerState extends State<SoundPlayer> {
                                         borderRadius: BorderRadius.circular(width * 0.050926)),
                                     child: Center(
                                       child: Text(
-                                        "${playbackSpeed.toString()}X",
+                                        "${playbackSpeed % 1 == 0 ? playbackSpeed.toInt() : playbackSpeed.toStringAsFixed(1)}x",
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold,
-                                            fontSize: 12,
+                                            fontSize: 13,
                                             color: widget
                                                 .colors[widget.voiceMap[widget.index]['cindex']]),
                                       ),
@@ -414,10 +414,10 @@ class _SoundPlayerState extends State<SoundPlayer> {
                                                   BorderRadius.circular(width * 0.050926)),
                                           child: Center(
                                             child: Text(
-                                              "${playbackSpeed.toString()}X",
+                                              "${playbackSpeed % 1 == 0 ? playbackSpeed.toInt() : playbackSpeed.toStringAsFixed(1)}x",
                                               style: TextStyle(
                                                   fontWeight: FontWeight.bold,
-                                                  fontSize: 12,
+                                                  fontSize: 13,
                                                   color: widget.colors[widget.voiceMap[widget.index]
                                                       ['cindex']]),
                                             ),

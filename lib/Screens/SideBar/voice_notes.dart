@@ -128,18 +128,15 @@ class _VoiceNotesPageState extends State<VoiceNotesPage> {
                                           ),
                                           Padding(
                                             padding: EdgeInsets.symmetric(
-                                                horizontal: B.isTablet ? 15 : 20,
+                                                horizontal: B.isTablet ? 15 : 10,
                                                 vertical: B.width * 0.02037),
                                             child: IconButton(
-                                                constraints: BoxConstraints.tightFor(
-                                                    width: B.width * 0.083,
-                                                    height: B.width * 0.083),
                                                 focusColor: Colors.blue,
                                                 onPressed: () async {
                                                   showDelete(reverseIndex);
                                                 },
                                                 icon: Icon(
-                                                  Icons.close,
+                                                  Icons.highlight_remove,
                                                   color: Colors.white,
                                                   size: B.width * 0.06620,
                                                 )),
@@ -170,18 +167,15 @@ class _VoiceNotesPageState extends State<VoiceNotesPage> {
                                           ),
                                           Padding(
                                             padding: EdgeInsets.symmetric(
-                                                horizontal: B.isTablet ? 8.0 : 10,
+                                                horizontal: B.isTablet ? 8.0 : 0,
                                                 vertical: B.isTablet ? 8.0 : 0),
                                             child: IconButton(
-                                                constraints: BoxConstraints.tightFor(
-                                                    width: B.width * 0.083,
-                                                    height: B.width * 0.083),
                                                 focusColor: Colors.blue,
                                                 onPressed: () async {
                                                   showDelete(reverseIndex);
                                                 },
                                                 icon: Icon(
-                                                  Icons.close,
+                                                  Icons.highlight_remove,
                                                   color: Colors.white,
                                                   size: B.width * 0.0662,
                                                 )),
@@ -232,17 +226,15 @@ class _VoiceNotesPageState extends State<VoiceNotesPage> {
                                     ),
                                     Padding(
                                       padding: EdgeInsets.symmetric(
-                                          horizontal: B.isTablet ? 8.0 : 10,
+                                          horizontal: B.isTablet ? 8.0 : 0,
                                           vertical: B.isTablet ? 8.0 : 0),
                                       child: IconButton(
-                                          constraints: BoxConstraints.tightFor(
-                                              width: B.width * 0.083, height: B.width * 0.083),
                                           focusColor: Colors.blue,
                                           onPressed: () async {
                                             showDelete(reverseIndex);
                                           },
                                           icon: Icon(
-                                            Icons.close,
+                                            Icons.highlight_remove,
                                             color: Colors.white,
                                             size: B.width * 0.0662,
                                           )),
@@ -304,9 +296,9 @@ class _VoiceNotesPageState extends State<VoiceNotesPage> {
             B.onViewChanged();
           },
           icon: B.viewIndexV == 0
-              ? const Icon(Icons.view_agenda_sharp)
+              ? const Icon(Icons.indeterminate_check_box)
               : B.viewIndexV == 1
-                  ? const Icon(Icons.view_day_sharp)
+                  ? const Icon(Icons.view_agenda_sharp)
                   : const Icon(Icons.grid_view_sharp),
         )
       ],
