@@ -33,11 +33,11 @@ class _SoundPlayerState extends State<SoundPlayer> {
   @override
   void initState() {
     super.initState();
-    audioPlayer.onPositionChanged.listen((Duration p) => {setState(() => position = p)});
-    audioPlayer.onDurationChanged.listen((Duration p) => {setState(() => duration = p)});
-    audioPlayer.onPlayerStateChanged.listen((PlayerState s) => {
-          currentState = s,
-        });
+    audioPlayer.onPositionChanged.listen((Duration p) => setState(() => position = p));
+    audioPlayer.onDurationChanged.listen((Duration p) => setState(() => duration = p));
+    audioPlayer.onPlayerStateChanged.listen(
+      (PlayerState s) => currentState = s,
+    );
     audioPlayer.onPlayerComplete.listen((event) {
       setState(() {
         audioPlayer.setSourceDeviceFile(widget.voiceMap[widget.index]["content"]);

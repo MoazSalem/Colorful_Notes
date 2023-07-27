@@ -18,8 +18,6 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:notes/Data/colors.dart';
 import 'package:notes/Screens/SideBar/home.dart';
-import 'package:notes/Screens/SideBar/notes.dart';
-import 'package:notes/Screens/SideBar/voice_notes.dart';
 // import 'package:path/path.dart' as path;
 // import 'package:path/path.dart';
 // import 'package:external_path/external_path.dart';
@@ -86,9 +84,7 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
   }
 
   onCreateNote() {
-    searchNotes(searchC.text);
-    searchVoice(searchVC.text);
-    searchHome(searchAC.text);
+    searchNotes(searchController.text);
     emit(NoteCreate());
   }
 
@@ -129,9 +125,7 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
   }
 
   onDelete() {
-    searchNotes(searchC.text);
-    searchVoice(searchVC.text);
-    searchHome(searchAC.text);
+    searchNotes(searchController.text);
     emit(OnChanged());
   }
 
@@ -215,7 +209,6 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
   }
 
   setSettings() {
-    isDarkMode = brightness == Brightness.dark;
     viewIndex = box.get('viewIndex') ?? 0;
     viewIndexN = box.get('viewIndexN') ?? 0;
     viewIndexV = box.get('viewIndexV') ?? 0;

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:notes/main.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'package:notes/Bloc/notes_bloc.dart';
 import 'package:record/record.dart';
@@ -18,7 +19,6 @@ class _CreateVoiceState extends State<CreateVoice> {
   final record = Record();
   late String title;
   late String content;
-  late NotesBloc B;
   late double height;
   String name = "";
   FocusNode titleFocusNode = FocusNode();
@@ -26,12 +26,6 @@ class _CreateVoiceState extends State<CreateVoice> {
   int chosenIndex = 0;
   bool isRecording = false;
   bool isPaused = false;
-
-  @override
-  void initState() {
-    B = NotesBloc.get(context);
-    super.initState();
-  }
 
   @override
   void didChangeDependencies() {

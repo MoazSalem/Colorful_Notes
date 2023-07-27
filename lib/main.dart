@@ -13,6 +13,8 @@ import 'package:notes/Data/flex_themes.dart';
 import 'Screens/home_screen.dart';
 import 'Screens/on_boarding.dart';
 
+late NotesBloc B;
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // Initialize the Localization services.
@@ -53,13 +55,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    B = NotesBloc.get(context);
+    B.themeController = themeController;
     return BlocProvider(
       create: (context) => NotesBloc(gBox: box)..startPage(),
       child: BlocConsumer<NotesBloc, NotesState>(
         listener: (context, state) {},
         builder: (context, state) {
-          var B = NotesBloc.get(context);
-          B.themeController = themeController;
           return DynamicColorBuilder(builder: (lightColorScheme, darkColorScheme) {
             return MaterialApp(
                 builder: (context, child) => ResponsiveBreakpoints.builder(
@@ -89,12 +91,7 @@ class MyApp extends StatelessWidget {
                 localizationsDelegates: context.localizationDelegates,
                 supportedLocales: context.supportedLocales,
                 locale: context.locale,
-                home: showHome
-                    ? Home(currentTheme: B.currentTheme)
-                    : IntroPage(
-                        currentTheme: B.currentTheme,
-                        box: box,
-                      ));
+                home: showHome ? const Home() : const IntroPage());
           });
         },
       ),

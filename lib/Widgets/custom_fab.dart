@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 
-bool openFab = false;
-
 Widget customFab({
   required ColorScheme theme,
   required colors,
@@ -11,6 +9,7 @@ Widget customFab({
   required action1,
   required action2,
 }) {
+  bool openFab = false;
   return StatefulBuilder(
     builder: (context, setState) => SizedBox(
       child: Column(

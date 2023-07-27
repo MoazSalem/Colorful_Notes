@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_localization/easy_localization.dart' hide TextDirection;
 import 'package:notes/Bloc/notes_bloc.dart';
+import 'package:notes/main.dart';
 
 class CreateNote extends StatefulWidget {
   const CreateNote({Key? key}) : super(key: key);
@@ -18,14 +19,12 @@ class _CreateNoteState extends State<CreateNote> {
   late String title;
   late String content;
   late String time;
-  late NotesBloc B;
   int chosenIndex = 0;
 
   @override
   void initState() {
     titleDir = ValueNotifier(TextDirection.ltr);
     contentDir = ValueNotifier(TextDirection.ltr);
-    B = NotesBloc.get(context);
     super.initState();
   }
 

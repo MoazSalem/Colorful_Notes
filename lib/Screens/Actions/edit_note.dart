@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_localization/easy_localization.dart' hide TextDirection;
 import 'package:notes/Bloc/notes_bloc.dart';
+import 'package:notes/main.dart';
 
 class EditNote extends StatefulWidget {
   final Map note;
@@ -18,12 +19,10 @@ class _EditNoteState extends State<EditNote> {
   late ValueNotifier<TextDirection> _titleDir;
   late ValueNotifier<TextDirection> _contentDir;
   late int bIndex;
-  late NotesBloc B;
   bool isEditing = false;
 
   @override
   void initState() {
-    B = NotesBloc.get(context);
     titleC.text = widget.note["title"];
     contentC.text = widget.note["content"];
     bIndex = widget.note["cindex"];

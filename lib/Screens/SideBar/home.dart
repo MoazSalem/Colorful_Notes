@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:notes/main.dart';
 import 'package:notes/Bloc/notes_bloc.dart';
 import 'package:notes/Screens/Actions/edit_note.dart';
 import 'package:notes/Screens/Actions/edit_voice.dart';
@@ -10,7 +11,7 @@ import 'package:notes/Screens/Actions/create_note.dart';
 import 'package:notes/Screens/Actions/create_voice.dart';
 import 'dart:ui' as ui;
 
-final TextEditingController searchAC = TextEditingController();
+final TextEditingController searchController = TextEditingController();
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -20,10 +21,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late NotesBloc B;
   late int value;
   late List<Map> notes;
-  late ColorScheme theme;
   bool noTitle = false;
   bool noContent = false;
   bool searchOn = false;
@@ -31,7 +30,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    B = NotesBloc.get(context);
     value = B.viewIndex;
     super.initState();
   }
@@ -39,7 +37,6 @@ class _HomePageState extends State<HomePage> {
   @override
   void didChangeDependencies() {
     notes = searchOn ? B.searchedALL : B.allNotesMap;
-    theme = Theme.of(context).colorScheme;
     super.didChangeDependencies();
   }
 
@@ -49,13 +46,13 @@ class _HomePageState extends State<HomePage> {
       listener: (context, state) {},
       builder: (context, state) {
         return Scaffold(
-          backgroundColor: B.isDarkMode ? theme.background : theme.surfaceVariant.withOpacity(0.6),
+          backgroundColor: B.isDarkMode ? B.theme.background : B.theme.surfaceVariant.withOpacity(0.6),
           floatingActionButtonLocation: B.fabIndex == 0
               ? FloatingActionButtonLocation.endFloat
               : FloatingActionButtonLocation.startFloat,
           floatingActionButton: B.fabIndex == 0
               ? customFab(
-                  theme: theme,
+                  theme: B.theme,
                   colors: B.colors,
                   action1: create1,
                   action2: create2,
@@ -65,7 +62,7 @@ class _HomePageState extends State<HomePage> {
               : Directionality(
                   textDirection: B.lang == 'en' ? ui.TextDirection.rtl : ui.TextDirection.ltr,
                   child: customFab(
-                    theme: theme,
+                    theme: B.theme,
                     colors: B.colors,
                     action1: create1,
                     action2: create2,
@@ -82,7 +79,7 @@ class _HomePageState extends State<HomePage> {
                         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                         child: TextFormField(
                             autofocus: true,
-                            controller: searchAC,
+                            controller: searchController,
                             onChanged: B.searchHome,
                             maxLines: 1,
                             decoration: InputDecoration(
@@ -281,7 +278,7 @@ class _HomePageState extends State<HomePage> {
                           child: Text(
                         "N1".tr(),
                         style: TextStyle(
-                            color: B.colorful ? B.colors[0] : theme.primary,
+                            color: B.colorful ? B.colors[0] : B.theme.primary,
                             fontWeight: FontWeight.w400),
                       )),
                     ),
@@ -303,7 +300,7 @@ class _HomePageState extends State<HomePage> {
         IconButton(
           onPressed: () {
             searchOn = !searchOn;
-            B.searchHome(searchAC.text);
+            B.searchHome(searchController.text);
             B.onSearch();
           },
           icon: Icon(
@@ -312,8 +309,8 @@ class _HomePageState extends State<HomePage> {
             color: searchOn
                 ? B.colorful
                     ? B.colors[0]
-                    : theme.primary
-                : theme.onSurfaceVariant, //const Color(0xffff8b34)
+                    : B.theme.primary
+                : B.theme.onSurfaceVariant, //const Color(0xffff8b34)
           ),
         ),
         IconButton(

@@ -4,9 +4,9 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:notes/Bloc/notes_bloc.dart';
 import 'package:notes/Screens/Actions/create_note.dart';
 import 'package:notes/Screens/Actions/edit_note.dart';
+import 'package:notes/Screens/SideBar/home.dart';
 import 'package:notes/Widgets/notes.dart';
-
-final TextEditingController searchC = TextEditingController();
+import 'package:notes/main.dart';
 
 class NotesPage extends StatefulWidget {
   const NotesPage({Key? key}) : super(key: key);
@@ -16,8 +16,6 @@ class NotesPage extends StatefulWidget {
 }
 
 class _NotesPageState extends State<NotesPage> {
-  late ColorScheme theme;
-  late NotesBloc B;
   late int value;
   late List<Map> notes;
   bool noTitle = false;
@@ -27,7 +25,6 @@ class _NotesPageState extends State<NotesPage> {
 
   @override
   void initState() {
-    B = NotesBloc.get(context);
     value = B.viewIndexN;
     super.initState();
   }
@@ -35,7 +32,6 @@ class _NotesPageState extends State<NotesPage> {
   @override
   void didChangeDependencies() {
     notes = searchOn ? B.searchedNotes : B.notesMap;
-    theme = Theme.of(context).colorScheme;
     super.didChangeDependencies();
   }
 
@@ -45,20 +41,21 @@ class _NotesPageState extends State<NotesPage> {
       listener: (context, state) {},
       builder: (context, state) {
         return Scaffold(
-          backgroundColor: B.isDarkMode ? theme.background : theme.surfaceVariant.withOpacity(0.6),
+          backgroundColor:
+              B.isDarkMode ? B.theme.background : B.theme.surfaceVariant.withOpacity(0.6),
           floatingActionButtonLocation: B.fabIndex == 0
               ? FloatingActionButtonLocation.endFloat
               : FloatingActionButtonLocation.startFloat,
           floatingActionButton: FloatingActionButton(
             splashColor: B.colors[0],
             elevation: 0,
-            backgroundColor: B.colorful ? B.colors[1] : theme.primary,
+            backgroundColor: B.colorful ? B.colors[1] : B.theme.primary,
             onPressed: () async {
               create();
             },
             child: Icon(
               Icons.add,
-              color: theme.surfaceVariant,
+              color: B.theme.surfaceVariant,
             ),
           ),
           body: ListView(
@@ -71,7 +68,7 @@ class _NotesPageState extends State<NotesPage> {
                         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                         child: TextFormField(
                             autofocus: true,
-                            controller: searchC,
+                            controller: searchController,
                             onChanged: B.searchNotes,
                             maxLines: 1,
                             decoration: InputDecoration(
@@ -266,7 +263,7 @@ class _NotesPageState extends State<NotesPage> {
                           child: Text(
                         "N2".tr(),
                         style: TextStyle(
-                            color: B.colorful ? B.colors[1] : theme.primary,
+                            color: B.colorful ? B.colors[1] : B.theme.primary,
                             fontWeight: FontWeight.w400),
                       )),
                     ),
@@ -288,7 +285,7 @@ class _NotesPageState extends State<NotesPage> {
         IconButton(
           onPressed: () {
             searchOn = !searchOn;
-            B.searchNotes(searchC.text);
+            B.searchNotes(searchController.text);
             B.onSearch();
           },
           icon: Icon(
@@ -297,8 +294,8 @@ class _NotesPageState extends State<NotesPage> {
             color: searchOn
                 ? B.colorful
                     ? B.colors[1]
-                    : theme.primary
-                : theme.onSurfaceVariant,
+                    : B.theme.primary
+                : B.theme.onSurfaceVariant,
           ),
         ),
         IconButton(

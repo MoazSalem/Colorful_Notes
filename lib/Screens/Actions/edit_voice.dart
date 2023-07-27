@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:notes/Bloc/notes_bloc.dart';
+import 'package:notes/main.dart';
 
 class EditVoice extends StatefulWidget {
   final Map note;
@@ -15,11 +16,9 @@ class EditVoice extends StatefulWidget {
 class _EditVoiceState extends State<EditVoice> {
   final TextEditingController titleC = TextEditingController();
   late int bIndex;
-  late NotesBloc B;
 
   @override
   void initState() {
-    B = NotesBloc.get(context);
     titleC.text = widget.note["title"];
     bIndex = widget.note["cindex"];
     super.initState();

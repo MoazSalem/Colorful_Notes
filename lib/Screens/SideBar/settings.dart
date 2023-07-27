@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:notes/Widgets/theme_popup_menu.dart';
+import 'package:notes/main.dart';
 import 'package:switcher_button/switcher_button.dart';
 import 'package:notes/Bloc/notes_bloc.dart';
 
@@ -15,8 +16,6 @@ class SettingsPage extends StatefulWidget {
 class _SettingsPageState extends State<SettingsPage> {
   late String dropDownTheme;
   late String darkTheme;
-  late NotesBloc B;
-  late ColorScheme theme;
   late double height;
   late double title;
   late double subtitle;
@@ -24,8 +23,6 @@ class _SettingsPageState extends State<SettingsPage> {
   late double iconSize;
   late double itemHeight;
   late double fontSize;
-  late Color textColor;
-  late Color dropDownColor;
   late String fabLoc;
   late String sB;
   var lang = ["English", "Arabic"];
@@ -57,20 +54,13 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   @override
-  void didChangeDependencies() {
-    theme = Theme.of(context).colorScheme;
-    textColor = theme.onSurfaceVariant;
-    dropDownColor = theme.surfaceVariant;
-    super.didChangeDependencies();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return BlocConsumer<NotesBloc, NotesState>(
       listener: (context, state) {},
       builder: (context, state) {
         return Scaffold(
-          backgroundColor: B.isDarkMode ? theme.background : theme.surfaceVariant.withOpacity(0.6),
+          backgroundColor:
+              B.isDarkMode ? B.theme.background : B.theme.surfaceVariant.withOpacity(0.6),
           body: ListView(
             padding: EdgeInsets.zero,
             children: [
@@ -81,13 +71,17 @@ class _SettingsPageState extends State<SettingsPage> {
                   child: ListTile(
                     title: Text(
                       "Language".tr(),
-                      style:
-                          TextStyle(fontSize: title, fontWeight: FontWeight.w400, color: textColor),
+                      style: TextStyle(
+                          fontSize: title,
+                          fontWeight: FontWeight.w400,
+                          color: B.theme.onSurfaceVariant),
                     ),
                     subtitle: Text(
                       "sLanguage".tr(),
                       style: TextStyle(
-                          fontSize: subtitle, fontWeight: FontWeight.w300, color: textColor),
+                          fontSize: subtitle,
+                          fontWeight: FontWeight.w300,
+                          color: B.theme.onSurfaceVariant),
                     ),
                     trailing: DropdownButton(
                       iconSize: iconSize,
@@ -96,11 +90,13 @@ class _SettingsPageState extends State<SettingsPage> {
                       alignment: Alignment.center,
                       underline: Container(),
                       style: TextStyle(
-                          color: textColor, fontSize: fontSize, fontWeight: FontWeight.w400),
-                      dropdownColor: dropDownColor,
+                          color: B.theme.onSurfaceVariant,
+                          fontSize: fontSize,
+                          fontWeight: FontWeight.w400),
+                      dropdownColor: B.theme.surfaceVariant,
                       elevation: 0,
                       isDense: true,
-                      iconEnabledColor: textColor,
+                      iconEnabledColor: B.theme.onSurfaceVariant,
                       value: B.lang == 'en' ? "English" : "Arabic",
                       icon: const Icon(Icons.keyboard_arrow_down),
                       items: lang.map((String items) {
@@ -130,12 +126,16 @@ class _SettingsPageState extends State<SettingsPage> {
                       title: Text(
                         "Start In".tr(),
                         style: TextStyle(
-                            fontSize: title, fontWeight: FontWeight.w400, color: textColor),
+                            fontSize: title,
+                            fontWeight: FontWeight.w400,
+                            color: B.theme.onSurfaceVariant),
                       ),
                       subtitle: Text(
                         "sStart In".tr(),
                         style: TextStyle(
-                            fontSize: subtitle, fontWeight: FontWeight.w300, color: textColor),
+                            fontSize: subtitle,
+                            fontWeight: FontWeight.w300,
+                            color: B.theme.onSurfaceVariant),
                       ),
                       trailing: DropdownButton(
                         iconSize: iconSize,
@@ -144,11 +144,13 @@ class _SettingsPageState extends State<SettingsPage> {
                         alignment: Alignment.center,
                         underline: Container(),
                         style: TextStyle(
-                            color: textColor, fontSize: fontSize, fontWeight: FontWeight.w400),
-                        dropdownColor: dropDownColor,
+                            color: B.theme.onSurfaceVariant,
+                            fontSize: fontSize,
+                            fontWeight: FontWeight.w400),
+                        dropdownColor: B.theme.surfaceVariant,
                         elevation: 0,
                         isDense: true,
-                        iconEnabledColor: textColor,
+                        iconEnabledColor: B.theme.onSurfaceVariant,
                         value: B.openPage,
                         icon: const Icon(Icons.keyboard_arrow_down),
                         items: pages.map((String items) {
@@ -182,12 +184,16 @@ class _SettingsPageState extends State<SettingsPage> {
                       title: Text(
                         "Side Bar".tr(),
                         style: TextStyle(
-                            fontSize: title, fontWeight: FontWeight.w400, color: textColor),
+                            fontSize: title,
+                            fontWeight: FontWeight.w400,
+                            color: B.theme.onSurfaceVariant),
                       ),
                       subtitle: Text(
                         "sSide Bar".tr(),
                         style: TextStyle(
-                            fontSize: subtitle, fontWeight: FontWeight.w300, color: textColor),
+                            fontSize: subtitle,
+                            fontWeight: FontWeight.w300,
+                            color: B.theme.onSurfaceVariant),
                       ),
                       trailing: DropdownButton(
                         iconSize: iconSize,
@@ -196,11 +202,13 @@ class _SettingsPageState extends State<SettingsPage> {
                         alignment: Alignment.center,
                         underline: Container(),
                         style: TextStyle(
-                            color: textColor, fontSize: fontSize, fontWeight: FontWeight.w400),
-                        dropdownColor: dropDownColor,
+                            color: B.theme.onSurfaceVariant,
+                            fontSize: fontSize,
+                            fontWeight: FontWeight.w400),
+                        dropdownColor: B.theme.surfaceVariant,
                         elevation: 0,
                         isDense: true,
-                        iconEnabledColor: textColor,
+                        iconEnabledColor: B.theme.onSurfaceVariant,
                         value: sB,
                         icon: const Icon(Icons.keyboard_arrow_down),
                         items: sb.map((String items) {
@@ -235,12 +243,16 @@ class _SettingsPageState extends State<SettingsPage> {
                       title: Text(
                         "Create Button".tr(),
                         style: TextStyle(
-                            fontSize: title, fontWeight: FontWeight.w400, color: textColor),
+                            fontSize: title,
+                            fontWeight: FontWeight.w400,
+                            color: B.theme.onSurfaceVariant),
                       ),
                       subtitle: Text(
                         "sCreate Button".tr(),
                         style: TextStyle(
-                            fontSize: subtitle, fontWeight: FontWeight.w300, color: textColor),
+                            fontSize: subtitle,
+                            fontWeight: FontWeight.w300,
+                            color: B.theme.onSurfaceVariant),
                       ),
                       trailing: DropdownButton(
                         iconSize: iconSize,
@@ -249,11 +261,13 @@ class _SettingsPageState extends State<SettingsPage> {
                         alignment: Alignment.center,
                         underline: Container(),
                         style: TextStyle(
-                            color: textColor, fontSize: fontSize, fontWeight: FontWeight.w400),
-                        dropdownColor: dropDownColor,
+                            color: B.theme.onSurfaceVariant,
+                            fontSize: fontSize,
+                            fontWeight: FontWeight.w400),
+                        dropdownColor: B.theme.surfaceVariant,
                         elevation: 0,
                         isDense: true,
-                        iconEnabledColor: textColor,
+                        iconEnabledColor: B.theme.onSurfaceVariant,
                         value: fabLoc,
                         icon: const Icon(Icons.keyboard_arrow_down),
                         items: fab.map((String items) {
@@ -282,12 +296,16 @@ class _SettingsPageState extends State<SettingsPage> {
                       title: Text(
                         "App Theme".tr(),
                         style: TextStyle(
-                            fontSize: title, fontWeight: FontWeight.w400, color: textColor),
+                            fontSize: title,
+                            fontWeight: FontWeight.w400,
+                            color: B.theme.onSurfaceVariant),
                       ),
                       subtitle: Text(
                         "sApp Theme".tr(),
                         style: TextStyle(
-                            fontSize: subtitle, fontWeight: FontWeight.w300, color: textColor),
+                            fontSize: subtitle,
+                            fontWeight: FontWeight.w300,
+                            color: B.theme.onSurfaceVariant),
                       ),
                       trailing: DropdownButton(
                         iconSize: iconSize,
@@ -296,11 +314,13 @@ class _SettingsPageState extends State<SettingsPage> {
                         alignment: Alignment.center,
                         underline: Container(),
                         style: TextStyle(
-                            color: textColor, fontSize: fontSize, fontWeight: FontWeight.w400),
-                        dropdownColor: dropDownColor,
+                            color: B.theme.onSurfaceVariant,
+                            fontSize: fontSize,
+                            fontWeight: FontWeight.w400),
+                        dropdownColor: B.theme.surfaceVariant,
                         elevation: 0,
                         isDense: true,
-                        iconEnabledColor: textColor,
+                        iconEnabledColor: B.theme.onSurfaceVariant,
                         value: B.currentTheme,
                         icon: const Icon(Icons.keyboard_arrow_down),
                         items: themes.map((String items) {
@@ -332,7 +352,7 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
               B.divider(),
               ThemePopupMenu(
-                textColor: textColor,
+                textColor: B.theme.onSurfaceVariant,
                 isTablet: B.isTablet,
                 schemeIndex: B.themeController.schemeIndex,
                 onChanged: (value) {
@@ -348,16 +368,20 @@ class _SettingsPageState extends State<SettingsPage> {
                       title: Text(
                         "Dynamic Colors".tr(),
                         style: TextStyle(
-                            fontSize: title, fontWeight: FontWeight.w400, color: textColor),
+                            fontSize: title,
+                            fontWeight: FontWeight.w400,
+                            color: B.theme.onSurfaceVariant),
                       ),
                       subtitle: Text(
                         "DC".tr(),
                         style: TextStyle(
-                            fontSize: subtitle, fontWeight: FontWeight.w300, color: textColor),
+                            fontSize: subtitle,
+                            fontWeight: FontWeight.w300,
+                            color: B.theme.onSurfaceVariant),
                       ),
                       trailing: SwitcherButton(
-                        onColor: B.colorful ? B.colors[8] : theme.primary,
-                        offColor: theme.primaryContainer,
+                        onColor: B.colorful ? B.colors[8] : B.theme.primary,
+                        offColor: B.theme.primaryContainer,
                         size: switchSize,
                         value: B.box.get("isDynamic") ?? false,
                         onChange: (bool value) {
@@ -375,16 +399,20 @@ class _SettingsPageState extends State<SettingsPage> {
                       title: Text(
                         "Darker Colors".tr(),
                         style: TextStyle(
-                            fontSize: title, fontWeight: FontWeight.w400, color: textColor),
+                            fontSize: title,
+                            fontWeight: FontWeight.w400,
+                            color: B.theme.onSurfaceVariant),
                       ),
                       subtitle: Text(
                         "sDarker Colors".tr(),
                         style: TextStyle(
-                            fontSize: subtitle, fontWeight: FontWeight.w300, color: textColor),
+                            fontSize: subtitle,
+                            fontWeight: FontWeight.w300,
+                            color: B.theme.onSurfaceVariant),
                       ),
                       trailing: SwitcherButton(
-                        onColor: B.colorful ? B.colors[6] : theme.primary,
-                        offColor: theme.primaryContainer,
+                        onColor: B.colorful ? B.colors[6] : B.theme.primary,
+                        offColor: B.theme.primaryContainer,
                         size: switchSize,
                         value: B.darkColors,
                         onChange: (bool value) {
@@ -403,16 +431,20 @@ class _SettingsPageState extends State<SettingsPage> {
                       title: Text(
                         "harmonize Colors".tr(),
                         style: TextStyle(
-                            fontSize: title, fontWeight: FontWeight.w400, color: textColor),
+                            fontSize: title,
+                            fontWeight: FontWeight.w400,
+                            color: B.theme.onSurfaceVariant),
                       ),
                       subtitle: Text(
                         "sHarmonizeColors".tr(),
                         style: TextStyle(
-                            fontSize: subtitle, fontWeight: FontWeight.w300, color: textColor),
+                            fontSize: subtitle,
+                            fontWeight: FontWeight.w300,
+                            color: B.theme.onSurfaceVariant),
                       ),
                       trailing: SwitcherButton(
-                        onColor: B.colorful ? B.colors[4] : theme.primary,
-                        offColor: theme.primaryContainer,
+                        onColor: B.colorful ? B.colors[4] : B.theme.primary,
+                        offColor: B.theme.primaryContainer,
                         size: switchSize,
                         value: B.harmonizeColor,
                         onChange: (bool value) {
@@ -432,16 +464,20 @@ class _SettingsPageState extends State<SettingsPage> {
                       title: Text(
                         "Colorful".tr(),
                         style: TextStyle(
-                            fontSize: title, fontWeight: FontWeight.w400, color: textColor),
+                            fontSize: title,
+                            fontWeight: FontWeight.w400,
+                            color: B.theme.onSurfaceVariant),
                       ),
                       subtitle: Text(
                         "sColorful".tr(),
                         style: TextStyle(
-                            fontSize: subtitle, fontWeight: FontWeight.w300, color: textColor),
+                            fontSize: subtitle,
+                            fontWeight: FontWeight.w300,
+                            color: B.theme.onSurfaceVariant),
                       ),
                       trailing: SwitcherButton(
-                        onColor: B.colorful ? B.colors[8] : theme.primary,
-                        offColor: theme.primaryContainer,
+                        onColor: B.colorful ? B.colors[8] : B.theme.primary,
+                        offColor: B.theme.primaryContainer,
                         size: switchSize,
                         value: B.colorful,
                         onChange: (bool value) {
@@ -460,16 +496,20 @@ class _SettingsPageState extends State<SettingsPage> {
                       title: Text(
                         "Show Date".tr(),
                         style: TextStyle(
-                            fontSize: title, fontWeight: FontWeight.w400, color: textColor),
+                            fontSize: title,
+                            fontWeight: FontWeight.w400,
+                            color: B.theme.onSurfaceVariant),
                       ),
                       subtitle: Text(
                         "sShow Date".tr(),
                         style: TextStyle(
-                            fontSize: subtitle, fontWeight: FontWeight.w300, color: textColor),
+                            fontSize: subtitle,
+                            fontWeight: FontWeight.w300,
+                            color: B.theme.onSurfaceVariant),
                       ),
                       trailing: SwitcherButton(
-                        onColor: B.colorful ? B.colors[0] : theme.primary,
-                        offColor: theme.primaryContainer,
+                        onColor: B.colorful ? B.colors[0] : B.theme.primary,
+                        offColor: B.theme.primaryContainer,
                         // offColor: Theme.of(context).primaryColorDark,
                         size: switchSize,
                         value: B.showDate,
@@ -489,16 +529,20 @@ class _SettingsPageState extends State<SettingsPage> {
                       title: Text(
                         "Show Edited".tr(),
                         style: TextStyle(
-                            fontSize: title, fontWeight: FontWeight.w400, color: textColor),
+                            fontSize: title,
+                            fontWeight: FontWeight.w400,
+                            color: B.theme.onSurfaceVariant),
                       ),
                       subtitle: Text(
                         "sShow Edited".tr(),
                         style: TextStyle(
-                            fontSize: subtitle, fontWeight: FontWeight.w300, color: textColor),
+                            fontSize: subtitle,
+                            fontWeight: FontWeight.w300,
+                            color: B.theme.onSurfaceVariant),
                       ),
                       trailing: SwitcherButton(
-                        onColor: B.colorful ? B.colors[2] : theme.primary,
-                        offColor: theme.primaryContainer,
+                        onColor: B.colorful ? B.colors[2] : B.theme.primary,
+                        offColor: B.theme.primaryContainer,
                         size: switchSize,
                         value: B.showEdited,
                         onChange: (bool value) {
@@ -517,16 +561,20 @@ class _SettingsPageState extends State<SettingsPage> {
                       title: Text(
                         "Show Shadow".tr(),
                         style: TextStyle(
-                            fontSize: title, fontWeight: FontWeight.w400, color: textColor),
+                            fontSize: title,
+                            fontWeight: FontWeight.w400,
+                            color: B.theme.onSurfaceVariant),
                       ),
                       subtitle: Text(
                         "sShow Shadow".tr(),
                         style: TextStyle(
-                            fontSize: subtitle, fontWeight: FontWeight.w300, color: textColor),
+                            fontSize: subtitle,
+                            fontWeight: FontWeight.w300,
+                            color: B.theme.onSurfaceVariant),
                       ),
                       trailing: SwitcherButton(
-                        onColor: B.colorful ? B.colors[1] : theme.primary,
-                        offColor: theme.primaryContainer,
+                        onColor: B.colorful ? B.colors[1] : B.theme.primary,
+                        offColor: B.theme.primaryContainer,
                         size: switchSize,
                         value: B.showShadow,
                         onChange: (bool value) {

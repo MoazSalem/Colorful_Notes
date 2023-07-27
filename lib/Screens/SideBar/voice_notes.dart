@@ -3,10 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:notes/Bloc/notes_bloc.dart';
 import 'package:notes/Screens/Actions/edit_voice.dart';
+import 'package:notes/Screens/SideBar/home.dart';
 import 'package:notes/Widgets/notes.dart';
 import 'package:notes/Screens/Actions/create_voice.dart';
-
-final TextEditingController searchVC = TextEditingController();
+import 'package:notes/main.dart';
 
 class VoiceNotesPage extends StatefulWidget {
   const VoiceNotesPage({Key? key}) : super(key: key);
@@ -17,15 +17,12 @@ class VoiceNotesPage extends StatefulWidget {
 
 class _VoiceNotesPageState extends State<VoiceNotesPage> {
   late bool noTitle;
-  late ColorScheme theme;
-  late NotesBloc B;
   late int value;
   late List<Map> notes;
   bool searchOn = false;
 
   @override
   void initState() {
-    B = NotesBloc.get(context);
     value = B.viewIndexV;
     super.initState();
   }
@@ -33,7 +30,6 @@ class _VoiceNotesPageState extends State<VoiceNotesPage> {
   @override
   void didChangeDependencies() {
     notes = searchOn ? B.searchedVoice : B.voiceMap;
-    theme = Theme.of(context).colorScheme;
     super.didChangeDependencies();
   }
 
@@ -43,21 +39,22 @@ class _VoiceNotesPageState extends State<VoiceNotesPage> {
       listener: (context, state) {},
       builder: (context, state) {
         return Scaffold(
-          backgroundColor: B.isDarkMode ? theme.background : theme.surfaceVariant.withOpacity(0.6),
+          backgroundColor:
+              B.isDarkMode ? B.theme.background : B.theme.surfaceVariant.withOpacity(0.6),
           floatingActionButtonLocation: B.fabIndex == 0
               ? FloatingActionButtonLocation.endFloat
               : FloatingActionButtonLocation.startFloat,
           floatingActionButton: FloatingActionButton(
             splashColor: B.colors[1],
             elevation: 0,
-            backgroundColor: B.colorful ? B.colors[3] : theme.primary,
+            backgroundColor: B.colorful ? B.colors[3] : B.theme.primary,
             onPressed: () async {
               showBottomSheet(
                   enableDrag: false, context: context, builder: (context) => const CreateVoice());
             },
             child: Icon(
               Icons.add,
-              color: theme.surfaceVariant,
+              color: B.theme.surfaceVariant,
             ),
           ),
           body: ListView(
@@ -70,7 +67,7 @@ class _VoiceNotesPageState extends State<VoiceNotesPage> {
                         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                         child: TextFormField(
                             autofocus: true,
-                            controller: searchVC,
+                            controller: searchController,
                             onChanged: B.searchVoice,
                             maxLines: 1,
                             decoration: InputDecoration(
@@ -249,7 +246,7 @@ class _VoiceNotesPageState extends State<VoiceNotesPage> {
                           child: Text(
                         "N3".tr(),
                         style: TextStyle(
-                            color: B.colorful ? B.colors[3] : theme.primary,
+                            color: B.colorful ? B.colors[3] : B.theme.primary,
                             fontWeight: FontWeight.w400), //B.colors[3]
                       )),
                     ),
@@ -275,7 +272,7 @@ class _VoiceNotesPageState extends State<VoiceNotesPage> {
         IconButton(
           onPressed: () {
             searchOn = !searchOn;
-            B.searchVoice(searchVC.text);
+            B.searchVoice(searchController.text);
             B.onSearch();
           },
           icon: Icon(
@@ -284,8 +281,8 @@ class _VoiceNotesPageState extends State<VoiceNotesPage> {
             color: searchOn
                 ? B.colorful
                     ? B.colors[3]
-                    : theme.primary
-                : theme.onSurfaceVariant, //Theme.of(context).textTheme.bodyMedium!.color,
+                    : B.theme.primary
+                : B.theme.onSurfaceVariant, //Theme.of(context).textTheme.bodyMedium!.color,
           ),
         ),
         IconButton(
