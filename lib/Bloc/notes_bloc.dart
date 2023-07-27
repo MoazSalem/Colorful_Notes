@@ -60,7 +60,7 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
   int currentIndex = 0;
   bool loading = true;
   bool isTablet = getDeviceType() == 'tablet' ? true : false;
-  Brightness brightness = SchedulerBinding.instance.window.platformBrightness;
+  Brightness brightness = SchedulerBinding.instance.platformDispatcher.platformBrightness;
   ThemeMode themeMode = ThemeMode.system;
   // late List<String> extDir;
 
@@ -660,6 +660,6 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
 }
 
 String getDeviceType() {
-  final data = MediaQueryData.fromWindow(WidgetsBinding.instance.window);
+  final data = MediaQueryData.fromView(WidgetsBinding.instance.platformDispatcher.views.single);
   return data.size.shortestSide < 750 ? 'phone' : 'tablet';
 }

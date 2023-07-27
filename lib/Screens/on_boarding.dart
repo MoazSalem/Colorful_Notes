@@ -26,15 +26,10 @@ class _IntroPageState extends State<IntroPage> {
   late ColorScheme theme;
 
   @override
-  void initState() {
-    brightness = SchedulerBinding.instance.window.platformBrightness;
-    isDarkMode = brightness == Brightness.dark;
-    super.initState();
-  }
-
-  @override
   void didChangeDependencies() {
     theme = Theme.of(context).colorScheme;
+    brightness = SchedulerBinding.instance.platformDispatcher.platformBrightness;
+    isDarkMode = brightness == Brightness.dark;
     super.didChangeDependencies();
   }
 
