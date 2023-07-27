@@ -5,7 +5,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:notes/Bloc/notes_bloc.dart';
 import 'package:notes/Data/theme.dart';
-import 'package:responsive_framework/responsive_wrapper.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'package:notes/Services/flex_colors/theme_controller.dart';
 import 'package:notes/Services/flex_colors/theme_service.dart';
 import 'package:notes/Services/flex_colors/theme_service_hive.dart';
@@ -62,17 +62,15 @@ class MyApp extends StatelessWidget {
           B.themeController = themeController;
           return DynamicColorBuilder(builder: (lightColorScheme, darkColorScheme) {
             return MaterialApp(
-                builder: (context, child) => ResponsiveWrapper.builder(child,
-                    maxWidth: 1200,
-                    minWidth: 400,
-                    defaultScale: true,
-                    breakpoints: [
-                      const ResponsiveBreakpoint.autoScale(600, scaleFactor: 0.9),
-                      const ResponsiveBreakpoint.autoScale(800, scaleFactor: 1.0),
-                      const ResponsiveBreakpoint.autoScale(1000, scaleFactor: 1.0),
-                      const ResponsiveBreakpoint.autoScale(1200, scaleFactor: 1.0),
-                    ],
-                    background: Container(color: Colors.black)),
+                builder: (context, child) => ResponsiveBreakpoints.builder(
+                      child: child!,
+                      breakpoints: [
+                        const Breakpoint(start: 0, end: 600),
+                        const Breakpoint(start: 600, end: 800),
+                        const Breakpoint(start: 800, end: 1000),
+                        const Breakpoint(start: 1000, end: 1200),
+                      ],
+                    ),
                 initialRoute: '/',
                 debugShowCheckedModeBanner: false,
                 title: 'Colorful Notes',
