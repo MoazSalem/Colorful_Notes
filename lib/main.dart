@@ -55,13 +55,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    B = NotesBloc.get(context);
-    B.themeController = themeController;
     return BlocProvider(
       create: (context) => NotesBloc(gBox: box)..startPage(),
       child: BlocConsumer<NotesBloc, NotesState>(
         listener: (context, state) {},
         builder: (context, state) {
+          B = NotesBloc.get(context);
+          B.themeController = themeController;
           return DynamicColorBuilder(builder: (lightColorScheme, darkColorScheme) {
             return MaterialApp(
                 builder: (context, child) => ResponsiveBreakpoints.builder(

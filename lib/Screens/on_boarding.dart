@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:notes/main.dart';
@@ -20,13 +21,9 @@ class _IntroPageState extends State<IntroPage> {
   late bool isDarkMode;
 
   @override
-  void initState() {
-    B.theme = Theme.of(context).colorScheme;
-    super.initState();
-  }
-
-  @override
   void didChangeDependencies() {
+    B.theme = Theme.of(context).colorScheme;
+    B.brightness = SchedulerBinding.instance.platformDispatcher.platformBrightness;
     isDarkMode = B.brightness == Brightness.dark;
     super.didChangeDependencies();
   }
@@ -227,6 +224,10 @@ class _IntroPageState extends State<IntroPage> {
                                 height: 60,
                                 width: 300,
                                 child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                      backgroundColor: B.theme.background,
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(30))),
                                   child: const Text("START"),
                                   onPressed: () async {
                                     B.box.put("showHome", true);

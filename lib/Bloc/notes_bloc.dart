@@ -6,7 +6,6 @@ import 'package:dynamic_color/dynamic_color.dart';
 import 'package:easy_localization/easy_localization.dart' hide TextDirection;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive/hive.dart';
 import 'package:material_dialogs/material_dialogs.dart';
@@ -48,6 +47,7 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
   late String openPage;
   late String lang;
   late List<Color> colors = lightColors;
+  late Brightness brightness;
   List<Map> allNotesMap = [];
   List<Map> voiceMap = [];
   List<Map> notesMap = [];
@@ -58,7 +58,6 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
   int currentIndex = 0;
   bool loading = true;
   bool isTablet = getDeviceType() == 'tablet' ? true : false;
-  Brightness brightness = SchedulerBinding.instance.platformDispatcher.platformBrightness;
   ThemeMode themeMode = ThemeMode.system;
   // late List<String> extDir;
 
@@ -654,5 +653,5 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
 
 String getDeviceType() {
   final data = MediaQueryData.fromView(WidgetsBinding.instance.platformDispatcher.views.single);
-  return data.size.shortestSide < 750 ? 'phone' : 'tablet';
+  return data.size.shortestSide < 600 ? 'phone' : 'tablet';
 }

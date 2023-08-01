@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
@@ -21,8 +22,6 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     B = NotesBloc.get(context);
-    B.harmonizeColors();
-    B.lang = context.locale.toString();
     page = getPages(B);
     super.initState();
   }
@@ -30,6 +29,9 @@ class _HomeState extends State<Home> {
   @override
   void didChangeDependencies() {
     B.theme = Theme.of(context).colorScheme;
+    B.harmonizeColors();
+    B.lang = context.locale.toString();
+    B.brightness = SchedulerBinding.instance.platformDispatcher.platformBrightness;
     B.isDarkMode = (B.brightness == Brightness.dark && B.themeMode == ThemeMode.system) ||
         B.themeMode == ThemeMode.dark;
     B.getScreenWidth(context);
