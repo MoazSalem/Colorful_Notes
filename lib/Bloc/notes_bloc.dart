@@ -82,8 +82,9 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
     emit(NavigationBarChanged());
   }
 
-  onCreateNote() {
+  onCreateNote() async {
     searchNotes(searchController.text);
+    await Future.delayed(const Duration(seconds: 1));
     emit(NoteCreate());
   }
 
@@ -377,11 +378,13 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
 
   Future<void> refreshDatabase() async {
     await getDatabaseItems(database);
+    emit(NoteCreate());
   }
 
   Future<void> destroyDatabase() async {
     await deleteDatabase('notes.db');
     await refreshDatabase();
+    emit(NoteCreate());
   }
 
   Future<void> insertToDatabase(
@@ -390,8 +393,8 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
       required int index,
       required String time,
       required int layout,
+      required tIndex,
       int? type = 0,
-      int? tIndex = 0,
       String? edited = 'no'}) async {
     await database.transaction((txn) async {
       txn
@@ -425,7 +428,7 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
       required int type,
       required String title,
       required int layout,
-      int? tIndex = 0,
+      required tIndex,
       String? edited = 'yes'}) async {
     await database.rawUpdate(
         'UPDATE Notes SET title = ?, content = ?, time = ?, cindex = ?, tindex = ?, type = ?, edited = ?, layout = ?, extra = ? WHERE id = ?',

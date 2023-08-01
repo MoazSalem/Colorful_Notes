@@ -48,8 +48,13 @@ class _SoundPlayerState extends State<SoundPlayer> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     audioPlayer.setSourceDeviceFile(widget.voiceMap[widget.index]["content"]);
+  }
+
+  @override
+  Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     return widget.viewMode == 0
         ? StatefulBuilder(
@@ -77,9 +82,15 @@ class _SoundPlayerState extends State<SoundPlayer> {
                                       RoundSliderOverlayShape(overlayRadius: width * 0.03565),
                                 ),
                                 child: Slider(
-                                  activeColor: Colors.white,
-                                  thumbColor: Colors.white,
-                                  inactiveColor: Colors.white54,
+                                  activeColor: widget.voiceMap[widget.index]['tindex'] == 0
+                                      ? Colors.white
+                                      : Colors.black,
+                                  thumbColor: widget.voiceMap[widget.index]['tindex'] == 0
+                                      ? Colors.white
+                                      : Colors.black,
+                                  inactiveColor: widget.voiceMap[widget.index]['tindex'] == 0
+                                      ? Colors.white54
+                                      : Colors.black54,
                                   value: position.inSeconds.toDouble(),
                                   min: 0,
                                   max: duration.inSeconds.toDouble(),
@@ -117,12 +128,16 @@ class _SoundPlayerState extends State<SoundPlayer> {
                                     ? Icon(
                                         Icons.pause_circle,
                                         size: width * 0.19097,
-                                        color: Colors.white,
+                                        color: widget.voiceMap[widget.index]['tindex'] == 0
+                                            ? Colors.white
+                                            : Colors.black,
                                       )
                                     : Icon(
                                         Icons.play_circle,
                                         size: width * 0.19097,
-                                        color: Colors.white,
+                                        color: widget.voiceMap[widget.index]['tindex'] == 0
+                                            ? Colors.white
+                                            : Colors.black,
                                       )),
                           ),
                           Padding(
@@ -138,7 +153,10 @@ class _SoundPlayerState extends State<SoundPlayer> {
                                           : currentState != PlayerState.paused
                                               ? parseTime(duration)
                                               : parseTime(position),
-                                      style: const TextStyle(color: Colors.white),
+                                      style: TextStyle(
+                                          color: widget.voiceMap[widget.index]['tindex'] == 0
+                                              ? Colors.white
+                                              : Colors.black),
                                     ),
                                   ),
                                 ),
@@ -158,7 +176,9 @@ class _SoundPlayerState extends State<SoundPlayer> {
                                     height: width * 0.07639,
                                     width: width * 0.10185,
                                     decoration: BoxDecoration(
-                                        color: Colors.white,
+                                        color: widget.voiceMap[widget.index]['tindex'] == 0
+                                            ? Colors.white
+                                            : Colors.black,
                                         borderRadius: BorderRadius.circular(width * 0.050926)),
                                     child: Center(
                                       child: Text(
@@ -215,12 +235,16 @@ class _SoundPlayerState extends State<SoundPlayer> {
                                         ? Icon(
                                             Icons.pause_circle,
                                             size: width * 0.10185,
-                                            color: Colors.white,
+                                            color: widget.voiceMap[widget.index]['tindex'] == 0
+                                                ? Colors.white
+                                                : Colors.black,
                                           )
                                         : Icon(
                                             Icons.play_circle,
                                             size: width * 0.10185,
-                                            color: Colors.white,
+                                            color: widget.voiceMap[widget.index]['tindex'] == 0
+                                                ? Colors.white
+                                                : Colors.black,
                                           )),
                                 Padding(
                                   padding: EdgeInsets.only(bottom: width * 0.030555),
@@ -240,9 +264,16 @@ class _SoundPlayerState extends State<SoundPlayer> {
                                                   : width * 0.035649),
                                         ),
                                         child: Slider(
-                                          activeColor: Colors.white,
-                                          thumbColor: Colors.white,
-                                          inactiveColor: Colors.white54,
+                                          activeColor: widget.voiceMap[widget.index]['tindex'] == 0
+                                              ? Colors.white
+                                              : Colors.black,
+                                          thumbColor: widget.voiceMap[widget.index]['tindex'] == 0
+                                              ? Colors.white
+                                              : Colors.black,
+                                          inactiveColor:
+                                              widget.voiceMap[widget.index]['tindex'] == 0
+                                                  ? Colors.white54
+                                                  : Colors.black54,
                                           value: position.inSeconds.toDouble(),
                                           min: 0,
                                           max: duration.inSeconds.toDouble(),
@@ -269,7 +300,9 @@ class _SoundPlayerState extends State<SoundPlayer> {
                                     height: width * 0.07639,
                                     width: width * 0.10185,
                                     decoration: BoxDecoration(
-                                        color: Colors.white,
+                                        color: widget.voiceMap[widget.index]['tindex'] == 0
+                                            ? Colors.white
+                                            : Colors.black,
                                         borderRadius: BorderRadius.circular(width * 0.050926)),
                                     child: Center(
                                       child: Text(
@@ -297,7 +330,10 @@ class _SoundPlayerState extends State<SoundPlayer> {
                                     : currentState != PlayerState.paused
                                         ? parseTime(duration)
                                         : parseTime(position),
-                                style: const TextStyle(color: Colors.white),
+                                style: TextStyle(
+                                    color: widget.voiceMap[widget.index]['tindex'] == 0
+                                        ? Colors.white
+                                        : Colors.black),
                               ),
                             ),
                           )
@@ -331,9 +367,15 @@ class _SoundPlayerState extends State<SoundPlayer> {
                                         RoundSliderOverlayShape(overlayRadius: width * 0.035649),
                                   ),
                                   child: Slider(
-                                    activeColor: Colors.white,
-                                    thumbColor: Colors.white,
-                                    inactiveColor: Colors.white54,
+                                    activeColor: widget.voiceMap[widget.index]['tindex'] == 0
+                                        ? Colors.white
+                                        : Colors.black,
+                                    thumbColor: widget.voiceMap[widget.index]['tindex'] == 0
+                                        ? Colors.white
+                                        : Colors.black,
+                                    inactiveColor: widget.voiceMap[widget.index]['tindex'] == 0
+                                        ? Colors.white54
+                                        : Colors.black54,
                                     value: position.inSeconds.toDouble(),
                                     min: 0,
                                     max: duration.inSeconds.toDouble(),
@@ -368,12 +410,16 @@ class _SoundPlayerState extends State<SoundPlayer> {
                                           ? Icon(
                                               Icons.pause_circle,
                                               size: width * 0.190972,
-                                              color: Colors.white,
+                                              color: widget.voiceMap[widget.index]['tindex'] == 0
+                                                  ? Colors.white
+                                                  : Colors.black,
                                             )
                                           : Icon(
                                               Icons.play_circle,
                                               size: width * 0.190972,
-                                              color: Colors.white,
+                                              color: widget.voiceMap[widget.index]['tindex'] == 0
+                                                  ? Colors.white
+                                                  : Colors.black,
                                             )),
                                 ),
                                 Padding(
@@ -389,7 +435,10 @@ class _SoundPlayerState extends State<SoundPlayer> {
                                                 : currentState != PlayerState.paused
                                                     ? parseTime(duration)
                                                     : parseTime(position),
-                                            style: const TextStyle(color: Colors.white),
+                                            style: TextStyle(
+                                                color: widget.voiceMap[widget.index]['tindex'] == 0
+                                                    ? Colors.white
+                                                    : Colors.black),
                                           ),
                                         ),
                                       ),
@@ -409,7 +458,9 @@ class _SoundPlayerState extends State<SoundPlayer> {
                                           height: width * 0.07639,
                                           width: width * 0.10185,
                                           decoration: BoxDecoration(
-                                              color: Colors.white,
+                                              color: widget.voiceMap[widget.index]['tindex'] == 0
+                                                  ? Colors.white
+                                                  : Colors.black,
                                               borderRadius:
                                                   BorderRadius.circular(width * 0.050926)),
                                           child: Center(

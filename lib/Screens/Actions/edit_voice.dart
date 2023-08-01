@@ -16,11 +16,13 @@ class EditVoice extends StatefulWidget {
 class _EditVoiceState extends State<EditVoice> {
   final TextEditingController titleC = TextEditingController();
   late int bIndex;
+  late int textColor;
 
   @override
   void initState() {
     titleC.text = widget.note["title"];
     bIndex = widget.note["cindex"];
+    textColor = widget.note['tindex'];
     super.initState();
   }
 
@@ -44,23 +46,38 @@ class _EditVoiceState extends State<EditVoice> {
                       onSaved: B.onViewChanged(),
                       textAlign: TextAlign.center,
                       maxLines: 2,
-                      cursorColor: Colors.white,
+                      cursorColor: textColor == 0 ? Colors.white : Colors.black,
                       textInputAction: TextInputAction.done,
                       controller: titleC,
                       style: TextStyle(
-                          color: Colors.white,
+                          color: textColor == 0 ? Colors.white : Colors.black,
                           fontSize: B.isTablet ? 60 : 36,
                           fontWeight: FontWeight.w500),
                       decoration: InputDecoration(
                           border: InputBorder.none,
                           hintText: "No Title".tr(),
-                          hintStyle: const TextStyle(color: Colors.black54))),
+                          hintStyle:
+                              TextStyle(color: textColor == 0 ? Colors.white54 : Colors.black54))),
                 ),
                 SizedBox(
                   height: B.isTablet ? 40 : 10,
                 ),
                 Column(
                   children: [
+                    GestureDetector(
+                      onTap: () {
+                        textColor = textColor == 0 ? 1 : 0;
+                        B.onColorChanged();
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 20.0),
+                        child: Text(
+                          "TC".tr(),
+                          style: TextStyle(
+                              fontSize: 20, color: textColor == 0 ? Colors.white : Colors.black),
+                        ),
+                      ),
+                    ),
                     FittedBox(
                       child: Padding(
                         padding: EdgeInsets.symmetric(horizontal: B.isTablet ? 100 : 20.0),
@@ -78,7 +95,13 @@ class _EditVoiceState extends State<EditVoice> {
                                 },
                                 child: CircleAvatar(
                                   radius: 35,
-                                  backgroundColor: bIndex == index2 ? Colors.white : Colors.white54,
+                                  backgroundColor: bIndex == index2
+                                      ? textColor == 0
+                                          ? Colors.white
+                                          : Colors.black
+                                      : textColor == 0
+                                          ? Colors.white54
+                                          : Colors.black54,
                                   child: CircleAvatar(
                                     radius: 25,
                                     backgroundColor: B.colors[index2],
@@ -110,8 +133,13 @@ class _EditVoiceState extends State<EditVoice> {
                                   },
                                   child: CircleAvatar(
                                     radius: 35,
-                                    backgroundColor:
-                                        bIndex == (index3 + 5) ? Colors.white : Colors.white54,
+                                    backgroundColor: bIndex == (index3 + 5)
+                                        ? textColor == 0
+                                            ? Colors.white
+                                            : Colors.black
+                                        : textColor == 0
+                                            ? Colors.white54
+                                            : Colors.black54,
                                     child: CircleAvatar(
                                       radius: 25,
                                       backgroundColor: B.colors[index3 + 5],
@@ -141,7 +169,9 @@ class _EditVoiceState extends State<EditVoice> {
                             },
                             child: Text(
                               "Discard".tr(),
-                              style: const TextStyle(fontSize: 20, color: Colors.white),
+                              style: TextStyle(
+                                  fontSize: 20,
+                                  color: textColor == 0 ? Colors.white : Colors.black),
                             ),
                           ),
                         ),
@@ -157,6 +187,7 @@ class _EditVoiceState extends State<EditVoice> {
                                           time: time,
                                           content: widget.note["content"],
                                           index: bIndex,
+                                          tIndex: textColor,
                                           type: 1,
                                           edited: 'yes',
                                           layout: widget.note['layout']),
@@ -164,7 +195,7 @@ class _EditVoiceState extends State<EditVoice> {
                                       Navigator.of(context).pop(),
                                       B.onCreateNote()
                                     }
-                                  : bIndex != widget.note["cindex"]
+                                  : bIndex != widget.note["cindex"] || textColor != widget.note["tindex"]
                                       ? {
                                           await B.editDatabaseItem(
                                               time: widget.note['time'],
@@ -172,6 +203,7 @@ class _EditVoiceState extends State<EditVoice> {
                                               id: widget.note["id"],
                                               title: widget.note['title'],
                                               index: bIndex,
+                                              tIndex: textColor,
                                               type: 1,
                                               edited: 'no',
                                               layout: widget.note['layout']),
@@ -182,7 +214,9 @@ class _EditVoiceState extends State<EditVoice> {
                             },
                             child: Text(
                               "Save".tr(),
-                              style: const TextStyle(fontSize: 20, color: Colors.white),
+                              style: TextStyle(
+                                  fontSize: 20,
+                                  color: textColor == 0 ? Colors.white : Colors.black),
                             ),
                           ),
                         )

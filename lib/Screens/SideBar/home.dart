@@ -134,7 +134,7 @@ class _HomePageState extends State<HomePage> {
                                               context: context,
                                               notes: notes,
                                               colors: B.colors,
-                                              reverseIndex: reverseIndex,
+                                              index: reverseIndex,
                                               dateValue: dateValue,
                                               date: date,
                                               noTitle: noTitle,
@@ -163,7 +163,9 @@ class _HomePageState extends State<HomePage> {
                                                 },
                                                 icon: Icon(
                                                   Icons.highlight_remove,
-                                                  color: Colors.white,
+                                                  color: notes[reverseIndex]['tindex'] == 0
+                                                      ? Colors.white
+                                                      : Colors.black,
                                                   size: B.width * 0.06620,
                                                 )),
                                           ),
@@ -181,7 +183,7 @@ class _HomePageState extends State<HomePage> {
                                               context: context,
                                               notes: notes,
                                               colors: B.colors,
-                                              reverseIndex: reverseIndex,
+                                              index: reverseIndex,
                                               dateValue: dateValue,
                                               date: date,
                                               noTitle: noTitle,
@@ -205,7 +207,9 @@ class _HomePageState extends State<HomePage> {
                                                 },
                                                 icon: Icon(
                                                   Icons.highlight_remove,
-                                                  color: Colors.white,
+                                                  color: notes[reverseIndex]['tindex'] == 0
+                                                      ? Colors.white
+                                                      : Colors.black,
                                                   size: B.width * 0.0662,
                                                 )),
                                           ),
@@ -246,7 +250,7 @@ class _HomePageState extends State<HomePage> {
                                         context: context,
                                         notes: notes,
                                         colors: B.colors,
-                                        reverseIndex: reverseIndex,
+                                        index: reverseIndex,
                                         dateValue: dateValue,
                                         date: date,
                                         noTitle: noTitle,
@@ -270,7 +274,9 @@ class _HomePageState extends State<HomePage> {
                                           },
                                           icon: Icon(
                                             Icons.highlight_remove,
-                                            color: Colors.white,
+                                            color: notes[reverseIndex]['tindex'] == 0
+                                                ? Colors.white
+                                                : Colors.black,
                                             size: B.width * 0.0662,
                                           )),
                                     ),

@@ -105,5 +105,6 @@
   "I7": "Sqflite ",
   "I8": "to make a database to store all of your notes data locally on your phone",
   "Dynamic Colors": "Dynamic Colors",
-  "DC": "Use systems theme, this will only work as intended on android 12+"
+  "DC": "Use systems theme, this will only work as intended on android 12+",
+  "TC": "Press Here To Change Text Color"
 }

@@ -19,6 +19,7 @@ class _EditNoteState extends State<EditNote> {
   late ValueNotifier<TextDirection> _titleDir;
   late ValueNotifier<TextDirection> _contentDir;
   late int bIndex;
+  late int textColor;
   bool isEditing = false;
 
   @override
@@ -26,6 +27,7 @@ class _EditNoteState extends State<EditNote> {
     titleC.text = widget.note["title"];
     contentC.text = widget.note["content"];
     bIndex = widget.note["cindex"];
+    textColor = widget.note['tindex'];
     _titleDir = widget.note["layout"] == 0 || widget.note["layout"] == 2
         ? ValueNotifier(TextDirection.ltr)
         : ValueNotifier(TextDirection.rtl);
@@ -65,7 +67,7 @@ class _EditNoteState extends State<EditNote> {
                                   Navigator.pop(context);
                                 },
                                 child: CircleAvatar(
-                                  backgroundColor: Colors.black54,
+                                  backgroundColor: textColor == 0 ? Colors.white54 : Colors.black54,
                                   radius: 25,
                                   child: Icon(
                                     Icons.arrow_back,
@@ -93,13 +95,15 @@ class _EditNoteState extends State<EditNote> {
                                               time: time,
                                               content: contentC.text,
                                               index: bIndex,
+                                              tIndex: textColor,
                                               edited: 'yes',
                                               layout: getLayout()),
                                           await B.deleteFromDatabase(id: widget.note["id"]),
                                           isEditing = false,
                                           B.onCreateNote(),
                                         }
-                                      : bIndex != widget.note["cindex"]
+                                      : bIndex != widget.note["cindex"] ||
+                                              textColor != widget.note['tindex']
                                           ? {
                                               await B.editDatabaseItem(
                                                   time: widget.note['time'],
@@ -107,6 +111,7 @@ class _EditNoteState extends State<EditNote> {
                                                   id: widget.note["id"],
                                                   title: widget.note['title'],
                                                   index: bIndex,
+                                                  tIndex: textColor,
                                                   type: 0,
                                                   edited: 'no',
                                                   layout: widget.note['layout']),
@@ -120,7 +125,7 @@ class _EditNoteState extends State<EditNote> {
                                   B.onCreateNote();
                                 },
                           child: CircleAvatar(
-                            backgroundColor: Colors.white,
+                            backgroundColor: textColor == 0 ? Colors.white : Colors.black,
                             radius: 25,
                             child: Icon(
                               isEditing ? Icons.done : Icons.edit_note,
@@ -161,18 +166,20 @@ class _EditNoteState extends State<EditNote> {
                                   onSaved: B.onViewChanged(),
                                   textAlign: TextAlign.center,
                                   maxLines: 2,
-                                  cursorColor: Colors.white,
+                                  cursorColor: textColor == 0 ? Colors.white : Colors.black,
                                   readOnly: isEditing ? false : true,
                                   textInputAction: TextInputAction.done,
                                   controller: titleC,
                                   style: TextStyle(
-                                      color: Colors.white,
+                                      color: textColor == 0 ? Colors.white : Colors.black,
                                       fontSize: B.isTablet ? 60 : 36,
                                       fontWeight: FontWeight.w500),
                                   decoration: InputDecoration(
                                       border: InputBorder.none,
                                       hintText: "No Title".tr(),
-                                      hintStyle: const TextStyle(color: Colors.black54))),
+                                      hintStyle: TextStyle(
+                                          color:
+                                              textColor == 0 ? Colors.white54 : Colors.black54))),
                             ),
                           ),
                           const SizedBox(
@@ -195,16 +202,19 @@ class _EditNoteState extends State<EditNote> {
                                     }
                                   },
                                   onSaved: B.onSearch(),
-                                  cursorColor: Colors.white,
+                                  cursorColor: textColor == 0 ? Colors.white : Colors.black,
                                   controller: contentC,
                                   readOnly: isEditing ? false : true,
                                   maxLines: 20,
                                   style: TextStyle(
-                                      color: Colors.white, fontSize: B.isTablet ? 40 : 24),
+                                      color: textColor == 0 ? Colors.white : Colors.black,
+                                      fontSize: B.isTablet ? 40 : 24),
                                   decoration: InputDecoration(
                                       border: InputBorder.none,
                                       hintText: "Content".tr(),
-                                      hintStyle: const TextStyle(color: Colors.black54))),
+                                      hintStyle: TextStyle(
+                                          color:
+                                              textColor == 0 ? Colors.white54 : Colors.black54))),
                             ),
                           ),
                         ]),
@@ -215,24 +225,75 @@ class _EditNoteState extends State<EditNote> {
                               child: ListView.builder(
                                 scrollDirection: Axis.vertical,
                                 itemCount: B.colors.length,
-                                itemBuilder: (BuildContext context, index2) => GestureDetector(
-                                  onTap: () {
-                                    bIndex = index2;
-                                    B.onColorChanged();
-                                  },
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(6.0),
-                                    child: CircleAvatar(
-                                      radius: 25,
-                                      backgroundColor:
-                                          bIndex == index2 ? Colors.white : Colors.white54,
-                                      child: CircleAvatar(
-                                        radius: 20,
-                                        backgroundColor: B.colors[index2],
+                                itemBuilder: (BuildContext context, index2) => index2 == 0
+                                    ? Column(
+                                        children: [
+                                          GestureDetector(
+                                            onTap: () {
+                                              textColor = textColor == 0 ? 1 : 0;
+                                              B.onColorChanged();
+                                            },
+                                            child: Padding(
+                                              padding: const EdgeInsets.all(6.0),
+                                              child: Text(
+                                                "TC",
+                                                style: TextStyle(
+                                                    color: textColor == 0
+                                                        ? Colors.white
+                                                        : Colors.black,
+                                                    fontSize: B.isTablet ? 40 : 24,
+                                                    fontWeight: FontWeight.w500),
+                                              ),
+                                            ),
+                                          ),
+                                          GestureDetector(
+                                            onTap: () {
+                                              bIndex = index2;
+                                              B.onColorChanged();
+                                            },
+                                            child: Padding(
+                                              padding: const EdgeInsets.all(6.0),
+                                              child: CircleAvatar(
+                                                radius: 25,
+                                                backgroundColor: bIndex == index2
+                                                    ? textColor == 0
+                                                        ? Colors.white
+                                                        : Colors.black
+                                                    : textColor == 0
+                                                        ? Colors.white54
+                                                        : Colors.black54,
+                                                child: CircleAvatar(
+                                                  radius: 20,
+                                                  backgroundColor: B.colors[index2],
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      )
+                                    : GestureDetector(
+                                        onTap: () {
+                                          bIndex = index2;
+                                          B.onColorChanged();
+                                        },
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(6.0),
+                                          child: CircleAvatar(
+                                            radius: 25,
+                                            backgroundColor: bIndex == index2
+                                                ? textColor == 0
+                                                    ? Colors.white
+                                                    : Colors.black
+                                                : textColor == 0
+                                                    ? Colors.white54
+                                                    : Colors.black54,
+                                            child: CircleAvatar(
+                                              radius: 20,
+                                              backgroundColor: B.colors[index2],
+                                            ),
+                                          ),
+                                        ),
                                       ),
-                                    ),
-                                  ),
-                                ),
                               ))
                           : Container()
                     ],

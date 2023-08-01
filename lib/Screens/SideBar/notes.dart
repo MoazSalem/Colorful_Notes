@@ -121,7 +121,7 @@ class _NotesPageState extends State<NotesPage> {
                                               context: context,
                                               notes: notes,
                                               colors: B.colors,
-                                              reverseIndex: reverseIndex,
+                                              index: reverseIndex,
                                               dateValue: dateValue,
                                               date: date,
                                               noTitle: noTitle,
@@ -149,7 +149,9 @@ class _NotesPageState extends State<NotesPage> {
                                                 },
                                                 icon: Icon(
                                                   Icons.highlight_remove,
-                                                  color: Colors.white,
+                                                  color: notes[reverseIndex]['tindex'] == 0
+                                                      ? Colors.white
+                                                      : Colors.black,
                                                   size: B.width * 0.06620,
                                                 )),
                                           ),
@@ -166,7 +168,7 @@ class _NotesPageState extends State<NotesPage> {
                                               context: context,
                                               notes: notes,
                                               colors: B.colors,
-                                              reverseIndex: reverseIndex,
+                                              index: reverseIndex,
                                               dateValue: dateValue,
                                               date: date,
                                               noTitle: noTitle,
@@ -190,7 +192,9 @@ class _NotesPageState extends State<NotesPage> {
                                                 },
                                                 icon: Icon(
                                                   Icons.highlight_remove,
-                                                  color: Colors.white,
+                                                  color: notes[reverseIndex]['tindex'] == 0
+                                                      ? Colors.white
+                                                      : Colors.black,
                                                   size: B.width * 0.0662,
                                                 )),
                                           ),
@@ -230,7 +234,7 @@ class _NotesPageState extends State<NotesPage> {
                                         context: context,
                                         notes: notes,
                                         colors: B.colors,
-                                        reverseIndex: reverseIndex,
+                                        index: reverseIndex,
                                         dateValue: dateValue,
                                         date: date,
                                         noTitle: noTitle,
@@ -254,7 +258,9 @@ class _NotesPageState extends State<NotesPage> {
                                           },
                                           icon: Icon(
                                             Icons.highlight_remove,
-                                            color: Colors.white,
+                                            color: notes[reverseIndex]['tindex'] == 0
+                                                ? Colors.white
+                                                : Colors.black,
                                             size: B.width * 0.0662,
                                           )),
                                     ),

@@ -26,6 +26,7 @@ class _CreateVoiceState extends State<CreateVoice> {
   int chosenIndex = 0;
   bool isRecording = false;
   bool isPaused = false;
+  int textColor = 0;
 
   @override
   void didChangeDependencies() {
@@ -69,7 +70,7 @@ class _CreateVoiceState extends State<CreateVoice> {
                                   B.onRecord();
                                 },
                                 child: CircleAvatar(
-                                  backgroundColor: Colors.black54,
+                                  backgroundColor: textColor == 0 ? Colors.white54 : Colors.black54,
                                   radius: 25,
                                   child: Icon(
                                     Icons.arrow_back,
@@ -98,6 +99,7 @@ class _CreateVoiceState extends State<CreateVoice> {
                                         time: time,
                                         content: content,
                                         index: chosenIndex,
+                                        tIndex: textColor,
                                         type: 1,
                                         layout: 0),
                                     stopWatchTimer.onResetTimer(),
@@ -110,7 +112,7 @@ class _CreateVoiceState extends State<CreateVoice> {
                                   };
                           },
                           child: CircleAvatar(
-                            backgroundColor: Colors.white,
+                            backgroundColor: textColor == 0 ? Colors.white : Colors.black,
                             radius: 25,
                             child: Icon(
                               Icons.done,
@@ -139,18 +141,20 @@ class _CreateVoiceState extends State<CreateVoice> {
                                   textAlign: TextAlign.center,
                                   focusNode: titleFocusNode,
                                   maxLines: 2,
-                                  cursorColor: Colors.white,
+                                  cursorColor: textColor == 0 ? Colors.white : Colors.black,
                                   autofocus: true,
                                   textInputAction: TextInputAction.done,
                                   controller: titleC,
                                   style: TextStyle(
-                                      color: Colors.white,
+                                      color: textColor == 0 ? Colors.white : Colors.black,
                                       fontSize: B.isTablet ? 60 : 36,
                                       fontWeight: FontWeight.w500),
                                   decoration: InputDecoration(
                                       border: InputBorder.none,
                                       hintText: "Title".tr(),
-                                      hintStyle: const TextStyle(color: Colors.black54))),
+                                      hintStyle: TextStyle(
+                                          color:
+                                              textColor == 0 ? Colors.white54 : Colors.black54))),
                             ),
                             SizedBox(
                               height: height * 0.8,
@@ -173,8 +177,13 @@ class _CreateVoiceState extends State<CreateVoice> {
                                               style: TextStyle(
                                                   fontSize: B.isTablet ? 80 : 40,
                                                   fontWeight: FontWeight.w500,
-                                                  color:
-                                                      value == 0 ? Colors.black54 : Colors.white),
+                                                  color: value == 0
+                                                      ? textColor == 0
+                                                          ? Colors.white54
+                                                          : Colors.black54
+                                                      : textColor == 0
+                                                          ? Colors.white
+                                                          : Colors.black),
                                             ),
                                           ),
                                         ],
@@ -194,10 +203,11 @@ class _CreateVoiceState extends State<CreateVoice> {
                                                   isPaused = false;
                                                   B.onRecord();
                                                 },
-                                                icon: const Icon(
+                                                icon: Icon(
                                                   Icons.play_arrow,
                                                   size: 100,
-                                                  color: Colors.white,
+                                                  color:
+                                                      textColor == 0 ? Colors.white : Colors.black,
                                                 ))
                                             : IconButton(
                                                 constraints: const BoxConstraints.tightFor(
@@ -208,10 +218,11 @@ class _CreateVoiceState extends State<CreateVoice> {
                                                   isPaused = true;
                                                   B.onRecord();
                                                 },
-                                                icon: const Icon(
+                                                icon: Icon(
                                                   Icons.pause,
                                                   size: 100,
-                                                  color: Colors.white,
+                                                  color:
+                                                      textColor == 0 ? Colors.white : Colors.black,
                                                 ))
                                         : IconButton(
                                             constraints: const BoxConstraints.tightFor(
@@ -245,10 +256,11 @@ class _CreateVoiceState extends State<CreateVoice> {
                                                 );
                                               }
                                             },
-                                            icon: const Icon(
+                                            icon: Icon(
                                               Icons.keyboard_voice_rounded,
                                               size: 100,
-                                              color: Colors.black54,
+                                              color:
+                                                  textColor == 0 ? Colors.white54 : Colors.black54,
                                             )),
                                   ),
                                   Padding(
@@ -267,7 +279,13 @@ class _CreateVoiceState extends State<CreateVoice> {
                                         icon: Icon(
                                           Icons.stop_circle,
                                           size: 100,
-                                          color: isRecording ? Colors.white : Colors.black54,
+                                          color: isRecording
+                                              ? textColor == 0
+                                                  ? Colors.white
+                                                  : Colors.black
+                                              : textColor == 0
+                                                  ? Colors.white54
+                                                  : Colors.black54,
                                         )),
                                   ),
                                 ],
@@ -281,24 +299,73 @@ class _CreateVoiceState extends State<CreateVoice> {
                           child: ListView.builder(
                             scrollDirection: Axis.vertical,
                             itemCount: B.colors.length,
-                            itemBuilder: (BuildContext context, index) => GestureDetector(
-                              onTap: () {
-                                chosenIndex = index;
-                                B.onColorChanged();
-                              },
-                              child: Padding(
-                                padding: const EdgeInsets.all(6.0),
-                                child: CircleAvatar(
-                                  radius: 25,
-                                  backgroundColor:
-                                      chosenIndex == index ? Colors.white : Colors.white54,
-                                  child: CircleAvatar(
-                                    radius: 20,
-                                    backgroundColor: B.colors[index],
+                            itemBuilder: (BuildContext context, index) => index == 0
+                                ? Column(
+                                    children: [
+                                      GestureDetector(
+                                        onTap: () {
+                                          textColor = textColor == 0 ? 1 : 0;
+                                          B.onColorChanged();
+                                        },
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(6.0),
+                                          child: Text(
+                                            "TC",
+                                            style: TextStyle(
+                                                color: textColor == 0 ? Colors.white : Colors.black,
+                                                fontSize: B.isTablet ? 40 : 24,
+                                                fontWeight: FontWeight.w500),
+                                          ),
+                                        ),
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          chosenIndex = index;
+                                          B.onColorChanged();
+                                        },
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(6.0),
+                                          child: CircleAvatar(
+                                            radius: 25,
+                                            backgroundColor: chosenIndex == index
+                                                ? textColor == 0
+                                                    ? Colors.white
+                                                    : Colors.black
+                                                : textColor == 0
+                                                    ? Colors.white54
+                                                    : Colors.black54,
+                                            child: CircleAvatar(
+                                              radius: 20,
+                                              backgroundColor: B.colors[index],
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                : GestureDetector(
+                                    onTap: () {
+                                      chosenIndex = index;
+                                      B.onColorChanged();
+                                    },
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(6.0),
+                                      child: CircleAvatar(
+                                        radius: 25,
+                                        backgroundColor: chosenIndex == index
+                                            ? textColor == 0
+                                                ? Colors.white
+                                                : Colors.black
+                                            : textColor == 0
+                                                ? Colors.white54
+                                                : Colors.black54,
+                                        child: CircleAvatar(
+                                          radius: 20,
+                                          backgroundColor: B.colors[index],
+                                        ),
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              ),
-                            ),
                           ))
                     ],
                   ),

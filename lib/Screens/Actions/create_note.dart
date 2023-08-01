@@ -19,6 +19,7 @@ class _CreateNoteState extends State<CreateNote> {
   late String title;
   late String content;
   late String time;
+  int textColor = 0;
   int chosenIndex = 0;
 
   @override
@@ -58,7 +59,7 @@ class _CreateNoteState extends State<CreateNote> {
                                   Navigator.pop(context);
                                 },
                                 child: CircleAvatar(
-                                  backgroundColor: Colors.black54,
+                                  backgroundColor: textColor == 0 ? Colors.white54 : Colors.black54,
                                   radius: 25,
                                   child: Icon(
                                     Icons.arrow_back,
@@ -86,17 +87,17 @@ class _CreateNoteState extends State<CreateNote> {
                                         time: time,
                                         content: content,
                                         index: chosenIndex,
+                                        tIndex: textColor,
                                         layout: getLayout()),
                                     titleC.text = "",
                                     contentC.text = "",
                                     B.onCreateNote(),
-                                    Navigator.pop(context),
-                                    B.onCreateNote()
+                                    Navigator.pop(context)
                                   }
                                 : Navigator.pop(context);
                           },
                           child: CircleAvatar(
-                            backgroundColor: Colors.white,
+                            backgroundColor: textColor == 0 ? Colors.white : Colors.black,
                             radius: 25,
                             child: Icon(
                               Icons.done,
@@ -134,18 +135,20 @@ class _CreateNoteState extends State<CreateNote> {
                                       if (dir != value) titleDir.value = dir;
                                     }
                                   },
-                                  cursorColor: Colors.white,
+                                  cursorColor: textColor == 0 ? Colors.white : Colors.black,
                                   autofocus: true,
                                   textInputAction: TextInputAction.done,
                                   controller: titleC,
                                   style: TextStyle(
-                                      color: Colors.white,
+                                      color: textColor == 0 ? Colors.white : Colors.black,
                                       fontSize: B.isTablet ? 60 : 36,
                                       fontWeight: FontWeight.w500),
                                   decoration: InputDecoration(
                                       border: InputBorder.none,
                                       hintText: "Title".tr(),
-                                      hintStyle: const TextStyle(color: Colors.black54))),
+                                      hintStyle: TextStyle(
+                                          color:
+                                              textColor == 0 ? Colors.white54 : Colors.black54))),
                             ),
                           ),
                           const SizedBox(
@@ -165,16 +168,19 @@ class _CreateNoteState extends State<CreateNote> {
                                       if (dir != value) contentDir.value = dir;
                                     }
                                   },
-                                  cursorColor: Colors.white,
+                                  cursorColor: textColor == 0 ? Colors.white : Colors.black,
                                   controller: contentC,
                                   maxLines: 20,
                                   showCursor: true,
                                   style: TextStyle(
-                                      color: Colors.white, fontSize: B.isTablet ? 40 : 24),
+                                      color: textColor == 0 ? Colors.white : Colors.black,
+                                      fontSize: B.isTablet ? 40 : 24),
                                   decoration: InputDecoration(
                                       border: InputBorder.none,
                                       hintText: "Content".tr(),
-                                      hintStyle: const TextStyle(color: Colors.black54))),
+                                      hintStyle: TextStyle(
+                                          color:
+                                              textColor == 0 ? Colors.white54 : Colors.black54))),
                             ),
                           ),
                         ]),
@@ -184,24 +190,73 @@ class _CreateNoteState extends State<CreateNote> {
                           child: ListView.builder(
                             scrollDirection: Axis.vertical,
                             itemCount: B.colors.length,
-                            itemBuilder: (BuildContext context, index) => GestureDetector(
-                              onTap: () {
-                                chosenIndex = index;
-                                B.onColorChanged();
-                              },
-                              child: Padding(
-                                padding: const EdgeInsets.all(6.0),
-                                child: CircleAvatar(
-                                  radius: 25,
-                                  backgroundColor:
-                                      chosenIndex == index ? Colors.white : Colors.white54,
-                                  child: CircleAvatar(
-                                    radius: 20,
-                                    backgroundColor: B.colors[index],
+                            itemBuilder: (BuildContext context, index) => index == 0
+                                ? Column(
+                                    children: [
+                                      GestureDetector(
+                                        onTap: () {
+                                          textColor = textColor == 0 ? 1 : 0;
+                                          B.onColorChanged();
+                                        },
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(6.0),
+                                          child: Text(
+                                            "TC",
+                                            style: TextStyle(
+                                                color: textColor == 0 ? Colors.white : Colors.black,
+                                                fontSize: B.isTablet ? 40 : 24,
+                                                fontWeight: FontWeight.w500),
+                                          ),
+                                        ),
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          chosenIndex = index;
+                                          B.onColorChanged();
+                                        },
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(6.0),
+                                          child: CircleAvatar(
+                                            radius: 25,
+                                            backgroundColor: chosenIndex == index
+                                                ? textColor == 0
+                                                    ? Colors.white
+                                                    : Colors.black
+                                                : textColor == 0
+                                                    ? Colors.white54
+                                                    : Colors.black54,
+                                            child: CircleAvatar(
+                                              radius: 20,
+                                              backgroundColor: B.colors[index],
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  )
+                                : GestureDetector(
+                                    onTap: () {
+                                      chosenIndex = index;
+                                      B.onColorChanged();
+                                    },
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(6.0),
+                                      child: CircleAvatar(
+                                        radius: 25,
+                                        backgroundColor: chosenIndex == index
+                                            ? textColor == 0
+                                                ? Colors.white
+                                                : Colors.black
+                                            : textColor == 0
+                                                ? Colors.white54
+                                                : Colors.black54,
+                                        child: CircleAvatar(
+                                          radius: 20,
+                                          backgroundColor: B.colors[index],
+                                        ),
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              ),
-                            ),
                           ))
                     ],
                   ),

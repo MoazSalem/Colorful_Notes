@@ -115,7 +115,7 @@ class _VoiceNotesPageState extends State<VoiceNotesPage> {
                                               context: context,
                                               notes: notes,
                                               colors: B.colors,
-                                              reverseIndex: reverseIndex,
+                                              index: reverseIndex,
                                               dateValue: dateValue,
                                               date: date,
                                               noTitle: noTitle,
@@ -139,7 +139,9 @@ class _VoiceNotesPageState extends State<VoiceNotesPage> {
                                                 },
                                                 icon: Icon(
                                                   Icons.highlight_remove,
-                                                  color: Colors.white,
+                                                  color: notes[reverseIndex]['tindex'] == 0
+                                                      ? Colors.white
+                                                      : Colors.black,
                                                   size: B.width * 0.06620,
                                                 )),
                                           ),
@@ -154,7 +156,7 @@ class _VoiceNotesPageState extends State<VoiceNotesPage> {
                                               context: context,
                                               notes: notes,
                                               colors: B.colors,
-                                              reverseIndex: reverseIndex,
+                                              index: reverseIndex,
                                               dateValue: dateValue,
                                               date: date,
                                               noTitle: noTitle,
@@ -178,7 +180,9 @@ class _VoiceNotesPageState extends State<VoiceNotesPage> {
                                                 },
                                                 icon: Icon(
                                                   Icons.highlight_remove,
-                                                  color: Colors.white,
+                                                  color: notes[reverseIndex]['tindex'] == 0
+                                                      ? Colors.white
+                                                      : Colors.black,
                                                   size: B.width * 0.0662,
                                                 )),
                                           ),
@@ -213,7 +217,7 @@ class _VoiceNotesPageState extends State<VoiceNotesPage> {
                                         context: context,
                                         notes: notes,
                                         colors: B.colors,
-                                        reverseIndex: reverseIndex,
+                                        index: reverseIndex,
                                         dateValue: dateValue,
                                         date: date,
                                         noTitle: noTitle,
@@ -237,7 +241,9 @@ class _VoiceNotesPageState extends State<VoiceNotesPage> {
                                           },
                                           icon: Icon(
                                             Icons.highlight_remove,
-                                            color: Colors.white,
+                                            color: notes[reverseIndex]['tindex'] == 0
+                                                ? Colors.white
+                                                : Colors.black,
                                             size: B.width * 0.0662,
                                           )),
                                     ),
