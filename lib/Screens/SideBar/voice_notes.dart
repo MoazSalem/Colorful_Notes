@@ -29,16 +29,11 @@ class _VoiceNotesPageState extends State<VoiceNotesPage> {
   }
 
   @override
-  void didChangeDependencies() {
-    notes = searchOn ? B.searchedVoice : B.voiceMap;
-    super.didChangeDependencies();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return BlocConsumer<NotesBloc, NotesState>(
       listener: (context, state) {},
       builder: (context, state) {
+        notes = searchOn ? B.searchedVoice : B.voiceMap;
         return Scaffold(
           backgroundColor:
               B.isDarkMode ? B.theme.background : B.theme.surfaceVariant.withOpacity(0.6),

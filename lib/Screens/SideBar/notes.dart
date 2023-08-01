@@ -31,16 +31,11 @@ class _NotesPageState extends State<NotesPage> {
   }
 
   @override
-  void didChangeDependencies() {
-    notes = searchOn ? B.searchedNotes : B.notesMap;
-    super.didChangeDependencies();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return BlocConsumer<NotesBloc, NotesState>(
       listener: (context, state) {},
       builder: (context, state) {
+        notes = searchOn ? B.searchedNotes : B.notesMap;
         return Scaffold(
           backgroundColor:
               B.isDarkMode ? B.theme.background : B.theme.surfaceVariant.withOpacity(0.6),
