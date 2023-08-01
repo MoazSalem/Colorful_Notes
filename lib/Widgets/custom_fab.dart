@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:notes/Screens/home_screen.dart';
+
+bool _openFab = false;
 
 Widget customFab({
   required ColorScheme theme,
@@ -9,7 +12,6 @@ Widget customFab({
   required action1,
   required action2,
 }) {
-  bool openFab = false;
   return StatefulBuilder(
     builder: (context, setState) => SizedBox(
       child: Column(
@@ -22,13 +24,13 @@ Widget customFab({
                   EdgeInsets.symmetric(horizontal: isTablet ? 0 : 8, vertical: isTablet ? 12 : 8),
               child: AnimatedSwitcher(
                 duration: const Duration(milliseconds: 200),
-                child: openFab
+                child: _openFab
                     ? Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           GestureDetector(
                             onTap: () {
-                              openFab = !openFab;
+                              _openFab = !_openFab;
                               action2();
                               setState(() {});
                             },
@@ -51,7 +53,7 @@ Widget customFab({
                                           child: Text(
                                         "Voice Note".tr(),
                                         style:
-                                            TextStyle(color: colorful ? colors[3] : theme.primary),
+                                            TextStyle(color: colorful ? colors[3] : primaryColor),
                                       )),
                                     ),
                                   ),
@@ -61,14 +63,14 @@ Widget customFab({
                                       backgroundColor: theme.surfaceVariant,
                                       mini: isTablet ? false : true,
                                       onPressed: () {
-                                        openFab = !openFab;
+                                        _openFab = !_openFab;
                                         action2();
                                         setState(() {});
                                       },
                                       elevation: 0,
                                       child: Icon(
                                         Icons.mic,
-                                        color: colorful ? colors[3] : theme.primary,
+                                        color: colorful ? colors[3] : primaryColor,
                                       ),
                                     ),
                                   ),
@@ -78,7 +80,7 @@ Widget customFab({
                           ),
                           GestureDetector(
                             onTap: () {
-                              openFab = !openFab;
+                              _openFab = !_openFab;
                               action1();
                               setState(() {});
                             },
@@ -98,7 +100,7 @@ Widget customFab({
                                     child: Center(
                                         child: Text(
                                       "Text Note".tr(),
-                                      style: TextStyle(color: colorful ? colors[1] : theme.primary),
+                                      style: TextStyle(color: colorful ? colors[1] : primaryColor),
                                     )),
                                   ),
                                 ),
@@ -109,14 +111,14 @@ Widget customFab({
                                     //colors[1],
                                     mini: isTablet ? false : true,
                                     onPressed: () {
-                                      openFab = !openFab;
+                                      _openFab = !_openFab;
                                       action1();
                                       setState(() {});
                                     },
                                     elevation: 0,
                                     child: Icon(
                                       Icons.sticky_note_2,
-                                      color: colorful ? colors[1] : theme.primary,
+                                      color: colorful ? colors[1] : primaryColor,
                                     ),
                                   ),
                                 ),
@@ -130,12 +132,12 @@ Widget customFab({
                       ),
               )),
           FloatingActionButton(
-            backgroundColor: colorful ? colors[0] : theme.primary,
+            backgroundColor: colorful ? colors[0] : primaryColor,
             //openFab ? colors[afterTap] : colors[main],
             //splashColor: theme.primaryContainer,
             //openFab ? colors[main] : colors[afterTap],
             onPressed: () {
-              openFab = !openFab;
+              _openFab = !_openFab;
               setState(() {});
             },
             elevation: 0,

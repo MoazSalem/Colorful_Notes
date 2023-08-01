@@ -8,6 +8,8 @@ import 'package:notes/Bloc/notes_bloc.dart';
 import 'package:notes/Data/pages.dart';
 import 'package:notes/Widgets/sidebar.dart';
 
+late Color primaryColor;
+
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
 
@@ -35,6 +37,9 @@ class _HomeState extends State<Home> {
     B.isDarkMode = (B.brightness == Brightness.dark && B.themeMode == ThemeMode.system) ||
         B.themeMode == ThemeMode.dark;
     B.getScreenWidth(context);
+    primaryColor = B.theme.primary == Colors.black || B.theme.primary == Colors.white
+        ? B.colors[0]
+        : B.theme.primary;
     super.didChangeDependencies();
   }
 

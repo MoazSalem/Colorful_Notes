@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:notes/Screens/home_screen.dart';
 import 'package:notes/Widgets/theme_popup_menu.dart';
 import 'package:notes/main.dart';
 import 'package:switcher_button/switcher_button.dart';
@@ -25,12 +26,12 @@ class _SettingsPageState extends State<SettingsPage> {
   late double fontSize;
   late String fabLoc;
   late String sB;
-  var lang = ["English", "Arabic"];
-  var themes = ["Light", "Dark", "System"];
-  var dark = ["Dark", "Amoled"];
-  var sb = ["Top Left", "Bottom Left", "Top Right", "Bottom Right"];
-  var fab = ["Right", "Left"];
-  var pages = ["Home", "Text", "Voice"];
+  List<String> lang = ["English", "Arabic"];
+  List<String> themes = ["Light", "Dark", "System"];
+  List<String> dark = ["Dark", "Amoled"];
+  List<String> sb = ["Top Left", "Bottom Left", "Top Right", "Bottom Right"];
+  List<String> fab = ["Right", "Left"];
+  List<String> pages = ["Home", "Text", "Voice"];
 
   @override
   void initState() {
@@ -336,12 +337,21 @@ class _SettingsPageState extends State<SettingsPage> {
                           // I need to relearn Bloc and reImplement this :(
                           int c;
                           newValue == 'Light'
-                              ? {c = 0, B.themeController.setThemeMode(ThemeMode.light)}
+                              ? {
+                                  c = 0,
+                                  B.themeController.setThemeMode(ThemeMode.light),
+                                  B.themeMode = ThemeMode.light
+                                }
                               : newValue == 'Dark'
-                                  ? {c = 1, B.themeController.setThemeMode(ThemeMode.dark)}
+                                  ? {
+                                      c = 1,
+                                      B.themeController.setThemeMode(ThemeMode.dark),
+                                      B.themeMode = ThemeMode.dark
+                                    }
                                   : {
                                       c = 2,
                                       B.themeController.setThemeMode(ThemeMode.system),
+                                      B.themeMode = ThemeMode.system
                                     };
                           B.currentTheme = newValue!;
                           B.box.put("themeMode", c);
@@ -380,7 +390,7 @@ class _SettingsPageState extends State<SettingsPage> {
                             color: B.theme.onSurfaceVariant),
                       ),
                       trailing: SwitcherButton(
-                        onColor: B.colorful ? B.colors[8] : B.theme.primary,
+                        onColor: B.colorful ? B.colors[8] : primaryColor,
                         offColor: B.theme.primaryContainer,
                         size: switchSize,
                         value: B.box.get("isDynamic") ?? false,
@@ -411,7 +421,7 @@ class _SettingsPageState extends State<SettingsPage> {
                             color: B.theme.onSurfaceVariant),
                       ),
                       trailing: SwitcherButton(
-                        onColor: B.colorful ? B.colors[6] : B.theme.primary,
+                        onColor: B.colorful ? B.colors[6] : primaryColor,
                         offColor: B.theme.primaryContainer,
                         size: switchSize,
                         value: B.darkColors,
@@ -443,7 +453,7 @@ class _SettingsPageState extends State<SettingsPage> {
                             color: B.theme.onSurfaceVariant),
                       ),
                       trailing: SwitcherButton(
-                        onColor: B.colorful ? B.colors[4] : B.theme.primary,
+                        onColor: B.colorful ? B.colors[4] : primaryColor,
                         offColor: B.theme.primaryContainer,
                         size: switchSize,
                         value: B.harmonizeColor,
@@ -476,7 +486,7 @@ class _SettingsPageState extends State<SettingsPage> {
                             color: B.theme.onSurfaceVariant),
                       ),
                       trailing: SwitcherButton(
-                        onColor: B.colorful ? B.colors[8] : B.theme.primary,
+                        onColor: B.colorful ? B.colors[8] : primaryColor,
                         offColor: B.theme.primaryContainer,
                         size: switchSize,
                         value: B.colorful,
@@ -508,7 +518,7 @@ class _SettingsPageState extends State<SettingsPage> {
                             color: B.theme.onSurfaceVariant),
                       ),
                       trailing: SwitcherButton(
-                        onColor: B.colorful ? B.colors[0] : B.theme.primary,
+                        onColor: B.colorful ? B.colors[0] : primaryColor,
                         offColor: B.theme.primaryContainer,
                         // offColor: Theme.of(context).primaryColorDark,
                         size: switchSize,
@@ -541,7 +551,7 @@ class _SettingsPageState extends State<SettingsPage> {
                             color: B.theme.onSurfaceVariant),
                       ),
                       trailing: SwitcherButton(
-                        onColor: B.colorful ? B.colors[2] : B.theme.primary,
+                        onColor: B.colorful ? B.colors[2] : primaryColor,
                         offColor: B.theme.primaryContainer,
                         size: switchSize,
                         value: B.showEdited,
@@ -573,7 +583,7 @@ class _SettingsPageState extends State<SettingsPage> {
                             color: B.theme.onSurfaceVariant),
                       ),
                       trailing: SwitcherButton(
-                        onColor: B.colorful ? B.colors[1] : B.theme.primary,
+                        onColor: B.colorful ? B.colors[1] : primaryColor,
                         offColor: B.theme.primaryContainer,
                         size: switchSize,
                         value: B.showShadow,

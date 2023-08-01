@@ -5,6 +5,7 @@ import 'package:notes/Bloc/notes_bloc.dart';
 import 'package:notes/Screens/Actions/create_note.dart';
 import 'package:notes/Screens/Actions/edit_note.dart';
 import 'package:notes/Screens/SideBar/home.dart';
+import 'package:notes/Screens/home_screen.dart';
 import 'package:notes/Widgets/notes.dart';
 import 'package:notes/main.dart';
 
@@ -49,7 +50,7 @@ class _NotesPageState extends State<NotesPage> {
           floatingActionButton: FloatingActionButton(
             splashColor: B.colors[0],
             elevation: 0,
-            backgroundColor: B.colorful ? B.colors[1] : B.theme.primary,
+            backgroundColor: B.colorful ? B.colors[1] : primaryColor,
             onPressed: () async {
               create();
             },
@@ -71,11 +72,15 @@ class _NotesPageState extends State<NotesPage> {
                             controller: searchController,
                             onChanged: B.searchNotes,
                             maxLines: 1,
+                            cursorColor: primaryColor,
                             decoration: InputDecoration(
                               contentPadding: EdgeInsets.symmetric(
                                   vertical: B.isTablet ? 20 : 5, horizontal: 20),
                               enabledBorder: OutlineInputBorder(
                                   borderSide: BorderSide(color: Colors.grey.shade300),
+                                  borderRadius: BorderRadius.circular(0)),
+                              focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: primaryColor),
                                   borderRadius: BorderRadius.circular(0)),
                               hintText: "Search".tr(),
                               filled: true,
@@ -263,7 +268,7 @@ class _NotesPageState extends State<NotesPage> {
                           child: Text(
                         "N2".tr(),
                         style: TextStyle(
-                            color: B.colorful ? B.colors[1] : B.theme.primary,
+                            color: B.colorful ? B.colors[1] : primaryColor,
                             fontWeight: FontWeight.w400),
                       )),
                     ),
@@ -294,7 +299,7 @@ class _NotesPageState extends State<NotesPage> {
             color: searchOn
                 ? B.colorful
                     ? B.colors[1]
-                    : B.theme.primary
+                    : primaryColor
                 : B.theme.onSurfaceVariant,
           ),
         ),

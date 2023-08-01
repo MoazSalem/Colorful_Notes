@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:notes/Bloc/notes_bloc.dart';
+import 'package:notes/Screens/home_screen.dart';
 import 'package:notes/main.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -67,7 +68,7 @@ class _InfoPageState extends State<InfoPage> {
                         child: Text(
                           "Click here to Check The App on Github.",
                           style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.w300, color: B.theme.primary),
+                              fontSize: 20, fontWeight: FontWeight.w300, color: primaryColor),
                         ),
                       ),
                     ],

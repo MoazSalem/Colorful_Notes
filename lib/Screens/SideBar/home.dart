@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:notes/Screens/home_screen.dart';
 import 'package:notes/main.dart';
 import 'package:notes/Bloc/notes_bloc.dart';
 import 'package:notes/Screens/Actions/edit_note.dart';
@@ -46,7 +47,8 @@ class _HomePageState extends State<HomePage> {
       listener: (context, state) {},
       builder: (context, state) {
         return Scaffold(
-          backgroundColor: B.isDarkMode ? B.theme.background : B.theme.surfaceVariant.withOpacity(0.6),
+          backgroundColor:
+              B.isDarkMode ? B.theme.background : B.theme.surfaceVariant.withOpacity(0.6),
           floatingActionButtonLocation: B.fabIndex == 0
               ? FloatingActionButtonLocation.endFloat
               : FloatingActionButtonLocation.startFloat,
@@ -82,11 +84,15 @@ class _HomePageState extends State<HomePage> {
                             controller: searchController,
                             onChanged: B.searchHome,
                             maxLines: 1,
+                            cursorColor: primaryColor,
                             decoration: InputDecoration(
                               contentPadding: EdgeInsets.symmetric(
                                   vertical: B.isTablet ? 20 : 5, horizontal: 20),
                               enabledBorder: OutlineInputBorder(
                                   borderSide: BorderSide(color: Colors.grey.shade300),
+                                  borderRadius: BorderRadius.circular(0)),
+                              focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: primaryColor),
                                   borderRadius: BorderRadius.circular(0)),
                               hintText: "Search".tr(),
                               filled: true,
@@ -278,7 +284,7 @@ class _HomePageState extends State<HomePage> {
                           child: Text(
                         "N1".tr(),
                         style: TextStyle(
-                            color: B.colorful ? B.colors[0] : B.theme.primary,
+                            color: B.colorful ? B.colors[0] : primaryColor,
                             fontWeight: FontWeight.w400),
                       )),
                     ),
@@ -309,7 +315,7 @@ class _HomePageState extends State<HomePage> {
             color: searchOn
                 ? B.colorful
                     ? B.colors[0]
-                    : B.theme.primary
+                    : primaryColor
                 : B.theme.onSurfaceVariant, //const Color(0xffff8b34)
           ),
         ),

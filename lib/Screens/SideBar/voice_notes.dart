@@ -4,6 +4,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:notes/Bloc/notes_bloc.dart';
 import 'package:notes/Screens/Actions/edit_voice.dart';
 import 'package:notes/Screens/SideBar/home.dart';
+import 'package:notes/Screens/home_screen.dart';
 import 'package:notes/Widgets/notes.dart';
 import 'package:notes/Screens/Actions/create_voice.dart';
 import 'package:notes/main.dart';
@@ -47,7 +48,7 @@ class _VoiceNotesPageState extends State<VoiceNotesPage> {
           floatingActionButton: FloatingActionButton(
             splashColor: B.colors[1],
             elevation: 0,
-            backgroundColor: B.colorful ? B.colors[3] : B.theme.primary,
+            backgroundColor: B.colorful ? B.colors[3] : primaryColor,
             onPressed: () async {
               showBottomSheet(
                   enableDrag: false, context: context, builder: (context) => const CreateVoice());
@@ -70,11 +71,15 @@ class _VoiceNotesPageState extends State<VoiceNotesPage> {
                             controller: searchController,
                             onChanged: B.searchVoice,
                             maxLines: 1,
+                            cursorColor: primaryColor,
                             decoration: InputDecoration(
                               contentPadding: EdgeInsets.symmetric(
                                   vertical: B.isTablet ? 20 : 5, horizontal: 20),
                               enabledBorder: OutlineInputBorder(
                                   borderSide: BorderSide(color: Colors.grey.shade300),
+                                  borderRadius: BorderRadius.circular(0)),
+                              focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: primaryColor),
                                   borderRadius: BorderRadius.circular(0)),
                               hintText: "Search".tr(),
                               filled: true,
@@ -246,7 +251,7 @@ class _VoiceNotesPageState extends State<VoiceNotesPage> {
                           child: Text(
                         "N3".tr(),
                         style: TextStyle(
-                            color: B.colorful ? B.colors[3] : B.theme.primary,
+                            color: B.colorful ? B.colors[3] : primaryColor,
                             fontWeight: FontWeight.w400), //B.colors[3]
                       )),
                     ),
@@ -281,7 +286,7 @@ class _VoiceNotesPageState extends State<VoiceNotesPage> {
             color: searchOn
                 ? B.colorful
                     ? B.colors[3]
-                    : B.theme.primary
+                    : primaryColor
                 : B.theme.onSurfaceVariant, //Theme.of(context).textTheme.bodyMedium!.color,
           ),
         ),
