@@ -596,31 +596,35 @@ class _SettingsPageState extends State<SettingsPage> {
                 ),
               ),
               B.divider(),
-              // SizedBox(
-              //   height: height,
-              //   child: Center(
-              //     child: Padding(
-              //         padding: EdgeInsets.symmetric(horizontal: padding),
-              //         child: Row(
-              //           mainAxisAlignment: MainAxisAlignment.spaceAround,
-              //           children: [
-              //             TextButton(
-              //               onPressed: () {
-              //                 B.bDialog(context);
-              //               },
-              //               child: Text(
-              //                 "Backup".tr(),
-              //                 style: TextStyle(fontSize: 24, color: B.colors[3]),
-              //               ),
-              //             ),
-              //             TextButton(onPressed: () {
-              //               B.rDialog(context);
-              //             }, child: Text("Restore".tr(), style: TextStyle(fontSize: 24, color: B.colors[4]))),
-              //           ],
-              //         )),
-              //   ),
-              // ),
-              // B.divider(context),
+              SizedBox(
+                height: height,
+                child: Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      TextButton(
+                        onPressed: () {
+                          B.bDialog(context);
+                        },
+                        child: Text(
+                          "Backup".tr(),
+                          style: TextStyle(
+                              fontSize: 20, color: B.colorful ? B.colors[3] : B.theme.primary),
+                        ),
+                      ),
+                      TextButton(
+                          onPressed: () {
+                            B.rDialog(context);
+                          },
+                          child: Text("Restore".tr(),
+                              style: TextStyle(
+                                  fontSize: 20,
+                                  color: B.colorful ? B.colors[4] : B.theme.secondary))),
+                    ],
+                  ),
+                ),
+              ),
+              B.divider(),
             ],
           ),
         );
