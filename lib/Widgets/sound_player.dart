@@ -4,7 +4,7 @@ import 'package:audioplayers/audioplayers.dart';
 class SoundPlayer extends StatefulWidget {
   final List<Map> voiceMap;
   final int index;
-  final List<Color> colors;
+  final Color color;
   final int viewMode;
   final bool isTablet;
 
@@ -12,7 +12,7 @@ class SoundPlayer extends StatefulWidget {
       {Key? key,
       required this.voiceMap,
       required this.index,
-      required this.colors,
+      required this.color,
       required this.viewMode,
       required this.isTablet})
       : super(key: key);
@@ -186,12 +186,11 @@ class _SoundPlayerState extends State<SoundPlayer> {
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 13,
-                                            color: widget
-                                                .colors[widget.voiceMap[widget.index]['cindex']]),
+                                            color: widget.color),
                                       ),
                                     ),
                                   ),
-                                ),
+                                )
                               ],
                             ),
                           )
@@ -306,13 +305,11 @@ class _SoundPlayerState extends State<SoundPlayer> {
                                         borderRadius: BorderRadius.circular(width * 0.050926)),
                                     child: Center(
                                       child: Text(
-                                        "${playbackSpeed % 1 == 0 ? playbackSpeed.toInt() : playbackSpeed.toStringAsFixed(1)}x",
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 13,
-                                            color: widget
-                                                .colors[widget.voiceMap[widget.index]['cindex']]),
-                                      ),
+                                          "${playbackSpeed % 1 == 0 ? playbackSpeed.toInt() : playbackSpeed.toStringAsFixed(1)}x",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 13,
+                                              color: widget.color)),
                                     ),
                                   ),
                                 )
@@ -465,13 +462,11 @@ class _SoundPlayerState extends State<SoundPlayer> {
                                                   BorderRadius.circular(width * 0.050926)),
                                           child: Center(
                                             child: Text(
-                                              "${playbackSpeed % 1 == 0 ? playbackSpeed.toInt() : playbackSpeed.toStringAsFixed(1)}x",
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 13,
-                                                  color: widget.colors[widget.voiceMap[widget.index]
-                                                      ['cindex']]),
-                                            ),
+                                                "${playbackSpeed % 1 == 0 ? playbackSpeed.toInt() : playbackSpeed.toStringAsFixed(1)}x",
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 13,
+                                                    color: widget.color)),
                                           ),
                                         ),
                                       ),

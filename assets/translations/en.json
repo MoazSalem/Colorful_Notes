@@ -41,7 +41,7 @@
   "sShow Edited": "Show or hide 'Edited' on notes",
   "sColorful": "Use Colorful Icons",
   "Colorful": "Colorful",
-  "sHarmonizeColors": "Change Notes & Icons colors to work with the dynamic theme",
+  "sHarmonizeColors": "Change Notes & Icons colors to work with the dynamic theme, doesn't work on custom colored notes",
   "harmonize Colors": "Harmonize Colors",
   "Backup": "Backup",
   "Restore": "Restore",
@@ -106,5 +106,5 @@
   "I8": "to make a database to store all of your notes data locally on your phone",
   "Dynamic Colors": "Dynamic Colors",
   "DC": "Use systems theme, this will only work as intended on android 12+",
-  "TC": "Press Here To Change Text Color"
+  "Ab": "Ab"
 }

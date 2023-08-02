@@ -435,7 +435,7 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
               B.divider(),
               SizedBox(
-                height: height,
+                height: B.isTablet ? 140 : 100,
                 child: Center(
                   child: ListTile(
                       title: Text(

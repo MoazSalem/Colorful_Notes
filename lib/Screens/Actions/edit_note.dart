@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_localization/easy_localization.dart' hide TextDirection;
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:notes/Bloc/notes_bloc.dart';
 import 'package:notes/main.dart';
 
@@ -21,6 +22,13 @@ class _EditNoteState extends State<EditNote> {
   late int bIndex;
   late int textColor;
   bool isEditing = false;
+  late Color pickerColor;
+  late Color currentColor;
+
+  // ValueChanged<Color> callback
+  void changeColor(Color color) {
+    setState(() => pickerColor = color);
+  }
 
   @override
   void initState() {
@@ -34,6 +42,13 @@ class _EditNoteState extends State<EditNote> {
     _contentDir = widget.note["layout"] == 0 || widget.note["layout"] == 3
         ? ValueNotifier(TextDirection.ltr)
         : ValueNotifier(TextDirection.rtl);
+    if (bIndex == 99) {
+      pickerColor = Color(int.parse(widget.note['extra']));
+      currentColor = Color(int.parse(widget.note['extra']));
+    } else {
+      pickerColor = const Color(0xfffdcb71);
+      currentColor = const Color(0xfffdcb71);
+    }
     super.initState();
   }
 
@@ -44,7 +59,7 @@ class _EditNoteState extends State<EditNote> {
       builder: (context, state) {
         return Scaffold(
           resizeToAvoidBottomInset: false,
-          backgroundColor: B.colors[bIndex],
+          backgroundColor: bIndex == 99 ? pickerColor : B.colors[bIndex],
           body: Padding(
             padding: const EdgeInsets.only(top: 40.0),
             child: Column(
@@ -71,7 +86,7 @@ class _EditNoteState extends State<EditNote> {
                                   radius: 25,
                                   child: Icon(
                                     Icons.arrow_back,
-                                    color: B.colors[bIndex],
+                                    color: bIndex == 99 ? pickerColor : B.colors[bIndex],
                                     size: 36,
                                   ),
                                 ),
@@ -96,6 +111,8 @@ class _EditNoteState extends State<EditNote> {
                                               content: contentC.text,
                                               index: bIndex,
                                               tIndex: textColor,
+                                              extra:
+                                                  bIndex == 99 ? pickerColor.value.toString() : "",
                                               edited: 'yes',
                                               layout: getLayout()),
                                           await B.deleteFromDatabase(id: widget.note["id"]),
@@ -103,7 +120,8 @@ class _EditNoteState extends State<EditNote> {
                                           B.onCreateNote(),
                                         }
                                       : bIndex != widget.note["cindex"] ||
-                                              textColor != widget.note['tindex']
+                                              textColor != widget.note['tindex'] ||
+                                              bIndex == 99
                                           ? {
                                               await B.editDatabaseItem(
                                                   time: widget.note['time'],
@@ -112,6 +130,9 @@ class _EditNoteState extends State<EditNote> {
                                                   title: widget.note['title'],
                                                   index: bIndex,
                                                   tIndex: textColor,
+                                                  extra: bIndex == 99
+                                                      ? pickerColor.value.toString()
+                                                      : "",
                                                   type: 0,
                                                   edited: 'no',
                                                   layout: widget.note['layout']),
@@ -129,7 +150,7 @@ class _EditNoteState extends State<EditNote> {
                             radius: 25,
                             child: Icon(
                               isEditing ? Icons.done : Icons.edit_note,
-                              color: B.colors[bIndex],
+                              color: bIndex == 99 ? pickerColor : B.colors[bIndex],
                               size: 36,
                             ),
                           ),
@@ -236,13 +257,70 @@ class _EditNoteState extends State<EditNote> {
                                             child: Padding(
                                               padding: const EdgeInsets.all(6.0),
                                               child: Text(
-                                                "TC",
+                                                "Ab".tr(),
                                                 style: TextStyle(
                                                     color: textColor == 0
                                                         ? Colors.white
                                                         : Colors.black,
                                                     fontSize: B.isTablet ? 40 : 24,
                                                     fontWeight: FontWeight.w500),
+                                              ),
+                                            ),
+                                          ),
+                                          GestureDetector(
+                                            onTap: () {
+                                              bIndex = 99;
+                                              showDialog(
+                                                context: context,
+                                                builder: (BuildContext context) => AlertDialog(
+                                                  title: const Text('Choose Color'),
+                                                  content: SingleChildScrollView(
+                                                    child: ColorPicker(
+                                                      pickerColor: pickerColor,
+                                                      onColorChanged: changeColor,
+                                                      enableAlpha: false,
+                                                      hexInputBar: true,
+                                                      paletteType: PaletteType.hueWheel,
+                                                    ),
+                                                  ),
+                                                  actions: <Widget>[
+                                                    ElevatedButton(
+                                                      child: const Text('Done'),
+                                                      onPressed: () {
+                                                        setState(() => currentColor = pickerColor);
+                                                        Navigator.of(context).pop();
+                                                      },
+                                                    ),
+                                                  ],
+                                                ),
+                                              );
+                                            },
+                                            child: Padding(
+                                              padding: const EdgeInsets.all(6.0),
+                                              child: CircleAvatar(
+                                                radius: 25,
+                                                backgroundColor: bIndex == 99
+                                                    ? textColor == 0
+                                                        ? Colors.white
+                                                        : Colors.black
+                                                    : textColor == 0
+                                                        ? Colors.white54
+                                                        : Colors.black54,
+                                                child:
+                                                    Stack(alignment: Alignment.center, children: [
+                                                  CircleAvatar(
+                                                    radius: 20,
+                                                    backgroundColor: pickerColor,
+                                                  ),
+                                                  Text(
+                                                    "#",
+                                                    style: TextStyle(
+                                                        color: textColor == 0
+                                                            ? Colors.white
+                                                            : Colors.black,
+                                                        fontSize: 26),
+                                                  )
+                                                ]),
                                               ),
                                             ),
                                           ),
@@ -268,7 +346,7 @@ class _EditNoteState extends State<EditNote> {
                                                 ),
                                               ),
                                             ),
-                                          ),
+                                          )
                                         ],
                                       )
                                     : GestureDetector(

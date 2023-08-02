@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:notes/main.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'package:notes/Bloc/notes_bloc.dart';
@@ -27,6 +28,13 @@ class _CreateVoiceState extends State<CreateVoice> {
   bool isRecording = false;
   bool isPaused = false;
   int textColor = 0;
+  Color pickerColor = const Color(0xfffdcb71);
+  Color currentColor = const Color(0xfffdcb71);
+
+  // ValueChanged<Color> callback
+  void changeColor(Color color) {
+    setState(() => pickerColor = color);
+  }
 
   @override
   void didChangeDependencies() {
@@ -41,7 +49,7 @@ class _CreateVoiceState extends State<CreateVoice> {
       builder: (context, state) {
         return Scaffold(
           resizeToAvoidBottomInset: false,
-          backgroundColor: B.colors[chosenIndex],
+          backgroundColor: chosenIndex == 99 ? pickerColor : B.colors[chosenIndex],
           body: Padding(
             padding: const EdgeInsets.only(top: 40.0),
             child: Column(
@@ -74,7 +82,7 @@ class _CreateVoiceState extends State<CreateVoice> {
                                   radius: 25,
                                   child: Icon(
                                     Icons.arrow_back,
-                                    color: B.colors[chosenIndex],
+                                    color: chosenIndex == 99 ? pickerColor : B.colors[chosenIndex],
                                     size: 36,
                                   ),
                                 ),
@@ -100,6 +108,8 @@ class _CreateVoiceState extends State<CreateVoice> {
                                         content: content,
                                         index: chosenIndex,
                                         tIndex: textColor,
+                                        extra:
+                                            chosenIndex == 99 ? pickerColor.value.toString() : "",
                                         type: 1,
                                         layout: 0),
                                     stopWatchTimer.onResetTimer(),
@@ -116,7 +126,7 @@ class _CreateVoiceState extends State<CreateVoice> {
                             radius: 25,
                             child: Icon(
                               Icons.done,
-                              color: B.colors[chosenIndex],
+                              color: chosenIndex == 99 ? pickerColor : B.colors[chosenIndex],
                               size: 36,
                             ),
                           ),
@@ -310,11 +320,67 @@ class _CreateVoiceState extends State<CreateVoice> {
                                         child: Padding(
                                           padding: const EdgeInsets.all(6.0),
                                           child: Text(
-                                            "TC",
+                                            "Ab".tr(),
                                             style: TextStyle(
                                                 color: textColor == 0 ? Colors.white : Colors.black,
                                                 fontSize: B.isTablet ? 40 : 24,
                                                 fontWeight: FontWeight.w500),
+                                          ),
+                                        ),
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          chosenIndex = 99;
+                                          showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) => AlertDialog(
+                                              title: const Text('Choose Color'),
+                                              content: SingleChildScrollView(
+                                                child: ColorPicker(
+                                                  pickerColor: pickerColor,
+                                                  onColorChanged: changeColor,
+                                                  enableAlpha: false,
+                                                  hexInputBar: true,
+                                                  paletteType: PaletteType.hueWheel,
+                                                ),
+                                              ),
+                                              actions: <Widget>[
+                                                ElevatedButton(
+                                                  child: const Text('Done'),
+                                                  onPressed: () {
+                                                    setState(() => currentColor = pickerColor);
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                ),
+                                              ],
+                                            ),
+                                          );
+                                        },
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(6.0),
+                                          child: CircleAvatar(
+                                            radius: 25,
+                                            backgroundColor: chosenIndex == 99
+                                                ? textColor == 0
+                                                    ? Colors.white
+                                                    : Colors.black
+                                                : textColor == 0
+                                                    ? Colors.white54
+                                                    : Colors.black54,
+                                            child: Stack(alignment: Alignment.center, children: [
+                                              CircleAvatar(
+                                                radius: 20,
+                                                backgroundColor: pickerColor,
+                                              ),
+                                              Text(
+                                                "#",
+                                                style: TextStyle(
+                                                    color: textColor == 0
+                                                        ? Colors.white
+                                                        : Colors.black,
+                                                    fontSize: 26),
+                                              )
+                                            ]),
                                           ),
                                         ),
                                       ),
@@ -340,7 +406,7 @@ class _CreateVoiceState extends State<CreateVoice> {
                                             ),
                                           ),
                                         ),
-                                      ),
+                                      )
                                     ],
                                   )
                                 : GestureDetector(

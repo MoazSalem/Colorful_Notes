@@ -291,7 +291,9 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
             },
             text: 'Delete'.tr(),
             iconData: Icons.delete,
-            color: colors[notes[index]['cindex']],
+            color: notes[index]['cindex'] == 99
+                ? Color(int.parse(notes[index]['extra']))
+                : colors[notes[index]['cindex']],
             textStyle: const TextStyle(color: Colors.white),
             iconColor: Colors.white,
             shape:
@@ -394,12 +396,13 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
       required String time,
       required int layout,
       required tIndex,
+      required String extra,
       int? type = 0,
       String? edited = 'no'}) async {
     await database.transaction((txn) async {
       txn
           .rawInsert(
-              'INSERT INTO Notes(title, content, cindex, tindex, type, time, edited ,layout, extra) VALUES("$title", "$content", "$index", "$tIndex", "$type","$time","$edited","$layout","")')
+              'INSERT INTO Notes(title, content, cindex, tindex, type, time, edited ,layout, extra) VALUES("$title", "$content", "$index", "$tIndex", "$type","$time","$edited","$layout","$extra")')
           .then((value) {});
     });
     await refreshDatabase();
@@ -428,11 +431,12 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
       required int type,
       required String title,
       required int layout,
-      required tIndex,
+      required int tIndex,
+      required String extra,
       String? edited = 'yes'}) async {
     await database.rawUpdate(
         'UPDATE Notes SET title = ?, content = ?, time = ?, cindex = ?, tindex = ?, type = ?, edited = ?, layout = ?, extra = ? WHERE id = ?',
-        [title, content, time, index, tIndex, type, edited, layout, "", id]);
+        [title, content, time, index, tIndex, type, edited, layout, extra, id]);
     await refreshDatabase();
   }
 

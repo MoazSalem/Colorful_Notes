@@ -25,9 +25,13 @@ Widget listView({
         SizedBox(
           height: isTablet ? width * 0.9 : width * 0.7639,
           child: Card(
-            color: colors[notes[index]['cindex']],
+            color: notes[index]['cindex'] == 99
+                ? Color(int.parse(notes[index]['extra']))
+                : colors[notes[index]['cindex']],
             elevation: showShadow ? 4 : 0,
-            shadowColor: colors[notes[index]['cindex']],
+            shadowColor: notes[index]['cindex'] == 99
+                ? Color(int.parse(notes[index]['extra']))
+                : colors[notes[index]['cindex']],
             shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(0)),
             ),
@@ -110,7 +114,9 @@ Widget listView({
                               child: SoundPlayer(
                                 index: index,
                                 voiceMap: notes,
-                                colors: colors,
+                                color: notes[index]['cindex'] == 99
+                                    ? Color(int.parse(notes[index]['extra']))
+                                    : colors[notes[index]['cindex']],
                                 viewMode: 0,
                                 isTablet: isTablet,
                               ),
@@ -192,9 +198,13 @@ Widget smallListView({
             alignment: Alignment.bottomLeft,
             children: [
               Card(
-                color: colors[notes[index]['cindex']],
+                color: notes[index]['cindex'] == 99
+                    ? Color(int.parse(notes[index]['extra']))
+                    : colors[notes[index]['cindex']],
                 elevation: showShadow ? width * 0.01018 : 0,
-                shadowColor: colors[notes[index]['cindex']],
+                shadowColor: notes[index]['cindex'] == 99
+                    ? Color(int.parse(notes[index]['extra']))
+                    : colors[notes[index]['cindex']],
                 shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(0)),
                 ),
@@ -320,7 +330,9 @@ Widget smallListView({
                                     child: SoundPlayer(
                                       index: index,
                                       voiceMap: notes,
-                                      colors: colors,
+                                      color: notes[index]['cindex'] == 99
+                                          ? Color(int.parse(notes[index]['extra']))
+                                          : colors[notes[index]['cindex']],
                                       viewMode: 1,
                                       isTablet: isTablet,
                                     ),
@@ -419,9 +431,13 @@ Widget gridView({
           height: width * 0.4584,
           width: width * 0.4584,
           child: Card(
-            color: colors[notes[index]['cindex']],
+            color: notes[index]['cindex'] == 99
+                ? Color(int.parse(notes[index]['extra']))
+                : colors[notes[index]['cindex']],
             elevation: showShadow ? width * 0.01018 : 0,
-            shadowColor: colors[notes[index]['cindex']],
+            shadowColor: notes[index]['cindex'] == 99
+                ? Color(int.parse(notes[index]['extra']))
+                : colors[notes[index]['cindex']],
             shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(0)),
             ),
@@ -516,7 +532,9 @@ Widget gridView({
                         child: SoundPlayer(
                           index: index,
                           voiceMap: notes,
-                          colors: colors,
+                          color: notes[index]['cindex'] == 99
+                              ? Color(int.parse(notes[index]['extra']))
+                              : colors[notes[index]['cindex']],
                           viewMode: 3,
                           isTablet: isTablet,
                         ),
