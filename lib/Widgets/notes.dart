@@ -506,14 +506,14 @@ Widget gridView({
                                             : 4
                                         : isTablet
                                             ? 10
-                                            : 5
+                                            : 4
                                     : showDate
                                         ? isTablet
                                             ? 9
-                                            : 3
+                                            : 2
                                         : isTablet
                                             ? 10
-                                            : 4,
+                                            : 3,
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
                                     color: noContent
