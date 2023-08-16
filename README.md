@@ -17,12 +17,12 @@ A Clean Looking Modern and Colorful Notes App Using a Local Database with Sqflit
 ### - Tablet Support</br>
 
 # Screenshots
-<img src="https://user-images.githubusercontent.com/88838071/213873207-139680b9-1c2e-44de-a921-3f95371e8661.png" width="300"> <img src="https://user-images.githubusercontent.com/88838071/213873346-0031b584-2aa3-4a4b-9bcc-ab6a4f5eb540.png" width="300"> 
+<img src="https://github.com/MoazSalem/Colorful_Notes/assets/88838071/03e46cc3-022a-4f76-a740-a885d5203131" width="300"> <img src="https://github.com/MoazSalem/Colorful_Notes/assets/88838071/4c6004c5-4e43-47b5-a5d3-b50c205aaa92" width="300"> 
 
-<img src="https://user-images.githubusercontent.com/88838071/213873345-198f813a-fc6b-4829-a712-b14f12fd6257.png" width="300"> <img src="https://user-images.githubusercontent.com/88838071/213873208-df05e50d-8a9b-427c-8828-419b3bab5ebc.png" width="300"> 
+<img src="https://github.com/MoazSalem/Colorful_Notes/assets/88838071/68407961-bd14-49ec-adb2-29368ed797f1" width="300"> <img src="https://github.com/MoazSalem/Colorful_Notes/assets/88838071/c386180a-f490-4c7f-aa2c-0da98dc2d0da" width="300"> 
 
-<img src="https://user-images.githubusercontent.com/88838071/213873402-e5828eac-8bb4-4cd1-9708-7f2e5c4043b4.png" width="300"> <img src="https://user-images.githubusercontent.com/88838071/213873405-e877d95f-0e85-47cb-a3d2-9b0048832eea.png" width="300"> 
+<img src="https://github.com/MoazSalem/Colorful_Notes/assets/88838071/b4b6afa5-84a2-481f-ac34-0ece658bc8bf" width="300"> <img src="https://github.com/MoazSalem/Colorful_Notes/assets/88838071/62ebb5ed-a0d3-402b-8743-da3952820855" width="300"> 
 
-# TODO Later
-
-To Be Changed
+# Store Releases
+* These Releases Might Be Outdated
+### [Check on Google Playstore](https://play.google.com/store/apps/details?id=com.moazsalem.notes)
