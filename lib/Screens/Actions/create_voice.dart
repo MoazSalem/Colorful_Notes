@@ -4,7 +4,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:notes/main.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
-import 'package:notes/Bloc/notes_bloc.dart';
+import 'package:notes/Cubit/notes_cubit.dart';
 import 'package:record/record.dart';
 
 class CreateVoice extends StatefulWidget {
@@ -44,12 +44,11 @@ class _CreateVoiceState extends State<CreateVoice> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<NotesBloc, NotesState>(
-      listener: (context, state) {},
+    return BlocBuilder<NotesCubit, NotesState>(
       builder: (context, state) {
         return Scaffold(
           resizeToAvoidBottomInset: false,
-          backgroundColor: chosenIndex == 99 ? pickerColor : B.colors[chosenIndex],
+          backgroundColor: chosenIndex == 99 ? pickerColor : C.colors[chosenIndex],
           body: Padding(
             padding: const EdgeInsets.only(top: 40.0),
             child: Column(
@@ -58,7 +57,7 @@ class _CreateVoiceState extends State<CreateVoice> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Expanded(
-                        flex: B.isTablet ? 8 : 4,
+                        flex: C.isTablet ? 8 : 4,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
@@ -73,16 +72,16 @@ class _CreateVoiceState extends State<CreateVoice> {
                                   isRecording = false;
                                   name == ""
                                       ? null
-                                      : B.deleteFile("${B.appDir.path}/Voice/$name.m4a");
+                                      : C.deleteFile("${C.appDir.path}/Voice/$name.m4a");
                                   Navigator.pop(context);
-                                  B.onRecord();
+                                  C.onRecord();
                                 },
                                 child: CircleAvatar(
                                   backgroundColor: textColor == 0 ? Colors.white54 : Colors.black54,
                                   radius: 25,
                                   child: Icon(
                                     Icons.arrow_back,
-                                    color: chosenIndex == 99 ? pickerColor : B.colors[chosenIndex],
+                                    color: chosenIndex == 99 ? pickerColor : C.colors[chosenIndex],
                                     size: 36,
                                   ),
                                 ),
@@ -101,8 +100,8 @@ class _CreateVoiceState extends State<CreateVoice> {
                             time == ""
                                 ? Navigator.pop(context)
                                 : {
-                                    content = "${B.appDir.path}/Voice/$name.m4a",
-                                    await B.insertToDatabase(
+                                    content = "${C.appDir.path}/Voice/$name.m4a",
+                                    await C.insertToDatabase(
                                         title: title,
                                         time: time,
                                         content: content,
@@ -117,8 +116,8 @@ class _CreateVoiceState extends State<CreateVoice> {
                                     titleC.text = "",
                                     time = "",
                                     Navigator.pop(context),
-                                    B.onCreateNote(),
-                                    B.onChanged()
+                                    C.onCreateNote(),
+                                    C.onChanged()
                                   };
                           },
                           child: CircleAvatar(
@@ -126,7 +125,7 @@ class _CreateVoiceState extends State<CreateVoice> {
                             radius: 25,
                             child: Icon(
                               Icons.done,
-                              color: chosenIndex == 99 ? pickerColor : B.colors[chosenIndex],
+                              color: chosenIndex == 99 ? pickerColor : C.colors[chosenIndex],
                               size: 36,
                             ),
                           ),
@@ -142,7 +141,7 @@ class _CreateVoiceState extends State<CreateVoice> {
                   child: Row(
                     children: [
                       Expanded(
-                        flex: B.isTablet ? 8 : 4,
+                        flex: C.isTablet ? 8 : 4,
                         child: ListView(children: [
                           Column(mainAxisAlignment: MainAxisAlignment.center, children: [
                             Padding(
@@ -157,7 +156,7 @@ class _CreateVoiceState extends State<CreateVoice> {
                                   controller: titleC,
                                   style: TextStyle(
                                       color: textColor == 0 ? Colors.white : Colors.black,
-                                      fontSize: B.isTablet ? 60 : 36,
+                                      fontSize: C.isTablet ? 60 : 36,
                                       fontWeight: FontWeight.w500),
                                   decoration: InputDecoration(
                                       border: InputBorder.none,
@@ -185,7 +184,7 @@ class _CreateVoiceState extends State<CreateVoice> {
                                             child: Text(
                                               displayTime[0],
                                               style: TextStyle(
-                                                  fontSize: B.isTablet ? 80 : 40,
+                                                  fontSize: C.isTablet ? 80 : 40,
                                                   fontWeight: FontWeight.w500,
                                                   color: value == 0
                                                       ? textColor == 0
@@ -201,7 +200,7 @@ class _CreateVoiceState extends State<CreateVoice> {
                                     },
                                   ),
                                   Padding(
-                                    padding: EdgeInsets.symmetric(vertical: B.isTablet ? 80 : 50.0),
+                                    padding: EdgeInsets.symmetric(vertical: C.isTablet ? 80 : 50.0),
                                     child: isRecording
                                         ? isPaused
                                             ? IconButton(
@@ -211,7 +210,7 @@ class _CreateVoiceState extends State<CreateVoice> {
                                                   await record.resume();
                                                   stopWatchTimer.onStartTimer();
                                                   isPaused = false;
-                                                  B.onRecord();
+                                                  C.onRecord();
                                                 },
                                                 icon: Icon(
                                                   Icons.play_arrow,
@@ -226,7 +225,7 @@ class _CreateVoiceState extends State<CreateVoice> {
                                                   await record.pause();
                                                   stopWatchTimer.onStopTimer();
                                                   isPaused = true;
-                                                  B.onRecord();
+                                                  C.onRecord();
                                                 },
                                                 icon: Icon(
                                                   Icons.pause,
@@ -246,20 +245,20 @@ class _CreateVoiceState extends State<CreateVoice> {
                                                     }
                                                   : {
                                                       stopWatchTimer.onResetTimer(),
-                                                      B.deleteFile(context),
+                                                      C.deleteFile(context),
                                                       time = DateTime.now().toString(),
                                                       name = parseDate(time).toString()
                                                     };
                                               if (await record.hasPermission()) {
-                                                await B.createVoiceFolder();
+                                                await C.createVoiceFolder();
                                                 // Start timer.
                                                 stopWatchTimer.onStartTimer();
                                                 // Start recording
                                                 isRecording = true;
                                                 isPaused = false;
-                                                B.onRecord();
+                                                C.onRecord();
                                                 await record.start(
-                                                  path: "${B.appDir.path}/Voice/$name.m4a",
+                                                  path: "${C.appDir.path}/Voice/$name.m4a",
                                                   encoder: AudioEncoder.aacLc, // by default
                                                   bitRate: 128000, // by default
                                                   samplingRate: 44100, // by default
@@ -284,7 +283,7 @@ class _CreateVoiceState extends State<CreateVoice> {
                                           await record.stop();
                                           isRecording = false;
                                           isPaused = false;
-                                          B.onRecord();
+                                          C.onRecord();
                                         },
                                         icon: Icon(
                                           Icons.stop_circle,
@@ -308,14 +307,14 @@ class _CreateVoiceState extends State<CreateVoice> {
                           flex: 1,
                           child: ListView.builder(
                             scrollDirection: Axis.vertical,
-                            itemCount: B.colors.length,
+                            itemCount: C.colors.length,
                             itemBuilder: (BuildContext context, index) => index == 0
                                 ? Column(
                                     children: [
                                       GestureDetector(
                                         onTap: () {
                                           textColor = textColor == 0 ? 1 : 0;
-                                          B.onColorChanged();
+                                          C.onColorChanged();
                                         },
                                         child: Padding(
                                           padding: const EdgeInsets.all(6.0),
@@ -323,7 +322,7 @@ class _CreateVoiceState extends State<CreateVoice> {
                                             "Ab".tr(),
                                             style: TextStyle(
                                                 color: textColor == 0 ? Colors.white : Colors.black,
-                                                fontSize: B.isTablet ? 40 : 24,
+                                                fontSize: C.isTablet ? 40 : 24,
                                                 fontWeight: FontWeight.w500),
                                           ),
                                         ),
@@ -387,7 +386,7 @@ class _CreateVoiceState extends State<CreateVoice> {
                                       GestureDetector(
                                         onTap: () {
                                           chosenIndex = index;
-                                          B.onColorChanged();
+                                          C.onColorChanged();
                                         },
                                         child: Padding(
                                           padding: const EdgeInsets.all(6.0),
@@ -402,7 +401,7 @@ class _CreateVoiceState extends State<CreateVoice> {
                                                     : Colors.black54,
                                             child: CircleAvatar(
                                               radius: 20,
-                                              backgroundColor: B.colors[index],
+                                              backgroundColor: C.colors[index],
                                             ),
                                           ),
                                         ),
@@ -412,7 +411,7 @@ class _CreateVoiceState extends State<CreateVoice> {
                                 : GestureDetector(
                                     onTap: () {
                                       chosenIndex = index;
-                                      B.onColorChanged();
+                                      C.onColorChanged();
                                     },
                                     child: Padding(
                                       padding: const EdgeInsets.all(6.0),
@@ -427,7 +426,7 @@ class _CreateVoiceState extends State<CreateVoice> {
                                                 : Colors.black54,
                                         child: CircleAvatar(
                                           radius: 20,
-                                          backgroundColor: B.colors[index],
+                                          backgroundColor: C.colors[index],
                                         ),
                                       ),
                                     ),

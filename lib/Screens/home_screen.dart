@@ -4,9 +4,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:notes/Bloc/notes_bloc.dart';
+import 'package:notes/Cubit/notes_cubit.dart';
 import 'package:notes/Data/pages.dart';
 import 'package:notes/Widgets/sidebar.dart';
+import 'package:notes/main.dart';
 
 late Color primaryColor;
 
@@ -18,28 +19,26 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  late NotesBloc B;
   late List<Widget> page;
 
   @override
   void initState() {
-    B = NotesBloc.get(context);
-    page = getPages(B);
+    page = getPages(C);
     super.initState();
   }
 
   @override
   void didChangeDependencies() {
-    B.theme = Theme.of(context).colorScheme;
-    B.harmonizeColors();
-    B.lang = context.locale.toString();
-    B.brightness = SchedulerBinding.instance.platformDispatcher.platformBrightness;
-    B.isDarkMode = (B.brightness == Brightness.dark && B.themeMode == ThemeMode.system) ||
-        B.themeMode == ThemeMode.dark;
-    B.getScreenWidth(context);
-    primaryColor = B.theme.primary == Colors.black || B.theme.primary == Colors.white
-        ? B.colors[0]
-        : B.theme.primary;
+    C.theme = Theme.of(context).colorScheme;
+    C.harmonizeColors();
+    C.lang = context.locale.toString();
+    C.brightness = SchedulerBinding.instance.platformDispatcher.platformBrightness;
+    C.isDarkMode = (C.brightness == Brightness.dark && C.themeMode == ThemeMode.system) ||
+        C.themeMode == ThemeMode.dark;
+    C.getScreenWidth(context);
+    primaryColor = C.theme.primary == Colors.black || C.theme.primary == Colors.white
+        ? C.colors[0]
+        : C.theme.primary;
     super.didChangeDependencies();
   }
 
@@ -48,25 +47,25 @@ class _HomeState extends State<Home> {
     return AnnotatedRegion<SystemUiOverlayStyle>(
         value: SystemUiOverlayStyle(
           statusBarColor: Colors.transparent,
-          statusBarIconBrightness: B.isDarkMode ? Brightness.light : Brightness.dark,
+          statusBarIconBrightness: C.isDarkMode ? Brightness.light : Brightness.dark,
           // For Android (dark icons)
-          statusBarBrightness: B.isDarkMode ? Brightness.light : Brightness.dark,
+          statusBarBrightness: C.isDarkMode ? Brightness.light : Brightness.dark,
           // For iOS (dark icons)
-          systemNavigationBarIconBrightness: B.isDarkMode ? Brightness.light : Brightness.dark,
-          systemNavigationBarColor: B.theme.surfaceVariant,
+          systemNavigationBarIconBrightness: C.isDarkMode ? Brightness.light : Brightness.dark,
+          systemNavigationBarColor: C.theme.surfaceVariant,
         ),
-        child: BlocConsumer<NotesBloc, NotesState>(
+        child: BlocConsumer<NotesCubit, NotesState>(
           listener: (context, state) {},
           builder: (context, state) {
             return Scaffold(
               resizeToAvoidBottomInset: false,
-              body: B.loading
+              body: C.loading
                   ? Container(
                       width: double.infinity,
                       height: double.infinity,
-                      color: B.isDarkMode
-                          ? B.theme.background
-                          : B.theme.surfaceVariant.withOpacity(0.6),
+                      color: C.isDarkMode
+                          ? C.theme.background
+                          : C.theme.surfaceVariant.withOpacity(0.6),
                       child: Center(
                         child: SizedBox(
                           width: 200,
@@ -78,27 +77,27 @@ class _HomeState extends State<Home> {
                       ),
                     )
                   : Row(
-                      children: B.sbIndex == 2 || B.sbIndex == 3
+                      children: C.sbIndex == 2 || C.sbIndex == 3
                           ? [
                               Expanded(
                                 flex: 5,
-                                child: page[B.currentIndex],
+                                child: page[C.currentIndex],
                               ),
                               sideBar(
-                                  theme: B.theme,
-                                  inverted: B.sbIndex == 3 ? true : false,
-                                  B: B,
-                                  sizeBox: B.isTablet ? 60 : 30),
+                                  theme: C.theme,
+                                  inverted: C.sbIndex == 3 ? true : false,
+                                  C: C,
+                                  sizeBox: C.isTablet ? 60 : 30),
                             ]
                           : [
                               sideBar(
-                                  theme: B.theme,
-                                  inverted: B.sbIndex == 1 ? true : false,
-                                  B: B,
-                                  sizeBox: B.isTablet ? 60 : 30),
+                                  theme: C.theme,
+                                  inverted: C.sbIndex == 1 ? true : false,
+                                  C: C,
+                                  sizeBox: C.isTablet ? 60 : 30),
                               Expanded(
                                 flex: 5,
-                                child: page[B.currentIndex],
+                                child: page[C.currentIndex],
                               ),
                             ],
                     ),

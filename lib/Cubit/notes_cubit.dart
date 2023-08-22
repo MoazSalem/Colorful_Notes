@@ -20,22 +20,22 @@ import 'package:notes/Data/colors.dart';
 import 'package:notes/Screens/SideBar/home.dart';
 import 'package:path/path.dart' as path;
 
-part 'notes_event.dart';
-
 part 'notes_state.dart';
 
-class NotesBloc extends Bloc<NotesEvent, NotesState> {
+class NotesCubit extends Cubit<NotesState> {
+  final Box box;
+  NotesCubit(this.box) : super(NotesInitial());
+  static NotesCubit get(context) => BlocProvider.of(context);
   late ThemeController themeController;
   late Database database;
-  late Box box;
   late ColorScheme theme;
   late int viewIndex;
   late int viewIndexN;
   late int viewIndexV;
-  late int sbIndex;
-  late int fabIndex;
   late double width;
   late Directory appDir;
+  late int sbIndex;
+  late int fabIndex;
   late bool showDate;
   late bool showShadow;
   late bool showEdited;
@@ -59,13 +59,6 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
   bool isTablet = getDeviceType() == 'tablet' ? true : false;
   ThemeMode themeMode = ThemeMode.system;
   late List<String> extDir;
-
-  static NotesBloc get(context) => BlocProvider.of(context);
-
-  NotesBloc({required Box gBox}) : super(NotesInitial()) {
-    on<NotesEvent>((event, emit) {});
-    box = gBox;
-  }
 
   startPage() async {
     setSettings();

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:notes/Bloc/notes_bloc.dart';
+import 'package:notes/Cubit/notes_cubit.dart';
 import 'package:notes/Screens/Actions/edit_voice.dart';
 import 'package:notes/Screens/SideBar/home.dart';
 import 'package:notes/Screens/home_screen.dart';
@@ -24,39 +24,38 @@ class _VoiceNotesPageState extends State<VoiceNotesPage> {
 
   @override
   void initState() {
-    value = B.viewIndexV;
+    value = C.viewIndexV;
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<NotesBloc, NotesState>(
-      listener: (context, state) {},
+    return BlocBuilder<NotesCubit, NotesState>(
       builder: (context, state) {
-        notes = searchOn ? B.searchedVoice : B.voiceMap;
+        notes = searchOn ? C.searchedVoice : C.voiceMap;
         return Scaffold(
           backgroundColor:
-              B.isDarkMode ? B.theme.background : B.theme.surfaceVariant.withOpacity(0.6),
-          floatingActionButtonLocation: B.fabIndex == 0
+              C.isDarkMode ? C.theme.background : C.theme.surfaceVariant.withOpacity(0.6),
+          floatingActionButtonLocation: C.fabIndex == 0
               ? FloatingActionButtonLocation.endFloat
               : FloatingActionButtonLocation.startFloat,
           floatingActionButton: FloatingActionButton(
-            splashColor: B.colors[1],
+            splashColor: C.colors[1],
             elevation: 0,
-            backgroundColor: B.colorful ? B.colors[3] : primaryColor,
+            backgroundColor: C.colorful ? C.colors[3] : primaryColor,
             onPressed: () async {
               showBottomSheet(
                   enableDrag: false, context: context, builder: (context) => const CreateVoice());
             },
             child: Icon(
               Icons.add,
-              color: B.theme.surfaceVariant,
+              color: C.theme.surfaceVariant,
             ),
           ),
           body: ListView(
             padding: EdgeInsets.zero,
             children: [
-              B.customAppBar("Voice".tr(), 65, leading()),
+              C.customAppBar("Voice".tr(), 65, leading()),
               searchOn
                   ? Center(
                       child: Padding(
@@ -64,12 +63,12 @@ class _VoiceNotesPageState extends State<VoiceNotesPage> {
                         child: TextFormField(
                             autofocus: true,
                             controller: searchController,
-                            onChanged: B.searchVoice,
+                            onChanged: C.searchVoice,
                             maxLines: 1,
                             cursorColor: primaryColor,
                             decoration: InputDecoration(
                               contentPadding: EdgeInsets.symmetric(
-                                  vertical: B.isTablet ? 20 : 5, horizontal: 20),
+                                  vertical: C.isTablet ? 20 : 5, horizontal: 20),
                               enabledBorder: OutlineInputBorder(
                                   borderSide: BorderSide(color: Colors.grey.shade300),
                                   borderRadius: BorderRadius.circular(0)),
@@ -85,7 +84,7 @@ class _VoiceNotesPageState extends State<VoiceNotesPage> {
                     )
                   : Container(),
               notes.isNotEmpty
-                  ? B.viewIndexV != 2
+                  ? C.viewIndexV != 2
                       ? Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
                           child: ListView.builder(
@@ -98,9 +97,9 @@ class _VoiceNotesPageState extends State<VoiceNotesPage> {
                                 notes[reverseIndex]["title"] == ""
                                     ? noTitle = true
                                     : noTitle = false;
-                                int dateValue = B.calculateDifference(notes[reverseIndex]["time"]);
-                                String date = B.parseDate(notes[reverseIndex]["time"]);
-                                Widget chosenView = B.viewIndexV == 0
+                                int dateValue = C.calculateDifference(notes[reverseIndex]["time"]);
+                                String date = C.parseDate(notes[reverseIndex]["time"]);
+                                Widget chosenView = C.viewIndexV == 0
                                     ? Stack(
                                         alignment: Alignment.topRight,
                                         children: [
@@ -109,24 +108,24 @@ class _VoiceNotesPageState extends State<VoiceNotesPage> {
                                             child: listView(
                                               context: context,
                                               notes: notes,
-                                              colors: B.colors,
+                                              colors: C.colors,
                                               index: reverseIndex,
                                               dateValue: dateValue,
                                               date: date,
                                               noTitle: noTitle,
                                               noContent: false,
-                                              showDate: B.showDate,
-                                              showShadow: B.showShadow,
-                                              showEdited: B.showEdited,
-                                              isTablet: B.isTablet,
+                                              showDate: C.showDate,
+                                              showShadow: C.showShadow,
+                                              showEdited: C.showEdited,
+                                              isTablet: C.isTablet,
                                               lang: context.locale.toString(),
-                                              width: B.width,
+                                              width: C.width,
                                             ),
                                           ),
                                           Padding(
                                             padding: EdgeInsets.symmetric(
-                                                horizontal: B.isTablet ? 15 : 10,
-                                                vertical: B.width * 0.02037),
+                                                horizontal: C.isTablet ? 15 : 10,
+                                                vertical: C.width * 0.02037),
                                             child: IconButton(
                                                 focusColor: Colors.blue,
                                                 onPressed: () async {
@@ -137,7 +136,7 @@ class _VoiceNotesPageState extends State<VoiceNotesPage> {
                                                   color: notes[reverseIndex]['tindex'] == 0
                                                       ? Colors.white
                                                       : Colors.black,
-                                                  size: B.width * 0.06620,
+                                                  size: C.width * 0.06620,
                                                 )),
                                           ),
                                         ],
@@ -150,24 +149,24 @@ class _VoiceNotesPageState extends State<VoiceNotesPage> {
                                             child: smallListView(
                                               context: context,
                                               notes: notes,
-                                              colors: B.colors,
+                                              colors: C.colors,
                                               index: reverseIndex,
                                               dateValue: dateValue,
                                               date: date,
                                               noTitle: noTitle,
                                               noContent: false,
-                                              showDate: B.showDate,
-                                              showShadow: B.showShadow,
-                                              showEdited: B.showEdited,
-                                              isTablet: B.isTablet,
+                                              showDate: C.showDate,
+                                              showShadow: C.showShadow,
+                                              showEdited: C.showEdited,
+                                              isTablet: C.isTablet,
                                               lang: context.locale.toString(),
-                                              width: B.width,
+                                              width: C.width,
                                             ),
                                           ),
                                           Padding(
                                             padding: EdgeInsets.symmetric(
-                                                horizontal: B.isTablet ? 8.0 : 0,
-                                                vertical: B.isTablet ? 8.0 : 0),
+                                                horizontal: C.isTablet ? 8.0 : 0,
+                                                vertical: C.isTablet ? 8.0 : 0),
                                             child: IconButton(
                                                 focusColor: Colors.blue,
                                                 onPressed: () async {
@@ -178,7 +177,7 @@ class _VoiceNotesPageState extends State<VoiceNotesPage> {
                                                   color: notes[reverseIndex]['tindex'] == 0
                                                       ? Colors.white
                                                       : Colors.black,
-                                                  size: B.width * 0.0662,
+                                                  size: C.width * 0.0662,
                                                 )),
                                           ),
                                         ],
@@ -201,8 +200,8 @@ class _VoiceNotesPageState extends State<VoiceNotesPage> {
                                 notes[reverseIndex]["title"] == ""
                                     ? noTitle = true
                                     : noTitle = false;
-                                int dateValue = B.calculateDifference(notes[reverseIndex]["time"]);
-                                String date = B.parseDate(notes[reverseIndex]["time"]);
+                                int dateValue = C.calculateDifference(notes[reverseIndex]["time"]);
+                                String date = C.parseDate(notes[reverseIndex]["time"]);
                                 return Stack(
                                   alignment: Alignment.topRight,
                                   children: [
@@ -211,24 +210,24 @@ class _VoiceNotesPageState extends State<VoiceNotesPage> {
                                       child: gridView(
                                         context: context,
                                         notes: notes,
-                                        colors: B.colors,
+                                        colors: C.colors,
                                         index: reverseIndex,
                                         dateValue: dateValue,
                                         date: date,
                                         noTitle: noTitle,
                                         noContent: false,
-                                        showDate: B.showDate,
-                                        showShadow: B.showShadow,
-                                        showEdited: B.showEdited,
-                                        isTablet: B.isTablet,
+                                        showDate: C.showDate,
+                                        showShadow: C.showShadow,
+                                        showEdited: C.showEdited,
+                                        isTablet: C.isTablet,
                                         lang: context.locale.toString(),
-                                        width: B.width,
+                                        width: C.width,
                                       ),
                                     ),
                                     Padding(
                                       padding: EdgeInsets.symmetric(
-                                          horizontal: B.isTablet ? 8.0 : 0,
-                                          vertical: B.isTablet ? 8.0 : 0),
+                                          horizontal: C.isTablet ? 8.0 : 0,
+                                          vertical: C.isTablet ? 8.0 : 0),
                                       child: IconButton(
                                           focusColor: Colors.blue,
                                           onPressed: () async {
@@ -239,7 +238,7 @@ class _VoiceNotesPageState extends State<VoiceNotesPage> {
                                             color: notes[reverseIndex]['tindex'] == 0
                                                 ? Colors.white
                                                 : Colors.black,
-                                            size: B.width * 0.0662,
+                                            size: C.width * 0.0662,
                                           )),
                                     ),
                                   ],
@@ -252,7 +251,7 @@ class _VoiceNotesPageState extends State<VoiceNotesPage> {
                           child: Text(
                         "N3".tr(),
                         style: TextStyle(
-                            color: B.colorful ? B.colors[3] : primaryColor,
+                            color: C.colorful ? C.colors[3] : primaryColor,
                             fontWeight: FontWeight.w400), //B.colors[3]
                       )),
                     ),
@@ -267,7 +266,7 @@ class _VoiceNotesPageState extends State<VoiceNotesPage> {
   }
 
   showDelete(index) {
-    B.showDeleteDialog(context, notes, index);
+    C.showDeleteDialog(context, notes, index);
   }
 
   Widget leading() {
@@ -278,29 +277,29 @@ class _VoiceNotesPageState extends State<VoiceNotesPage> {
         IconButton(
           onPressed: () {
             searchOn = !searchOn;
-            B.searchVoice(searchController.text);
-            B.onSearch();
+            C.searchVoice(searchController.text);
+            C.onSearch();
           },
           icon: Icon(
             Icons.search,
             size: 30,
             color: searchOn
-                ? B.colorful
-                    ? B.colors[3]
+                ? C.colorful
+                    ? C.colors[3]
                     : primaryColor
-                : B.theme.onSurfaceVariant, //Theme.of(context).textTheme.bodyMedium!.color,
+                : C.theme.onSurfaceVariant, //Theme.of(context).textTheme.bodyMedium!.color,
           ),
         ),
         IconButton(
           onPressed: () {
             value < 2 ? value++ : value = 0;
-            B.box.put("viewIndexV", value);
-            B.viewIndexV = value;
-            B.onViewChanged();
+            C.box.put("viewIndexV", value);
+            C.viewIndexV = value;
+            C.onViewChanged();
           },
-          icon: B.viewIndexV == 0
+          icon: C.viewIndexV == 0
               ? const Icon(Icons.indeterminate_check_box)
-              : B.viewIndexV == 1
+              : C.viewIndexV == 1
                   ? const Icon(Icons.view_agenda_sharp)
                   : const Icon(Icons.grid_view_sharp),
         )

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_localization/easy_localization.dart' hide TextDirection;
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
-import 'package:notes/Bloc/notes_bloc.dart';
+import 'package:notes/Cubit/notes_cubit.dart';
 import 'package:notes/main.dart';
 
 class EditNote extends StatefulWidget {
@@ -54,12 +54,11 @@ class _EditNoteState extends State<EditNote> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<NotesBloc, NotesState>(
-      listener: (context, state) {},
+    return BlocBuilder<NotesCubit, NotesState>(
       builder: (context, state) {
         return Scaffold(
           resizeToAvoidBottomInset: false,
-          backgroundColor: bIndex == 99 ? pickerColor : B.colors[bIndex],
+          backgroundColor: bIndex == 99 ? pickerColor : C.colors[bIndex],
           body: Padding(
             padding: const EdgeInsets.only(top: 40.0),
             child: Column(
@@ -68,7 +67,7 @@ class _EditNoteState extends State<EditNote> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Expanded(
-                        flex: B.isTablet ? 8 : 4,
+                        flex: C.isTablet ? 8 : 4,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
@@ -86,7 +85,7 @@ class _EditNoteState extends State<EditNote> {
                                   radius: 25,
                                   child: Icon(
                                     Icons.arrow_back,
-                                    color: bIndex == 99 ? pickerColor : B.colors[bIndex],
+                                    color: bIndex == 99 ? pickerColor : C.colors[bIndex],
                                     size: 36,
                                   ),
                                 ),
@@ -105,7 +104,7 @@ class _EditNoteState extends State<EditNote> {
                                   titleC.text != widget.note["title"] ||
                                           contentC.text != widget.note["content"]
                                       ? {
-                                          await B.insertToDatabase(
+                                          await C.insertToDatabase(
                                               title: titleC.text,
                                               time: time,
                                               content: contentC.text,
@@ -115,15 +114,15 @@ class _EditNoteState extends State<EditNote> {
                                                   bIndex == 99 ? pickerColor.value.toString() : "",
                                               edited: 'yes',
                                               layout: getLayout()),
-                                          await B.deleteFromDatabase(id: widget.note["id"]),
+                                          await C.deleteFromDatabase(id: widget.note["id"]),
                                           isEditing = false,
-                                          B.onCreateNote(),
+                                          C.onCreateNote(),
                                         }
                                       : bIndex != widget.note["cindex"] ||
                                               textColor != widget.note['tindex'] ||
                                               bIndex == 99
                                           ? {
-                                              await B.editDatabaseItem(
+                                              await C.editDatabaseItem(
                                                   time: widget.note['time'],
                                                   content: widget.note['content'],
                                                   id: widget.note["id"],
@@ -137,20 +136,20 @@ class _EditNoteState extends State<EditNote> {
                                                   edited: 'no',
                                                   layout: widget.note['layout']),
                                               isEditing = false,
-                                              B.onCreateNote()
+                                              C.onCreateNote()
                                             }
-                                          : {isEditing = false, B.onCreateNote()};
+                                          : {isEditing = false, C.onCreateNote()};
                                 }
                               : () {
                                   isEditing = true;
-                                  B.onCreateNote();
+                                  C.onCreateNote();
                                 },
                           child: CircleAvatar(
                             backgroundColor: textColor == 0 ? Colors.white : Colors.black,
                             radius: 25,
                             child: Icon(
                               isEditing ? Icons.done : Icons.edit_note,
-                              color: bIndex == 99 ? pickerColor : B.colors[bIndex],
+                              color: bIndex == 99 ? pickerColor : C.colors[bIndex],
                               size: 36,
                             ),
                           ),
@@ -166,25 +165,25 @@ class _EditNoteState extends State<EditNote> {
                   child: Row(
                     children: [
                       Expanded(
-                        flex: B.isTablet ? 8 : 4,
+                        flex: C.isTablet ? 8 : 4,
                         child: ListView(children: [
                           Padding(
                             padding: isEditing
-                                ? B.lang == 'en'
-                                    ? EdgeInsets.only(left: B.isTablet ? 60 : 20)
-                                    : EdgeInsets.only(right: B.isTablet ? 60 : 20)
-                                : EdgeInsets.symmetric(horizontal: B.isTablet ? 60 : 20),
+                                ? C.lang == 'en'
+                                    ? EdgeInsets.only(left: C.isTablet ? 60 : 20)
+                                    : EdgeInsets.only(right: C.isTablet ? 60 : 20)
+                                : EdgeInsets.symmetric(horizontal: C.isTablet ? 60 : 20),
                             child: ValueListenableBuilder<TextDirection>(
                               valueListenable: _titleDir,
                               builder: (context, value, child) => TextFormField(
                                   textDirection: value,
                                   onChanged: (input) {
                                     if (input.trim().length < 2) {
-                                      final dir = B.getDirection(input);
+                                      final dir = C.getDirection(input);
                                       if (dir != value) _titleDir.value = dir;
                                     }
                                   },
-                                  onSaved: B.onViewChanged(),
+                                  onSaved: C.onViewChanged(),
                                   textAlign: TextAlign.center,
                                   maxLines: 2,
                                   cursorColor: textColor == 0 ? Colors.white : Colors.black,
@@ -193,7 +192,7 @@ class _EditNoteState extends State<EditNote> {
                                   controller: titleC,
                                   style: TextStyle(
                                       color: textColor == 0 ? Colors.white : Colors.black,
-                                      fontSize: B.isTablet ? 60 : 36,
+                                      fontSize: C.isTablet ? 60 : 36,
                                       fontWeight: FontWeight.w500),
                                   decoration: InputDecoration(
                                       border: InputBorder.none,
@@ -208,28 +207,28 @@ class _EditNoteState extends State<EditNote> {
                           ),
                           Padding(
                             padding: isEditing
-                                ? B.lang == 'en'
-                                    ? EdgeInsets.only(left: B.isTablet ? 60 : 20)
-                                    : EdgeInsets.only(right: B.isTablet ? 60 : 20)
-                                : EdgeInsets.symmetric(horizontal: B.isTablet ? 60 : 20),
+                                ? C.lang == 'en'
+                                    ? EdgeInsets.only(left: C.isTablet ? 60 : 20)
+                                    : EdgeInsets.only(right: C.isTablet ? 60 : 20)
+                                : EdgeInsets.symmetric(horizontal: C.isTablet ? 60 : 20),
                             child: ValueListenableBuilder<TextDirection>(
                               valueListenable: _contentDir,
                               builder: (context, value, child) => TextFormField(
                                   textDirection: value,
                                   onChanged: (input) {
                                     if (input.trim().length < 2) {
-                                      final dir = B.getDirection(input);
+                                      final dir = C.getDirection(input);
                                       if (dir != value) _contentDir.value = dir;
                                     }
                                   },
-                                  onSaved: B.onSearch(),
+                                  onSaved: C.onSearch(),
                                   cursorColor: textColor == 0 ? Colors.white : Colors.black,
                                   controller: contentC,
                                   readOnly: isEditing ? false : true,
                                   maxLines: 20,
                                   style: TextStyle(
                                       color: textColor == 0 ? Colors.white : Colors.black,
-                                      fontSize: B.isTablet ? 40 : 24),
+                                      fontSize: C.isTablet ? 40 : 24),
                                   decoration: InputDecoration(
                                       border: InputBorder.none,
                                       hintText: "Content".tr(),
@@ -245,14 +244,14 @@ class _EditNoteState extends State<EditNote> {
                               flex: 1,
                               child: ListView.builder(
                                 scrollDirection: Axis.vertical,
-                                itemCount: B.colors.length,
+                                itemCount: C.colors.length,
                                 itemBuilder: (BuildContext context, index2) => index2 == 0
                                     ? Column(
                                         children: [
                                           GestureDetector(
                                             onTap: () {
                                               textColor = textColor == 0 ? 1 : 0;
-                                              B.onColorChanged();
+                                              C.onColorChanged();
                                             },
                                             child: Padding(
                                               padding: const EdgeInsets.all(6.0),
@@ -262,7 +261,7 @@ class _EditNoteState extends State<EditNote> {
                                                     color: textColor == 0
                                                         ? Colors.white
                                                         : Colors.black,
-                                                    fontSize: B.isTablet ? 40 : 24,
+                                                    fontSize: C.isTablet ? 40 : 24,
                                                     fontWeight: FontWeight.w500),
                                               ),
                                             ),
@@ -327,7 +326,7 @@ class _EditNoteState extends State<EditNote> {
                                           GestureDetector(
                                             onTap: () {
                                               bIndex = index2;
-                                              B.onColorChanged();
+                                              C.onColorChanged();
                                             },
                                             child: Padding(
                                               padding: const EdgeInsets.all(6.0),
@@ -342,7 +341,7 @@ class _EditNoteState extends State<EditNote> {
                                                         : Colors.black54,
                                                 child: CircleAvatar(
                                                   radius: 20,
-                                                  backgroundColor: B.colors[index2],
+                                                  backgroundColor: C.colors[index2],
                                                 ),
                                               ),
                                             ),
@@ -352,7 +351,7 @@ class _EditNoteState extends State<EditNote> {
                                     : GestureDetector(
                                         onTap: () {
                                           bIndex = index2;
-                                          B.onColorChanged();
+                                          C.onColorChanged();
                                         },
                                         child: Padding(
                                           padding: const EdgeInsets.all(6.0),
@@ -367,7 +366,7 @@ class _EditNoteState extends State<EditNote> {
                                                     : Colors.black54,
                                             child: CircleAvatar(
                                               radius: 20,
-                                              backgroundColor: B.colors[index2],
+                                              backgroundColor: C.colors[index2],
                                             ),
                                           ),
                                         ),

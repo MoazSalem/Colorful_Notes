@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_localization/easy_localization.dart' hide TextDirection;
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
-import 'package:notes/Bloc/notes_bloc.dart';
+import 'package:notes/Cubit/notes_cubit.dart';
 import 'package:notes/main.dart';
 
 class CreateNote extends StatefulWidget {
@@ -39,12 +39,11 @@ class _CreateNoteState extends State<CreateNote> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<NotesBloc, NotesState>(
-      listener: (context, state) {},
+    return BlocBuilder<NotesCubit, NotesState>(
       builder: (context, state) {
         return Scaffold(
           resizeToAvoidBottomInset: false,
-          backgroundColor: chosenIndex == 99 ? pickerColor : B.colors[chosenIndex],
+          backgroundColor: chosenIndex == 99 ? pickerColor : C.colors[chosenIndex],
           body: Padding(
             padding: const EdgeInsets.only(top: 40.0),
             child: Column(
@@ -53,7 +52,7 @@ class _CreateNoteState extends State<CreateNote> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Expanded(
-                        flex: B.isTablet ? 8 : 4,
+                        flex: C.isTablet ? 8 : 4,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
@@ -71,7 +70,7 @@ class _CreateNoteState extends State<CreateNote> {
                                   radius: 25,
                                   child: Icon(
                                     Icons.arrow_back,
-                                    color: chosenIndex == 99 ? pickerColor : B.colors[chosenIndex],
+                                    color: chosenIndex == 99 ? pickerColor : C.colors[chosenIndex],
                                     size: 36,
                                   ),
                                 ),
@@ -90,7 +89,7 @@ class _CreateNoteState extends State<CreateNote> {
                             content = contentC.text;
                             titleC.text != "" || contentC.text != ""
                                 ? {
-                                    await B.insertToDatabase(
+                                    await C.insertToDatabase(
                                         title: title,
                                         time: time,
                                         content: content,
@@ -100,7 +99,7 @@ class _CreateNoteState extends State<CreateNote> {
                                         layout: getLayout()),
                                     titleC.text = "",
                                     contentC.text = "",
-                                    B.onCreateNote(),
+                                    C.onCreateNote(),
                                     Navigator.pop(context)
                                   }
                                 : Navigator.pop(context);
@@ -110,7 +109,7 @@ class _CreateNoteState extends State<CreateNote> {
                             radius: 25,
                             child: Icon(
                               Icons.done,
-                              color: chosenIndex == 99 ? pickerColor : B.colors[chosenIndex],
+                              color: chosenIndex == 99 ? pickerColor : C.colors[chosenIndex],
                               size: 36,
                             ),
                           ),
@@ -126,12 +125,12 @@ class _CreateNoteState extends State<CreateNote> {
                   child: Row(
                     children: [
                       Expanded(
-                        flex: B.isTablet ? 8 : 4,
+                        flex: C.isTablet ? 8 : 4,
                         child: ListView(children: [
                           Padding(
-                            padding: B.lang == 'en'
-                                ? EdgeInsets.only(left: B.isTablet ? 60 : 20)
-                                : EdgeInsets.only(right: B.isTablet ? 60 : 20),
+                            padding: C.lang == 'en'
+                                ? EdgeInsets.only(left: C.isTablet ? 60 : 20)
+                                : EdgeInsets.only(right: C.isTablet ? 60 : 20),
                             child: ValueListenableBuilder<TextDirection>(
                               valueListenable: titleDir,
                               builder: (context, value, child) => TextFormField(
@@ -140,7 +139,7 @@ class _CreateNoteState extends State<CreateNote> {
                                   textDirection: value,
                                   onChanged: (input) {
                                     if (input.trim().length < 2) {
-                                      final dir = B.getDirection(input);
+                                      final dir = C.getDirection(input);
                                       if (dir != value) titleDir.value = dir;
                                     }
                                   },
@@ -150,7 +149,7 @@ class _CreateNoteState extends State<CreateNote> {
                                   controller: titleC,
                                   style: TextStyle(
                                       color: textColor == 0 ? Colors.white : Colors.black,
-                                      fontSize: B.isTablet ? 60 : 36,
+                                      fontSize: C.isTablet ? 60 : 36,
                                       fontWeight: FontWeight.w500),
                                   decoration: InputDecoration(
                                       border: InputBorder.none,
@@ -164,16 +163,16 @@ class _CreateNoteState extends State<CreateNote> {
                             height: 10,
                           ),
                           Padding(
-                            padding: B.lang == 'en'
-                                ? EdgeInsets.only(left: B.isTablet ? 60 : 20)
-                                : EdgeInsets.only(right: B.isTablet ? 60 : 20),
+                            padding: C.lang == 'en'
+                                ? EdgeInsets.only(left: C.isTablet ? 60 : 20)
+                                : EdgeInsets.only(right: C.isTablet ? 60 : 20),
                             child: ValueListenableBuilder<TextDirection>(
                               valueListenable: contentDir,
                               builder: (context, value, child) => TextFormField(
                                   textDirection: value,
                                   onChanged: (input) {
                                     if (input.trim().length < 2) {
-                                      final dir = B.getDirection(input);
+                                      final dir = C.getDirection(input);
                                       if (dir != value) contentDir.value = dir;
                                     }
                                   },
@@ -183,7 +182,7 @@ class _CreateNoteState extends State<CreateNote> {
                                   showCursor: true,
                                   style: TextStyle(
                                       color: textColor == 0 ? Colors.white : Colors.black,
-                                      fontSize: B.isTablet ? 40 : 24),
+                                      fontSize: C.isTablet ? 40 : 24),
                                   decoration: InputDecoration(
                                       border: InputBorder.none,
                                       hintText: "Content".tr(),
@@ -198,14 +197,14 @@ class _CreateNoteState extends State<CreateNote> {
                           flex: 1,
                           child: ListView.builder(
                             scrollDirection: Axis.vertical,
-                            itemCount: B.colors.length,
+                            itemCount: C.colors.length,
                             itemBuilder: (BuildContext context, index) => index == 0
                                 ? Column(
                                     children: [
                                       GestureDetector(
                                         onTap: () {
                                           textColor = textColor == 0 ? 1 : 0;
-                                          B.onColorChanged();
+                                          C.onColorChanged();
                                         },
                                         child: Padding(
                                           padding: const EdgeInsets.all(6.0),
@@ -213,7 +212,7 @@ class _CreateNoteState extends State<CreateNote> {
                                             "Ab".tr(),
                                             style: TextStyle(
                                                 color: textColor == 0 ? Colors.white : Colors.black,
-                                                fontSize: B.isTablet ? 40 : 24,
+                                                fontSize: C.isTablet ? 40 : 24,
                                                 fontWeight: FontWeight.w500),
                                           ),
                                         ),
@@ -277,7 +276,7 @@ class _CreateNoteState extends State<CreateNote> {
                                       GestureDetector(
                                         onTap: () {
                                           chosenIndex = index;
-                                          B.onColorChanged();
+                                          C.onColorChanged();
                                         },
                                         child: Padding(
                                           padding: const EdgeInsets.all(6.0),
@@ -292,7 +291,7 @@ class _CreateNoteState extends State<CreateNote> {
                                                     : Colors.black54,
                                             child: CircleAvatar(
                                               radius: 20,
-                                              backgroundColor: B.colors[index],
+                                              backgroundColor: C.colors[index],
                                             ),
                                           ),
                                         ),
@@ -302,7 +301,7 @@ class _CreateNoteState extends State<CreateNote> {
                                 : GestureDetector(
                                     onTap: () {
                                       chosenIndex = index;
-                                      B.onColorChanged();
+                                      C.onColorChanged();
                                     },
                                     child: Padding(
                                       padding: const EdgeInsets.all(6.0),
@@ -317,7 +316,7 @@ class _CreateNoteState extends State<CreateNote> {
                                                 : Colors.black54,
                                         child: CircleAvatar(
                                           radius: 20,
-                                          backgroundColor: B.colors[index],
+                                          backgroundColor: C.colors[index],
                                         ),
                                       ),
                                     ),

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
-import 'package:notes/Bloc/notes_bloc.dart';
+import 'package:notes/Cubit/notes_cubit.dart';
 import 'package:notes/main.dart';
 
 class EditVoice extends StatefulWidget {
@@ -43,22 +43,21 @@ class _EditVoiceState extends State<EditVoice> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<NotesBloc, NotesState>(
-      listener: (context, state) {},
+    return BlocBuilder<NotesCubit, NotesState>(
       builder: (context, state) {
         return Container(
-          color: bIndex == 99 ? pickerColor : B.colors[bIndex],
+          color: bIndex == 99 ? pickerColor : C.colors[bIndex],
           child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 SizedBox(
-                  height: B.isTablet ? 50 : 30,
+                  height: C.isTablet ? 50 : 30,
                 ),
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: B.isTablet ? 80 : 40),
+                  padding: EdgeInsets.symmetric(horizontal: C.isTablet ? 80 : 40),
                   child: TextFormField(
-                      onSaved: B.onViewChanged(),
+                      onSaved: C.onViewChanged(),
                       textAlign: TextAlign.center,
                       maxLines: 2,
                       cursorColor: textColor == 0 ? Colors.white : Colors.black,
@@ -66,7 +65,7 @@ class _EditVoiceState extends State<EditVoice> {
                       controller: titleC,
                       style: TextStyle(
                           color: textColor == 0 ? Colors.white : Colors.black,
-                          fontSize: B.isTablet ? 60 : 36,
+                          fontSize: C.isTablet ? 60 : 36,
                           fontWeight: FontWeight.w500),
                       decoration: InputDecoration(
                           border: InputBorder.none,
@@ -75,14 +74,14 @@ class _EditVoiceState extends State<EditVoice> {
                               TextStyle(color: textColor == 0 ? Colors.white54 : Colors.black54))),
                 ),
                 SizedBox(
-                  height: B.isTablet ? 40 : 10,
+                  height: C.isTablet ? 40 : 10,
                 ),
                 Column(
                   children: [
                     GestureDetector(
                       onTap: () {
                         textColor = textColor == 0 ? 1 : 0;
-                        B.onColorChanged();
+                        C.onColorChanged();
                       },
                       child: Padding(
                         padding: const EdgeInsets.only(bottom: 20.0),
@@ -156,7 +155,7 @@ class _EditVoiceState extends State<EditVoice> {
                     ),
                     FittedBox(
                       child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: B.isTablet ? 100 : 20.0),
+                        padding: EdgeInsets.symmetric(horizontal: C.isTablet ? 100 : 20.0),
                         child: SizedBox(
                           height: 65,
                           child: Center(
@@ -167,7 +166,7 @@ class _EditVoiceState extends State<EditVoice> {
                               itemBuilder: (BuildContext context, index2) => GestureDetector(
                                 onTap: () {
                                   bIndex = index2;
-                                  B.onColorChanged();
+                                  C.onColorChanged();
                                 },
                                 child: CircleAvatar(
                                   radius: 35,
@@ -180,7 +179,7 @@ class _EditVoiceState extends State<EditVoice> {
                                           : Colors.black54,
                                   child: CircleAvatar(
                                     radius: 25,
-                                    backgroundColor: B.colors[index2],
+                                    backgroundColor: C.colors[index2],
                                   ),
                                 ),
                               ),
@@ -193,7 +192,7 @@ class _EditVoiceState extends State<EditVoice> {
                       padding: const EdgeInsets.only(top: 10.0),
                       child: FittedBox(
                         child: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: B.isTablet ? 100 : 20.0),
+                          padding: EdgeInsets.symmetric(horizontal: C.isTablet ? 100 : 20.0),
                           child: SizedBox(
                             height: 65,
                             child: Center(
@@ -205,7 +204,7 @@ class _EditVoiceState extends State<EditVoice> {
                                   onTap: () {
                                     index3 += 5;
                                     bIndex = index3;
-                                    B.onColorChanged();
+                                    C.onColorChanged();
                                   },
                                   child: CircleAvatar(
                                     radius: 35,
@@ -218,7 +217,7 @@ class _EditVoiceState extends State<EditVoice> {
                                             : Colors.black54,
                                     child: CircleAvatar(
                                       radius: 25,
-                                      backgroundColor: B.colors[index3 + 5],
+                                      backgroundColor: C.colors[index3 + 5],
                                     ),
                                   ),
                                 ),
@@ -237,7 +236,7 @@ class _EditVoiceState extends State<EditVoice> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Padding(
-                          padding: EdgeInsets.symmetric(horizontal: B.isTablet ? 50 : 30),
+                          padding: EdgeInsets.symmetric(horizontal: C.isTablet ? 50 : 30),
                           child: TextButton(
                             onPressed: () {
                               titleC.clear();
@@ -252,13 +251,13 @@ class _EditVoiceState extends State<EditVoice> {
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsets.symmetric(horizontal: B.isTablet ? 60 : 40),
+                          padding: EdgeInsets.symmetric(horizontal: C.isTablet ? 60 : 40),
                           child: TextButton(
                             onPressed: () async {
                               var time = DateTime.now().toString();
                               titleC.text != widget.note["title"]
                                   ? {
-                                      await B.insertToDatabase(
+                                      await C.insertToDatabase(
                                           title: titleC.text,
                                           time: time,
                                           content: widget.note["content"],
@@ -268,15 +267,15 @@ class _EditVoiceState extends State<EditVoice> {
                                           type: 1,
                                           edited: 'yes',
                                           layout: widget.note['layout']),
-                                      await B.deleteFromDatabase(id: widget.note["id"]),
+                                      await C.deleteFromDatabase(id: widget.note["id"]),
                                       Navigator.of(context).pop(),
-                                      B.onCreateNote()
+                                      C.onCreateNote()
                                     }
                                   : bIndex != widget.note["cindex"] ||
                                           textColor != widget.note["tindex"] ||
                                           bIndex == 99
                                       ? {
-                                          await B.editDatabaseItem(
+                                          await C.editDatabaseItem(
                                               time: widget.note['time'],
                                               content: widget.note['content'],
                                               id: widget.note["id"],
@@ -289,7 +288,7 @@ class _EditVoiceState extends State<EditVoice> {
                                               edited: 'no',
                                               layout: widget.note['layout']),
                                           Navigator.of(context).pop(),
-                                          B.onCreateNote()
+                                          C.onCreateNote()
                                         }
                                       : Navigator.of(context).pop();
                             },

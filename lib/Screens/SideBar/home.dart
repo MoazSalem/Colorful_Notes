@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:notes/Screens/home_screen.dart';
 import 'package:notes/main.dart';
-import 'package:notes/Bloc/notes_bloc.dart';
+import 'package:notes/Cubit/notes_cubit.dart';
 import 'package:notes/Screens/Actions/edit_note.dart';
 import 'package:notes/Screens/Actions/edit_voice.dart';
 import 'package:notes/Widgets/custom_fab.dart';
@@ -31,45 +31,44 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    value = B.viewIndex;
+    value = C.viewIndex;
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<NotesBloc, NotesState>(
-      listener: (context, state) {},
+    return BlocBuilder<NotesCubit, NotesState>(
       builder: (context, state) {
-        notes = searchOn ? B.searchedALL : B.allNotesMap;
+        notes = searchOn ? C.searchedALL : C.allNotesMap;
         return Scaffold(
           backgroundColor:
-              B.isDarkMode ? B.theme.background : B.theme.surfaceVariant.withOpacity(0.6),
-          floatingActionButtonLocation: B.fabIndex == 0
+              C.isDarkMode ? C.theme.background : C.theme.surfaceVariant.withOpacity(0.6),
+          floatingActionButtonLocation: C.fabIndex == 0
               ? FloatingActionButtonLocation.endFloat
               : FloatingActionButtonLocation.startFloat,
-          floatingActionButton: B.fabIndex == 0
+          floatingActionButton: C.fabIndex == 0
               ? customFab(
-                  theme: B.theme,
-                  colors: B.colors,
+                  theme: C.theme,
+                  colors: C.colors,
                   action1: create1,
                   action2: create2,
-                  colorful: B.colorful,
-                  isTablet: B.isTablet,
+                  colorful: C.colorful,
+                  isTablet: C.isTablet,
                 )
               : Directionality(
-                  textDirection: B.lang == 'en' ? ui.TextDirection.rtl : ui.TextDirection.ltr,
+                  textDirection: C.lang == 'en' ? ui.TextDirection.rtl : ui.TextDirection.ltr,
                   child: customFab(
-                    theme: B.theme,
-                    colors: B.colors,
+                    theme: C.theme,
+                    colors: C.colors,
                     action1: create1,
                     action2: create2,
-                    colorful: B.colorful,
-                    isTablet: B.isTablet,
+                    colorful: C.colorful,
+                    isTablet: C.isTablet,
                   )),
           body: ListView(
             padding: EdgeInsets.zero,
             children: [
-              B.customAppBar("Home".tr(), 65, leading()),
+              C.customAppBar("Home".tr(), 65, leading()),
               searchOn
                   ? Center(
                       child: Padding(
@@ -77,12 +76,12 @@ class _HomePageState extends State<HomePage> {
                         child: TextFormField(
                             autofocus: true,
                             controller: searchController,
-                            onChanged: B.searchHome,
+                            onChanged: C.searchHome,
                             maxLines: 1,
                             cursorColor: primaryColor,
                             decoration: InputDecoration(
                               contentPadding: EdgeInsets.symmetric(
-                                  vertical: B.isTablet ? 20 : 5, horizontal: 20),
+                                  vertical: C.isTablet ? 20 : 5, horizontal: 20),
                               enabledBorder: OutlineInputBorder(
                                   borderSide: BorderSide(color: Colors.grey.shade300),
                                   borderRadius: BorderRadius.circular(0)),
@@ -98,7 +97,7 @@ class _HomePageState extends State<HomePage> {
                     )
                   : Container(),
               notes.isNotEmpty
-                  ? B.viewIndex != 2
+                  ? C.viewIndex != 2
                       ? Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
                           child: ListView.builder(
@@ -114,9 +113,9 @@ class _HomePageState extends State<HomePage> {
                                 notes[reverseIndex]["content"] == ""
                                     ? noContent = true
                                     : noContent = false;
-                                int dateValue = B.calculateDifference(notes[reverseIndex]["time"]);
-                                String date = B.parseDate(notes[reverseIndex]["time"]);
-                                Widget chosenView = B.viewIndex == 0
+                                int dateValue = C.calculateDifference(notes[reverseIndex]["time"]);
+                                String date = C.parseDate(notes[reverseIndex]["time"]);
+                                Widget chosenView = C.viewIndex == 0
                                     ? Stack(
                                         alignment: notes[reverseIndex]["layout"] == 0 ||
                                                 notes[reverseIndex]["layout"] == 2
@@ -128,18 +127,18 @@ class _HomePageState extends State<HomePage> {
                                             child: listView(
                                               context: context,
                                               notes: notes,
-                                              colors: B.colors,
+                                              colors: C.colors,
                                               index: reverseIndex,
                                               dateValue: dateValue,
                                               date: date,
                                               noTitle: noTitle,
                                               noContent: noContent,
-                                              showDate: B.showDate,
-                                              showShadow: B.showShadow,
-                                              showEdited: B.showEdited,
-                                              isTablet: B.isTablet,
+                                              showDate: C.showDate,
+                                              showShadow: C.showShadow,
+                                              showEdited: C.showEdited,
+                                              isTablet: C.isTablet,
                                               lang: context.locale.toString(),
-                                              width: B.width,
+                                              width: C.width,
                                             ),
                                           ),
                                           Padding(
@@ -147,10 +146,10 @@ class _HomePageState extends State<HomePage> {
                                                 horizontal: notes[reverseIndex]["layout"] == 0 ||
                                                         notes[reverseIndex]["layout"] == 2
                                                     ? 10
-                                                    : B.isTablet
+                                                    : C.isTablet
                                                         ? 15
                                                         : 10,
-                                                vertical: B.width * 0.02037),
+                                                vertical: C.width * 0.02037),
                                             child: IconButton(
                                                 focusColor: Colors.blue,
                                                 onPressed: () async {
@@ -161,7 +160,7 @@ class _HomePageState extends State<HomePage> {
                                                   color: notes[reverseIndex]['tindex'] == 0
                                                       ? Colors.white
                                                       : Colors.black,
-                                                  size: B.width * 0.06620,
+                                                  size: C.width * 0.06620,
                                                 )),
                                           ),
                                         ],
@@ -177,24 +176,24 @@ class _HomePageState extends State<HomePage> {
                                             child: smallListView(
                                               context: context,
                                               notes: notes,
-                                              colors: B.colors,
+                                              colors: C.colors,
                                               index: reverseIndex,
                                               dateValue: dateValue,
                                               date: date,
                                               noTitle: noTitle,
                                               noContent: noContent,
-                                              showDate: B.showDate,
-                                              showShadow: B.showShadow,
-                                              showEdited: B.showEdited,
-                                              isTablet: B.isTablet,
+                                              showDate: C.showDate,
+                                              showShadow: C.showShadow,
+                                              showEdited: C.showEdited,
+                                              isTablet: C.isTablet,
                                               lang: context.locale.toString(),
-                                              width: B.width,
+                                              width: C.width,
                                             ),
                                           ),
                                           Padding(
                                             padding: EdgeInsets.symmetric(
-                                                horizontal: B.isTablet ? 8.0 : 0,
-                                                vertical: B.isTablet ? 8.0 : 0),
+                                                horizontal: C.isTablet ? 8.0 : 0,
+                                                vertical: C.isTablet ? 8.0 : 0),
                                             child: IconButton(
                                                 focusColor: Colors.blue,
                                                 onPressed: () async {
@@ -205,7 +204,7 @@ class _HomePageState extends State<HomePage> {
                                                   color: notes[reverseIndex]['tindex'] == 0
                                                       ? Colors.white
                                                       : Colors.black,
-                                                  size: B.width * 0.0662,
+                                                  size: C.width * 0.0662,
                                                 )),
                                           ),
                                         ],
@@ -231,8 +230,8 @@ class _HomePageState extends State<HomePage> {
                                 notes[reverseIndex]["content"] == ""
                                     ? noContent = true
                                     : noContent = false;
-                                int dateValue = B.calculateDifference(notes[reverseIndex]["time"]);
-                                String date = B.parseDate(notes[reverseIndex]["time"]);
+                                int dateValue = C.calculateDifference(notes[reverseIndex]["time"]);
+                                String date = C.parseDate(notes[reverseIndex]["time"]);
                                 return Stack(
                                   alignment: notes[reverseIndex]["layout"] == 0 ||
                                           notes[reverseIndex]["layout"] == 2
@@ -244,24 +243,24 @@ class _HomePageState extends State<HomePage> {
                                       child: gridView(
                                         context: context,
                                         notes: notes,
-                                        colors: B.colors,
+                                        colors: C.colors,
                                         index: reverseIndex,
                                         dateValue: dateValue,
                                         date: date,
                                         noTitle: noTitle,
                                         noContent: noContent,
-                                        showDate: B.showDate,
-                                        showShadow: B.showShadow,
-                                        showEdited: B.showEdited,
-                                        isTablet: B.isTablet,
+                                        showDate: C.showDate,
+                                        showShadow: C.showShadow,
+                                        showEdited: C.showEdited,
+                                        isTablet: C.isTablet,
                                         lang: context.locale.toString(),
-                                        width: B.width,
+                                        width: C.width,
                                       ),
                                     ),
                                     Padding(
                                       padding: EdgeInsets.symmetric(
-                                          horizontal: B.isTablet ? 8.0 : 0,
-                                          vertical: B.isTablet ? 8.0 : 0),
+                                          horizontal: C.isTablet ? 8.0 : 0,
+                                          vertical: C.isTablet ? 8.0 : 0),
                                       child: IconButton(
                                           focusColor: Colors.blue,
                                           onPressed: () async {
@@ -272,7 +271,7 @@ class _HomePageState extends State<HomePage> {
                                             color: notes[reverseIndex]['tindex'] == 0
                                                 ? Colors.white
                                                 : Colors.black,
-                                            size: B.width * 0.0662,
+                                            size: C.width * 0.0662,
                                           )),
                                     ),
                                   ],
@@ -285,7 +284,7 @@ class _HomePageState extends State<HomePage> {
                           child: Text(
                         "N1".tr(),
                         style: TextStyle(
-                            color: B.colorful ? B.colors[0] : primaryColor,
+                            color: C.colorful ? C.colors[0] : primaryColor,
                             fontWeight: FontWeight.w400),
                       )),
                     ),
@@ -307,29 +306,29 @@ class _HomePageState extends State<HomePage> {
         IconButton(
           onPressed: () {
             searchOn = !searchOn;
-            B.searchHome(searchController.text);
-            B.onSearch();
+            C.searchHome(searchController.text);
+            C.onSearch();
           },
           icon: Icon(
             Icons.search,
             size: 30,
             color: searchOn
-                ? B.colorful
-                    ? B.colors[0]
+                ? C.colorful
+                    ? C.colors[0]
                     : primaryColor
-                : B.theme.onSurfaceVariant, //const Color(0xffff8b34)
+                : C.theme.onSurfaceVariant, //const Color(0xffff8b34)
           ),
         ),
         IconButton(
           onPressed: () {
             value < 2 ? value++ : value = 0;
-            B.box.put("viewIndex", value);
-            B.viewIndex = value;
-            B.onViewChanged();
+            C.box.put("viewIndex", value);
+            C.viewIndex = value;
+            C.onViewChanged();
           },
-          icon: B.viewIndex == 0
+          icon: C.viewIndex == 0
               ? const Icon(Icons.indeterminate_check_box_sharp)
-              : B.viewIndex == 1
+              : C.viewIndex == 1
                   ? const Icon(Icons.view_agenda_sharp)
                   : const Icon(Icons.grid_view_sharp),
         )
@@ -355,6 +354,6 @@ class _HomePageState extends State<HomePage> {
   }
 
   showDelete(index) {
-    B.showDeleteDialog(context, notes, index);
+    C.showDeleteDialog(context, notes, index);
   }
 }

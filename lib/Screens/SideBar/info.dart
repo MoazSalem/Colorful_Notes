@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:notes/Bloc/notes_bloc.dart';
+import 'package:notes/Cubit/notes_cubit.dart';
 import 'package:notes/Screens/home_screen.dart';
 import 'package:notes/main.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -18,16 +18,15 @@ class _InfoPageState extends State<InfoPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<NotesBloc, NotesState>(
-      listener: (context, state) {},
+    return BlocBuilder<NotesCubit, NotesState>(
       builder: (context, state) {
         return Scaffold(
           backgroundColor:
-              B.isDarkMode ? B.theme.background : B.theme.surfaceVariant.withOpacity(0.6),
+              C.isDarkMode ? C.theme.background : C.theme.surfaceVariant.withOpacity(0.6),
           body: ListView(
             padding: EdgeInsets.zero,
             children: [
-              B.customAppBar("Info".tr(), 65),
+              C.customAppBar("Info".tr(), 65),
               Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 22.0, vertical: 20),
                   child: Column(
@@ -36,12 +35,12 @@ class _InfoPageState extends State<InfoPage> {
                       RichText(
                           text: TextSpan(
                         style: TextStyle(
-                            fontSize: B.isTablet ? 30 : 20,
+                            fontSize: C.isTablet ? 30 : 20,
                             fontWeight: FontWeight.w300,
-                            color: B.theme.onSurfaceVariant),
+                            color: C.theme.onSurfaceVariant),
                         children: <TextSpan>[
                           TextSpan(text: "I1".tr()),
-                          TextSpan(text: "I2".tr(), style: TextStyle(color: B.colors[2])),
+                          TextSpan(text: "I2".tr(), style: TextStyle(color: C.colors[2])),
                           TextSpan(text: "I3".tr()),
                         ],
                       )),
@@ -51,12 +50,12 @@ class _InfoPageState extends State<InfoPage> {
                       RichText(
                           text: TextSpan(
                         style: TextStyle(
-                            fontSize: B.isTablet ? 30 : 20,
+                            fontSize: C.isTablet ? 30 : 20,
                             fontWeight: FontWeight.w300,
-                            color: B.theme.onSurfaceVariant),
+                            color: C.theme.onSurfaceVariant),
                         children: <TextSpan>[
                           TextSpan(text: "I6".tr()),
-                          TextSpan(text: "I7".tr(), style: TextStyle(color: B.colors[1])),
+                          TextSpan(text: "I7".tr(), style: TextStyle(color: C.colors[1])),
                           TextSpan(text: "I8".tr()),
                         ],
                       )),

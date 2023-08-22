@@ -5,7 +5,7 @@ import 'package:notes/Screens/home_screen.dart';
 import 'package:notes/Widgets/theme_popup_menu.dart';
 import 'package:notes/main.dart';
 import 'package:switcher_button/switcher_button.dart';
-import 'package:notes/Bloc/notes_bloc.dart';
+import 'package:notes/Cubit/notes_cubit.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({Key? key}) : super(key: key);
@@ -35,37 +35,35 @@ class _SettingsPageState extends State<SettingsPage> {
 
   @override
   void initState() {
-    B = NotesBloc.get(context);
-    height = B.isTablet ? 120 : 80;
-    title = B.isTablet ? 26 : 22;
-    subtitle = B.isTablet ? 16 : 12;
-    switchSize = B.isTablet ? 100 : 50;
-    iconSize = B.isTablet ? 40 : 10.0;
-    itemHeight = B.isTablet ? 80 : 50.0;
-    fontSize = B.isTablet ? 10 : 14;
-    sB = B.sbIndex == 0
+    height = C.isTablet ? 120 : 80;
+    title = C.isTablet ? 26 : 22;
+    subtitle = C.isTablet ? 16 : 12;
+    switchSize = C.isTablet ? 100 : 50;
+    iconSize = C.isTablet ? 40 : 10.0;
+    itemHeight = C.isTablet ? 80 : 50.0;
+    fontSize = C.isTablet ? 10 : 14;
+    sB = C.sbIndex == 0
         ? "Top Left"
-        : B.sbIndex == 1
+        : C.sbIndex == 1
             ? "Bottom Left"
-            : B.sbIndex == 2
+            : C.sbIndex == 2
                 ? "Top Right"
                 : "Bottom Right";
-    fabLoc = B.fabIndex == 0 ? "Right" : "Left";
+    fabLoc = C.fabIndex == 0 ? "Right" : "Left";
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<NotesBloc, NotesState>(
-      listener: (context, state) {},
+    return BlocBuilder<NotesCubit, NotesState>(
       builder: (context, state) {
         return Scaffold(
           backgroundColor:
-              B.isDarkMode ? B.theme.background : B.theme.surfaceVariant.withOpacity(0.6),
+              C.isDarkMode ? C.theme.background : C.theme.surfaceVariant.withOpacity(0.6),
           body: ListView(
             padding: EdgeInsets.zero,
             children: [
-              B.customAppBar("Settings".tr(), 65),
+              C.customAppBar("Settings".tr(), 65),
               SizedBox(
                 height: height,
                 child: Center(
@@ -75,14 +73,14 @@ class _SettingsPageState extends State<SettingsPage> {
                       style: TextStyle(
                           fontSize: title,
                           fontWeight: FontWeight.w400,
-                          color: B.theme.onSurfaceVariant),
+                          color: C.theme.onSurfaceVariant),
                     ),
                     subtitle: Text(
                       "sLanguage".tr(),
                       style: TextStyle(
                           fontSize: subtitle,
                           fontWeight: FontWeight.w300,
-                          color: B.theme.onSurfaceVariant),
+                          color: C.theme.onSurfaceVariant),
                     ),
                     trailing: DropdownButton(
                       iconSize: iconSize,
@@ -91,35 +89,35 @@ class _SettingsPageState extends State<SettingsPage> {
                       alignment: Alignment.center,
                       underline: Container(),
                       style: TextStyle(
-                          color: B.theme.onSurfaceVariant,
+                          color: C.theme.onSurfaceVariant,
                           fontSize: fontSize,
                           fontWeight: FontWeight.w400),
-                      dropdownColor: B.theme.surfaceVariant,
+                      dropdownColor: C.theme.surfaceVariant,
                       elevation: 0,
                       isDense: true,
-                      iconEnabledColor: B.theme.onSurfaceVariant,
-                      value: B.lang == 'en' ? "English" : "Arabic",
+                      iconEnabledColor: C.theme.onSurfaceVariant,
+                      value: C.lang == 'en' ? "English" : "Arabic",
                       icon: const Icon(Icons.keyboard_arrow_down),
                       items: lang.map((String items) {
                         return DropdownMenuItem(
                             value: items,
                             child: MediaQuery(
                               data: MediaQuery.of(context)
-                                  .copyWith(textScaleFactor: B.isTablet ? 2.0 : 1.0),
+                                  .copyWith(textScaleFactor: C.isTablet ? 2.0 : 1.0),
                               child: Text(items).tr(),
                             ));
                       }).toList(),
                       onChanged: (String? newValue) {
-                        B.lang = newValue! == 'English' ? 'en' : 'ar';
-                        context.setLocale(Locale(B.lang));
-                        B.lang = context.locale.toString();
-                        B.prefsChanged();
+                        C.lang = newValue! == 'English' ? 'en' : 'ar';
+                        context.setLocale(Locale(C.lang));
+                        C.lang = context.locale.toString();
+                        C.prefsChanged();
                       },
                     ),
                   ),
                 ),
               ),
-              B.divider(),
+              C.divider(),
               SizedBox(
                 height: height,
                 child: Center(
@@ -129,14 +127,14 @@ class _SettingsPageState extends State<SettingsPage> {
                         style: TextStyle(
                             fontSize: title,
                             fontWeight: FontWeight.w400,
-                            color: B.theme.onSurfaceVariant),
+                            color: C.theme.onSurfaceVariant),
                       ),
                       subtitle: Text(
                         "sStart In".tr(),
                         style: TextStyle(
                             fontSize: subtitle,
                             fontWeight: FontWeight.w300,
-                            color: B.theme.onSurfaceVariant),
+                            color: C.theme.onSurfaceVariant),
                       ),
                       trailing: DropdownButton(
                         iconSize: iconSize,
@@ -145,39 +143,39 @@ class _SettingsPageState extends State<SettingsPage> {
                         alignment: Alignment.center,
                         underline: Container(),
                         style: TextStyle(
-                            color: B.theme.onSurfaceVariant,
+                            color: C.theme.onSurfaceVariant,
                             fontSize: fontSize,
                             fontWeight: FontWeight.w400),
-                        dropdownColor: B.theme.surfaceVariant,
+                        dropdownColor: C.theme.surfaceVariant,
                         elevation: 0,
                         isDense: true,
-                        iconEnabledColor: B.theme.onSurfaceVariant,
-                        value: B.openPage,
+                        iconEnabledColor: C.theme.onSurfaceVariant,
+                        value: C.openPage,
                         icon: const Icon(Icons.keyboard_arrow_down),
                         items: pages.map((String items) {
                           return DropdownMenuItem(
                               value: items,
                               child: MediaQuery(
                                 data: MediaQuery.of(context)
-                                    .copyWith(textScaleFactor: B.isTablet ? 2.0 : 1.0),
+                                    .copyWith(textScaleFactor: C.isTablet ? 2.0 : 1.0),
                                 child: Text(items).tr(),
                               ));
                         }).toList(),
                         onChanged: (String? newValue) {
-                          B.box.put(
+                          C.box.put(
                               "Pages",
                               newValue! == 'Home'
                                   ? 'Home'
                                   : newValue == 'Text'
                                       ? 'Text'
                                       : 'Voice');
-                          B.openPage = newValue;
-                          B.prefsChanged();
+                          C.openPage = newValue;
+                          C.prefsChanged();
                         },
                       )),
                 ),
               ),
-              B.divider(),
+              C.divider(),
               SizedBox(
                 height: height,
                 child: Center(
@@ -187,14 +185,14 @@ class _SettingsPageState extends State<SettingsPage> {
                         style: TextStyle(
                             fontSize: title,
                             fontWeight: FontWeight.w400,
-                            color: B.theme.onSurfaceVariant),
+                            color: C.theme.onSurfaceVariant),
                       ),
                       subtitle: Text(
                         "sSide Bar".tr(),
                         style: TextStyle(
                             fontSize: subtitle,
                             fontWeight: FontWeight.w300,
-                            color: B.theme.onSurfaceVariant),
+                            color: C.theme.onSurfaceVariant),
                       ),
                       trailing: DropdownButton(
                         iconSize: iconSize,
@@ -203,13 +201,13 @@ class _SettingsPageState extends State<SettingsPage> {
                         alignment: Alignment.center,
                         underline: Container(),
                         style: TextStyle(
-                            color: B.theme.onSurfaceVariant,
+                            color: C.theme.onSurfaceVariant,
                             fontSize: fontSize,
                             fontWeight: FontWeight.w400),
-                        dropdownColor: B.theme.surfaceVariant,
+                        dropdownColor: C.theme.surfaceVariant,
                         elevation: 0,
                         isDense: true,
-                        iconEnabledColor: B.theme.onSurfaceVariant,
+                        iconEnabledColor: C.theme.onSurfaceVariant,
                         value: sB,
                         icon: const Icon(Icons.keyboard_arrow_down),
                         items: sb.map((String items) {
@@ -217,26 +215,26 @@ class _SettingsPageState extends State<SettingsPage> {
                               value: items,
                               child: MediaQuery(
                                 data: MediaQuery.of(context)
-                                    .copyWith(textScaleFactor: B.isTablet ? 2.0 : 1.0),
+                                    .copyWith(textScaleFactor: C.isTablet ? 2.0 : 1.0),
                                 child: Text(items).tr(),
                               ));
                         }).toList(),
                         onChanged: (String? newValue) {
                           newValue == 'Top Left'
-                              ? B.sbIndex = 0
+                              ? C.sbIndex = 0
                               : newValue == 'Bottom Left'
-                                  ? B.sbIndex = 1
+                                  ? C.sbIndex = 1
                                   : newValue == 'Top Right'
-                                      ? B.sbIndex = 2
-                                      : B.sbIndex = 3;
+                                      ? C.sbIndex = 2
+                                      : C.sbIndex = 3;
                           sB = newValue!;
-                          B.box.put("sbIndex", B.sbIndex);
-                          B.prefsChanged();
+                          C.box.put("sbIndex", C.sbIndex);
+                          C.prefsChanged();
                         },
                       )),
                 ),
               ),
-              B.divider(),
+              C.divider(),
               SizedBox(
                 height: height,
                 child: Center(
@@ -246,14 +244,14 @@ class _SettingsPageState extends State<SettingsPage> {
                         style: TextStyle(
                             fontSize: title,
                             fontWeight: FontWeight.w400,
-                            color: B.theme.onSurfaceVariant),
+                            color: C.theme.onSurfaceVariant),
                       ),
                       subtitle: Text(
                         "sCreate Button".tr(),
                         style: TextStyle(
                             fontSize: subtitle,
                             fontWeight: FontWeight.w300,
-                            color: B.theme.onSurfaceVariant),
+                            color: C.theme.onSurfaceVariant),
                       ),
                       trailing: DropdownButton(
                         iconSize: iconSize,
@@ -262,13 +260,13 @@ class _SettingsPageState extends State<SettingsPage> {
                         alignment: Alignment.center,
                         underline: Container(),
                         style: TextStyle(
-                            color: B.theme.onSurfaceVariant,
+                            color: C.theme.onSurfaceVariant,
                             fontSize: fontSize,
                             fontWeight: FontWeight.w400),
-                        dropdownColor: B.theme.surfaceVariant,
+                        dropdownColor: C.theme.surfaceVariant,
                         elevation: 0,
                         isDense: true,
-                        iconEnabledColor: B.theme.onSurfaceVariant,
+                        iconEnabledColor: C.theme.onSurfaceVariant,
                         value: fabLoc,
                         icon: const Icon(Icons.keyboard_arrow_down),
                         items: fab.map((String items) {
@@ -276,20 +274,20 @@ class _SettingsPageState extends State<SettingsPage> {
                               value: items,
                               child: MediaQuery(
                                 data: MediaQuery.of(context)
-                                    .copyWith(textScaleFactor: B.isTablet ? 2.0 : 1.0),
+                                    .copyWith(textScaleFactor: C.isTablet ? 2.0 : 1.0),
                                 child: Text(items).tr(),
                               ));
                         }).toList(),
                         onChanged: (String? newValue) {
-                          newValue == 'Right' ? B.fabIndex = 0 : B.fabIndex = 1;
+                          newValue == 'Right' ? C.fabIndex = 0 : C.fabIndex = 1;
                           fabLoc = newValue!;
-                          B.box.put("fabIndex", B.fabIndex);
-                          B.prefsChanged();
+                          C.box.put("fabIndex", C.fabIndex);
+                          C.prefsChanged();
                         },
                       )),
                 ),
               ),
-              B.divider(),
+              C.divider(),
               SizedBox(
                 height: height,
                 child: Center(
@@ -299,14 +297,14 @@ class _SettingsPageState extends State<SettingsPage> {
                         style: TextStyle(
                             fontSize: title,
                             fontWeight: FontWeight.w400,
-                            color: B.theme.onSurfaceVariant),
+                            color: C.theme.onSurfaceVariant),
                       ),
                       subtitle: Text(
                         "sApp Theme".tr(),
                         style: TextStyle(
                             fontSize: subtitle,
                             fontWeight: FontWeight.w300,
-                            color: B.theme.onSurfaceVariant),
+                            color: C.theme.onSurfaceVariant),
                       ),
                       trailing: DropdownButton(
                         iconSize: iconSize,
@@ -315,21 +313,21 @@ class _SettingsPageState extends State<SettingsPage> {
                         alignment: Alignment.center,
                         underline: Container(),
                         style: TextStyle(
-                            color: B.theme.onSurfaceVariant,
+                            color: C.theme.onSurfaceVariant,
                             fontSize: fontSize,
                             fontWeight: FontWeight.w400),
-                        dropdownColor: B.theme.surfaceVariant,
+                        dropdownColor: C.theme.surfaceVariant,
                         elevation: 0,
                         isDense: true,
-                        iconEnabledColor: B.theme.onSurfaceVariant,
-                        value: B.currentTheme,
+                        iconEnabledColor: C.theme.onSurfaceVariant,
+                        value: C.currentTheme,
                         icon: const Icon(Icons.keyboard_arrow_down),
                         items: themes.map((String items) {
                           return DropdownMenuItem(
                               value: items,
                               child: MediaQuery(
                                 data: MediaQuery.of(context)
-                                    .copyWith(textScaleFactor: B.isTablet ? 2.0 : 1.0),
+                                    .copyWith(textScaleFactor: C.isTablet ? 2.0 : 1.0),
                                 child: Text(items).tr(),
                               ));
                         }).toList(),
@@ -339,38 +337,38 @@ class _SettingsPageState extends State<SettingsPage> {
                           newValue == 'Light'
                               ? {
                                   c = 0,
-                                  B.themeController.setThemeMode(ThemeMode.light),
-                                  B.themeMode = ThemeMode.light
+                                  C.themeController.setThemeMode(ThemeMode.light),
+                                  C.themeMode = ThemeMode.light
                                 }
                               : newValue == 'Dark'
                                   ? {
                                       c = 1,
-                                      B.themeController.setThemeMode(ThemeMode.dark),
-                                      B.themeMode = ThemeMode.dark
+                                      C.themeController.setThemeMode(ThemeMode.dark),
+                                      C.themeMode = ThemeMode.dark
                                     }
                                   : {
                                       c = 2,
-                                      B.themeController.setThemeMode(ThemeMode.system),
-                                      B.themeMode = ThemeMode.system
+                                      C.themeController.setThemeMode(ThemeMode.system),
+                                      C.themeMode = ThemeMode.system
                                     };
-                          B.currentTheme = newValue!;
-                          B.box.put("themeMode", c);
-                          B.prefsChanged();
+                          C.currentTheme = newValue!;
+                          C.box.put("themeMode", c);
+                          C.prefsChanged();
                         },
                       )),
                 ),
               ),
-              B.divider(),
+              C.divider(),
               ThemePopupMenu(
-                textColor: B.theme.onSurfaceVariant,
-                isTablet: B.isTablet,
-                schemeIndex: B.themeController.schemeIndex,
+                textColor: C.theme.onSurfaceVariant,
+                isTablet: C.isTablet,
+                schemeIndex: C.themeController.schemeIndex,
                 onChanged: (value) {
-                  B.themeController.setSchemeIndex(value);
-                  B.prefsChanged();
+                  C.themeController.setSchemeIndex(value);
+                  C.prefsChanged();
                 },
               ),
-              B.divider(),
+              C.divider(),
               SizedBox(
                 height: height,
                 child: Center(
@@ -380,28 +378,28 @@ class _SettingsPageState extends State<SettingsPage> {
                         style: TextStyle(
                             fontSize: title,
                             fontWeight: FontWeight.w400,
-                            color: B.theme.onSurfaceVariant),
+                            color: C.theme.onSurfaceVariant),
                       ),
                       subtitle: Text(
                         "DC".tr(),
                         style: TextStyle(
                             fontSize: subtitle,
                             fontWeight: FontWeight.w300,
-                            color: B.theme.onSurfaceVariant),
+                            color: C.theme.onSurfaceVariant),
                       ),
                       trailing: SwitcherButton(
-                        onColor: B.colorful ? B.colors[8] : primaryColor,
-                        offColor: B.theme.primaryContainer,
+                        onColor: C.colorful ? C.colors[8] : primaryColor,
+                        offColor: C.theme.primaryContainer,
                         size: switchSize,
-                        value: B.box.get("isDynamic") ?? false,
+                        value: C.box.get("isDynamic") ?? false,
                         onChange: (bool value) {
-                          B.box.put("isDynamic", value);
-                          B.prefsChanged();
+                          C.box.put("isDynamic", value);
+                          C.prefsChanged();
                         },
                       )),
                 ),
               ),
-              B.divider(),
+              C.divider(),
               SizedBox(
                 height: height,
                 child: Center(
@@ -411,31 +409,31 @@ class _SettingsPageState extends State<SettingsPage> {
                         style: TextStyle(
                             fontSize: title,
                             fontWeight: FontWeight.w400,
-                            color: B.theme.onSurfaceVariant),
+                            color: C.theme.onSurfaceVariant),
                       ),
                       subtitle: Text(
                         "sDarker Colors".tr(),
                         style: TextStyle(
                             fontSize: subtitle,
                             fontWeight: FontWeight.w300,
-                            color: B.theme.onSurfaceVariant),
+                            color: C.theme.onSurfaceVariant),
                       ),
                       trailing: SwitcherButton(
-                        onColor: B.colorful ? B.colors[6] : primaryColor,
-                        offColor: B.theme.primaryContainer,
+                        onColor: C.colorful ? C.colors[6] : primaryColor,
+                        offColor: C.theme.primaryContainer,
                         size: switchSize,
-                        value: B.darkColors,
+                        value: C.darkColors,
                         onChange: (bool value) {
-                          B.box.put("darkColors", value);
-                          B.darkColors = value;
-                          B.prefsChanged();
+                          C.box.put("darkColors", value);
+                          C.darkColors = value;
+                          C.prefsChanged();
                         },
                       )),
                 ),
               ),
-              B.divider(),
+              C.divider(),
               SizedBox(
-                height: B.isTablet ? 140 : 100,
+                height: C.isTablet ? 140 : 100,
                 child: Center(
                   child: ListTile(
                       title: Text(
@@ -443,30 +441,30 @@ class _SettingsPageState extends State<SettingsPage> {
                         style: TextStyle(
                             fontSize: title,
                             fontWeight: FontWeight.w400,
-                            color: B.theme.onSurfaceVariant),
+                            color: C.theme.onSurfaceVariant),
                       ),
                       subtitle: Text(
                         "sHarmonizeColors".tr(),
                         style: TextStyle(
                             fontSize: subtitle,
                             fontWeight: FontWeight.w300,
-                            color: B.theme.onSurfaceVariant),
+                            color: C.theme.onSurfaceVariant),
                       ),
                       trailing: SwitcherButton(
-                        onColor: B.colorful ? B.colors[4] : primaryColor,
-                        offColor: B.theme.primaryContainer,
+                        onColor: C.colorful ? C.colors[4] : primaryColor,
+                        offColor: C.theme.primaryContainer,
                         size: switchSize,
-                        value: B.harmonizeColor,
+                        value: C.harmonizeColor,
                         onChange: (bool value) {
-                          B.box.put("harmonizeColor", value);
-                          B.harmonizeColor = value;
-                          B.harmonizeColors();
-                          B.prefsChanged();
+                          C.box.put("harmonizeColor", value);
+                          C.harmonizeColor = value;
+                          C.harmonizeColors();
+                          C.prefsChanged();
                         },
                       )),
                 ),
               ),
-              B.divider(),
+              C.divider(),
               SizedBox(
                 height: height,
                 child: Center(
@@ -476,29 +474,29 @@ class _SettingsPageState extends State<SettingsPage> {
                         style: TextStyle(
                             fontSize: title,
                             fontWeight: FontWeight.w400,
-                            color: B.theme.onSurfaceVariant),
+                            color: C.theme.onSurfaceVariant),
                       ),
                       subtitle: Text(
                         "sColorful".tr(),
                         style: TextStyle(
                             fontSize: subtitle,
                             fontWeight: FontWeight.w300,
-                            color: B.theme.onSurfaceVariant),
+                            color: C.theme.onSurfaceVariant),
                       ),
                       trailing: SwitcherButton(
-                        onColor: B.colorful ? B.colors[8] : primaryColor,
-                        offColor: B.theme.primaryContainer,
+                        onColor: C.colorful ? C.colors[8] : primaryColor,
+                        offColor: C.theme.primaryContainer,
                         size: switchSize,
-                        value: B.colorful,
+                        value: C.colorful,
                         onChange: (bool value) {
-                          B.box.put("colorful", value);
-                          B.colorful = value;
-                          B.prefsChanged();
+                          C.box.put("colorful", value);
+                          C.colorful = value;
+                          C.prefsChanged();
                         },
                       )),
                 ),
               ),
-              B.divider(),
+              C.divider(),
               SizedBox(
                 height: height,
                 child: Center(
@@ -508,30 +506,30 @@ class _SettingsPageState extends State<SettingsPage> {
                         style: TextStyle(
                             fontSize: title,
                             fontWeight: FontWeight.w400,
-                            color: B.theme.onSurfaceVariant),
+                            color: C.theme.onSurfaceVariant),
                       ),
                       subtitle: Text(
                         "sShow Date".tr(),
                         style: TextStyle(
                             fontSize: subtitle,
                             fontWeight: FontWeight.w300,
-                            color: B.theme.onSurfaceVariant),
+                            color: C.theme.onSurfaceVariant),
                       ),
                       trailing: SwitcherButton(
-                        onColor: B.colorful ? B.colors[0] : primaryColor,
-                        offColor: B.theme.primaryContainer,
+                        onColor: C.colorful ? C.colors[0] : primaryColor,
+                        offColor: C.theme.primaryContainer,
                         // offColor: Theme.of(context).primaryColorDark,
                         size: switchSize,
-                        value: B.showDate,
+                        value: C.showDate,
                         onChange: (bool value) {
-                          B.box.put("showDate", value);
-                          B.showDate = value;
-                          B.prefsChanged();
+                          C.box.put("showDate", value);
+                          C.showDate = value;
+                          C.prefsChanged();
                         },
                       )),
                 ),
               ),
-              B.divider(),
+              C.divider(),
               SizedBox(
                 height: height,
                 child: Center(
@@ -541,29 +539,29 @@ class _SettingsPageState extends State<SettingsPage> {
                         style: TextStyle(
                             fontSize: title,
                             fontWeight: FontWeight.w400,
-                            color: B.theme.onSurfaceVariant),
+                            color: C.theme.onSurfaceVariant),
                       ),
                       subtitle: Text(
                         "sShow Edited".tr(),
                         style: TextStyle(
                             fontSize: subtitle,
                             fontWeight: FontWeight.w300,
-                            color: B.theme.onSurfaceVariant),
+                            color: C.theme.onSurfaceVariant),
                       ),
                       trailing: SwitcherButton(
-                        onColor: B.colorful ? B.colors[2] : primaryColor,
-                        offColor: B.theme.primaryContainer,
+                        onColor: C.colorful ? C.colors[2] : primaryColor,
+                        offColor: C.theme.primaryContainer,
                         size: switchSize,
-                        value: B.showEdited,
+                        value: C.showEdited,
                         onChange: (bool value) {
-                          B.box.put("showEdit", value);
-                          B.showEdited = value;
-                          B.prefsChanged();
+                          C.box.put("showEdit", value);
+                          C.showEdited = value;
+                          C.prefsChanged();
                         },
                       )),
                 ),
               ),
-              B.divider(),
+              C.divider(),
               SizedBox(
                 height: height,
                 child: Center(
@@ -573,29 +571,29 @@ class _SettingsPageState extends State<SettingsPage> {
                         style: TextStyle(
                             fontSize: title,
                             fontWeight: FontWeight.w400,
-                            color: B.theme.onSurfaceVariant),
+                            color: C.theme.onSurfaceVariant),
                       ),
                       subtitle: Text(
                         "sShow Shadow".tr(),
                         style: TextStyle(
                             fontSize: subtitle,
                             fontWeight: FontWeight.w300,
-                            color: B.theme.onSurfaceVariant),
+                            color: C.theme.onSurfaceVariant),
                       ),
                       trailing: SwitcherButton(
-                        onColor: B.colorful ? B.colors[1] : primaryColor,
-                        offColor: B.theme.primaryContainer,
+                        onColor: C.colorful ? C.colors[1] : primaryColor,
+                        offColor: C.theme.primaryContainer,
                         size: switchSize,
-                        value: B.showShadow,
+                        value: C.showShadow,
                         onChange: (bool value) {
-                          B.box.put("showShadow", value);
-                          B.showShadow = value;
-                          B.prefsChanged();
+                          C.box.put("showShadow", value);
+                          C.showShadow = value;
+                          C.prefsChanged();
                         },
                       )),
                 ),
               ),
-              B.divider(),
+              C.divider(),
               SizedBox(
                 height: height,
                 child: Center(
@@ -604,27 +602,27 @@ class _SettingsPageState extends State<SettingsPage> {
                     children: [
                       TextButton(
                         onPressed: () {
-                          B.bDialog(context);
+                          C.bDialog(context);
                         },
                         child: Text(
                           "Backup".tr(),
                           style: TextStyle(
-                              fontSize: 20, color: B.colorful ? B.colors[3] : B.theme.primary),
+                              fontSize: 20, color: C.colorful ? C.colors[3] : C.theme.primary),
                         ),
                       ),
                       TextButton(
                           onPressed: () {
-                            B.rDialog(context);
+                            C.rDialog(context);
                           },
                           child: Text("Restore".tr(),
                               style: TextStyle(
                                   fontSize: 20,
-                                  color: B.colorful ? B.colors[4] : B.theme.secondary))),
+                                  color: C.colorful ? C.colors[4] : C.theme.secondary))),
                     ],
                   ),
                 ),
               ),
-              B.divider(),
+              C.divider(),
             ],
           ),
         );

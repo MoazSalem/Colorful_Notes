@@ -3,7 +3,7 @@ import 'package:dynamic_color/dynamic_color.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:notes/Bloc/notes_bloc.dart';
+import 'package:notes/Cubit/notes_cubit.dart';
 import 'package:notes/Data/theme.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:notes/Services/flex_colors/theme_controller.dart';
@@ -13,7 +13,7 @@ import 'package:notes/Data/flex_themes.dart';
 import 'Screens/home_screen.dart';
 import 'Screens/on_boarding.dart';
 
-late NotesBloc B;
+late NotesCubit C;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -56,12 +56,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => NotesBloc(gBox: box)..startPage(),
-      child: BlocConsumer<NotesBloc, NotesState>(
+      create: (context) => NotesCubit(box)..startPage(),
+      child: BlocConsumer<NotesCubit, NotesState>(
         listener: (context, state) {},
         builder: (context, state) {
-          B = NotesBloc.get(context);
-          B.themeController = themeController;
+          C = NotesCubit.get(context);
+          C.themeController = themeController;
           return DynamicColorBuilder(builder: (lightColorScheme, darkColorScheme) {
             return MaterialApp(
                 builder: (context, child) => ResponsiveBreakpoints.builder(
