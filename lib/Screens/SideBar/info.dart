@@ -21,8 +21,9 @@ class _InfoPageState extends State<InfoPage> {
     return BlocBuilder<NotesCubit, NotesState>(
       builder: (context, state) {
         return Scaffold(
-          backgroundColor:
-              C.isDarkMode ? C.theme.background : C.theme.surfaceVariant.withOpacity(0.6),
+          backgroundColor: C.isDark
+              ? C.theme.background
+              : C.theme.surfaceVariant.withOpacity(0.6),
           body: ListView(
             padding: EdgeInsets.zero,
             children: [

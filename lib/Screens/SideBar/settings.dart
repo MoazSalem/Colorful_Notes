@@ -15,8 +15,6 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  late String dropDownTheme;
-  late String darkTheme;
   late double height;
   late double title;
   late double subtitle;
@@ -42,14 +40,14 @@ class _SettingsPageState extends State<SettingsPage> {
     iconSize = C.isTablet ? 40 : 10.0;
     itemHeight = C.isTablet ? 80 : 50.0;
     fontSize = C.isTablet ? 10 : 14;
-    sB = C.sbIndex == 0
+    sB = C.settings["sbIndex"] == 0
         ? "Top Left"
-        : C.sbIndex == 1
+        : C.settings["sbIndex"] == 1
             ? "Bottom Left"
-            : C.sbIndex == 2
+            : C.settings["sbIndex"] == 2
                 ? "Top Right"
                 : "Bottom Right";
-    fabLoc = C.fabIndex == 0 ? "Right" : "Left";
+    fabLoc = C.settings["fabIndex"] == 0 ? "Right" : "Left";
     super.initState();
   }
 
@@ -58,8 +56,9 @@ class _SettingsPageState extends State<SettingsPage> {
     return BlocBuilder<NotesCubit, NotesState>(
       builder: (context, state) {
         return Scaffold(
-          backgroundColor:
-              C.isDarkMode ? C.theme.background : C.theme.surfaceVariant.withOpacity(0.6),
+          backgroundColor: C.isDark
+              ? C.theme.background
+              : C.theme.surfaceVariant.withOpacity(0.6),
           body: ListView(
             padding: EdgeInsets.zero,
             children: [
@@ -96,7 +95,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       elevation: 0,
                       isDense: true,
                       iconEnabledColor: C.theme.onSurfaceVariant,
-                      value: C.lang == 'en' ? "English" : "Arabic",
+                      value: C.settings["lang"] == 'en' ? "English" : "Arabic",
                       icon: const Icon(Icons.keyboard_arrow_down),
                       items: lang.map((String items) {
                         return DropdownMenuItem(
@@ -108,10 +107,10 @@ class _SettingsPageState extends State<SettingsPage> {
                             ));
                       }).toList(),
                       onChanged: (String? newValue) {
-                        C.lang = newValue! == 'English' ? 'en' : 'ar';
-                        context.setLocale(Locale(C.lang));
-                        C.lang = context.locale.toString();
-                        C.prefsChanged();
+                        C.settings["lang"] = newValue! == 'English' ? 'en' : 'ar';
+                        context.setLocale(Locale(C.settings["lang"]));
+                        C.settings["lang"] = context.locale.toString();
+                        C.onChanged();
                       },
                     ),
                   ),
@@ -150,7 +149,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         elevation: 0,
                         isDense: true,
                         iconEnabledColor: C.theme.onSurfaceVariant,
-                        value: C.openPage,
+                        value: C.settings["openPage"],
                         icon: const Icon(Icons.keyboard_arrow_down),
                         items: pages.map((String items) {
                           return DropdownMenuItem(
@@ -161,7 +160,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                 child: Text(items).tr(),
                               ));
                         }).toList(),
-                        onChanged: (String? newValue) {
+                        onChanged: (newValue) {
                           C.box.put(
                               "Pages",
                               newValue! == 'Home'
@@ -169,8 +168,8 @@ class _SettingsPageState extends State<SettingsPage> {
                                   : newValue == 'Text'
                                       ? 'Text'
                                       : 'Voice');
-                          C.openPage = newValue;
-                          C.prefsChanged();
+                          C.settings["openPage"] = newValue;
+                          C.onChanged();
                         },
                       )),
                 ),
@@ -221,15 +220,15 @@ class _SettingsPageState extends State<SettingsPage> {
                         }).toList(),
                         onChanged: (String? newValue) {
                           newValue == 'Top Left'
-                              ? C.sbIndex = 0
+                              ? C.settings["sbIndex"] = 0
                               : newValue == 'Bottom Left'
-                                  ? C.sbIndex = 1
+                                  ? C.settings["sbIndex"] = 1
                                   : newValue == 'Top Right'
-                                      ? C.sbIndex = 2
-                                      : C.sbIndex = 3;
+                                      ? C.settings["sbIndex"] = 2
+                                      : C.settings["sbIndex"] = 3;
                           sB = newValue!;
-                          C.box.put("sbIndex", C.sbIndex);
-                          C.prefsChanged();
+                          C.box.put("sbIndex", C.settings["sbIndex"]);
+                          C.onChanged();
                         },
                       )),
                 ),
@@ -279,10 +278,12 @@ class _SettingsPageState extends State<SettingsPage> {
                               ));
                         }).toList(),
                         onChanged: (String? newValue) {
-                          newValue == 'Right' ? C.fabIndex = 0 : C.fabIndex = 1;
+                          newValue == 'Right'
+                              ? C.settings["fabIndex"] = 0
+                              : C.settings["fabIndex"] = 1;
                           fabLoc = newValue!;
-                          C.box.put("fabIndex", C.fabIndex);
-                          C.prefsChanged();
+                          C.box.put("fabIndex", C.settings["fabIndex"]);
+                          C.onChanged();
                         },
                       )),
                 ),
@@ -320,7 +321,11 @@ class _SettingsPageState extends State<SettingsPage> {
                         elevation: 0,
                         isDense: true,
                         iconEnabledColor: C.theme.onSurfaceVariant,
-                        value: C.currentTheme,
+                        value: C.settings["currentTheme"] == ThemeMode.light
+                            ? "Light"
+                            : C.settings["currentTheme"] == ThemeMode.dark
+                                ? "Dark"
+                                : "System",
                         icon: const Icon(Icons.keyboard_arrow_down),
                         items: themes.map((String items) {
                           return DropdownMenuItem(
@@ -331,29 +336,22 @@ class _SettingsPageState extends State<SettingsPage> {
                                 child: Text(items).tr(),
                               ));
                         }).toList(),
-                        onChanged: (String? newValue) {
-                          // I need to relearn Bloc and reImplement this :(
-                          int c;
+                        onChanged: (newValue) {
                           newValue == 'Light'
                               ? {
-                                  c = 0,
                                   C.themeController.setThemeMode(ThemeMode.light),
-                                  C.themeMode = ThemeMode.light
+                                  C.settings["currentTheme"] = ThemeMode.light
                                 }
                               : newValue == 'Dark'
                                   ? {
-                                      c = 1,
                                       C.themeController.setThemeMode(ThemeMode.dark),
-                                      C.themeMode = ThemeMode.dark
+                                      C.settings["currentTheme"] = ThemeMode.dark
                                     }
                                   : {
-                                      c = 2,
                                       C.themeController.setThemeMode(ThemeMode.system),
-                                      C.themeMode = ThemeMode.system
+                                      C.settings["currentTheme"] = ThemeMode.system
                                     };
-                          C.currentTheme = newValue!;
-                          C.box.put("themeMode", c);
-                          C.prefsChanged();
+                          C.onChanged();
                         },
                       )),
                 ),
@@ -365,7 +363,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 schemeIndex: C.themeController.schemeIndex,
                 onChanged: (value) {
                   C.themeController.setSchemeIndex(value);
-                  C.prefsChanged();
+                  C.onChanged();
                 },
               ),
               C.divider(),
@@ -388,13 +386,13 @@ class _SettingsPageState extends State<SettingsPage> {
                             color: C.theme.onSurfaceVariant),
                       ),
                       trailing: SwitcherButton(
-                        onColor: C.colorful ? C.colors[8] : primaryColor,
+                        onColor: C.settings["colorful"] ? C.colors[8] : primaryColor,
                         offColor: C.theme.primaryContainer,
                         size: switchSize,
                         value: C.box.get("isDynamic") ?? false,
                         onChange: (bool value) {
                           C.box.put("isDynamic", value);
-                          C.prefsChanged();
+                          C.onChanged();
                         },
                       )),
                 ),
@@ -419,14 +417,14 @@ class _SettingsPageState extends State<SettingsPage> {
                             color: C.theme.onSurfaceVariant),
                       ),
                       trailing: SwitcherButton(
-                        onColor: C.colorful ? C.colors[6] : primaryColor,
+                        onColor: C.settings["colorful"] ? C.colors[6] : primaryColor,
                         offColor: C.theme.primaryContainer,
                         size: switchSize,
-                        value: C.darkColors,
+                        value: C.settings["darkColors"],
                         onChange: (bool value) {
                           C.box.put("darkColors", value);
-                          C.darkColors = value;
-                          C.prefsChanged();
+                          C.settings["darkColors"] = value;
+                          C.onChanged();
                         },
                       )),
                 ),
@@ -451,15 +449,15 @@ class _SettingsPageState extends State<SettingsPage> {
                             color: C.theme.onSurfaceVariant),
                       ),
                       trailing: SwitcherButton(
-                        onColor: C.colorful ? C.colors[4] : primaryColor,
+                        onColor: C.settings["colorful"] ? C.colors[4] : primaryColor,
                         offColor: C.theme.primaryContainer,
                         size: switchSize,
-                        value: C.harmonizeColor,
+                        value: C.settings["harmonizeColor"],
                         onChange: (bool value) {
                           C.box.put("harmonizeColor", value);
-                          C.harmonizeColor = value;
+                          C.settings["harmonizeColor"] = value;
                           C.harmonizeColors();
-                          C.prefsChanged();
+                          C.onChanged();
                         },
                       )),
                 ),
@@ -484,14 +482,14 @@ class _SettingsPageState extends State<SettingsPage> {
                             color: C.theme.onSurfaceVariant),
                       ),
                       trailing: SwitcherButton(
-                        onColor: C.colorful ? C.colors[8] : primaryColor,
+                        onColor: C.settings["colorful"] ? C.colors[8] : primaryColor,
                         offColor: C.theme.primaryContainer,
                         size: switchSize,
-                        value: C.colorful,
+                        value: C.settings["colorful"],
                         onChange: (bool value) {
                           C.box.put("colorful", value);
-                          C.colorful = value;
-                          C.prefsChanged();
+                          C.settings["colorful"] = value;
+                          C.onChanged();
                         },
                       )),
                 ),
@@ -516,15 +514,15 @@ class _SettingsPageState extends State<SettingsPage> {
                             color: C.theme.onSurfaceVariant),
                       ),
                       trailing: SwitcherButton(
-                        onColor: C.colorful ? C.colors[0] : primaryColor,
+                        onColor: C.settings["colorful"] ? C.colors[0] : primaryColor,
                         offColor: C.theme.primaryContainer,
                         // offColor: Theme.of(context).primaryColorDark,
                         size: switchSize,
-                        value: C.showDate,
+                        value: C.settings["showDate"],
                         onChange: (bool value) {
                           C.box.put("showDate", value);
-                          C.showDate = value;
-                          C.prefsChanged();
+                          C.settings["showDate"] = value;
+                          C.onChanged();
                         },
                       )),
                 ),
@@ -549,14 +547,14 @@ class _SettingsPageState extends State<SettingsPage> {
                             color: C.theme.onSurfaceVariant),
                       ),
                       trailing: SwitcherButton(
-                        onColor: C.colorful ? C.colors[2] : primaryColor,
+                        onColor: C.settings["colorful"] ? C.colors[2] : primaryColor,
                         offColor: C.theme.primaryContainer,
                         size: switchSize,
-                        value: C.showEdited,
+                        value: C.settings["showEdited"],
                         onChange: (bool value) {
                           C.box.put("showEdit", value);
-                          C.showEdited = value;
-                          C.prefsChanged();
+                          C.settings["showEdited"] = value;
+                          C.onChanged();
                         },
                       )),
                 ),
@@ -581,14 +579,14 @@ class _SettingsPageState extends State<SettingsPage> {
                             color: C.theme.onSurfaceVariant),
                       ),
                       trailing: SwitcherButton(
-                        onColor: C.colorful ? C.colors[1] : primaryColor,
+                        onColor: C.settings["colorful"] ? C.colors[1] : primaryColor,
                         offColor: C.theme.primaryContainer,
                         size: switchSize,
-                        value: C.showShadow,
+                        value: C.settings["showShadow"],
                         onChange: (bool value) {
                           C.box.put("showShadow", value);
-                          C.showShadow = value;
-                          C.prefsChanged();
+                          C.settings["showShadow"] = value;
+                          C.onChanged();
                         },
                       )),
                 ),
@@ -607,7 +605,8 @@ class _SettingsPageState extends State<SettingsPage> {
                         child: Text(
                           "Backup".tr(),
                           style: TextStyle(
-                              fontSize: 20, color: C.colorful ? C.colors[3] : C.theme.primary),
+                              fontSize: 20,
+                              color: C.settings["colorful"] ? C.colors[3] : C.theme.primary),
                         ),
                       ),
                       TextButton(
@@ -617,7 +616,8 @@ class _SettingsPageState extends State<SettingsPage> {
                           child: Text("Restore".tr(),
                               style: TextStyle(
                                   fontSize: 20,
-                                  color: C.colorful ? C.colors[4] : C.theme.secondary))),
+                                  color:
+                                      C.settings["colorful"] ? C.colors[4] : C.theme.secondary))),
                     ],
                   ),
                 ),

@@ -17,7 +17,7 @@ class NotesPage extends StatefulWidget {
 }
 
 class _NotesPageState extends State<NotesPage> {
-  late int value;
+  late int viewIndex;
   late List<Map> notes;
   bool noTitle = false;
   bool noContent = false;
@@ -26,7 +26,7 @@ class _NotesPageState extends State<NotesPage> {
 
   @override
   void initState() {
-    value = C.viewIndexN;
+    viewIndex = C.box.get('viewIndexN') ?? 0;
     super.initState();
   }
 
@@ -34,17 +34,18 @@ class _NotesPageState extends State<NotesPage> {
   Widget build(BuildContext context) {
     return BlocBuilder<NotesCubit, NotesState>(
       builder: (context, state) {
-        notes = searchOn ? C.searchedNotes : C.notesMap;
+        notes = (searchOn ? C.notes['textSearched'] : C.notes['textNotes'])!;
         return Scaffold(
-          backgroundColor:
-              C.isDarkMode ? C.theme.background : C.theme.surfaceVariant.withOpacity(0.6),
-          floatingActionButtonLocation: C.fabIndex == 0
+          backgroundColor: C.isDark
+              ? C.theme.background
+              : C.theme.surfaceVariant.withOpacity(0.6),
+          floatingActionButtonLocation: C.settings["fabIndex"] == 0
               ? FloatingActionButtonLocation.endFloat
               : FloatingActionButtonLocation.startFloat,
           floatingActionButton: FloatingActionButton(
             splashColor: C.colors[0],
             elevation: 0,
-            backgroundColor: C.colorful ? C.colors[1] : primaryColor,
+            backgroundColor: C.settings["colorful"] ? C.colors[1] : primaryColor,
             onPressed: () async {
               create();
             },
@@ -64,7 +65,7 @@ class _NotesPageState extends State<NotesPage> {
                         child: TextFormField(
                             autofocus: true,
                             controller: searchController,
-                            onChanged: C.searchNotes,
+                            onChanged: (query) => C.search(query: query, where: "text"),
                             maxLines: 1,
                             cursorColor: primaryColor,
                             decoration: InputDecoration(
@@ -85,7 +86,7 @@ class _NotesPageState extends State<NotesPage> {
                     )
                   : Container(),
               notes.isNotEmpty
-                  ? C.viewIndexN != 2
+                  ? viewIndex != 2
                       ? Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
                           child: ListView.builder(
@@ -103,7 +104,7 @@ class _NotesPageState extends State<NotesPage> {
                                     : noContent = false;
                                 int dateValue = C.calculateDifference(notes[reverseIndex]["time"]);
                                 String date = C.parseDate(notes[reverseIndex]["time"]);
-                                Widget chosenView = C.viewIndexN == 0
+                                Widget chosenView = viewIndex == 0
                                     ? Stack(
                                         alignment: notes[reverseIndex]["layout"] == 0
                                             ? Alignment.topRight
@@ -120,9 +121,9 @@ class _NotesPageState extends State<NotesPage> {
                                               date: date,
                                               noTitle: noTitle,
                                               noContent: noContent,
-                                              showDate: C.showDate,
-                                              showShadow: C.showShadow,
-                                              showEdited: C.showEdited,
+                                              showDate: C.settings["showDate"],
+                                              showShadow: C.settings["showShadow"],
+                                              showEdited: C.settings["showEdited"],
                                               isTablet: C.isTablet,
                                               lang: context.locale.toString(),
                                               width: C.width,
@@ -167,9 +168,9 @@ class _NotesPageState extends State<NotesPage> {
                                               date: date,
                                               noTitle: noTitle,
                                               noContent: noContent,
-                                              showDate: C.showDate,
-                                              showShadow: C.showShadow,
-                                              showEdited: C.showEdited,
+                                              showDate: C.settings["showDate"],
+                                              showShadow: C.settings["showShadow"],
+                                              showEdited: C.settings["showEdited"],
                                               isTablet: C.isTablet,
                                               lang: context.locale.toString(),
                                               width: C.width,
@@ -233,9 +234,9 @@ class _NotesPageState extends State<NotesPage> {
                                         date: date,
                                         noTitle: noTitle,
                                         noContent: noContent,
-                                        showDate: C.showDate,
-                                        showShadow: C.showShadow,
-                                        showEdited: C.showEdited,
+                                        showDate: C.settings["showDate"],
+                                        showShadow: C.settings["showShadow"],
+                                        showEdited: C.settings["showEdited"],
                                         isTablet: C.isTablet,
                                         lang: context.locale.toString(),
                                         width: C.width,
@@ -268,7 +269,7 @@ class _NotesPageState extends State<NotesPage> {
                           child: Text(
                         "N2".tr(),
                         style: TextStyle(
-                            color: C.colorful ? C.colors[1] : primaryColor,
+                            color: C.settings["colorful"] ? C.colors[1] : primaryColor,
                             fontWeight: FontWeight.w400),
                       )),
                     ),
@@ -290,14 +291,14 @@ class _NotesPageState extends State<NotesPage> {
         IconButton(
           onPressed: () {
             searchOn = !searchOn;
-            C.searchNotes(searchController.text);
-            C.onSearch();
+            C.search(query: searchController.text, where: "text");
+            C.onChanged();
           },
           icon: Icon(
             Icons.search,
             size: 30,
             color: searchOn
-                ? C.colorful
+                ? C.settings["colorful"]
                     ? C.colors[1]
                     : primaryColor
                 : C.theme.onSurfaceVariant,
@@ -305,14 +306,13 @@ class _NotesPageState extends State<NotesPage> {
         ),
         IconButton(
           onPressed: () {
-            value < 2 ? value++ : value = 0;
-            C.box.put("viewIndexN", value);
-            C.viewIndexN = value;
-            C.onViewChanged();
+            viewIndex < 2 ? viewIndex++ : viewIndex = 0;
+            C.box.put("viewIndexN", viewIndex);
+            C.onChanged();
           },
-          icon: C.viewIndexN == 0
+          icon: viewIndex == 0
               ? const Icon(Icons.indeterminate_check_box)
-              : C.viewIndexN == 1
+              : viewIndex == 1
                   ? const Icon(Icons.view_agenda_sharp)
                   : const Icon(Icons.grid_view_sharp),
         )

@@ -9,9 +9,8 @@ Widget sideBar(
   return inverted
       ? Container(
           width: C.isTablet ? 100 : 60,
-          decoration:
-              BoxDecoration(color: theme.surfaceVariant //Theme.of(context).backgroundColor,
-                  ),
+          decoration: BoxDecoration(color: theme.surfaceVariant //Theme.of(context).backgroundColor,
+              ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.end,
             crossAxisAlignment: CrossAxisAlignment.end,
@@ -24,12 +23,12 @@ Widget sideBar(
                   icon: C.currentIndex != 4
                       ? Icon(
                           Icons.info_outline,
-                          color: C.colorful ? C.colors[4] : theme.onSurfaceVariant,
+                          color: C.settings["colorful"] ? C.colors[4] : theme.onSurfaceVariant,
                           size: C.isTablet ? 30 : 20,
                         )
                       : Icon(
                           Icons.info,
-                          color: C.colorful ? C.colors[4] : theme.onSurfaceVariant,
+                          color: C.settings["colorful"] ? C.colors[4] : theme.onSurfaceVariant,
                           size: C.isTablet ? 40 : 30,
                         )),
               Column(
@@ -45,12 +44,12 @@ Widget sideBar(
                       icon: C.currentIndex != 3
                           ? Icon(
                               Icons.settings_outlined,
-                              color: C.colorful ? C.colors[2] : theme.onSurfaceVariant,
+                              color: C.settings["colorful"] ? C.colors[2] : theme.onSurfaceVariant,
                               size: C.isTablet ? 30 : 20,
                             )
                           : Icon(
                               Icons.settings_rounded,
-                              color: C.colorful ? C.colors[2] : theme.onSurfaceVariant,
+                              color: C.settings["colorful"] ? C.colors[2] : theme.onSurfaceVariant,
                               size: C.isTablet ? 40 : 30,
                             )),
                   SizedBox(
@@ -64,12 +63,12 @@ Widget sideBar(
                       icon: C.currentIndex != 2
                           ? Icon(
                               Icons.keyboard_voice_outlined,
-                              color: C.colorful ? C.colors[3] : theme.onSurfaceVariant,
+                              color: C.settings["colorful"] ? C.colors[3] : theme.onSurfaceVariant,
                               size: C.isTablet ? 34 : 24,
                             )
                           : Icon(
                               Icons.keyboard_voice,
-                              color: C.colorful ? C.colors[3] : theme.onSurfaceVariant,
+                              color: C.settings["colorful"] ? C.colors[3] : theme.onSurfaceVariant,
                               size: C.isTablet ? 42 : 32,
                             )),
                   SizedBox(
@@ -83,12 +82,12 @@ Widget sideBar(
                       icon: C.currentIndex != 1
                           ? Icon(
                               Icons.sticky_note_2_outlined,
-                              color: C.colorful ? C.colors[1] : theme.onSurfaceVariant,
+                              color: C.settings["colorful"] ? C.colors[1] : theme.onSurfaceVariant,
                               size: C.isTablet ? 30 : 20,
                             )
                           : Icon(
                               Icons.sticky_note_2_sharp,
-                              color: C.colorful ? C.colors[1] : theme.onSurfaceVariant,
+                              color: C.settings["colorful"] ? C.colors[1] : theme.onSurfaceVariant,
                               size: C.isTablet ? 40 : 30,
                             )),
                   SizedBox(
@@ -102,12 +101,12 @@ Widget sideBar(
                       icon: C.currentIndex != 0
                           ? Icon(
                               Icons.home_outlined,
-                              color: C.colorful ? C.colors[0] : theme.onSurfaceVariant,
+                              color: C.settings["colorful"] ? C.colors[0] : theme.onSurfaceVariant,
                               size: C.isTablet ? 32 : 22,
                             )
                           : Icon(
                               Icons.home,
-                              color: C.colorful ? C.colors[0] : theme.onSurfaceVariant,
+                              color: C.settings["colorful"] ? C.colors[0] : theme.onSurfaceVariant,
                               size: C.isTablet ? 40 : 30,
                             )),
                   SizedBox(
@@ -138,12 +137,14 @@ Widget sideBar(
                           icon: C.currentIndex != 0
                               ? Icon(
                                   Icons.home_outlined,
-                                  color: C.colorful ? C.colors[0] : theme.onSurfaceVariant,
+                                  color:
+                                      C.settings["colorful"] ? C.colors[0] : theme.onSurfaceVariant,
                                   size: C.isTablet ? 32 : 22,
                                 )
                               : Icon(
                                   Icons.home,
-                                  color: C.colorful ? C.colors[0] : theme.onSurfaceVariant,
+                                  color:
+                                      C.settings["colorful"] ? C.colors[0] : theme.onSurfaceVariant,
                                   size: C.isTablet ? 40 : 30,
                                 )),
                       SizedBox(
@@ -157,12 +158,14 @@ Widget sideBar(
                           icon: C.currentIndex != 1
                               ? Icon(
                                   Icons.sticky_note_2_outlined,
-                                  color: C.colorful ? C.colors[1] : theme.onSurfaceVariant,
+                                  color:
+                                      C.settings["colorful"] ? C.colors[1] : theme.onSurfaceVariant,
                                   size: C.isTablet ? 30 : 20,
                                 )
                               : Icon(
                                   Icons.sticky_note_2_sharp,
-                                  color: C.colorful ? C.colors[1] : theme.onSurfaceVariant,
+                                  color:
+                                      C.settings["colorful"] ? C.colors[1] : theme.onSurfaceVariant,
                                   size: C.isTablet ? 40 : 30,
                                 )),
                       SizedBox(
@@ -176,12 +179,14 @@ Widget sideBar(
                           icon: C.currentIndex != 2
                               ? Icon(
                                   Icons.keyboard_voice_outlined,
-                                  color: C.colorful ? C.colors[3] : theme.onSurfaceVariant,
+                                  color:
+                                      C.settings["colorful"] ? C.colors[3] : theme.onSurfaceVariant,
                                   size: C.isTablet ? 34 : 24,
                                 )
                               : Icon(
                                   Icons.keyboard_voice,
-                                  color: C.colorful ? C.colors[3] : theme.onSurfaceVariant,
+                                  color:
+                                      C.settings["colorful"] ? C.colors[3] : theme.onSurfaceVariant,
                                   size: C.isTablet ? 42 : 32,
                                 )),
                       SizedBox(
@@ -195,12 +200,14 @@ Widget sideBar(
                           icon: C.currentIndex != 3
                               ? Icon(
                                   Icons.settings_outlined,
-                                  color: C.colorful ? C.colors[2] : theme.onSurfaceVariant,
+                                  color:
+                                      C.settings["colorful"] ? C.colors[2] : theme.onSurfaceVariant,
                                   size: C.isTablet ? 30 : 20,
                                 )
                               : Icon(
                                   Icons.settings_rounded,
-                                  color: C.colorful ? C.colors[2] : theme.onSurfaceVariant,
+                                  color:
+                                      C.settings["colorful"] ? C.colors[2] : theme.onSurfaceVariant,
                                   size: C.isTablet ? 40 : 30,
                                 )),
                     ],
@@ -214,12 +221,12 @@ Widget sideBar(
                     icon: C.currentIndex != 4
                         ? Icon(
                             Icons.info_outline,
-                            color: C.colorful ? C.colors[4] : theme.onSurfaceVariant,
+                            color: C.settings["colorful"] ? C.colors[4] : theme.onSurfaceVariant,
                             size: C.isTablet ? 30 : 20,
                           )
                         : Icon(
                             Icons.info,
-                            color: C.colorful ? C.colors[4] : theme.onSurfaceVariant,
+                            color: C.settings["colorful"] ? C.colors[4] : theme.onSurfaceVariant,
                             size: C.isTablet ? 40 : 30,
                           )),
               )

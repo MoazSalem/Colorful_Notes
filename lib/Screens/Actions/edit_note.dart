@@ -169,7 +169,7 @@ class _EditNoteState extends State<EditNote> {
                         child: ListView(children: [
                           Padding(
                             padding: isEditing
-                                ? C.lang == 'en'
+                                ? C.settings["lang"] == 'en'
                                     ? EdgeInsets.only(left: C.isTablet ? 60 : 20)
                                     : EdgeInsets.only(right: C.isTablet ? 60 : 20)
                                 : EdgeInsets.symmetric(horizontal: C.isTablet ? 60 : 20),
@@ -183,7 +183,7 @@ class _EditNoteState extends State<EditNote> {
                                       if (dir != value) _titleDir.value = dir;
                                     }
                                   },
-                                  onSaved: C.onViewChanged(),
+                                  onSaved: C.onChanged(),
                                   textAlign: TextAlign.center,
                                   maxLines: 2,
                                   cursorColor: textColor == 0 ? Colors.white : Colors.black,
@@ -207,7 +207,7 @@ class _EditNoteState extends State<EditNote> {
                           ),
                           Padding(
                             padding: isEditing
-                                ? C.lang == 'en'
+                                ? C.settings["lang"] == 'en'
                                     ? EdgeInsets.only(left: C.isTablet ? 60 : 20)
                                     : EdgeInsets.only(right: C.isTablet ? 60 : 20)
                                 : EdgeInsets.symmetric(horizontal: C.isTablet ? 60 : 20),
@@ -221,7 +221,7 @@ class _EditNoteState extends State<EditNote> {
                                       if (dir != value) _contentDir.value = dir;
                                     }
                                   },
-                                  onSaved: C.onSearch(),
+                                  onSaved: C.onChanged(),
                                   cursorColor: textColor == 0 ? Colors.white : Colors.black,
                                   controller: contentC,
                                   readOnly: isEditing ? false : true,
@@ -251,7 +251,7 @@ class _EditNoteState extends State<EditNote> {
                                           GestureDetector(
                                             onTap: () {
                                               textColor = textColor == 0 ? 1 : 0;
-                                              C.onColorChanged();
+                                              C.onChanged();
                                             },
                                             child: Padding(
                                               padding: const EdgeInsets.all(6.0),
@@ -326,7 +326,7 @@ class _EditNoteState extends State<EditNote> {
                                           GestureDetector(
                                             onTap: () {
                                               bIndex = index2;
-                                              C.onColorChanged();
+                                              C.onChanged();
                                             },
                                             child: Padding(
                                               padding: const EdgeInsets.all(6.0),
@@ -351,7 +351,7 @@ class _EditNoteState extends State<EditNote> {
                                     : GestureDetector(
                                         onTap: () {
                                           bIndex = index2;
-                                          C.onColorChanged();
+                                          C.onChanged();
                                         },
                                         child: Padding(
                                           padding: const EdgeInsets.all(6.0),

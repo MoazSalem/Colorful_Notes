@@ -128,7 +128,7 @@ class _CreateNoteState extends State<CreateNote> {
                         flex: C.isTablet ? 8 : 4,
                         child: ListView(children: [
                           Padding(
-                            padding: C.lang == 'en'
+                            padding: C.settings["lang"]  == 'en'
                                 ? EdgeInsets.only(left: C.isTablet ? 60 : 20)
                                 : EdgeInsets.only(right: C.isTablet ? 60 : 20),
                             child: ValueListenableBuilder<TextDirection>(
@@ -163,7 +163,7 @@ class _CreateNoteState extends State<CreateNote> {
                             height: 10,
                           ),
                           Padding(
-                            padding: C.lang == 'en'
+                            padding: C.settings["lang"]  == 'en'
                                 ? EdgeInsets.only(left: C.isTablet ? 60 : 20)
                                 : EdgeInsets.only(right: C.isTablet ? 60 : 20),
                             child: ValueListenableBuilder<TextDirection>(
@@ -204,7 +204,7 @@ class _CreateNoteState extends State<CreateNote> {
                                       GestureDetector(
                                         onTap: () {
                                           textColor = textColor == 0 ? 1 : 0;
-                                          C.onColorChanged();
+                                          C.onChanged();
                                         },
                                         child: Padding(
                                           padding: const EdgeInsets.all(6.0),
@@ -276,7 +276,7 @@ class _CreateNoteState extends State<CreateNote> {
                                       GestureDetector(
                                         onTap: () {
                                           chosenIndex = index;
-                                          C.onColorChanged();
+                                          C.onChanged();
                                         },
                                         child: Padding(
                                           padding: const EdgeInsets.all(6.0),
@@ -301,7 +301,7 @@ class _CreateNoteState extends State<CreateNote> {
                                 : GestureDetector(
                                     onTap: () {
                                       chosenIndex = index;
-                                      C.onColorChanged();
+                                      C.onChanged();
                                     },
                                     child: Padding(
                                       padding: const EdgeInsets.all(6.0),

@@ -3,7 +3,7 @@ import 'package:notes/Screens/SideBar/home.dart';
 import 'package:notes/Screens/SideBar/info.dart';
 import 'package:notes/Screens/SideBar/notes.dart';
 import 'package:notes/Screens/SideBar/settings.dart';
-import 'package:notes/Screens/SideBar/voice_notes.dart';
+import 'package:notes/Screens/SideBar/voice.dart';
 
 List<Builder> getPages(B) {
   return [

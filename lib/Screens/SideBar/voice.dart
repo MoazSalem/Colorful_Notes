@@ -18,13 +18,13 @@ class VoiceNotesPage extends StatefulWidget {
 
 class _VoiceNotesPageState extends State<VoiceNotesPage> {
   late bool noTitle;
-  late int value;
+  late int viewIndex;
   late List<Map> notes;
   bool searchOn = false;
 
   @override
   void initState() {
-    value = C.viewIndexV;
+    viewIndex = C.box.get('viewIndexV') ?? 0;
     super.initState();
   }
 
@@ -32,17 +32,18 @@ class _VoiceNotesPageState extends State<VoiceNotesPage> {
   Widget build(BuildContext context) {
     return BlocBuilder<NotesCubit, NotesState>(
       builder: (context, state) {
-        notes = searchOn ? C.searchedVoice : C.voiceMap;
+        notes = (searchOn ? C.notes['voiceSearched'] : C.notes['voiceNotes'])!;
         return Scaffold(
-          backgroundColor:
-              C.isDarkMode ? C.theme.background : C.theme.surfaceVariant.withOpacity(0.6),
-          floatingActionButtonLocation: C.fabIndex == 0
+          backgroundColor: C.isDark
+              ? C.theme.background
+              : C.theme.surfaceVariant.withOpacity(0.6),
+          floatingActionButtonLocation: C.settings["fabIndex"] == 0
               ? FloatingActionButtonLocation.endFloat
               : FloatingActionButtonLocation.startFloat,
           floatingActionButton: FloatingActionButton(
             splashColor: C.colors[1],
             elevation: 0,
-            backgroundColor: C.colorful ? C.colors[3] : primaryColor,
+            backgroundColor: C.settings["colorful"] ? C.colors[3] : primaryColor,
             onPressed: () async {
               showBottomSheet(
                   enableDrag: false, context: context, builder: (context) => const CreateVoice());
@@ -63,7 +64,7 @@ class _VoiceNotesPageState extends State<VoiceNotesPage> {
                         child: TextFormField(
                             autofocus: true,
                             controller: searchController,
-                            onChanged: C.searchVoice,
+                            onChanged: (query) => C.search(query: query, where: "voice"),
                             maxLines: 1,
                             cursorColor: primaryColor,
                             decoration: InputDecoration(
@@ -84,7 +85,7 @@ class _VoiceNotesPageState extends State<VoiceNotesPage> {
                     )
                   : Container(),
               notes.isNotEmpty
-                  ? C.viewIndexV != 2
+                  ? viewIndex != 2
                       ? Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
                           child: ListView.builder(
@@ -99,7 +100,7 @@ class _VoiceNotesPageState extends State<VoiceNotesPage> {
                                     : noTitle = false;
                                 int dateValue = C.calculateDifference(notes[reverseIndex]["time"]);
                                 String date = C.parseDate(notes[reverseIndex]["time"]);
-                                Widget chosenView = C.viewIndexV == 0
+                                Widget chosenView = viewIndex == 0
                                     ? Stack(
                                         alignment: Alignment.topRight,
                                         children: [
@@ -114,9 +115,9 @@ class _VoiceNotesPageState extends State<VoiceNotesPage> {
                                               date: date,
                                               noTitle: noTitle,
                                               noContent: false,
-                                              showDate: C.showDate,
-                                              showShadow: C.showShadow,
-                                              showEdited: C.showEdited,
+                                              showDate: C.settings["showDate"],
+                                              showShadow: C.settings["showShadow"],
+                                              showEdited: C.settings["showEdited"],
                                               isTablet: C.isTablet,
                                               lang: context.locale.toString(),
                                               width: C.width,
@@ -155,9 +156,9 @@ class _VoiceNotesPageState extends State<VoiceNotesPage> {
                                               date: date,
                                               noTitle: noTitle,
                                               noContent: false,
-                                              showDate: C.showDate,
-                                              showShadow: C.showShadow,
-                                              showEdited: C.showEdited,
+                                              showDate: C.settings["showDate"],
+                                              showShadow: C.settings["showShadow"],
+                                              showEdited: C.settings["showEdited"],
                                               isTablet: C.isTablet,
                                               lang: context.locale.toString(),
                                               width: C.width,
@@ -216,9 +217,9 @@ class _VoiceNotesPageState extends State<VoiceNotesPage> {
                                         date: date,
                                         noTitle: noTitle,
                                         noContent: false,
-                                        showDate: C.showDate,
-                                        showShadow: C.showShadow,
-                                        showEdited: C.showEdited,
+                                        showDate: C.settings["showDate"],
+                                        showShadow: C.settings["showShadow"],
+                                        showEdited: C.settings["showEdited"],
                                         isTablet: C.isTablet,
                                         lang: context.locale.toString(),
                                         width: C.width,
@@ -251,7 +252,7 @@ class _VoiceNotesPageState extends State<VoiceNotesPage> {
                           child: Text(
                         "N3".tr(),
                         style: TextStyle(
-                            color: C.colorful ? C.colors[3] : primaryColor,
+                            color: C.settings["colorful"] ? C.colors[3] : primaryColor,
                             fontWeight: FontWeight.w400), //B.colors[3]
                       )),
                     ),
@@ -277,14 +278,14 @@ class _VoiceNotesPageState extends State<VoiceNotesPage> {
         IconButton(
           onPressed: () {
             searchOn = !searchOn;
-            C.searchVoice(searchController.text);
-            C.onSearch();
+            C.search(query: searchController.text, where: "voice");
+            C.onChanged();
           },
           icon: Icon(
             Icons.search,
             size: 30,
             color: searchOn
-                ? C.colorful
+                ? C.settings["colorful"]
                     ? C.colors[3]
                     : primaryColor
                 : C.theme.onSurfaceVariant, //Theme.of(context).textTheme.bodyMedium!.color,
@@ -292,14 +293,13 @@ class _VoiceNotesPageState extends State<VoiceNotesPage> {
         ),
         IconButton(
           onPressed: () {
-            value < 2 ? value++ : value = 0;
-            C.box.put("viewIndexV", value);
-            C.viewIndexV = value;
-            C.onViewChanged();
+            viewIndex < 2 ? viewIndex++ : viewIndex = 0;
+            C.box.put("viewIndexV", viewIndex);
+            C.onChanged();
           },
-          icon: C.viewIndexV == 0
+          icon: viewIndex == 0
               ? const Icon(Icons.indeterminate_check_box)
-              : C.viewIndexV == 1
+              : viewIndex == 1
                   ? const Icon(Icons.view_agenda_sharp)
                   : const Icon(Icons.grid_view_sharp),
         )

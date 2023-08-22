@@ -22,7 +22,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late int value;
+  late int viewIndex;
   late List<Map> notes;
   bool noTitle = false;
   bool noContent = false;
@@ -31,7 +31,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    value = C.viewIndex;
+    viewIndex = C.box.get('viewIndex') ?? 0;
     super.initState();
   }
 
@@ -39,30 +39,32 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return BlocBuilder<NotesCubit, NotesState>(
       builder: (context, state) {
-        notes = searchOn ? C.searchedALL : C.allNotesMap;
+        notes = (searchOn ? C.notes['homeSearched'] : C.notes['homeNotes'])!;
         return Scaffold(
-          backgroundColor:
-              C.isDarkMode ? C.theme.background : C.theme.surfaceVariant.withOpacity(0.6),
-          floatingActionButtonLocation: C.fabIndex == 0
+          backgroundColor: C.isDark
+              ? C.theme.background
+              : C.theme.surfaceVariant.withOpacity(0.6),
+          floatingActionButtonLocation: C.settings["fabIndex"] == 0
               ? FloatingActionButtonLocation.endFloat
               : FloatingActionButtonLocation.startFloat,
-          floatingActionButton: C.fabIndex == 0
+          floatingActionButton: C.settings["fabIndex"] == 0
               ? customFab(
                   theme: C.theme,
                   colors: C.colors,
                   action1: create1,
                   action2: create2,
-                  colorful: C.colorful,
+                  colorful: C.settings["colorful"],
                   isTablet: C.isTablet,
                 )
               : Directionality(
-                  textDirection: C.lang == 'en' ? ui.TextDirection.rtl : ui.TextDirection.ltr,
+                  textDirection:
+                      C.settings["lang"] == 'en' ? ui.TextDirection.rtl : ui.TextDirection.ltr,
                   child: customFab(
                     theme: C.theme,
                     colors: C.colors,
                     action1: create1,
                     action2: create2,
-                    colorful: C.colorful,
+                    colorful: C.settings["colorful"],
                     isTablet: C.isTablet,
                   )),
           body: ListView(
@@ -76,7 +78,7 @@ class _HomePageState extends State<HomePage> {
                         child: TextFormField(
                             autofocus: true,
                             controller: searchController,
-                            onChanged: C.searchHome,
+                            onChanged: (query) => C.search(query: query, where: "home"),
                             maxLines: 1,
                             cursorColor: primaryColor,
                             decoration: InputDecoration(
@@ -97,7 +99,7 @@ class _HomePageState extends State<HomePage> {
                     )
                   : Container(),
               notes.isNotEmpty
-                  ? C.viewIndex != 2
+                  ? viewIndex != 2
                       ? Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
                           child: ListView.builder(
@@ -115,7 +117,7 @@ class _HomePageState extends State<HomePage> {
                                     : noContent = false;
                                 int dateValue = C.calculateDifference(notes[reverseIndex]["time"]);
                                 String date = C.parseDate(notes[reverseIndex]["time"]);
-                                Widget chosenView = C.viewIndex == 0
+                                Widget chosenView = viewIndex == 0
                                     ? Stack(
                                         alignment: notes[reverseIndex]["layout"] == 0 ||
                                                 notes[reverseIndex]["layout"] == 2
@@ -133,9 +135,9 @@ class _HomePageState extends State<HomePage> {
                                               date: date,
                                               noTitle: noTitle,
                                               noContent: noContent,
-                                              showDate: C.showDate,
-                                              showShadow: C.showShadow,
-                                              showEdited: C.showEdited,
+                                              showDate: C.settings["showDate"],
+                                              showShadow: C.settings["showShadow"],
+                                              showEdited: C.settings["showEdited"],
                                               isTablet: C.isTablet,
                                               lang: context.locale.toString(),
                                               width: C.width,
@@ -182,9 +184,9 @@ class _HomePageState extends State<HomePage> {
                                               date: date,
                                               noTitle: noTitle,
                                               noContent: noContent,
-                                              showDate: C.showDate,
-                                              showShadow: C.showShadow,
-                                              showEdited: C.showEdited,
+                                              showDate: C.settings["showDate"],
+                                              showShadow: C.settings["showShadow"],
+                                              showEdited: C.settings["showEdited"],
                                               isTablet: C.isTablet,
                                               lang: context.locale.toString(),
                                               width: C.width,
@@ -249,9 +251,9 @@ class _HomePageState extends State<HomePage> {
                                         date: date,
                                         noTitle: noTitle,
                                         noContent: noContent,
-                                        showDate: C.showDate,
-                                        showShadow: C.showShadow,
-                                        showEdited: C.showEdited,
+                                        showDate: C.settings["showDate"],
+                                        showShadow: C.settings["showShadow"],
+                                        showEdited: C.settings["showEdited"],
                                         isTablet: C.isTablet,
                                         lang: context.locale.toString(),
                                         width: C.width,
@@ -284,7 +286,7 @@ class _HomePageState extends State<HomePage> {
                           child: Text(
                         "N1".tr(),
                         style: TextStyle(
-                            color: C.colorful ? C.colors[0] : primaryColor,
+                            color: C.settings["colorful"] ? C.colors[0] : primaryColor,
                             fontWeight: FontWeight.w400),
                       )),
                     ),
@@ -306,14 +308,14 @@ class _HomePageState extends State<HomePage> {
         IconButton(
           onPressed: () {
             searchOn = !searchOn;
-            C.searchHome(searchController.text);
-            C.onSearch();
+            C.search(query: searchController.text, where: "home");
+            C.onChanged();
           },
           icon: Icon(
             Icons.search,
             size: 30,
             color: searchOn
-                ? C.colorful
+                ? C.settings["colorful"]
                     ? C.colors[0]
                     : primaryColor
                 : C.theme.onSurfaceVariant, //const Color(0xffff8b34)
@@ -321,14 +323,13 @@ class _HomePageState extends State<HomePage> {
         ),
         IconButton(
           onPressed: () {
-            value < 2 ? value++ : value = 0;
-            C.box.put("viewIndex", value);
-            C.viewIndex = value;
-            C.onViewChanged();
+            viewIndex < 2 ? viewIndex++ : viewIndex = 0;
+            C.box.put("viewIndex", viewIndex);
+            C.onChanged();
           },
-          icon: C.viewIndex == 0
+          icon: viewIndex == 0
               ? const Icon(Icons.indeterminate_check_box_sharp)
-              : C.viewIndex == 1
+              : viewIndex == 1
                   ? const Icon(Icons.view_agenda_sharp)
                   : const Icon(Icons.grid_view_sharp),
         )

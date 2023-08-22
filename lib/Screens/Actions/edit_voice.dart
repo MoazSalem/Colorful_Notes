@@ -57,7 +57,7 @@ class _EditVoiceState extends State<EditVoice> {
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: C.isTablet ? 80 : 40),
                   child: TextFormField(
-                      onSaved: C.onViewChanged(),
+                      onSaved: C.onChanged(),
                       textAlign: TextAlign.center,
                       maxLines: 2,
                       cursorColor: textColor == 0 ? Colors.white : Colors.black,
@@ -81,7 +81,7 @@ class _EditVoiceState extends State<EditVoice> {
                     GestureDetector(
                       onTap: () {
                         textColor = textColor == 0 ? 1 : 0;
-                        C.onColorChanged();
+                        C.onChanged();
                       },
                       child: Padding(
                         padding: const EdgeInsets.only(bottom: 20.0),
@@ -166,7 +166,7 @@ class _EditVoiceState extends State<EditVoice> {
                               itemBuilder: (BuildContext context, index2) => GestureDetector(
                                 onTap: () {
                                   bIndex = index2;
-                                  C.onColorChanged();
+                                  C.onChanged();
                                 },
                                 child: CircleAvatar(
                                   radius: 35,
@@ -204,7 +204,7 @@ class _EditVoiceState extends State<EditVoice> {
                                   onTap: () {
                                     index3 += 5;
                                     bIndex = index3;
-                                    C.onColorChanged();
+                                    C.onChanged();
                                   },
                                   child: CircleAvatar(
                                     radius: 35,

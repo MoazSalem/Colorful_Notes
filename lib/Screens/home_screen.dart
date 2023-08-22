@@ -31,14 +31,14 @@ class _HomeState extends State<Home> {
   void didChangeDependencies() {
     C.theme = Theme.of(context).colorScheme;
     C.harmonizeColors();
-    C.lang = context.locale.toString();
+    C.settings["lang"] = context.locale.toString();
     C.brightness = SchedulerBinding.instance.platformDispatcher.platformBrightness;
-    C.isDarkMode = (C.brightness == Brightness.dark && C.themeMode == ThemeMode.system) ||
-        C.themeMode == ThemeMode.dark;
     C.getScreenWidth(context);
     primaryColor = C.theme.primary == Colors.black || C.theme.primary == Colors.white
         ? C.colors[0]
         : C.theme.primary;
+    C.isDark = C.settings["currentTheme"] == ThemeMode.dark ||
+        (C.settings["currentTheme"] == ThemeMode.system && C.brightness == Brightness.dark);
     super.didChangeDependencies();
   }
 
@@ -47,15 +47,14 @@ class _HomeState extends State<Home> {
     return AnnotatedRegion<SystemUiOverlayStyle>(
         value: SystemUiOverlayStyle(
           statusBarColor: Colors.transparent,
-          statusBarIconBrightness: C.isDarkMode ? Brightness.light : Brightness.dark,
+          statusBarIconBrightness: C.isDark ? Brightness.light : Brightness.dark,
           // For Android (dark icons)
-          statusBarBrightness: C.isDarkMode ? Brightness.light : Brightness.dark,
+          statusBarBrightness: C.isDark ? Brightness.light : Brightness.dark,
           // For iOS (dark icons)
-          systemNavigationBarIconBrightness: C.isDarkMode ? Brightness.light : Brightness.dark,
+          systemNavigationBarIconBrightness: C.isDark ? Brightness.light : Brightness.dark,
           systemNavigationBarColor: C.theme.surfaceVariant,
         ),
-        child: BlocConsumer<NotesCubit, NotesState>(
-          listener: (context, state) {},
+        child: BlocBuilder<NotesCubit, NotesState>(
           builder: (context, state) {
             return Scaffold(
               resizeToAvoidBottomInset: false,
@@ -63,9 +62,8 @@ class _HomeState extends State<Home> {
                   ? Container(
                       width: double.infinity,
                       height: double.infinity,
-                      color: C.isDarkMode
-                          ? C.theme.background
-                          : C.theme.surfaceVariant.withOpacity(0.6),
+                      color:
+                          C.isDark ? C.theme.background : C.theme.surfaceVariant.withOpacity(0.6),
                       child: Center(
                         child: SizedBox(
                           width: 200,
@@ -77,7 +75,7 @@ class _HomeState extends State<Home> {
                       ),
                     )
                   : Row(
-                      children: C.sbIndex == 2 || C.sbIndex == 3
+                      children: C.settings["sbIndex"] == 2 || C.settings["sbIndex"] == 3
                           ? [
                               Expanded(
                                 flex: 5,
@@ -85,14 +83,14 @@ class _HomeState extends State<Home> {
                               ),
                               sideBar(
                                   theme: C.theme,
-                                  inverted: C.sbIndex == 3 ? true : false,
+                                  inverted: C.settings["sbIndex"] == 3 ? true : false,
                                   C: C,
                                   sizeBox: C.isTablet ? 60 : 30),
                             ]
                           : [
                               sideBar(
                                   theme: C.theme,
-                                  inverted: C.sbIndex == 1 ? true : false,
+                                  inverted: C.settings["sbIndex"] == 1 ? true : false,
                                   C: C,
                                   sizeBox: C.isTablet ? 60 : 30),
                               Expanded(

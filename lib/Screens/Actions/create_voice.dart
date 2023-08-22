@@ -74,7 +74,7 @@ class _CreateVoiceState extends State<CreateVoice> {
                                       ? null
                                       : C.deleteFile("${C.appDir.path}/Voice/$name.m4a");
                                   Navigator.pop(context);
-                                  C.onRecord();
+                                  C.onChanged();
                                 },
                                 child: CircleAvatar(
                                   backgroundColor: textColor == 0 ? Colors.white54 : Colors.black54,
@@ -210,7 +210,7 @@ class _CreateVoiceState extends State<CreateVoice> {
                                                   await record.resume();
                                                   stopWatchTimer.onStartTimer();
                                                   isPaused = false;
-                                                  C.onRecord();
+                                                  C.onChanged();
                                                 },
                                                 icon: Icon(
                                                   Icons.play_arrow,
@@ -225,7 +225,7 @@ class _CreateVoiceState extends State<CreateVoice> {
                                                   await record.pause();
                                                   stopWatchTimer.onStopTimer();
                                                   isPaused = true;
-                                                  C.onRecord();
+                                                  C.onChanged();
                                                 },
                                                 icon: Icon(
                                                   Icons.pause,
@@ -256,7 +256,7 @@ class _CreateVoiceState extends State<CreateVoice> {
                                                 // Start recording
                                                 isRecording = true;
                                                 isPaused = false;
-                                                C.onRecord();
+                                                C.onChanged();
                                                 await record.start(
                                                   path: "${C.appDir.path}/Voice/$name.m4a",
                                                   encoder: AudioEncoder.aacLc, // by default
@@ -283,7 +283,7 @@ class _CreateVoiceState extends State<CreateVoice> {
                                           await record.stop();
                                           isRecording = false;
                                           isPaused = false;
-                                          C.onRecord();
+                                          C.onChanged();
                                         },
                                         icon: Icon(
                                           Icons.stop_circle,
@@ -314,7 +314,7 @@ class _CreateVoiceState extends State<CreateVoice> {
                                       GestureDetector(
                                         onTap: () {
                                           textColor = textColor == 0 ? 1 : 0;
-                                          C.onColorChanged();
+                                          C.onChanged();
                                         },
                                         child: Padding(
                                           padding: const EdgeInsets.all(6.0),
@@ -386,7 +386,7 @@ class _CreateVoiceState extends State<CreateVoice> {
                                       GestureDetector(
                                         onTap: () {
                                           chosenIndex = index;
-                                          C.onColorChanged();
+                                          C.onChanged();
                                         },
                                         child: Padding(
                                           padding: const EdgeInsets.all(6.0),
@@ -411,7 +411,7 @@ class _CreateVoiceState extends State<CreateVoice> {
                                 : GestureDetector(
                                     onTap: () {
                                       chosenIndex = index;
-                                      C.onColorChanged();
+                                      C.onChanged();
                                     },
                                     child: Padding(
                                       padding: const EdgeInsets.all(6.0),
