@@ -1,20 +1,20 @@
 # Colorful Notes
 
-A Clean Looking Modern and Colorful Notes App Using a Local Database with Sqflite.
+A Clean Modern and Colorful Notes App Using a Local Database with Sqflite.
 
 # Features
 
-### - Material 3 Theming With Dynamic Colors</br>
+- Material 3 Theming With Dynamic Colors</br>
 
-### - Both Text and Voice Notes</br>
+- Both Text and Voice Notes</br>
 
-### - Search Notes & Edit Notes</br>
+- Search Notes & Edit Notes</br>
 
-### - Supports Arabic</br>
+- Supports Arabic</br>
 
-### - 3 View Styles</br>
+- 3 View Styles</br>
 
-### - Tablet Support</br>
+- Tablet Support</br>
 
 # Screenshots
 <img src="https://github.com/MoazSalem/Colorful_Notes/assets/88838071/03e46cc3-022a-4f76-a740-a885d5203131" width="300"> <img src="https://github.com/MoazSalem/Colorful_Notes/assets/88838071/4c6004c5-4e43-47b5-a5d3-b50c205aaa92" width="300"> 
