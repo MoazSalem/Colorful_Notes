@@ -12,7 +12,7 @@ import 'package:notes/main.dart';
 late Color primaryColor;
 
 class Home extends StatefulWidget {
-  const Home({Key? key}) : super(key: key);
+  const Home({super.key});
 
   @override
   State<Home> createState() => _HomeState();

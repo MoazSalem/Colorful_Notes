@@ -10,7 +10,7 @@ import 'package:notes/Screens/Actions/create_voice.dart';
 import 'package:notes/main.dart';
 
 class VoiceNotesPage extends StatefulWidget {
-  const VoiceNotesPage({Key? key}) : super(key: key);
+  const VoiceNotesPage({super.key});
 
   @override
   State<VoiceNotesPage> createState() => _VoiceNotesPageState();
@@ -34,9 +34,7 @@ class _VoiceNotesPageState extends State<VoiceNotesPage> {
       builder: (context, state) {
         notes = (searchOn ? C.notes['voiceSearched'] : C.notes['voiceNotes'])!;
         return Scaffold(
-          backgroundColor: C.isDark
-              ? C.theme.background
-              : C.theme.surfaceVariant.withOpacity(0.6),
+          backgroundColor: C.isDark ? C.theme.background : C.theme.surfaceVariant.withOpacity(0.6),
           floatingActionButtonLocation: C.settings["fabIndex"] == 0
               ? FloatingActionButtonLocation.endFloat
               : FloatingActionButtonLocation.startFloat,

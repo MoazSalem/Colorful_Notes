@@ -8,7 +8,7 @@ import 'package:notes/main.dart';
 class EditNote extends StatefulWidget {
   final Map note;
 
-  const EditNote({Key? key, required this.note}) : super(key: key);
+  const EditNote({super.key, required this.note});
 
   @override
   State<EditNote> createState() => _EditNoteState();
@@ -28,6 +28,15 @@ class _EditNoteState extends State<EditNote> {
   // ValueChanged<Color> callback
   void changeColor(Color color) {
     setState(() => pickerColor = color);
+  }
+
+  @override
+  void dispose() {
+    titleC.dispose();
+    contentC.dispose();
+    _titleDir.dispose();
+    _contentDir.dispose();
+    super.dispose();
   }
 
   @override

@@ -8,7 +8,7 @@ import 'package:notes/main.dart';
 class EditVoice extends StatefulWidget {
   final Map note;
 
-  const EditVoice({Key? key, required this.note}) : super(key: key);
+  const EditVoice({super.key, required this.note});
 
   @override
   State<EditVoice> createState() => _EditVoiceState();
@@ -24,6 +24,12 @@ class _EditVoiceState extends State<EditVoice> {
   // ValueChanged<Color> callback
   void changeColor(Color color) {
     setState(() => pickerColor = color);
+  }
+
+  @override
+  void dispose() {
+    titleC.dispose();
+    super.dispose();
   }
 
   @override

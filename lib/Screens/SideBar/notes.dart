@@ -10,7 +10,7 @@ import 'package:notes/Widgets/notes.dart';
 import 'package:notes/main.dart';
 
 class NotesPage extends StatefulWidget {
-  const NotesPage({Key? key}) : super(key: key);
+  const NotesPage({super.key});
 
   @override
   State<NotesPage> createState() => _NotesPageState();
@@ -36,9 +36,7 @@ class _NotesPageState extends State<NotesPage> {
       builder: (context, state) {
         notes = (searchOn ? C.notes['textSearched'] : C.notes['textNotes'])!;
         return Scaffold(
-          backgroundColor: C.isDark
-              ? C.theme.background
-              : C.theme.surfaceVariant.withOpacity(0.6),
+          backgroundColor: C.isDark ? C.theme.background : C.theme.surfaceVariant.withOpacity(0.6),
           floatingActionButtonLocation: C.settings["fabIndex"] == 0
               ? FloatingActionButtonLocation.endFloat
               : FloatingActionButtonLocation.startFloat,

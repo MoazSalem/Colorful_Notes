@@ -399,38 +399,6 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
               C.divider(),
               SizedBox(
-                height: height,
-                child: Center(
-                  child: ListTile(
-                      title: Text(
-                        "Darker Colors".tr(),
-                        style: TextStyle(
-                            fontSize: title,
-                            fontWeight: FontWeight.w400,
-                            color: C.theme.onSurfaceVariant),
-                      ),
-                      subtitle: Text(
-                        "sDarker Colors".tr(),
-                        style: TextStyle(
-                            fontSize: subtitle,
-                            fontWeight: FontWeight.w300,
-                            color: C.theme.onSurfaceVariant),
-                      ),
-                      trailing: SwitcherButton(
-                        onColor: C.settings["colorful"] ? C.colors[6] : primaryColor,
-                        offColor: C.theme.primaryContainer,
-                        size: switchSize,
-                        value: C.settings["darkColors"],
-                        onChange: (bool value) {
-                          C.box.put("darkColors", value);
-                          C.settings["darkColors"] = value;
-                          C.onChanged();
-                        },
-                      )),
-                ),
-              ),
-              C.divider(),
-              SizedBox(
                 height: C.isTablet ? 140 : 100,
                 child: Center(
                   child: ListTile(
@@ -489,6 +457,38 @@ class _SettingsPageState extends State<SettingsPage> {
                         onChange: (bool value) {
                           C.box.put("colorful", value);
                           C.settings["colorful"] = value;
+                          C.onChanged();
+                        },
+                      )),
+                ),
+              ),
+              C.divider(),
+              SizedBox(
+                height: height,
+                child: Center(
+                  child: ListTile(
+                      title: Text(
+                        "Darker Colors".tr(),
+                        style: TextStyle(
+                            fontSize: title,
+                            fontWeight: FontWeight.w400,
+                            color: C.theme.onSurfaceVariant),
+                      ),
+                      subtitle: Text(
+                        "sDarker Colors".tr(),
+                        style: TextStyle(
+                            fontSize: subtitle,
+                            fontWeight: FontWeight.w300,
+                            color: C.theme.onSurfaceVariant),
+                      ),
+                      trailing: SwitcherButton(
+                        onColor: C.settings["colorful"] ? C.colors[6] : primaryColor,
+                        offColor: C.theme.primaryContainer,
+                        size: switchSize,
+                        value: C.settings["darkColors"],
+                        onChange: (bool value) {
+                          C.box.put("darkColors", value);
+                          C.settings["darkColors"] = value;
                           C.onChanged();
                         },
                       )),

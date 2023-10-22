@@ -8,7 +8,7 @@ import 'package:notes/Cubit/notes_cubit.dart';
 import 'package:record/record.dart';
 
 class CreateVoice extends StatefulWidget {
-  const CreateVoice({Key? key}) : super(key: key);
+  const CreateVoice({super.key});
 
   @override
   State<CreateVoice> createState() => _CreateVoiceState();
@@ -34,6 +34,15 @@ class _CreateVoiceState extends State<CreateVoice> {
   // ValueChanged<Color> callback
   void changeColor(Color color) {
     setState(() => pickerColor = color);
+  }
+
+  @override
+  void dispose() {
+    titleC.dispose();
+    titleFocusNode.dispose();
+    stopWatchTimer.dispose();
+    record.dispose();
+    super.dispose();
   }
 
   @override

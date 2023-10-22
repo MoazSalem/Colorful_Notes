@@ -8,7 +8,7 @@ import 'package:lottie/lottie.dart';
 import 'package:notes/Screens/home_screen.dart';
 
 class IntroPage extends StatefulWidget {
-  const IntroPage({Key? key}) : super(key: key);
+  const IntroPage({super.key});
 
   @override
   State<IntroPage> createState() => _IntroPageState();
@@ -19,6 +19,12 @@ class _IntroPageState extends State<IntroPage> {
   bool isLastPage = false;
   bool lang = false;
   late bool isDarkMode;
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
 
   @override
   void didChangeDependencies() {

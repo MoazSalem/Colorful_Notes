@@ -6,7 +6,7 @@ import 'package:notes/Cubit/notes_cubit.dart';
 import 'package:notes/main.dart';
 
 class CreateNote extends StatefulWidget {
-  const CreateNote({Key? key}) : super(key: key);
+  const CreateNote({super.key});
 
   @override
   State<CreateNote> createState() => _CreateNoteState();
@@ -28,6 +28,15 @@ class _CreateNoteState extends State<CreateNote> {
   // ValueChanged<Color> callback
   void changeColor(Color color) {
     setState(() => pickerColor = color);
+  }
+
+  @override
+  void dispose() {
+    titleC.dispose();
+    contentC.dispose();
+    titleDir.dispose();
+    contentDir.dispose();
+    super.dispose();
   }
 
   @override
@@ -95,7 +104,8 @@ class _CreateNoteState extends State<CreateNote> {
                                         content: content,
                                         index: chosenIndex,
                                         tIndex: textColor,
-                                        extra: chosenIndex == 99 ? pickerColor.value.toString() : "",
+                                        extra:
+                                            chosenIndex == 99 ? pickerColor.value.toString() : "",
                                         layout: getLayout()),
                                     titleC.text = "",
                                     contentC.text = "",
@@ -128,7 +138,7 @@ class _CreateNoteState extends State<CreateNote> {
                         flex: C.isTablet ? 8 : 4,
                         child: ListView(children: [
                           Padding(
-                            padding: C.settings["lang"]  == 'en'
+                            padding: C.settings["lang"] == 'en'
                                 ? EdgeInsets.only(left: C.isTablet ? 60 : 20)
                                 : EdgeInsets.only(right: C.isTablet ? 60 : 20),
                             child: ValueListenableBuilder<TextDirection>(
@@ -163,7 +173,7 @@ class _CreateNoteState extends State<CreateNote> {
                             height: 10,
                           ),
                           Padding(
-                            padding: C.settings["lang"]  == 'en'
+                            padding: C.settings["lang"] == 'en'
                                 ? EdgeInsets.only(left: C.isTablet ? 60 : 20)
                                 : EdgeInsets.only(right: C.isTablet ? 60 : 20),
                             child: ValueListenableBuilder<TextDirection>(
