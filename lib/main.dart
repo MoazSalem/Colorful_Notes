@@ -3,6 +3,7 @@ import 'package:dynamic_color/dynamic_color.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:home_widget/home_widget_callback_dispatcher.dart';
 import 'package:notes/Cubit/notes_cubit.dart';
 import 'package:notes/Data/theme.dart';
 import 'package:responsive_framework/responsive_framework.dart';
@@ -10,6 +11,7 @@ import 'package:notes/Services/flex_colors/theme_controller.dart';
 import 'package:notes/Services/flex_colors/theme_service.dart';
 import 'package:notes/Services/flex_colors/theme_service_hive.dart';
 import 'package:notes/Data/flex_themes.dart';
+import 'package:workmanager/workmanager.dart';
 import 'Screens/home_screen.dart';
 import 'Screens/on_boarding.dart';
 
@@ -17,6 +19,8 @@ late NotesCubit C;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // Initialize the Workmanager services, this is for background process to allow for home screen widgets.
+  Workmanager().initialize(callbackDispatcher, isInDebugMode: true);
   // Initialize the Localization services.
   await EasyLocalization.ensureInitialized();
   // Initialize the Hive services.
