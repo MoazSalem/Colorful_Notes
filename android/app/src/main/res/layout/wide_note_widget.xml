@@ -5,8 +5,7 @@
     style="@style/Widget.Android.AppWidget.Container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F4B907"
-    android:gravity="start"
+    android:background="#66c6c2"
     android:padding="0dp"
     android:theme="@style/Theme.Android.AppWidgetContainer">
 
@@ -18,18 +17,18 @@
         <TextView
             android:id="@+id/title"
             android:layout_width="match_parent"
-            android:layout_height="92dp"
+            android:layout_height="70dp"
             android:ellipsize="end"
-            android:gravity="center|center_horizontal|center_vertical"
+            android:gravity="center|start"
             android:maxLines="2"
-            android:minWidth="80dp"
-            android:paddingLeft="20dp"
-            android:paddingTop="20dp"
-            android:paddingRight="20dp"
+            android:minWidth="50dp"
+            android:paddingLeft="16dp"
+            android:paddingTop="10dp"
+            android:paddingRight="16dp"
             android:text="@string/title"
-            android:textAlignment="center"
+            android:textAlignment="textStart"
             android:textColor="#ffffff"
-            android:textSize="28sp"
+            android:textSize="22sp"
             android:textStyle="bold" />
 
         <TextView
@@ -38,14 +37,14 @@
             android:layout_height="match_parent"
             android:ellipsize="end"
             android:gravity="start"
-            android:minWidth="80dp"
+            android:minWidth="40dp"
             android:minLines="1"
-            android:paddingLeft="20dp"
-            android:paddingTop="10dp"
-            android:paddingRight="20dp"
-            android:paddingBottom="20dp"
+            android:paddingLeft="16dp"
+            android:paddingTop="3dp"
+            android:paddingRight="16dp"
+            android:paddingBottom="14dp"
             android:text="@string/content"
             android:textColor="#FFFFFF"
-            android:textSize="18sp" />
+            android:textSize="16sp" />
     </LinearLayout>
 </RelativeLayout>

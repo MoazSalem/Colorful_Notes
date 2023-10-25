@@ -11,7 +11,7 @@ import android.widget.RemoteViews
 import es.antonborri.home_widget.HomeWidgetPlugin
 
 private var globalIndex: Int = 0
-class BigNoteWidget : AppWidgetProvider() {
+class WideNoteWidget : AppWidgetProvider() {
     override fun onUpdate(
         context: Context,
         appWidgetManager: AppWidgetManager,
@@ -19,7 +19,7 @@ class BigNoteWidget : AppWidgetProvider() {
     ) {
         for (appWidgetId in appWidgetIds) {
             // Create an intent to handle widget click
-            val intent = Intent(context, BigNoteWidget::class.java)
+            val intent = Intent(context, WideNoteWidget::class.java)
             intent.action = "widgetClicked"
 
             // Create a PendingIntent for the widget click
@@ -27,18 +27,18 @@ class BigNoteWidget : AppWidgetProvider() {
                 PendingIntent.FLAG_IMMUTABLE)
 
             // Create RemoteViews
-            val views = RemoteViews(context.packageName, R.layout.big_note_widget).apply {
+            val views = RemoteViews(context.packageName, R.layout.wide_note_widget).apply {
                 val widgetData = HomeWidgetPlugin.getData(context)
                 val titlesArray = widgetData.getString("titles", "No Notes")?.split("||S||")
                 val contentsArray = widgetData.getString("contents", "Add Notes from App")?.split("||S||")
-                val colorsArray = widgetData.getString("colors", "#F4B907")?.split("||S||")
+                val colorsArray = widgetData.getString("colors", "#66c6c2")?.split("||S||")
                 val textCArray = widgetData.getString("textColors", "")?.split("||S||")
                 val textColor = if(textCArray?.get(globalIndex) == "1") "#000000" else "#ffffff"
                 setTextViewText(R.id.title, titlesArray?.get(globalIndex) ?: "No Title")
                 setTextColor(R.id.title, Color.parseColor(textColor))
                 setTextViewText(R.id.content, contentsArray?.get(globalIndex) ?: "No Content")
                 setTextColor(R.id.content, Color.parseColor(textColor))
-                setInt(R.id.background, "setBackgroundColor", Color.parseColor(colorsArray?.get(globalIndex) ?: "#F4B907"))
+                setInt(R.id.background, "setBackgroundColor", Color.parseColor(colorsArray?.get(globalIndex) ?: "#66c6c2"))
                 // Set the click action to increment globalIndex
                 setOnClickPendingIntent(R.id.background, pendingIntent)
             }
@@ -61,7 +61,7 @@ class BigNoteWidget : AppWidgetProvider() {
             }
 
             val appWidgetManager = AppWidgetManager.getInstance(context)
-            val appWidgetIds = appWidgetManager.getAppWidgetIds(ComponentName(context, BigNoteWidget::class.java))
+            val appWidgetIds = appWidgetManager.getAppWidgetIds(ComponentName(context, WideNoteWidget::class.java))
             onUpdate(context, appWidgetManager, appWidgetIds)
         }
     }

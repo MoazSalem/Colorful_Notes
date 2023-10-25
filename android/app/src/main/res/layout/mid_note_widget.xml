@@ -5,8 +5,7 @@
     style="@style/Widget.Android.AppWidget.Container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F4B907"
-    android:gravity="start"
+    android:background="#ff8b34"
     android:padding="0dp"
     android:theme="@style/Theme.Android.AppWidgetContainer">
 
@@ -29,7 +28,7 @@
             android:text="@string/title"
             android:textAlignment="center"
             android:textColor="#ffffff"
-            android:textSize="28sp"
+            android:textSize="26sp"
             android:textStyle="bold" />
 
         <TextView
@@ -46,6 +45,6 @@
             android:paddingBottom="20dp"
             android:text="@string/content"
             android:textColor="#FFFFFF"
-            android:textSize="18sp" />
+            android:textSize="16sp" />
     </LinearLayout>
 </RelativeLayout>

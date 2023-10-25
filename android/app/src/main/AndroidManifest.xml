@@ -19,6 +19,39 @@
         android:label="Colorful Notes"
         android:requestLegacyExternalStorage="true">
         <receiver
+            android:name=".WideNoteWidget"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/wide_note_widget_info" />
+        </receiver>
+        <receiver
+            android:name=".SmallNoteWidget"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/small_note_widget_info" />
+        </receiver>
+        <receiver
+            android:name=".MidNoteWidget"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/mid_note_widget_info" />
+        </receiver>
+        <receiver
             android:name=".BigNoteWidget"
             android:exported="false">
             <intent-filter>

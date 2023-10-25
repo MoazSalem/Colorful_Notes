@@ -8,26 +8,29 @@ class HomeWidgetConfig {
     String titles = "";
     String contents = "";
     String colors = "";
-    String layouts = "";
+    String textColors = "";
     for (int i = 0; i < notes.length; i++) {
       titles += notes[i]['title'];
       contents += notes[i]['content'];
       colors += notes[i]['cindex'] == 99
           ? Color(int.parse(notes[i]['extra'])).hex.toString()
           : color[notes[i]['cindex']].hex.toString();
-      layouts += notes[i]['layout'].toString();
+      textColors += notes[i]['tindex'].toString();
       // add separator if not last note
       if (i < notes.length - 1) {
         titles += "||S||";
         contents += "||S||";
         colors += "||S||";
-        layouts += "||S||";
+        textColors += "||S||";
       }
     }
     await HomeWidget.saveWidgetData('titles', titles);
     await HomeWidget.saveWidgetData('contents', contents);
     await HomeWidget.saveWidgetData('colors', colors);
-    await HomeWidget.saveWidgetData('layouts', layouts);
+    await HomeWidget.saveWidgetData('textColors', textColors);
     await HomeWidget.updateWidget(androidName: "BigNoteWidget");
+    await HomeWidget.updateWidget(androidName: "MidNoteWidget");
+    await HomeWidget.updateWidget(androidName: "SmallNoteWidget");
+    await HomeWidget.updateWidget(androidName: "WideNoteWidget");
   }
 }
