@@ -8,7 +8,7 @@ import 'package:switcher_button/switcher_button.dart';
 import 'package:notes/Cubit/notes_cubit.dart';
 
 class SettingsPage extends StatefulWidget {
-  const SettingsPage({Key? key}) : super(key: key);
+  const SettingsPage({super.key});
 
   @override
   State<SettingsPage> createState() => _SettingsPageState();
@@ -56,9 +56,7 @@ class _SettingsPageState extends State<SettingsPage> {
     return BlocBuilder<NotesCubit, NotesState>(
       builder: (context, state) {
         return Scaffold(
-          backgroundColor: C.isDark
-              ? C.theme.background
-              : C.theme.surfaceVariant.withOpacity(0.6),
+          backgroundColor: C.isDark ? C.theme.background : C.theme.surfaceVariant.withOpacity(0.6),
           body: ListView(
             padding: EdgeInsets.zero,
             children: [

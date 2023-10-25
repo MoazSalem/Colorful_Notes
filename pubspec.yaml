@@ -54,7 +54,6 @@ dependencies:
   flex_color_scheme: ^7.3.1
   flutter_colorpicker: ^1.0.3
   home_widget: ^0.3.0
-  workmanager: ^0.5.2
 
 dev_dependencies:
   flutter_test:
@@ -75,7 +74,7 @@ flutter_icons:
   android: "launcher_icon"
   ios: true
   image_path: "assets/icon/icon.png"
-  min_sdk_android: 21
+  min_sdk_android: 19
   remove_alpha_ios: true
 # The following section is specific to Flutter packages.
 flutter:

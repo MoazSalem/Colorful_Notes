@@ -19,6 +19,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:notes/Data/colors.dart';
 import 'package:notes/Services/flex_colors/theme_controller.dart';
+import '../Services/home_widget_config.dart';
 
 part 'notes_state.dart';
 
@@ -160,6 +161,16 @@ class NotesCubit extends Cubit<NotesState> {
     int count = await database.rawDelete('DELETE FROM Notes WHERE id = ?', ['$id']);
     assert(count == 1);
     await refreshDatabase();
+  }
+
+  void updateHomeWidgets(BuildContext context) {
+    notes['textNotes']!.isNotEmpty
+        ? HomeWidgetConfig.update(
+            context,
+            notes: notes['textNotes']!,
+            color: colors,
+          )
+        : null;
   }
 
   setSettings() {

@@ -1,9 +1,7 @@
-import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:notes/Screens/home_screen.dart';
-import 'package:notes/Services/home_widget_config.dart';
 import 'package:notes/main.dart';
 import 'package:notes/Cubit/notes_cubit.dart';
 import 'package:notes/Screens/Actions/edit_note.dart';
@@ -42,16 +40,6 @@ class _HomePageState extends State<HomePage> {
     return BlocBuilder<NotesCubit, NotesState>(
       builder: (context, state) {
         notes = (searchOn ? C.notes['homeSearched'] : C.notes['homeNotes'])!;
-        notes.isNotEmpty
-            ? HomeWidgetConfig.update(
-                context,
-                title: notes.isNotEmpty ? notes[0]['title'] : '',
-                content: notes.isNotEmpty ? notes[0]['content'] : '',
-                color: notes[0]['cindex'] == 99
-                    ? Color(int.parse(notes[0]['extra'])).hex.toString()
-                    : C.colors[notes[0]['cindex']].hex.toString(),
-              )
-            : null;
         return Scaffold(
           backgroundColor: C.isDark ? C.theme.background : C.theme.surfaceVariant.withOpacity(0.6),
           floatingActionButtonLocation: C.settings["fabIndex"] == 0

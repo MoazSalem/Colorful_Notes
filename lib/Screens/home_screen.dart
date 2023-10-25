@@ -39,6 +39,7 @@ class _HomeState extends State<Home> {
         : C.theme.primary;
     C.isDark = C.settings["currentTheme"] == ThemeMode.dark ||
         (C.settings["currentTheme"] == ThemeMode.system && C.brightness == Brightness.dark);
+    C.updateHomeWidgets(context);
     super.didChangeDependencies();
   }
 

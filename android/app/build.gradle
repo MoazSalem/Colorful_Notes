@@ -44,7 +44,7 @@ android {
         applicationId "com.moazsalem.notes"
         // You can update the following values to match your application needs. 
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-build-configuration.
-        minSdkVersion 21
+        minSdkVersion 19
         multiDexEnabled true
         targetSdkVersion 33
         versionCode flutterVersionCode.toInteger()
@@ -75,16 +75,9 @@ android {
             shrinkResources true
         }
     }
-    buildFeatures {
-        viewBinding true
-    }
 
 }
 
 flutter {
     source '../..'
-}
-
-dependencies {
-    implementation 'androidx.compose.ui:ui-graphics-android:1.5.4'
 }
