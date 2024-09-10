@@ -9,13 +9,12 @@ class SoundPlayer extends StatefulWidget {
   final bool isTablet;
 
   const SoundPlayer(
-      {Key? key,
+      {super.key,
       required this.voiceMap,
       required this.index,
       required this.color,
       required this.viewMode,
-      required this.isTablet})
-      : super(key: key);
+      required this.isTablet});
 
   @override
   State<SoundPlayer> createState() => _SoundPlayerState();

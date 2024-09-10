@@ -158,7 +158,8 @@ class NotesCubit extends Cubit<NotesState> {
   }
 
   Future<void> deleteFromDatabase({required int id}) async {
-    int count = await database.rawDelete('DELETE FROM Notes WHERE id = ?', ['$id']);
+    int count =
+        await database.rawDelete('DELETE FROM Notes WHERE id = ?', ['$id']);
     assert(count == 1);
     await refreshDatabase();
   }
@@ -233,7 +234,8 @@ class NotesCubit extends Cubit<NotesState> {
       final title = note['title'].toString().toLowerCase();
       final content = note['content'].toString().toLowerCase();
       return note['type'] == 0
-          ? title.contains(query.toLowerCase()) || content.contains(query.toLowerCase())
+          ? title.contains(query.toLowerCase()) ||
+              content.contains(query.toLowerCase())
           : title.contains(query.toLowerCase());
     }).toList();
     notes['${where}Searched'] = searched;
@@ -340,8 +342,8 @@ class NotesCubit extends Cubit<NotesState> {
             iconData: Icons.cancel_outlined,
             textStyle: const TextStyle(color: Colors.grey),
             iconColor: Colors.grey,
-            shape:
-                const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0))),
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(8.0))),
           ),
           IconsButton(
             onPressed: () async {
@@ -363,8 +365,8 @@ class NotesCubit extends Cubit<NotesState> {
                 : colors[notes[index]['cindex']],
             textStyle: const TextStyle(color: Colors.white),
             iconColor: Colors.white,
-            shape:
-                const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0))),
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(8.0))),
             padding: const EdgeInsets.symmetric(vertical: 10),
           ),
         ]);
@@ -382,7 +384,9 @@ class NotesCubit extends Cubit<NotesState> {
     var date = DateTime.parse(stringDate);
     String parsedDate = DateFormat.MMMMd().format(date);
     List<String> translate = parsedDate.split(' ');
-    parsedDate = settings["lang"] == 'en' ? parsedDate : "${translate[1]} ${translate[0].tr()}";
+    parsedDate = settings["lang"] == 'en'
+        ? parsedDate
+        : "${translate[1]} ${translate[0].tr()}";
     return parsedDate;
   }
 
@@ -391,7 +395,8 @@ class NotesCubit extends Cubit<NotesState> {
       height: 20,
       child: Divider(
         thickness: 1,
-        color: theme.outline.withOpacity(0.2), //Theme.of(context).highlightColor.withOpacity(0.3),
+        color: theme.outline.withOpacity(
+            0.2), //Theme.of(context).highlightColor.withOpacity(0.3),
       ),
     );
   }
@@ -414,12 +419,16 @@ class NotesCubit extends Cubit<NotesState> {
               bottom: 10,
               top: top),
           child: Stack(
-            alignment: settings["lang"] == 'en' ? Alignment.centerLeft : Alignment.centerRight,
+            alignment: settings["lang"] == 'en'
+                ? Alignment.centerLeft
+                : Alignment.centerRight,
             children: [
               Text(
                 title,
                 style: TextStyle(
-                    fontSize: 34, fontWeight: FontWeight.w600, color: theme.onSurfaceVariant),
+                    fontSize: 34,
+                    fontWeight: FontWeight.w600,
+                    color: theme.onSurfaceVariant),
               ),
               Padding(
                 padding: const EdgeInsets.only(right: 5),
@@ -436,13 +445,14 @@ class NotesCubit extends Cubit<NotesState> {
   void copyDirectory(Directory source, Directory destination) =>
       source.listSync(recursive: false).forEach((var entity) {
         if (entity is Directory) {
-          var newDirectory =
-              Directory(path.join(destination.absolute.path, path.basename(entity.path)));
+          var newDirectory = Directory(
+              path.join(destination.absolute.path, path.basename(entity.path)));
           newDirectory.createSync();
 
           copyDirectory(entity.absolute, newDirectory);
         } else if (entity is File) {
-          entity.copySync(path.join(destination.path, path.basename(entity.path)));
+          entity.copySync(
+              path.join(destination.path, path.basename(entity.path)));
         }
       });
 
@@ -451,8 +461,10 @@ class NotesCubit extends Cubit<NotesState> {
     final dbFolder = await getDatabasesPath();
     File source1 = File('$dbFolder/notes.db');
     File source2 = File('${appDir.path}/Voice');
-    Directory dbBackup = Directory("${extDir[0]}/Colorful Notes/backup/Database");
-    Directory voBackup = Directory("${extDir[0]}/Colorful Notes/backup/.VoiceNotes");
+    Directory dbBackup =
+        Directory("${extDir[0]}/Colorful Notes/backup/Database");
+    Directory voBackup =
+        Directory("${extDir[0]}/Colorful Notes/backup/.VoiceNotes");
     if ((dbBackup.existsSync()) && (voBackup.existsSync())) {
       if (kDebugMode) {
         print("Path exist");
@@ -489,8 +501,10 @@ class NotesCubit extends Cubit<NotesState> {
     final dbFolder = await getDatabasesPath();
     String source1 = '$dbFolder/notes.db';
     String source2 = '${appDir.path}/Voice';
-    Directory dbBackup = Directory("${extDir[0]}/Colorful Notes/backup/Database");
-    Directory voBackup = Directory("${extDir[0]}/Colorful Notes/backup/.VoiceNotes");
+    Directory dbBackup =
+        Directory("${extDir[0]}/Colorful Notes/backup/Database");
+    Directory voBackup =
+        Directory("${extDir[0]}/Colorful Notes/backup/.VoiceNotes");
     if ((dbBackup.existsSync()) && (voBackup.existsSync())) {
       if (kDebugMode) {
         print("Path exist");
@@ -596,6 +610,7 @@ class NotesCubit extends Cubit<NotesState> {
 }
 
 String getDeviceType() {
-  final data = MediaQueryData.fromView(WidgetsBinding.instance.platformDispatcher.views.single);
+  final data = MediaQueryData.fromView(
+      WidgetsBinding.instance.platformDispatcher.views.single);
   return data.size.shortestSide < 600 ? 'phone' : 'tablet';
 }

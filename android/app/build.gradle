@@ -39,7 +39,7 @@ android {
 
     defaultConfig {
         applicationId "com.moazsalem.notes"
-        minSdkVersion flutter.minSdkVersion
+        minSdkVersion 23
         multiDexEnabled true
         targetSdkVersion 34
         versionCode flutterVersionCode.toInteger()

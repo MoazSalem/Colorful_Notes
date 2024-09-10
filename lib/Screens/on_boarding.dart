@@ -38,13 +38,13 @@ class _IntroPageState extends State<IntroPage> {
   Widget build(BuildContext context) {
     return AnnotatedRegion<SystemUiOverlayStyle>(
         value: SystemUiOverlayStyle(
-          statusBarColor: isDarkMode ? C.theme.background : C.theme.surfaceVariant.withOpacity(0.6),
+          statusBarColor: isDarkMode ? C.theme.surface : C.theme.surfaceContainerHighest.withOpacity(0.6),
           statusBarIconBrightness: isDarkMode ? Brightness.light : Brightness.dark,
           // For Android (dark icons)
           statusBarBrightness: isDarkMode ? Brightness.light : Brightness.dark,
           // For iOS (dark icons)
           systemNavigationBarIconBrightness: isDarkMode ? Brightness.light : Brightness.dark,
-          systemNavigationBarColor: C.theme.surfaceVariant,
+          systemNavigationBarColor: C.theme.surfaceContainerHighest,
         ),
         child: Scaffold(
           body: SafeArea(
@@ -63,8 +63,8 @@ class _IntroPageState extends State<IntroPage> {
                       padding: EdgeInsets.only(bottom: lang ? 0 : 20),
                       child: Container(
                         color: isDarkMode
-                            ? C.theme.background
-                            : C.theme.surfaceVariant.withOpacity(0.6),
+                            ? C.theme.surface
+                            : C.theme.surfaceContainerHighest.withOpacity(0.6),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -107,7 +107,7 @@ class _IntroPageState extends State<IntroPage> {
                     ),
                     Container(
                       color:
-                          isDarkMode ? C.theme.background : C.theme.surfaceVariant.withOpacity(0.6),
+                          isDarkMode ? C.theme.surface : C.theme.surfaceContainerHighest.withOpacity(0.6),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -146,7 +146,7 @@ class _IntroPageState extends State<IntroPage> {
                     ),
                     Container(
                       color:
-                          isDarkMode ? C.theme.background : C.theme.surfaceVariant.withOpacity(0.6),
+                          isDarkMode ? C.theme.surface : C.theme.surfaceContainerHighest.withOpacity(0.6),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -190,7 +190,7 @@ class _IntroPageState extends State<IntroPage> {
                     ),
                     Container(
                       color:
-                          isDarkMode ? C.theme.background : C.theme.surfaceVariant.withOpacity(0.6),
+                          isDarkMode ? C.theme.surface : C.theme.surfaceContainerHighest.withOpacity(0.6),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -231,7 +231,7 @@ class _IntroPageState extends State<IntroPage> {
                                 width: 300,
                                 child: ElevatedButton(
                                   style: ElevatedButton.styleFrom(
-                                      backgroundColor: C.theme.background,
+                                      backgroundColor: C.theme.surface,
                                       shape: RoundedRectangleBorder(
                                           borderRadius: BorderRadius.circular(30))),
                                   child: const Text("START"),
@@ -257,7 +257,7 @@ class _IntroPageState extends State<IntroPage> {
                       });
                     },
                     child: CircleAvatar(
-                      backgroundColor: C.theme.surfaceVariant,
+                      backgroundColor: C.theme.surfaceContainerHighest,
                       child: lang
                           ? Text(
                               "عر",
@@ -278,7 +278,7 @@ class _IntroPageState extends State<IntroPage> {
           bottomSheet: isLastPage
               ? null
               : Container(
-                  color: C.theme.surfaceVariant,
+                  color: C.theme.surfaceContainerHighest,
                   height: 60,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 40),

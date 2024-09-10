@@ -10,21 +10,21 @@ List<Builder> getPages(B) {
     Builder(
       builder: (context) {
         return MediaQuery(
-            data: MediaQuery.of(context).copyWith(textScaleFactor: B.isTablet ? 1.5 : 1.0),
+            data: MediaQuery.of(context).copyWith(textScaler: TextScaler.linear(B.isTablet ? 1.5 : 1.0)),
             child: const HomePage());
       },
     ),
     Builder(
       builder: (context) {
         return MediaQuery(
-            data: MediaQuery.of(context).copyWith(textScaleFactor: B.isTablet ? 1.5 : 1.0),
+            data: MediaQuery.of(context).copyWith(textScaler: TextScaler.linear(B.isTablet ? 1.5 : 1.0)),
             child: const NotesPage());
       },
     ),
     Builder(
       builder: (context) {
         return MediaQuery(
-            data: MediaQuery.of(context).copyWith(textScaleFactor: B.isTablet ? 1.5 : 1.0),
+            data: MediaQuery.of(context).copyWith(textScaler: TextScaler.linear(B.isTablet ? 1.5 : 1.0)),
             child: const VoiceNotesPage());
       },
     ),
@@ -32,14 +32,14 @@ List<Builder> getPages(B) {
       builder: (context) {
         return MediaQuery(
             data: MediaQuery.of(context)
-                .copyWith(textScaleFactor: B.isTablet ? 1.5 : 1.0), //child: ColorsTest(),);
+                .copyWith(textScaler: TextScaler.linear(B.isTablet ? 1.5 : 1.0)), //child: ColorsTest(),);
             child: const SettingsPage());
       },
     ),
     Builder(
       builder: (context) {
         return MediaQuery(
-            data: MediaQuery.of(context).copyWith(textScaleFactor: B.isTablet ? 1.5 : 1.0),
+            data: MediaQuery.of(context).copyWith(textScaler: TextScaler.linear(B.isTablet ? 1.5 : 1.0)),
             child: const InfoPage());
       },
     ),

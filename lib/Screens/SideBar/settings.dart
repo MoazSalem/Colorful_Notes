@@ -56,7 +56,7 @@ class _SettingsPageState extends State<SettingsPage> {
     return BlocBuilder<NotesCubit, NotesState>(
       builder: (context, state) {
         return Scaffold(
-          backgroundColor: C.isDark ? C.theme.background : C.theme.surfaceVariant.withOpacity(0.6),
+          backgroundColor: C.isDark ? C.theme.surface : C.theme.surfaceContainerHighest.withOpacity(0.6),
           body: ListView(
             padding: EdgeInsets.zero,
             children: [
@@ -89,7 +89,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           color: C.theme.onSurfaceVariant,
                           fontSize: fontSize,
                           fontWeight: FontWeight.w400),
-                      dropdownColor: C.theme.surfaceVariant,
+                      dropdownColor: C.theme.surfaceContainerHighest,
                       elevation: 0,
                       isDense: true,
                       iconEnabledColor: C.theme.onSurfaceVariant,
@@ -100,7 +100,7 @@ class _SettingsPageState extends State<SettingsPage> {
                             value: items,
                             child: MediaQuery(
                               data: MediaQuery.of(context)
-                                  .copyWith(textScaleFactor: C.isTablet ? 2.0 : 1.0),
+                                  .copyWith(textScaler: TextScaler.linear(C.isTablet ? 2.0 : 1.0)),
                               child: Text(items).tr(),
                             ));
                       }).toList(),
@@ -143,7 +143,7 @@ class _SettingsPageState extends State<SettingsPage> {
                             color: C.theme.onSurfaceVariant,
                             fontSize: fontSize,
                             fontWeight: FontWeight.w400),
-                        dropdownColor: C.theme.surfaceVariant,
+                        dropdownColor: C.theme.surfaceContainerHighest,
                         elevation: 0,
                         isDense: true,
                         iconEnabledColor: C.theme.onSurfaceVariant,
@@ -154,7 +154,7 @@ class _SettingsPageState extends State<SettingsPage> {
                               value: items,
                               child: MediaQuery(
                                 data: MediaQuery.of(context)
-                                    .copyWith(textScaleFactor: C.isTablet ? 2.0 : 1.0),
+                                    .copyWith(textScaler: TextScaler.linear(C.isTablet ? 2.0 : 1.0)),
                                 child: Text(items).tr(),
                               ));
                         }).toList(),
@@ -201,7 +201,7 @@ class _SettingsPageState extends State<SettingsPage> {
                             color: C.theme.onSurfaceVariant,
                             fontSize: fontSize,
                             fontWeight: FontWeight.w400),
-                        dropdownColor: C.theme.surfaceVariant,
+                        dropdownColor: C.theme.surfaceContainerHighest,
                         elevation: 0,
                         isDense: true,
                         iconEnabledColor: C.theme.onSurfaceVariant,
@@ -212,7 +212,7 @@ class _SettingsPageState extends State<SettingsPage> {
                               value: items,
                               child: MediaQuery(
                                 data: MediaQuery.of(context)
-                                    .copyWith(textScaleFactor: C.isTablet ? 2.0 : 1.0),
+                                    .copyWith(textScaler: TextScaler.linear(C.isTablet ? 2.0 : 1.0)),
                                 child: Text(items).tr(),
                               ));
                         }).toList(),
@@ -260,7 +260,7 @@ class _SettingsPageState extends State<SettingsPage> {
                             color: C.theme.onSurfaceVariant,
                             fontSize: fontSize,
                             fontWeight: FontWeight.w400),
-                        dropdownColor: C.theme.surfaceVariant,
+                        dropdownColor: C.theme.surfaceContainerHighest,
                         elevation: 0,
                         isDense: true,
                         iconEnabledColor: C.theme.onSurfaceVariant,
@@ -271,7 +271,7 @@ class _SettingsPageState extends State<SettingsPage> {
                               value: items,
                               child: MediaQuery(
                                 data: MediaQuery.of(context)
-                                    .copyWith(textScaleFactor: C.isTablet ? 2.0 : 1.0),
+                                    .copyWith(textScaler: TextScaler.linear(C.isTablet ? 2.0 : 1.0)),
                                 child: Text(items).tr(),
                               ));
                         }).toList(),
@@ -315,7 +315,7 @@ class _SettingsPageState extends State<SettingsPage> {
                             color: C.theme.onSurfaceVariant,
                             fontSize: fontSize,
                             fontWeight: FontWeight.w400),
-                        dropdownColor: C.theme.surfaceVariant,
+                        dropdownColor: C.theme.surfaceContainerHighest,
                         elevation: 0,
                         isDense: true,
                         iconEnabledColor: C.theme.onSurfaceVariant,
@@ -330,7 +330,7 @@ class _SettingsPageState extends State<SettingsPage> {
                               value: items,
                               child: MediaQuery(
                                 data: MediaQuery.of(context)
-                                    .copyWith(textScaleFactor: C.isTablet ? 2.0 : 1.0),
+                                    .copyWith(textScaler: TextScaler.linear(C.isTablet ? 2.0 : 1.0)),
                                 child: Text(items).tr(),
                               ));
                         }).toList(),

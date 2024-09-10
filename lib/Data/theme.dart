@@ -6,13 +6,13 @@ ThemeData light = ThemeData(
     primaryColorDark: const Color(0xfff2f2f2),
     colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.amber)
         .copyWith(secondary: Colors.amber)
-        .copyWith(background: Colors.white));
+        .copyWith(surface: Colors.white));
 
 ThemeData normalDark = ThemeData(
     brightness: Brightness.dark,
     primaryColorDark: const Color(0xFF424242),
     colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.amber)
-        .copyWith(background: const Color(0xFF424242)));
+        .copyWith(surface: const Color(0xFF424242)));
 
 ThemeData amoled = ThemeData(
     useMaterial3: true,
@@ -22,7 +22,7 @@ ThemeData amoled = ThemeData(
     canvasColor: Colors.black,
     cardColor: const Color(0xFF1b1b1b),
     colorScheme:
-        ColorScheme.fromSwatch(primarySwatch: Colors.amber).copyWith(background: Colors.black));
+        ColorScheme.fromSwatch(primarySwatch: Colors.amber).copyWith(surface: Colors.black));
 
 ColorScheme defaultLightColorScheme = const ColorScheme(
   brightness: Brightness.light,
@@ -43,11 +43,9 @@ ColorScheme defaultLightColorScheme = const ColorScheme(
   errorContainer: Color(0xFFF9DEDC),
   onErrorContainer: Color(0xFF410E0B),
   outline: Color(0xFF79747E),
-  background: Color(0xFFFFFBFE),
-  onBackground: Color(0xFF1C1B1F),
   surface: Color(0xFFFFFBFE),
   onSurface: Color(0xFF1C1B1F),
-  surfaceVariant: Color(0xFFE7E0EC),
+  surfaceContainerHighest: Color(0xFFE7E0EC),
   onSurfaceVariant: Color(0xFF49454F),
   inverseSurface: Color(0xFF313033),
   onInverseSurface: Color(0xFFF4EFF4),
@@ -74,11 +72,9 @@ ColorScheme defaultDarkColorScheme = const ColorScheme(
   errorContainer: Color(0xFF8C1D18),
   onErrorContainer: Color(0xFFF9DEDC),
   outline: Color(0xFF938F99),
-  background: Color(0xFF1C1B1F),
-  onBackground: Color(0xFFE6E1E5),
   surface: Color(0xFF1C1B1F),
   onSurface: Color(0xFFE6E1E5),
-  surfaceVariant: Color(0xFF49454F),
+  surfaceContainerHighest: Color(0xFF49454F),
   onSurfaceVariant: Color(0xFFCAC4D0),
   inverseSurface: Color(0xFFE6E1E5),
   onInverseSurface: Color(0xFF313033),

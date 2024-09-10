@@ -41,7 +41,7 @@ class _HomePageState extends State<HomePage> {
       builder: (context, state) {
         notes = (searchOn ? C.notes['homeSearched'] : C.notes['homeNotes'])!;
         return Scaffold(
-          backgroundColor: C.isDark ? C.theme.background : C.theme.surfaceVariant.withOpacity(0.6),
+          backgroundColor: C.isDark ? C.theme.surface : C.theme.surfaceContainerHighest.withOpacity(0.6),
           floatingActionButtonLocation: C.settings["fabIndex"] == 0
               ? FloatingActionButtonLocation.endFloat
               : FloatingActionButtonLocation.startFloat,

@@ -53,7 +53,7 @@ class _HomeState extends State<Home> {
           statusBarBrightness: C.isDark ? Brightness.light : Brightness.dark,
           // For iOS (dark icons)
           systemNavigationBarIconBrightness: C.isDark ? Brightness.light : Brightness.dark,
-          systemNavigationBarColor: C.theme.surfaceVariant,
+          systemNavigationBarColor: C.theme.surfaceContainerHighest,
         ),
         child: BlocBuilder<NotesCubit, NotesState>(
           builder: (context, state) {
@@ -64,7 +64,7 @@ class _HomeState extends State<Home> {
                       width: double.infinity,
                       height: double.infinity,
                       color:
-                          C.isDark ? C.theme.background : C.theme.surfaceVariant.withOpacity(0.6),
+                          C.isDark ? C.theme.surface : C.theme.surfaceContainerHighest.withOpacity(0.6),
                       child: Center(
                         child: SizedBox(
                           width: 200,

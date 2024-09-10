@@ -17,7 +17,7 @@ class CreateVoice extends StatefulWidget {
 class _CreateVoiceState extends State<CreateVoice> {
   final stopWatchTimer = StopWatchTimer(mode: StopWatchMode.countUp);
   final TextEditingController titleC = TextEditingController();
-  final record = Record();
+  final record = AudioRecorder();
   late String title;
   late String content;
   late double height;
@@ -266,11 +266,8 @@ class _CreateVoiceState extends State<CreateVoice> {
                                                 isRecording = true;
                                                 isPaused = false;
                                                 C.onChanged();
-                                                await record.start(
+                                                await record.start(const RecordConfig(),
                                                   path: "${C.appDir.path}/Voice/$name.m4a",
-                                                  encoder: AudioEncoder.aacLc, // by default
-                                                  bitRate: 128000, // by default
-                                                  samplingRate: 44100, // by default
                                                 );
                                               }
                                             },

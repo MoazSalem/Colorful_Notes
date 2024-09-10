@@ -45,7 +45,7 @@ Widget customFab({
                                     child: Container(
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(12),
-                                        color: theme.surfaceVariant,
+                                        color: theme.surfaceContainerHighest,
                                       ),
                                       width: isTablet ? 160 : 100,
                                       height: isTablet ? 50 : 40,
@@ -60,7 +60,7 @@ Widget customFab({
                                   SizedBox(
                                     width: isTablet ? 60 : 40,
                                     child: FloatingActionButton(
-                                      backgroundColor: theme.surfaceVariant,
+                                      backgroundColor: theme.surfaceContainerHighest,
                                       mini: isTablet ? false : true,
                                       onPressed: () {
                                         _openFab = !_openFab;
@@ -93,7 +93,7 @@ Widget customFab({
                                   child: Container(
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(12),
-                                      color: theme.surfaceVariant, //colors[1],
+                                      color: theme.surfaceContainerHighest, //colors[1],
                                     ),
                                     width: isTablet ? 160 : 100,
                                     height: isTablet ? 50 : 40,
@@ -107,7 +107,7 @@ Widget customFab({
                                 SizedBox(
                                   width: isTablet ? 60 : 40,
                                   child: FloatingActionButton(
-                                    backgroundColor: theme.surfaceVariant,
+                                    backgroundColor: theme.surfaceContainerHighest,
                                     //colors[1],
                                     mini: isTablet ? false : true,
                                     onPressed: () {
@@ -144,7 +144,7 @@ Widget customFab({
 
             child: Icon(
               Icons.add,
-              color: theme.surfaceVariant, //white
+              color: theme.surfaceContainerHighest, //white
             ),
           ),
         ],

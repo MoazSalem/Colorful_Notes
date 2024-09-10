@@ -9,7 +9,7 @@ Widget sideBar(
   return inverted
       ? Container(
           width: C.isTablet ? 100 : 60,
-          decoration: BoxDecoration(color: theme.surfaceVariant //Theme.of(context).backgroundColor,
+          decoration: BoxDecoration(color: theme.surfaceContainerHighest //Theme.of(context).backgroundColor,
               ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.end,
@@ -119,7 +119,7 @@ Widget sideBar(
         )
       : Container(
           width: C.isTablet ? 100 : 60,
-          decoration: BoxDecoration(color: theme.surfaceVariant),
+          decoration: BoxDecoration(color: theme.surfaceContainerHighest),
           child: Column(
             children: [
               Expanded(
