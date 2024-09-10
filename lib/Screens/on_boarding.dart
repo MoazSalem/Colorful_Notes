@@ -38,13 +38,13 @@ class _IntroPageState extends State<IntroPage> {
   Widget build(BuildContext context) {
     return AnnotatedRegion<SystemUiOverlayStyle>(
         value: SystemUiOverlayStyle(
-          statusBarColor: isDarkMode ? C.theme.surface : C.theme.surfaceContainerHighest.withOpacity(0.6),
+          statusBarColor: isDarkMode ? C.theme.surface : C.theme.primary,
           statusBarIconBrightness: isDarkMode ? Brightness.light : Brightness.dark,
           // For Android (dark icons)
           statusBarBrightness: isDarkMode ? Brightness.light : Brightness.dark,
           // For iOS (dark icons)
           systemNavigationBarIconBrightness: isDarkMode ? Brightness.light : Brightness.dark,
-          systemNavigationBarColor: C.theme.surfaceContainerHighest,
+          systemNavigationBarColor: C.theme.primary.withOpacity(0.15),
         ),
         child: Scaffold(
           body: SafeArea(
@@ -64,7 +64,7 @@ class _IntroPageState extends State<IntroPage> {
                       child: Container(
                         color: isDarkMode
                             ? C.theme.surface
-                            : C.theme.surfaceContainerHighest.withOpacity(0.6),
+                            : C.theme.primary.withOpacity(0.15),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -107,7 +107,7 @@ class _IntroPageState extends State<IntroPage> {
                     ),
                     Container(
                       color:
-                          isDarkMode ? C.theme.surface : C.theme.surfaceContainerHighest.withOpacity(0.6),
+                          isDarkMode ? C.theme.surface : C.theme.primary.withOpacity(0.15),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -146,7 +146,7 @@ class _IntroPageState extends State<IntroPage> {
                     ),
                     Container(
                       color:
-                          isDarkMode ? C.theme.surface : C.theme.surfaceContainerHighest.withOpacity(0.6),
+                          isDarkMode ? C.theme.surface : C.theme.primary.withOpacity(0.15),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -190,7 +190,7 @@ class _IntroPageState extends State<IntroPage> {
                     ),
                     Container(
                       color:
-                          isDarkMode ? C.theme.surface : C.theme.surfaceContainerHighest.withOpacity(0.6),
+                          isDarkMode ? C.theme.surface : C.theme.primary.withOpacity(0.15),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -257,7 +257,7 @@ class _IntroPageState extends State<IntroPage> {
                       });
                     },
                     child: CircleAvatar(
-                      backgroundColor: C.theme.surfaceContainerHighest,
+                      backgroundColor: C.theme.primary.withOpacity(0.15),
                       child: lang
                           ? Text(
                               "عر",
@@ -278,7 +278,7 @@ class _IntroPageState extends State<IntroPage> {
           bottomSheet: isLastPage
               ? null
               : Container(
-                  color: C.theme.surfaceContainerHighest,
+                  color: C.theme.primary.withOpacity(0.15),
                   height: 60,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 40),

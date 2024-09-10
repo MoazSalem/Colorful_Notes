@@ -36,7 +36,7 @@ class _NotesPageState extends State<NotesPage> {
       builder: (context, state) {
         notes = (searchOn ? C.notes['textSearched'] : C.notes['textNotes'])!;
         return Scaffold(
-          backgroundColor: C.isDark ? C.theme.surface : C.theme.surfaceContainerHighest.withOpacity(0.6),
+          backgroundColor: C.theme.surface,
           floatingActionButtonLocation: C.settings["fabIndex"] == 0
               ? FloatingActionButtonLocation.endFloat
               : FloatingActionButtonLocation.startFloat,
@@ -49,7 +49,7 @@ class _NotesPageState extends State<NotesPage> {
             },
             child: Icon(
               Icons.add,
-              color: C.theme.surfaceContainerHighest,
+              color: C.theme.onPrimary,
             ),
           ),
           body: ListView(

@@ -56,7 +56,7 @@ class _SettingsPageState extends State<SettingsPage> {
     return BlocBuilder<NotesCubit, NotesState>(
       builder: (context, state) {
         return Scaffold(
-          backgroundColor: C.isDark ? C.theme.surface : C.theme.surfaceContainerHighest.withOpacity(0.6),
+          backgroundColor: C.theme.surface,
           body: ListView(
             padding: EdgeInsets.zero,
             children: [
@@ -89,7 +89,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           color: C.theme.onSurfaceVariant,
                           fontSize: fontSize,
                           fontWeight: FontWeight.w400),
-                      dropdownColor: C.theme.surfaceContainerHighest,
+                      dropdownColor: C.theme.primaryContainer,
                       elevation: 0,
                       isDense: true,
                       iconEnabledColor: C.theme.onSurfaceVariant,
@@ -143,7 +143,7 @@ class _SettingsPageState extends State<SettingsPage> {
                             color: C.theme.onSurfaceVariant,
                             fontSize: fontSize,
                             fontWeight: FontWeight.w400),
-                        dropdownColor: C.theme.surfaceContainerHighest,
+                        dropdownColor: C.theme.primaryContainer,
                         elevation: 0,
                         isDense: true,
                         iconEnabledColor: C.theme.onSurfaceVariant,
@@ -201,7 +201,7 @@ class _SettingsPageState extends State<SettingsPage> {
                             color: C.theme.onSurfaceVariant,
                             fontSize: fontSize,
                             fontWeight: FontWeight.w400),
-                        dropdownColor: C.theme.surfaceContainerHighest,
+                        dropdownColor: C.theme.primaryContainer,
                         elevation: 0,
                         isDense: true,
                         iconEnabledColor: C.theme.onSurfaceVariant,
@@ -260,7 +260,7 @@ class _SettingsPageState extends State<SettingsPage> {
                             color: C.theme.onSurfaceVariant,
                             fontSize: fontSize,
                             fontWeight: FontWeight.w400),
-                        dropdownColor: C.theme.surfaceContainerHighest,
+                        dropdownColor: C.theme.primaryContainer,
                         elevation: 0,
                         isDense: true,
                         iconEnabledColor: C.theme.onSurfaceVariant,
@@ -315,7 +315,7 @@ class _SettingsPageState extends State<SettingsPage> {
                             color: C.theme.onSurfaceVariant,
                             fontSize: fontSize,
                             fontWeight: FontWeight.w400),
-                        dropdownColor: C.theme.surfaceContainerHighest,
+                        dropdownColor: C.theme.primaryContainer,
                         elevation: 0,
                         isDense: true,
                         iconEnabledColor: C.theme.onSurfaceVariant,
