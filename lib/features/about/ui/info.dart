@@ -77,7 +77,7 @@ class _InfoPageState extends State<InfoPage> {
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.w300,
-                          color: primaryColor,
+                          color: C.theme.primary,
                         ),
                       ),
                     ),

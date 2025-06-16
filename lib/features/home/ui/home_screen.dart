@@ -1,14 +1,10 @@
+import 'package:colorful_notes/core/consts.dart';
+import 'package:colorful_notes/core/shared_widgets/custom_loading_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lottie/lottie.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:colorful_notes/old_logic/notes_cubit.dart';
-import 'package:colorful_notes/core/pages.dart';
 import 'package:colorful_notes/features/home/ui/widgets/sidebar.dart';
 import 'package:colorful_notes/main.dart';
-
-late Color primaryColor;
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -18,31 +14,10 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  late List<Widget> page;
-
   @override
-  void initState() {
-    page = getPages(C);
-    super.initState();
-  }
-
-  @override
-  void didChangeDependencies() {
+  didChangeDependencies() {
     C.theme = Theme.of(context).colorScheme;
-    C.harmonizeColors();
-    C.settings["lang"] = context.locale.toString();
-    C.brightness =
-        SchedulerBinding.instance.platformDispatcher.platformBrightness;
-    C.getScreenWidth(context);
-    primaryColor =
-        C.theme.primary == Colors.black || C.theme.primary == Colors.white
-        ? C.colors[0]
-        : C.theme.primary;
-    C.isDark =
-        C.settings["currentTheme"] == ThemeMode.dark ||
-        (C.settings["currentTheme"] == ThemeMode.system &&
-            C.brightness == Brightness.dark);
-    C.updateHomeWidgets(context);
+    C.width = MediaQuery.sizeOf(context).width;
     super.didChangeDependencies();
   }
 
@@ -53,41 +28,18 @@ class _HomeState extends State<Home> {
         return Scaffold(
           resizeToAvoidBottomInset: false,
           body: C.loading
-              ? Container(
-                  width: double.infinity,
-                  height: double.infinity,
-                  color: C.isDark
-                      ? C.theme.surface
-                      : C.theme.primary.withAlpha(38),
-                  child: Center(
-                    child: SizedBox(
-                      width: 200,
-                      height: 200,
-                      child: Lottie.asset('assets/animations/loading.json'),
-                    ),
-                  ),
-                )
+              ? CustomLoadingWidget()
               : Row(
-                  children:
-                      C.settings["sbIndex"] == 2 || C.settings["sbIndex"] == 3
-                      ? [
-                          Expanded(flex: 5, child: page[C.currentIndex]),
-                          sideBar(
-                            theme: C.theme,
-                            inverted: C.settings["sbIndex"] == 3 ? true : false,
-                            C: C,
-                            sizeBox: C.isTablet ? 60 : 30,
-                          ),
-                        ]
-                      : [
-                          sideBar(
-                            theme: C.theme,
-                            inverted: C.settings["sbIndex"] == 1 ? true : false,
-                            C: C,
-                            sizeBox: C.isTablet ? 60 : 30,
-                          ),
-                          Expanded(flex: 5, child: page[C.currentIndex]),
-                        ],
+                  children: [
+                    SideBar(
+                      currentIndex: C.currentIndex,
+                      onIndexChanged: (i) => {C.onIndexChanged(i)},
+                    ),
+                    Expanded(
+                      flex: 5,
+                      child: AppConsts.pagesList[C.currentIndex],
+                    ),
+                  ],
                 ),
         );
       },

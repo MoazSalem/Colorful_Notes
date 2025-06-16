@@ -43,7 +43,7 @@ class _VoiceNotesPageState extends State<VoiceNotesPage> {
             elevation: 0,
             backgroundColor: C.settings["colorful"]
                 ? C.colors[3]
-                : primaryColor,
+                : C.theme.primary,
             onPressed: () async {
               showBottomSheet(
                 enableDrag: false,
@@ -70,7 +70,7 @@ class _VoiceNotesPageState extends State<VoiceNotesPage> {
                           onChanged: (query) =>
                               C.search(query: query, where: "voice"),
                           maxLines: 1,
-                          cursorColor: primaryColor,
+                          cursorColor: C.theme.primary,
                           decoration: InputDecoration(
                             contentPadding: EdgeInsets.symmetric(
                               vertical: C.isTablet ? 20 : 5,
@@ -83,7 +83,7 @@ class _VoiceNotesPageState extends State<VoiceNotesPage> {
                               borderRadius: BorderRadius.circular(0),
                             ),
                             focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: primaryColor),
+                              borderSide: BorderSide(color: C.theme.primary),
                               borderRadius: BorderRadius.circular(0),
                             ),
                             hintText: "Search".tr(),
@@ -299,7 +299,7 @@ class _VoiceNotesPageState extends State<VoiceNotesPage> {
                           style: TextStyle(
                             color: C.settings["colorful"]
                                 ? C.colors[3]
-                                : primaryColor,
+                                : C.theme.primary,
                             fontWeight: FontWeight.w400,
                           ), //B.colors[3]
                         ),
@@ -334,7 +334,7 @@ class _VoiceNotesPageState extends State<VoiceNotesPage> {
             color: searchOn
                 ? C.settings["colorful"]
                       ? C.colors[3]
-                      : primaryColor
+                      : C.theme.primary
                 : C
                       .theme
                       .onSurfaceVariant, //Theme.of(context).textTheme.bodyMedium!.color,

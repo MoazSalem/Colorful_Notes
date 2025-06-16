@@ -84,7 +84,7 @@ class _HomePageState extends State<HomePage> {
                           onChanged: (query) =>
                               C.search(query: query, where: "home"),
                           maxLines: 1,
-                          cursorColor: primaryColor,
+                          cursorColor: C.theme.primary,
                           decoration: InputDecoration(
                             contentPadding: EdgeInsets.symmetric(
                               vertical: C.isTablet ? 20 : 5,
@@ -97,7 +97,7 @@ class _HomePageState extends State<HomePage> {
                               borderRadius: BorderRadius.circular(0),
                             ),
                             focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: primaryColor),
+                              borderSide: BorderSide(color: C.theme.primary),
                               borderRadius: BorderRadius.circular(0),
                             ),
                             hintText: "Search".tr(),
@@ -343,7 +343,7 @@ class _HomePageState extends State<HomePage> {
                           style: TextStyle(
                             color: C.settings["colorful"]
                                 ? C.colors[0]
-                                : primaryColor,
+                                : C.theme.primary,
                             fontWeight: FontWeight.w400,
                           ),
                         ),
@@ -374,7 +374,7 @@ class _HomePageState extends State<HomePage> {
             color: searchOn
                 ? C.settings["colorful"]
                       ? C.colors[0]
-                      : primaryColor
+                      : C.theme.primary
                 : C.theme.onSurfaceVariant, //const Color(0xffff8b34)
           ),
         ),

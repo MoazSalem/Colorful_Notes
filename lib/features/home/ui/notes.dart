@@ -45,7 +45,7 @@ class _NotesPageState extends State<NotesPage> {
             elevation: 0,
             backgroundColor: C.settings["colorful"]
                 ? C.colors[1]
-                : primaryColor,
+                : C.theme.primary,
             onPressed: () async {
               create();
             },
@@ -68,7 +68,7 @@ class _NotesPageState extends State<NotesPage> {
                           onChanged: (query) =>
                               C.search(query: query, where: "text"),
                           maxLines: 1,
-                          cursorColor: primaryColor,
+                          cursorColor: C.theme.primary,
                           decoration: InputDecoration(
                             contentPadding: EdgeInsets.symmetric(
                               vertical: C.isTablet ? 20 : 5,
@@ -81,7 +81,7 @@ class _NotesPageState extends State<NotesPage> {
                               borderRadius: BorderRadius.circular(0),
                             ),
                             focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: primaryColor),
+                              borderSide: BorderSide(color: C.theme.primary),
                               borderRadius: BorderRadius.circular(0),
                             ),
                             hintText: "Search".tr(),
@@ -317,7 +317,7 @@ class _NotesPageState extends State<NotesPage> {
                           style: TextStyle(
                             color: C.settings["colorful"]
                                 ? C.colors[1]
-                                : primaryColor,
+                                : C.theme.primary,
                             fontWeight: FontWeight.w400,
                           ),
                         ),
@@ -348,7 +348,7 @@ class _NotesPageState extends State<NotesPage> {
             color: searchOn
                 ? C.settings["colorful"]
                       ? C.colors[1]
-                      : primaryColor
+                      : C.theme.primary
                 : C.theme.onSurfaceVariant,
           ),
         ),

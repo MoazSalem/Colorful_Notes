@@ -1,3 +1,4 @@
+import 'package:colorful_notes/main.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:colorful_notes/features/home/ui/home_screen.dart';
@@ -62,7 +63,7 @@ Widget customFab({
                                         style: TextStyle(
                                           color: colorful
                                               ? colors[3]
-                                              : primaryColor,
+                                              : C.theme.primary,
                                         ),
                                       ),
                                     ),
@@ -85,7 +86,7 @@ Widget customFab({
                                       Icons.mic,
                                       color: colorful
                                           ? colors[3]
-                                          : primaryColor,
+                                          : C.theme.primary,
                                     ),
                                   ),
                                 ),
@@ -123,7 +124,7 @@ Widget customFab({
                                       style: TextStyle(
                                         color: colorful
                                             ? colors[1]
-                                            : primaryColor,
+                                            : C.theme.primary,
                                       ),
                                     ),
                                   ),
@@ -145,7 +146,9 @@ Widget customFab({
                                   elevation: 0,
                                   child: Icon(
                                     Icons.sticky_note_2,
-                                    color: colorful ? colors[1] : primaryColor,
+                                    color: colorful
+                                        ? colors[1]
+                                        : C.theme.primary,
                                   ),
                                 ),
                               ),
@@ -158,7 +161,7 @@ Widget customFab({
             ),
           ),
           FloatingActionButton(
-            backgroundColor: colorful ? colors[0] : primaryColor,
+            backgroundColor: colorful ? colors[0] : C.theme.primary,
             //openFab ? colors[afterTap] : colors[main],
             //splashColor: theme.primaryContainer,
             //openFab ? colors[main] : colors[afterTap],
