@@ -32,13 +32,14 @@ class _SettingsPageState extends State<SettingsPage> {
 
   @override
   void initState() {
-    height = C.isTablet ? 120 : 80;
-    title = C.isTablet ? 26 : 22;
-    subtitle = C.isTablet ? 16 : 12;
-    switchSize = C.isTablet ? 100 : 50;
-    iconSize = C.isTablet ? 40 : 10.0;
-    itemHeight = C.isTablet ? 80 : 50.0;
-    fontSize = C.isTablet ? 10 : 14;
+    bool isTablet = getDeviceType() == 'tablet' ? true : false;
+    height = isTablet ? 120 : 80;
+    title = isTablet ? 26 : 22;
+    subtitle = isTablet ? 16 : 12;
+    switchSize = isTablet ? 100 : 50;
+    iconSize = isTablet ? 40 : 10.0;
+    itemHeight = isTablet ? 80 : 50.0;
+    fontSize = isTablet ? 10 : 14;
     sB = C.settings["sbIndex"] == 0
         ? "Top Left"
         : C.settings["sbIndex"] == 1

@@ -1,4 +1,4 @@
-import 'package:colorful_notes/core/di/dependency_injection.dart';
+import 'package:colorful_notes/core/services/service_locator.dart';
 import 'package:colorful_notes/features/home/ui/home_screen.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -58,7 +58,7 @@ class OnboardingPageWidget extends StatelessWidget {
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
               ),
               onPressed: () async {
-                getIt<Box>().put('showHome', true);
+                serviceLocator<Box>().put('showHome', true);
                 Navigator.of(context).pushReplacement(
                   MaterialPageRoute(builder: (context) => const Home()),
                 );

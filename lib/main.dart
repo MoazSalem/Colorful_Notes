@@ -1,4 +1,4 @@
-import 'package:colorful_notes/core/di/dependency_injection.dart';
+import 'package:colorful_notes/core/services/service_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -18,7 +18,8 @@ void main() async {
   await EasyLocalization.ensureInitialized();
   // Initialize the Hive services.
   await Hive.initFlutter();
-  await setupGetIt();
+  // Initialize get it.
+  await setupServiceLocator();
   runApp(
     EasyLocalization(
       useOnlyLangCode: true,
@@ -36,7 +37,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => NotesCubit(getIt<Box>())..startPage(),
+      create: (context) => NotesCubit(serviceLocator<Box>())..startPage(),
       child: BlocConsumer<NotesCubit, NotesState>(
         listener: (context, state) {},
         builder: (context, state) {
@@ -74,7 +75,7 @@ class MyApp extends StatelessWidget {
                     supportedLocales: context.supportedLocales,
                     locale: context.locale,
                     // Skip on boarding screen if not first time
-                    home: getIt<Box>().get('showHome') ?? false
+                    home: serviceLocator<Box>().get('showHome') ?? false
                         ? const Home()
                         : const IntroPage(),
                   ),
