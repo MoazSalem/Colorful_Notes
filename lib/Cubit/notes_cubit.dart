@@ -9,7 +9,7 @@ import 'package:dynamic_color/dynamic_color.dart';
 import 'package:easy_localization/easy_localization.dart' hide TextDirection;
 import 'package:external_path/external_path.dart';
 import 'package:hive/hive.dart';
-import 'package:notes/Screens/SideBar/home.dart';
+import 'package:colorful_notes/Screens/SideBar/home.dart';
 import 'package:path/path.dart' as path;
 import 'package:material_dialogs/material_dialogs.dart';
 import 'package:material_dialogs/widgets/buttons/icon_button.dart';
@@ -17,8 +17,7 @@ import 'package:material_dialogs/widgets/buttons/icon_outline_button.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:notes/Data/colors.dart';
-import 'package:notes/Services/flex_colors/theme_controller.dart';
+import 'package:colorful_notes/Data/colors.dart';
 import '../Services/home_widget_config.dart';
 
 part 'notes_state.dart';
@@ -28,7 +27,6 @@ class NotesCubit extends Cubit<NotesState> {
   NotesCubit(this.box) : super(NotesInitial());
   static NotesCubit get(context) => BlocProvider.of(context);
 
-  late ThemeController themeController;
   late Database database;
   late ColorScheme theme;
   late double width;
@@ -46,7 +44,7 @@ class NotesCubit extends Cubit<NotesState> {
     "voiceNotes": [],
     "homeSearched": [],
     "textSearched": [],
-    "voiceSearched": []
+    "voiceSearched": [],
   };
   Map<String, dynamic> settings = {
     "sbIndex": 0,
@@ -59,7 +57,7 @@ class NotesCubit extends Cubit<NotesState> {
     "harmonizeColor": true,
     "lang": "en",
     "openPage": "Home",
-    "currentTheme": ThemeMode.system
+    "currentTheme": ThemeMode.system,
   };
 
   onChanged() {
@@ -89,11 +87,16 @@ class NotesCubit extends Cubit<NotesState> {
   }
 
   Future<void> startDatabase() async {
-    await openDatabase('notes.db', version: 1, onCreate: (db, version) async {
-      await db.execute(
-          'CREATE TABLE Notes (id INTEGER PRIMARY KEY, title TEXT, content TEXT, time Text, cindex INTEGER, tindex INTEGER, type INTEGER, edited Text, layout INTEGER, extra Text)');
-    }, onOpen: (db) async {})
-        .then((value) => database = value);
+    await openDatabase(
+      'notes.db',
+      version: 1,
+      onCreate: (db, version) async {
+        await db.execute(
+          'CREATE TABLE Notes (id INTEGER PRIMARY KEY, title TEXT, content TEXT, time Text, cindex INTEGER, tindex INTEGER, type INTEGER, edited Text, layout INTEGER, extra Text)',
+        );
+      },
+      onOpen: (db) async {},
+    ).then((value) => database = value);
     await refreshDatabase();
   }
 
@@ -108,20 +111,22 @@ class NotesCubit extends Cubit<NotesState> {
     emit(NoteCreate());
   }
 
-  Future<void> insertToDatabase(
-      {required String title,
-      required String content,
-      required int index,
-      required String time,
-      required int layout,
-      required tIndex,
-      required String extra,
-      int? type = 0,
-      String? edited = 'no'}) async {
+  Future<void> insertToDatabase({
+    required String title,
+    required String content,
+    required int index,
+    required String time,
+    required int layout,
+    required tIndex,
+    required String extra,
+    int? type = 0,
+    String? edited = 'no',
+  }) async {
     await database.transaction((txn) async {
       txn
           .rawInsert(
-              'INSERT INTO Notes(title, content, cindex, tindex, type, time, edited ,layout, extra) VALUES("$title", "$content", "$index", "$tIndex", "$type","$time","$edited","$layout","$extra")')
+            'INSERT INTO Notes(title, content, cindex, tindex, type, time, edited ,layout, extra) VALUES("$title", "$content", "$index", "$tIndex", "$type","$time","$edited","$layout","$extra")',
+          )
           .then((value) {});
     });
     await refreshDatabase();
@@ -140,26 +145,29 @@ class NotesCubit extends Cubit<NotesState> {
     }).toList();
   }
 
-  Future<void> editDatabaseItem(
-      {required int id,
-      required String content,
-      required String time,
-      required int index,
-      required int type,
-      required String title,
-      required int layout,
-      required int tIndex,
-      required String extra,
-      String? edited = 'yes'}) async {
+  Future<void> editDatabaseItem({
+    required int id,
+    required String content,
+    required String time,
+    required int index,
+    required int type,
+    required String title,
+    required int layout,
+    required int tIndex,
+    required String extra,
+    String? edited = 'yes',
+  }) async {
     await database.rawUpdate(
-        'UPDATE Notes SET title = ?, content = ?, time = ?, cindex = ?, tindex = ?, type = ?, edited = ?, layout = ?, extra = ? WHERE id = ?',
-        [title, content, time, index, tIndex, type, edited, layout, extra, id]);
+      'UPDATE Notes SET title = ?, content = ?, time = ?, cindex = ?, tindex = ?, type = ?, edited = ?, layout = ?, extra = ? WHERE id = ?',
+      [title, content, time, index, tIndex, type, edited, layout, extra, id],
+    );
     await refreshDatabase();
   }
 
   Future<void> deleteFromDatabase({required int id}) async {
-    int count =
-        await database.rawDelete('DELETE FROM Notes WHERE id = ?', ['$id']);
+    int count = await database.rawDelete('DELETE FROM Notes WHERE id = ?', [
+      '$id',
+    ]);
     assert(count == 1);
     await refreshDatabase();
   }
@@ -191,8 +199,8 @@ class NotesCubit extends Cubit<NotesState> {
     settings["openPage"] == 'Home'
         ? currentIndex = 0
         : settings["openPage"] == 'Text'
-            ? currentIndex = 1
-            : currentIndex = 2;
+        ? currentIndex = 1
+        : currentIndex = 2;
   }
 
   getScreenWidth(context) {
@@ -235,7 +243,7 @@ class NotesCubit extends Cubit<NotesState> {
       final content = note['content'].toString().toLowerCase();
       return note['type'] == 0
           ? title.contains(query.toLowerCase()) ||
-              content.contains(query.toLowerCase())
+                content.contains(query.toLowerCase())
           : title.contains(query.toLowerCase());
     }).toList();
     notes['${where}Searched'] = searched;
@@ -253,11 +261,11 @@ class NotesCubit extends Cubit<NotesState> {
     }
     colors = settings["darkColors"]
         ? settings["harmonizeColor"]
-            ? hdColors
-            : darkerColors
+              ? hdColors
+              : darkerColors
         : settings["harmonizeColor"]
-            ? hlColors
-            : lightColors;
+        ? hlColors
+        : lightColors;
     emit(ColorsHarmonized());
   }
 
@@ -297,7 +305,7 @@ class NotesCubit extends Cubit<NotesState> {
 
   localPath() async {
     appDir = await getApplicationDocumentsDirectory();
-    extDir = await ExternalPath.getExternalStorageDirectories();
+    extDir = (await ExternalPath.getExternalStorageDirectories())!;
   }
 
   createVoiceFolder() async {
@@ -329,55 +337,58 @@ class NotesCubit extends Cubit<NotesState> {
 
   showDeleteDialog(BuildContext context, List<Map> notes, int index) {
     return Dialogs.materialDialog(
-        msg: "msg".tr(),
-        title: "DeleteN".tr(),
-        color: Theme.of(context).cardColor,
-        context: context,
-        actions: [
-          IconsOutlineButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            text: 'Cancel'.tr(),
-            iconData: Icons.cancel_outlined,
-            textStyle: const TextStyle(color: Colors.grey),
-            iconColor: Colors.grey,
-            shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(8.0))),
+      msg: "msg".tr(),
+      title: "DeleteN".tr(),
+      color: Theme.of(context).cardColor,
+      context: context,
+      actions: [
+        IconsOutlineButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          text: 'Cancel'.tr(),
+          iconData: Icons.cancel_outlined,
+          textStyle: const TextStyle(color: Colors.grey),
+          iconColor: Colors.grey,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(8.0)),
           ),
-          IconsButton(
-            onPressed: () async {
-              notes[index]["type"] == 1
-                  ? {
-                      await deleteFile(notes[index]["content"]),
-                      await deleteFromDatabase(id: notes[index]["id"]),
-                    }
-                  : {
-                      await deleteFromDatabase(id: notes[index]["id"]),
-                    };
-              Navigator.of(context).pop();
-              onCreateNote();
-            },
-            text: 'Delete'.tr(),
-            iconData: Icons.delete,
-            color: notes[index]['cindex'] == 99
-                ? Color(int.parse(notes[index]['extra']))
-                : colors[notes[index]['cindex']],
-            textStyle: const TextStyle(color: Colors.white),
-            iconColor: Colors.white,
-            shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(8.0))),
-            padding: const EdgeInsets.symmetric(vertical: 10),
+        ),
+        IconsButton(
+          onPressed: () async {
+            notes[index]["type"] == 1
+                ? {
+                    await deleteFile(notes[index]["content"]),
+                    await deleteFromDatabase(id: notes[index]["id"]),
+                  }
+                : {await deleteFromDatabase(id: notes[index]["id"])};
+            Navigator.of(context).pop();
+            onCreateNote();
+          },
+          text: 'Delete'.tr(),
+          iconData: Icons.delete,
+          color: notes[index]['cindex'] == 99
+              ? Color(int.parse(notes[index]['extra']))
+              : colors[notes[index]['cindex']],
+          textStyle: const TextStyle(color: Colors.white),
+          iconColor: Colors.white,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(8.0)),
           ),
-        ]);
+          padding: const EdgeInsets.symmetric(vertical: 10),
+        ),
+      ],
+    );
   }
 
   int calculateDifference(String stringDate) {
     var date = DateTime.parse(stringDate);
     DateTime now = DateTime.now();
-    return DateTime(date.year, date.month, date.day)
-        .difference(DateTime(now.year, now.month, now.day))
-        .inDays;
+    return DateTime(
+      date.year,
+      date.month,
+      date.day,
+    ).difference(DateTime(now.year, now.month, now.day)).inDays;
   }
 
   String parseDate(String stringDate) {
@@ -396,7 +407,8 @@ class NotesCubit extends Cubit<NotesState> {
       child: Divider(
         thickness: 1,
         color: theme.outline.withOpacity(
-            0.2), //Theme.of(context).highlightColor.withOpacity(0.3),
+          0.2,
+        ), //Theme.of(context).highlightColor.withOpacity(0.3),
       ),
     );
   }
@@ -406,18 +418,19 @@ class NotesCubit extends Cubit<NotesState> {
       children: [
         Padding(
           padding: EdgeInsets.only(
-              left: settings["lang"] == 'en'
-                  ? isTablet
+            left: settings["lang"] == 'en'
+                ? isTablet
                       ? 40
                       : 20
-                  : 0,
-              right: settings["lang"] == 'en'
-                  ? 0
-                  : isTablet
-                      ? 40
-                      : 20,
-              bottom: 10,
-              top: top),
+                : 0,
+            right: settings["lang"] == 'en'
+                ? 0
+                : isTablet
+                ? 40
+                : 20,
+            bottom: 10,
+            top: top,
+          ),
           child: Stack(
             alignment: settings["lang"] == 'en'
                 ? Alignment.centerLeft
@@ -426,14 +439,15 @@ class NotesCubit extends Cubit<NotesState> {
               Text(
                 title,
                 style: TextStyle(
-                    fontSize: 34,
-                    fontWeight: FontWeight.w600,
-                    color: theme.onSurfaceVariant),
+                  fontSize: 34,
+                  fontWeight: FontWeight.w600,
+                  color: theme.onSurfaceVariant,
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.only(right: 5),
                 child: leading ?? Container(),
-              )
+              ),
             ],
           ),
         ),
@@ -446,13 +460,15 @@ class NotesCubit extends Cubit<NotesState> {
       source.listSync(recursive: false).forEach((var entity) {
         if (entity is Directory) {
           var newDirectory = Directory(
-              path.join(destination.absolute.path, path.basename(entity.path)));
+            path.join(destination.absolute.path, path.basename(entity.path)),
+          );
           newDirectory.createSync();
 
           copyDirectory(entity.absolute, newDirectory);
         } else if (entity is File) {
           entity.copySync(
-              path.join(destination.path, path.basename(entity.path)));
+            path.join(destination.path, path.basename(entity.path)),
+          );
         }
       });
 
@@ -461,10 +477,12 @@ class NotesCubit extends Cubit<NotesState> {
     final dbFolder = await getDatabasesPath();
     File source1 = File('$dbFolder/notes.db');
     File source2 = File('${appDir.path}/Voice');
-    Directory dbBackup =
-        Directory("${extDir[0]}/Colorful Notes/backup/Database");
-    Directory voBackup =
-        Directory("${extDir[0]}/Colorful Notes/backup/.VoiceNotes");
+    Directory dbBackup = Directory(
+      "${extDir[0]}/Colorful Notes/backup/Database",
+    );
+    Directory voBackup = Directory(
+      "${extDir[0]}/Colorful Notes/backup/.VoiceNotes",
+    );
     if ((dbBackup.existsSync()) && (voBackup.existsSync())) {
       if (kDebugMode) {
         print("Path exist");
@@ -501,10 +519,12 @@ class NotesCubit extends Cubit<NotesState> {
     final dbFolder = await getDatabasesPath();
     String source1 = '$dbFolder/notes.db';
     String source2 = '${appDir.path}/Voice';
-    Directory dbBackup =
-        Directory("${extDir[0]}/Colorful Notes/backup/Database");
-    Directory voBackup =
-        Directory("${extDir[0]}/Colorful Notes/backup/.VoiceNotes");
+    Directory dbBackup = Directory(
+      "${extDir[0]}/Colorful Notes/backup/Database",
+    );
+    Directory voBackup = Directory(
+      "${extDir[0]}/Colorful Notes/backup/.VoiceNotes",
+    );
     if ((dbBackup.existsSync()) && (voBackup.existsSync())) {
       if (kDebugMode) {
         print("Path exist");
@@ -540,77 +560,78 @@ class NotesCubit extends Cubit<NotesState> {
 
   bDialog(BuildContext context) {
     return Dialogs.materialDialog(
-        msg: "m2".tr(),
-        title: "Backup".tr(),
-        color: Theme.of(context).cardColor,
-        context: context,
-        actions: [
-          IconsOutlineButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            text: 'Cancel'.tr(),
-            iconData: Icons.cancel_outlined,
-            textStyle: const TextStyle(color: Colors.grey),
-            iconColor: Colors.grey,
-          ),
-          IconsButton(
-            onPressed: () async {
-              await backUp();
-              Navigator.of(context).pop();
-              emit(OnDelete());
-              SnackBar snackBar = SnackBar(
-                content: Text('Backup Complete'.tr()),
-              );
-              ScaffoldMessenger.of(context).showSnackBar(snackBar);
-            },
-            text: 'Backup'.tr(),
-            iconData: Icons.backup_outlined,
-            color: colors[0],
-            textStyle: const TextStyle(color: Colors.white),
-            iconColor: Colors.white,
-          ),
-        ]);
+      msg: "m2".tr(),
+      title: "Backup".tr(),
+      color: Theme.of(context).cardColor,
+      context: context,
+      actions: [
+        IconsOutlineButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          text: 'Cancel'.tr(),
+          iconData: Icons.cancel_outlined,
+          textStyle: const TextStyle(color: Colors.grey),
+          iconColor: Colors.grey,
+        ),
+        IconsButton(
+          onPressed: () async {
+            await backUp();
+            Navigator.of(context).pop();
+            emit(OnDelete());
+            SnackBar snackBar = SnackBar(content: Text('Backup Complete'.tr()));
+            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          },
+          text: 'Backup'.tr(),
+          iconData: Icons.backup_outlined,
+          color: colors[0],
+          textStyle: const TextStyle(color: Colors.white),
+          iconColor: Colors.white,
+        ),
+      ],
+    );
   }
 
   rDialog(BuildContext context) {
     return Dialogs.materialDialog(
-        msg: "m3".tr(),
-        title: "Restore".tr(),
-        color: Theme.of(context).cardColor,
-        context: context,
-        actions: [
-          IconsOutlineButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            text: 'Cancel'.tr(),
-            iconData: Icons.cancel_outlined,
-            textStyle: const TextStyle(color: Colors.grey),
-            iconColor: Colors.grey,
-          ),
-          IconsButton(
-            onPressed: () async {
-              await restore();
-              Navigator.of(context).pop();
-              emit(OnDelete());
-              SnackBar snackBar = SnackBar(
-                content: Text('Restore Complete'.tr()),
-              );
-              ScaffoldMessenger.of(context).showSnackBar(snackBar);
-            },
-            text: 'Yes'.tr(),
-            iconData: Icons.restore,
-            color: colors[0],
-            textStyle: const TextStyle(color: Colors.white),
-            iconColor: Colors.white,
-          ),
-        ]);
+      msg: "m3".tr(),
+      title: "Restore".tr(),
+      color: Theme.of(context).cardColor,
+      context: context,
+      actions: [
+        IconsOutlineButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          text: 'Cancel'.tr(),
+          iconData: Icons.cancel_outlined,
+          textStyle: const TextStyle(color: Colors.grey),
+          iconColor: Colors.grey,
+        ),
+        IconsButton(
+          onPressed: () async {
+            await restore();
+            Navigator.of(context).pop();
+            emit(OnDelete());
+            SnackBar snackBar = SnackBar(
+              content: Text('Restore Complete'.tr()),
+            );
+            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          },
+          text: 'Yes'.tr(),
+          iconData: Icons.restore,
+          color: colors[0],
+          textStyle: const TextStyle(color: Colors.white),
+          iconColor: Colors.white,
+        ),
+      ],
+    );
   }
 }
 
 String getDeviceType() {
   final data = MediaQueryData.fromView(
-      WidgetsBinding.instance.platformDispatcher.views.single);
+    WidgetsBinding.instance.platformDispatcher.views.single,
+  );
   return data.size.shortestSide < 600 ? 'phone' : 'tablet';
 }

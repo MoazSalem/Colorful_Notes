@@ -4,10 +4,11 @@ gradle-wrapper.jar
 /gradlew
 /gradlew.bat
 /local.properties
-/lib/Private
-android/app/agconnect-services.json
 GeneratedPluginRegistrant.java
-android/app/keystore.properties
-android/app/keystore.jks
+.cxx/
+
+# Remember to never publicly share your keystore.
+# See https://flutter.dev/to/reference-keystore
+key.properties
 **/*.keystore
 **/*.jks

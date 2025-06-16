@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:notes/Cubit/notes_cubit.dart';
-import 'package:notes/Screens/Actions/edit_voice.dart';
-import 'package:notes/Screens/SideBar/home.dart';
-import 'package:notes/Screens/home_screen.dart';
-import 'package:notes/Widgets/notes.dart';
-import 'package:notes/Screens/Actions/create_voice.dart';
-import 'package:notes/main.dart';
+import 'package:colorful_notes/Cubit/notes_cubit.dart';
+import 'package:colorful_notes/Screens/Actions/edit_voice.dart';
+import 'package:colorful_notes/Screens/SideBar/home.dart';
+import 'package:colorful_notes/Screens/home_screen.dart';
+import 'package:colorful_notes/Widgets/notes.dart';
+import 'package:colorful_notes/Screens/Actions/create_voice.dart';
+import 'package:colorful_notes/main.dart';
 
 class VoiceNotesPage extends StatefulWidget {
   const VoiceNotesPage({super.key});
@@ -41,15 +41,17 @@ class _VoiceNotesPageState extends State<VoiceNotesPage> {
           floatingActionButton: FloatingActionButton(
             splashColor: C.colors[1],
             elevation: 0,
-            backgroundColor: C.settings["colorful"] ? C.colors[3] : primaryColor,
+            backgroundColor: C.settings["colorful"]
+                ? C.colors[3]
+                : primaryColor,
             onPressed: () async {
               showBottomSheet(
-                  enableDrag: false, context: context, builder: (context) => const CreateVoice());
+                enableDrag: false,
+                context: context,
+                builder: (context) => const CreateVoice(),
+              );
             },
-            child: Icon(
-              Icons.add,
-              color: C.theme.onPrimary,
-            ),
+            child: Icon(Icons.add, color: C.theme.onPrimary),
           ),
           body: ListView(
             padding: EdgeInsets.zero,
@@ -58,35 +60,51 @@ class _VoiceNotesPageState extends State<VoiceNotesPage> {
               searchOn
                   ? Center(
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 10,
+                          horizontal: 20,
+                        ),
                         child: TextFormField(
-                            autofocus: true,
-                            controller: searchController,
-                            onChanged: (query) => C.search(query: query, where: "voice"),
-                            maxLines: 1,
-                            cursorColor: primaryColor,
-                            decoration: InputDecoration(
-                              contentPadding: EdgeInsets.symmetric(
-                                  vertical: C.isTablet ? 20 : 5, horizontal: 20),
-                              enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.grey.shade300),
-                                  borderRadius: BorderRadius.circular(0)),
-                              focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: primaryColor),
-                                  borderRadius: BorderRadius.circular(0)),
-                              hintText: "Search".tr(),
-                              filled: true,
-                              fillColor: Theme.of(context).cardColor,
-                              border: OutlineInputBorder(borderRadius: BorderRadius.circular(0)),
-                            )),
+                          autofocus: true,
+                          controller: searchController,
+                          onChanged: (query) =>
+                              C.search(query: query, where: "voice"),
+                          maxLines: 1,
+                          cursorColor: primaryColor,
+                          decoration: InputDecoration(
+                            contentPadding: EdgeInsets.symmetric(
+                              vertical: C.isTablet ? 20 : 5,
+                              horizontal: 20,
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Colors.grey.shade300,
+                              ),
+                              borderRadius: BorderRadius.circular(0),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: primaryColor),
+                              borderRadius: BorderRadius.circular(0),
+                            ),
+                            hintText: "Search".tr(),
+                            filled: true,
+                            fillColor: Theme.of(context).cardColor,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(0),
+                            ),
+                          ),
+                        ),
                       ),
                     )
                   : Container(),
               notes.isNotEmpty
                   ? viewIndex != 2
-                      ? Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
-                          child: ListView.builder(
+                        ? Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 2,
+                            ),
+                            child: ListView.builder(
                               padding: EdgeInsets.zero,
                               shrinkWrap: true,
                               physics: const NeverScrollableScrollPhysics(),
@@ -96,8 +114,12 @@ class _VoiceNotesPageState extends State<VoiceNotesPage> {
                                 notes[reverseIndex]["title"] == ""
                                     ? noTitle = true
                                     : noTitle = false;
-                                int dateValue = C.calculateDifference(notes[reverseIndex]["time"]);
-                                String date = C.parseDate(notes[reverseIndex]["time"]);
+                                int dateValue = C.calculateDifference(
+                                  notes[reverseIndex]["time"],
+                                );
+                                String date = C.parseDate(
+                                  notes[reverseIndex]["time"],
+                                );
                                 Widget chosenView = viewIndex == 0
                                     ? Stack(
                                         alignment: Alignment.topRight,
@@ -114,8 +136,10 @@ class _VoiceNotesPageState extends State<VoiceNotesPage> {
                                               noTitle: noTitle,
                                               noContent: false,
                                               showDate: C.settings["showDate"],
-                                              showShadow: C.settings["showShadow"],
-                                              showEdited: C.settings["showEdited"],
+                                              showShadow:
+                                                  C.settings["showShadow"],
+                                              showEdited:
+                                                  C.settings["showEdited"],
                                               isTablet: C.isTablet,
                                               lang: context.locale.toString(),
                                               width: C.width,
@@ -123,20 +147,24 @@ class _VoiceNotesPageState extends State<VoiceNotesPage> {
                                           ),
                                           Padding(
                                             padding: EdgeInsets.symmetric(
-                                                horizontal: C.isTablet ? 15 : 10,
-                                                vertical: C.width * 0.02037),
+                                              horizontal: C.isTablet ? 15 : 10,
+                                              vertical: C.width * 0.02037,
+                                            ),
                                             child: IconButton(
-                                                focusColor: Colors.blue,
-                                                onPressed: () async {
-                                                  showDelete(reverseIndex);
-                                                },
-                                                icon: Icon(
-                                                  Icons.highlight_remove,
-                                                  color: notes[reverseIndex]['tindex'] == 0
-                                                      ? Colors.white
-                                                      : Colors.black,
-                                                  size: C.width * 0.06620,
-                                                )),
+                                              focusColor: Colors.blue,
+                                              onPressed: () async {
+                                                showDelete(reverseIndex);
+                                              },
+                                              icon: Icon(
+                                                Icons.highlight_remove,
+                                                color:
+                                                    notes[reverseIndex]['tindex'] ==
+                                                        0
+                                                    ? Colors.white
+                                                    : Colors.black,
+                                                size: C.width * 0.06620,
+                                              ),
+                                            ),
                                           ),
                                         ],
                                       )
@@ -155,8 +183,10 @@ class _VoiceNotesPageState extends State<VoiceNotesPage> {
                                               noTitle: noTitle,
                                               noContent: false,
                                               showDate: C.settings["showDate"],
-                                              showShadow: C.settings["showShadow"],
-                                              showEdited: C.settings["showEdited"],
+                                              showShadow:
+                                                  C.settings["showShadow"],
+                                              showEdited:
+                                                  C.settings["showEdited"],
                                               isTablet: C.isTablet,
                                               lang: context.locale.toString(),
                                               width: C.width,
@@ -164,33 +194,42 @@ class _VoiceNotesPageState extends State<VoiceNotesPage> {
                                           ),
                                           Padding(
                                             padding: EdgeInsets.symmetric(
-                                                horizontal: C.isTablet ? 8.0 : 0,
-                                                vertical: C.isTablet ? 8.0 : 0),
+                                              horizontal: C.isTablet ? 8.0 : 0,
+                                              vertical: C.isTablet ? 8.0 : 0,
+                                            ),
                                             child: IconButton(
-                                                focusColor: Colors.blue,
-                                                onPressed: () async {
-                                                  showDelete(reverseIndex);
-                                                },
-                                                icon: Icon(
-                                                  Icons.highlight_remove,
-                                                  color: notes[reverseIndex]['tindex'] == 0
-                                                      ? Colors.white
-                                                      : Colors.black,
-                                                  size: C.width * 0.0662,
-                                                )),
+                                              focusColor: Colors.blue,
+                                              onPressed: () async {
+                                                showDelete(reverseIndex);
+                                              },
+                                              icon: Icon(
+                                                Icons.highlight_remove,
+                                                color:
+                                                    notes[reverseIndex]['tindex'] ==
+                                                        0
+                                                    ? Colors.white
+                                                    : Colors.black,
+                                                size: C.width * 0.0662,
+                                              ),
+                                            ),
                                           ),
                                         ],
                                       );
                                 return chosenView;
-                              }),
-                        )
-                      : Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
-                          child: GridView.builder(
+                              },
+                            ),
+                          )
+                        : Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 2,
+                            ),
+                            child: GridView.builder(
                               padding: EdgeInsets.zero,
-                              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 2,
-                              ),
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 2,
+                                  ),
                               shrinkWrap: true,
                               physics: const NeverScrollableScrollPhysics(),
                               itemCount: notes.length,
@@ -199,8 +238,12 @@ class _VoiceNotesPageState extends State<VoiceNotesPage> {
                                 notes[reverseIndex]["title"] == ""
                                     ? noTitle = true
                                     : noTitle = false;
-                                int dateValue = C.calculateDifference(notes[reverseIndex]["time"]);
-                                String date = C.parseDate(notes[reverseIndex]["time"]);
+                                int dateValue = C.calculateDifference(
+                                  notes[reverseIndex]["time"],
+                                );
+                                String date = C.parseDate(
+                                  notes[reverseIndex]["time"],
+                                );
                                 return Stack(
                                   alignment: Alignment.topRight,
                                   children: [
@@ -225,38 +268,44 @@ class _VoiceNotesPageState extends State<VoiceNotesPage> {
                                     ),
                                     Padding(
                                       padding: EdgeInsets.symmetric(
-                                          horizontal: C.isTablet ? 8.0 : 0,
-                                          vertical: C.isTablet ? 8.0 : 0),
+                                        horizontal: C.isTablet ? 8.0 : 0,
+                                        vertical: C.isTablet ? 8.0 : 0,
+                                      ),
                                       child: IconButton(
-                                          focusColor: Colors.blue,
-                                          onPressed: () async {
-                                            showDelete(reverseIndex);
-                                          },
-                                          icon: Icon(
-                                            Icons.highlight_remove,
-                                            color: notes[reverseIndex]['tindex'] == 0
-                                                ? Colors.white
-                                                : Colors.black,
-                                            size: C.width * 0.0662,
-                                          )),
+                                        focusColor: Colors.blue,
+                                        onPressed: () async {
+                                          showDelete(reverseIndex);
+                                        },
+                                        icon: Icon(
+                                          Icons.highlight_remove,
+                                          color:
+                                              notes[reverseIndex]['tindex'] == 0
+                                              ? Colors.white
+                                              : Colors.black,
+                                          size: C.width * 0.0662,
+                                        ),
+                                      ),
                                     ),
                                   ],
                                 );
-                              }),
-                        )
+                              },
+                            ),
+                          )
                   : Padding(
                       padding: const EdgeInsets.symmetric(vertical: 200),
                       child: Center(
-                          child: Text(
-                        "N3".tr(),
-                        style: TextStyle(
-                            color: C.settings["colorful"] ? C.colors[3] : primaryColor,
-                            fontWeight: FontWeight.w400), //B.colors[3]
-                      )),
+                        child: Text(
+                          "N3".tr(),
+                          style: TextStyle(
+                            color: C.settings["colorful"]
+                                ? C.colors[3]
+                                : primaryColor,
+                            fontWeight: FontWeight.w400,
+                          ), //B.colors[3]
+                        ),
+                      ),
                     ),
-              const SizedBox(
-                height: 20,
-              ),
+              const SizedBox(height: 20),
             ],
           ),
         );
@@ -284,9 +333,11 @@ class _VoiceNotesPageState extends State<VoiceNotesPage> {
             size: 30,
             color: searchOn
                 ? C.settings["colorful"]
-                    ? C.colors[3]
-                    : primaryColor
-                : C.theme.onSurfaceVariant, //Theme.of(context).textTheme.bodyMedium!.color,
+                      ? C.colors[3]
+                      : primaryColor
+                : C
+                      .theme
+                      .onSurfaceVariant, //Theme.of(context).textTheme.bodyMedium!.color,
           ),
         ),
         IconButton(
@@ -298,9 +349,9 @@ class _VoiceNotesPageState extends State<VoiceNotesPage> {
           icon: viewIndex == 0
               ? const Icon(Icons.indeterminate_check_box)
               : viewIndex == 1
-                  ? const Icon(Icons.view_agenda_sharp)
-                  : const Icon(Icons.grid_view_sharp),
-        )
+              ? const Icon(Icons.view_agenda_sharp)
+              : const Icon(Icons.grid_view_sharp),
+        ),
       ],
     );
   }

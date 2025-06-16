@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:notes/Cubit/notes_cubit.dart';
-import 'package:notes/Screens/Actions/create_note.dart';
-import 'package:notes/Screens/Actions/edit_note.dart';
-import 'package:notes/Screens/SideBar/home.dart';
-import 'package:notes/Screens/home_screen.dart';
-import 'package:notes/Widgets/notes.dart';
-import 'package:notes/main.dart';
+import 'package:colorful_notes/Cubit/notes_cubit.dart';
+import 'package:colorful_notes/Screens/Actions/create_note.dart';
+import 'package:colorful_notes/Screens/Actions/edit_note.dart';
+import 'package:colorful_notes/Screens/SideBar/home.dart';
+import 'package:colorful_notes/Screens/home_screen.dart';
+import 'package:colorful_notes/Widgets/notes.dart';
+import 'package:colorful_notes/main.dart';
 
 class NotesPage extends StatefulWidget {
   const NotesPage({super.key});
@@ -43,14 +43,13 @@ class _NotesPageState extends State<NotesPage> {
           floatingActionButton: FloatingActionButton(
             splashColor: C.colors[0],
             elevation: 0,
-            backgroundColor: C.settings["colorful"] ? C.colors[1] : primaryColor,
+            backgroundColor: C.settings["colorful"]
+                ? C.colors[1]
+                : primaryColor,
             onPressed: () async {
               create();
             },
-            child: Icon(
-              Icons.add,
-              color: C.theme.onPrimary,
-            ),
+            child: Icon(Icons.add, color: C.theme.onPrimary),
           ),
           body: ListView(
             padding: EdgeInsets.zero,
@@ -59,35 +58,51 @@ class _NotesPageState extends State<NotesPage> {
               searchOn
                   ? Center(
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 10,
+                          horizontal: 20,
+                        ),
                         child: TextFormField(
-                            autofocus: true,
-                            controller: searchController,
-                            onChanged: (query) => C.search(query: query, where: "text"),
-                            maxLines: 1,
-                            cursorColor: primaryColor,
-                            decoration: InputDecoration(
-                              contentPadding: EdgeInsets.symmetric(
-                                  vertical: C.isTablet ? 20 : 5, horizontal: 20),
-                              enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.grey.shade300),
-                                  borderRadius: BorderRadius.circular(0)),
-                              focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: primaryColor),
-                                  borderRadius: BorderRadius.circular(0)),
-                              hintText: "Search".tr(),
-                              filled: true,
-                              fillColor: Theme.of(context).cardColor,
-                              border: OutlineInputBorder(borderRadius: BorderRadius.circular(0)),
-                            )),
+                          autofocus: true,
+                          controller: searchController,
+                          onChanged: (query) =>
+                              C.search(query: query, where: "text"),
+                          maxLines: 1,
+                          cursorColor: primaryColor,
+                          decoration: InputDecoration(
+                            contentPadding: EdgeInsets.symmetric(
+                              vertical: C.isTablet ? 20 : 5,
+                              horizontal: 20,
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Colors.grey.shade300,
+                              ),
+                              borderRadius: BorderRadius.circular(0),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: primaryColor),
+                              borderRadius: BorderRadius.circular(0),
+                            ),
+                            hintText: "Search".tr(),
+                            filled: true,
+                            fillColor: Theme.of(context).cardColor,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(0),
+                            ),
+                          ),
+                        ),
                       ),
                     )
                   : Container(),
               notes.isNotEmpty
                   ? viewIndex != 2
-                      ? Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
-                          child: ListView.builder(
+                        ? Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 2,
+                            ),
+                            child: ListView.builder(
                               padding: EdgeInsets.zero,
                               shrinkWrap: true,
                               physics: const NeverScrollableScrollPhysics(),
@@ -100,11 +115,16 @@ class _NotesPageState extends State<NotesPage> {
                                 notes[reverseIndex]["content"] == ""
                                     ? noContent = true
                                     : noContent = false;
-                                int dateValue = C.calculateDifference(notes[reverseIndex]["time"]);
-                                String date = C.parseDate(notes[reverseIndex]["time"]);
+                                int dateValue = C.calculateDifference(
+                                  notes[reverseIndex]["time"],
+                                );
+                                String date = C.parseDate(
+                                  notes[reverseIndex]["time"],
+                                );
                                 Widget chosenView = viewIndex == 0
                                     ? Stack(
-                                        alignment: notes[reverseIndex]["layout"] == 0
+                                        alignment:
+                                            notes[reverseIndex]["layout"] == 0
                                             ? Alignment.topRight
                                             : Alignment.topLeft,
                                         children: [
@@ -120,8 +140,10 @@ class _NotesPageState extends State<NotesPage> {
                                               noTitle: noTitle,
                                               noContent: noContent,
                                               showDate: C.settings["showDate"],
-                                              showShadow: C.settings["showShadow"],
-                                              showEdited: C.settings["showEdited"],
+                                              showShadow:
+                                                  C.settings["showShadow"],
+                                              showEdited:
+                                                  C.settings["showEdited"],
                                               isTablet: C.isTablet,
                                               lang: context.locale.toString(),
                                               width: C.width,
@@ -129,29 +151,36 @@ class _NotesPageState extends State<NotesPage> {
                                           ),
                                           Padding(
                                             padding: EdgeInsets.symmetric(
-                                                horizontal: notes[reverseIndex]["layout"] == 0
-                                                    ? 10
-                                                    : C.isTablet
-                                                        ? 15
-                                                        : 10,
-                                                vertical: C.width * 0.02037),
+                                              horizontal:
+                                                  notes[reverseIndex]["layout"] ==
+                                                      0
+                                                  ? 10
+                                                  : C.isTablet
+                                                  ? 15
+                                                  : 10,
+                                              vertical: C.width * 0.02037,
+                                            ),
                                             child: IconButton(
-                                                focusColor: Colors.blue,
-                                                onPressed: () async {
-                                                  showDelete(reverseIndex);
-                                                },
-                                                icon: Icon(
-                                                  Icons.highlight_remove,
-                                                  color: notes[reverseIndex]['tindex'] == 0
-                                                      ? Colors.white
-                                                      : Colors.black,
-                                                  size: C.width * 0.06620,
-                                                )),
+                                              focusColor: Colors.blue,
+                                              onPressed: () async {
+                                                showDelete(reverseIndex);
+                                              },
+                                              icon: Icon(
+                                                Icons.highlight_remove,
+                                                color:
+                                                    notes[reverseIndex]['tindex'] ==
+                                                        0
+                                                    ? Colors.white
+                                                    : Colors.black,
+                                                size: C.width * 0.06620,
+                                              ),
+                                            ),
                                           ),
                                         ],
                                       )
                                     : Stack(
-                                        alignment: notes[reverseIndex]["layout"] == 0
+                                        alignment:
+                                            notes[reverseIndex]["layout"] == 0
                                             ? Alignment.topRight
                                             : Alignment.topLeft,
                                         children: [
@@ -167,8 +196,10 @@ class _NotesPageState extends State<NotesPage> {
                                               noTitle: noTitle,
                                               noContent: noContent,
                                               showDate: C.settings["showDate"],
-                                              showShadow: C.settings["showShadow"],
-                                              showEdited: C.settings["showEdited"],
+                                              showShadow:
+                                                  C.settings["showShadow"],
+                                              showEdited:
+                                                  C.settings["showEdited"],
                                               isTablet: C.isTablet,
                                               lang: context.locale.toString(),
                                               width: C.width,
@@ -176,33 +207,42 @@ class _NotesPageState extends State<NotesPage> {
                                           ),
                                           Padding(
                                             padding: EdgeInsets.symmetric(
-                                                horizontal: C.isTablet ? 8.0 : 0,
-                                                vertical: C.isTablet ? 8.0 : 0),
+                                              horizontal: C.isTablet ? 8.0 : 0,
+                                              vertical: C.isTablet ? 8.0 : 0,
+                                            ),
                                             child: IconButton(
-                                                focusColor: Colors.blue,
-                                                onPressed: () async {
-                                                  showDelete(reverseIndex);
-                                                },
-                                                icon: Icon(
-                                                  Icons.highlight_remove,
-                                                  color: notes[reverseIndex]['tindex'] == 0
-                                                      ? Colors.white
-                                                      : Colors.black,
-                                                  size: C.width * 0.0662,
-                                                )),
+                                              focusColor: Colors.blue,
+                                              onPressed: () async {
+                                                showDelete(reverseIndex);
+                                              },
+                                              icon: Icon(
+                                                Icons.highlight_remove,
+                                                color:
+                                                    notes[reverseIndex]['tindex'] ==
+                                                        0
+                                                    ? Colors.white
+                                                    : Colors.black,
+                                                size: C.width * 0.0662,
+                                              ),
+                                            ),
                                           ),
                                         ],
                                       );
                                 return chosenView;
-                              }),
-                        )
-                      : Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
-                          child: GridView.builder(
+                              },
+                            ),
+                          )
+                        : Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 2,
+                            ),
+                            child: GridView.builder(
                               padding: EdgeInsets.zero,
-                              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 2,
-                              ),
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 2,
+                                  ),
                               shrinkWrap: true,
                               physics: const NeverScrollableScrollPhysics(),
                               itemCount: notes.length,
@@ -214,8 +254,12 @@ class _NotesPageState extends State<NotesPage> {
                                 notes[reverseIndex]["content"] == ""
                                     ? noContent = true
                                     : noContent = false;
-                                int dateValue = C.calculateDifference(notes[reverseIndex]["time"]);
-                                String date = C.parseDate(notes[reverseIndex]["time"]);
+                                int dateValue = C.calculateDifference(
+                                  notes[reverseIndex]["time"],
+                                );
+                                String date = C.parseDate(
+                                  notes[reverseIndex]["time"],
+                                );
                                 return Stack(
                                   alignment: notes[reverseIndex]["layout"] == 0
                                       ? Alignment.topRight
@@ -242,38 +286,44 @@ class _NotesPageState extends State<NotesPage> {
                                     ),
                                     Padding(
                                       padding: EdgeInsets.symmetric(
-                                          horizontal: C.isTablet ? 8.0 : 0,
-                                          vertical: C.isTablet ? 8.0 : 0),
+                                        horizontal: C.isTablet ? 8.0 : 0,
+                                        vertical: C.isTablet ? 8.0 : 0,
+                                      ),
                                       child: IconButton(
-                                          focusColor: Colors.blue,
-                                          onPressed: () async {
-                                            showDelete(reverseIndex);
-                                          },
-                                          icon: Icon(
-                                            Icons.highlight_remove,
-                                            color: notes[reverseIndex]['tindex'] == 0
-                                                ? Colors.white
-                                                : Colors.black,
-                                            size: C.width * 0.0662,
-                                          )),
+                                        focusColor: Colors.blue,
+                                        onPressed: () async {
+                                          showDelete(reverseIndex);
+                                        },
+                                        icon: Icon(
+                                          Icons.highlight_remove,
+                                          color:
+                                              notes[reverseIndex]['tindex'] == 0
+                                              ? Colors.white
+                                              : Colors.black,
+                                          size: C.width * 0.0662,
+                                        ),
+                                      ),
                                     ),
                                   ],
                                 );
-                              }),
-                        )
+                              },
+                            ),
+                          )
                   : Padding(
                       padding: const EdgeInsets.symmetric(vertical: 200),
                       child: Center(
-                          child: Text(
-                        "N2".tr(),
-                        style: TextStyle(
-                            color: C.settings["colorful"] ? C.colors[1] : primaryColor,
-                            fontWeight: FontWeight.w400),
-                      )),
+                        child: Text(
+                          "N2".tr(),
+                          style: TextStyle(
+                            color: C.settings["colorful"]
+                                ? C.colors[1]
+                                : primaryColor,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                      ),
                     ),
-              const SizedBox(
-                height: 20,
-              ),
+              const SizedBox(height: 20),
             ],
           ),
         );
@@ -297,8 +347,8 @@ class _NotesPageState extends State<NotesPage> {
             size: 30,
             color: searchOn
                 ? C.settings["colorful"]
-                    ? C.colors[1]
-                    : primaryColor
+                      ? C.colors[1]
+                      : primaryColor
                 : C.theme.onSurfaceVariant,
           ),
         ),
@@ -311,9 +361,9 @@ class _NotesPageState extends State<NotesPage> {
           icon: viewIndex == 0
               ? const Icon(Icons.indeterminate_check_box)
               : viewIndex == 1
-                  ? const Icon(Icons.view_agenda_sharp)
-                  : const Icon(Icons.grid_view_sharp),
-        )
+              ? const Icon(Icons.view_agenda_sharp)
+              : const Icon(Icons.grid_view_sharp),
+        ),
       ],
     );
   }
