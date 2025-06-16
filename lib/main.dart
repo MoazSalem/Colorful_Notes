@@ -4,10 +4,10 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/services.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:colorful_notes/Cubit/notes_cubit.dart';
+import 'package:colorful_notes/old_logic/notes_cubit.dart';
 import 'package:responsive_framework/responsive_framework.dart';
-import 'Screens/home_screen.dart';
-import 'Screens/on_boarding.dart';
+import 'features/home/ui/home_screen.dart';
+import 'features/onboarding/ui/onboarding_view.dart';
 
 late NotesCubit C;
 

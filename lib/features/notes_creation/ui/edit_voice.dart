@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
-import 'package:colorful_notes/Cubit/notes_cubit.dart';
+import 'package:colorful_notes/old_logic/notes_cubit.dart';
 import 'package:colorful_notes/main.dart';
 
 class EditVoice extends StatefulWidget {

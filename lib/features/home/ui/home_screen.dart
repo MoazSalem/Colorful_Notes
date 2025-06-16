@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:colorful_notes/Cubit/notes_cubit.dart';
-import 'package:colorful_notes/Data/pages.dart';
-import 'package:colorful_notes/Widgets/sidebar.dart';
+import 'package:colorful_notes/old_logic/notes_cubit.dart';
+import 'package:colorful_notes/core/pages.dart';
+import 'package:colorful_notes/features/home/ui/widgets/sidebar.dart';
 import 'package:colorful_notes/main.dart';
 
 late Color primaryColor;
@@ -59,7 +58,7 @@ class _HomeState extends State<Home> {
                   height: double.infinity,
                   color: C.isDark
                       ? C.theme.surface
-                      : C.theme.primary.withOpacity(0.15),
+                      : C.theme.primary.withAlpha(38),
                   child: Center(
                     child: SizedBox(
                       width: 200,

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:colorful_notes/Screens/SideBar/home.dart';
-import 'package:colorful_notes/Screens/SideBar/info.dart';
-import 'package:colorful_notes/Screens/SideBar/notes.dart';
-import 'package:colorful_notes/Screens/SideBar/settings.dart';
-import 'package:colorful_notes/Screens/SideBar/voice.dart';
+import 'package:colorful_notes/features/home/ui/home.dart';
+import 'package:colorful_notes/features/about/ui/info.dart';
+import 'package:colorful_notes/features/home/ui/notes.dart';
+import 'package:colorful_notes/features/settings/ui/settings.dart';
+import 'package:colorful_notes/features/home/ui/voice.dart';
 
 List<Builder> getPages(B) {
   return [

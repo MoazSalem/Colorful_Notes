@@ -1,37 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:colorful_notes/Screens/home_screen.dart';
+import 'package:colorful_notes/old_logic/notes_cubit.dart';
+import 'package:colorful_notes/features/notes_creation/ui/edit_voice.dart';
+import 'package:colorful_notes/features/home/ui/home.dart';
+import 'package:colorful_notes/features/home/ui/home_screen.dart';
+import 'package:colorful_notes/features/home/ui/widgets/notes.dart';
+import 'package:colorful_notes/features/notes_creation/ui/create_voice.dart';
 import 'package:colorful_notes/main.dart';
-import 'package:colorful_notes/Cubit/notes_cubit.dart';
-import 'package:colorful_notes/Screens/Actions/edit_note.dart';
-import 'package:colorful_notes/Screens/Actions/edit_voice.dart';
-import 'package:colorful_notes/Widgets/custom_fab.dart';
-import 'package:colorful_notes/Widgets/notes.dart';
-import 'package:colorful_notes/Screens/Actions/create_note.dart';
-import 'package:colorful_notes/Screens/Actions/create_voice.dart';
-import 'dart:ui' as ui;
 
-final TextEditingController searchController = TextEditingController();
-
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class VoiceNotesPage extends StatefulWidget {
+  const VoiceNotesPage({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<VoiceNotesPage> createState() => _VoiceNotesPageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _VoiceNotesPageState extends State<VoiceNotesPage> {
+  late bool noTitle;
   late int viewIndex;
   late List<Map> notes;
-  bool noTitle = false;
-  bool noContent = false;
   bool searchOn = false;
-  bool openFab = false;
 
   @override
   void initState() {
-    viewIndex = C.box.get('viewIndex') ?? 0;
+    viewIndex = C.box.get('viewIndexV') ?? 0;
     super.initState();
   }
 
@@ -39,38 +32,31 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return BlocBuilder<NotesCubit, NotesState>(
       builder: (context, state) {
-        notes = (searchOn ? C.notes['homeSearched'] : C.notes['homeNotes'])!;
+        notes = (searchOn ? C.notes['voiceSearched'] : C.notes['voiceNotes'])!;
         return Scaffold(
           backgroundColor: C.theme.surface,
           floatingActionButtonLocation: C.settings["fabIndex"] == 0
               ? FloatingActionButtonLocation.endFloat
               : FloatingActionButtonLocation.startFloat,
-          floatingActionButton: C.settings["fabIndex"] == 0
-              ? customFab(
-                  theme: C.theme,
-                  colors: C.colors,
-                  action1: create1,
-                  action2: create2,
-                  colorful: C.settings["colorful"],
-                  isTablet: C.isTablet,
-                )
-              : Directionality(
-                  textDirection: C.settings["lang"] == 'en'
-                      ? ui.TextDirection.rtl
-                      : ui.TextDirection.ltr,
-                  child: customFab(
-                    theme: C.theme,
-                    colors: C.colors,
-                    action1: create1,
-                    action2: create2,
-                    colorful: C.settings["colorful"],
-                    isTablet: C.isTablet,
-                  ),
-                ),
+          floatingActionButton: FloatingActionButton(
+            splashColor: C.colors[1],
+            elevation: 0,
+            backgroundColor: C.settings["colorful"]
+                ? C.colors[3]
+                : primaryColor,
+            onPressed: () async {
+              showBottomSheet(
+                enableDrag: false,
+                context: context,
+                builder: (context) => const CreateVoice(),
+              );
+            },
+            child: Icon(Icons.add, color: C.theme.onPrimary),
+          ),
           body: ListView(
             padding: EdgeInsets.zero,
             children: [
-              C.customAppBar("Home".tr(), 65, leading()),
+              C.customAppBar("Voice".tr(), 65, leading()),
               searchOn
                   ? Center(
                       child: Padding(
@@ -82,7 +68,7 @@ class _HomePageState extends State<HomePage> {
                           autofocus: true,
                           controller: searchController,
                           onChanged: (query) =>
-                              C.search(query: query, where: "home"),
+                              C.search(query: query, where: "voice"),
                           maxLines: 1,
                           cursorColor: primaryColor,
                           decoration: InputDecoration(
@@ -128,9 +114,6 @@ class _HomePageState extends State<HomePage> {
                                 notes[reverseIndex]["title"] == ""
                                     ? noTitle = true
                                     : noTitle = false;
-                                notes[reverseIndex]["content"] == ""
-                                    ? noContent = true
-                                    : noContent = false;
                                 int dateValue = C.calculateDifference(
                                   notes[reverseIndex]["time"],
                                 );
@@ -139,13 +122,7 @@ class _HomePageState extends State<HomePage> {
                                 );
                                 Widget chosenView = viewIndex == 0
                                     ? Stack(
-                                        alignment:
-                                            notes[reverseIndex]["layout"] ==
-                                                    0 ||
-                                                notes[reverseIndex]["layout"] ==
-                                                    2
-                                            ? Alignment.topRight
-                                            : Alignment.topLeft,
+                                        alignment: Alignment.topRight,
                                         children: [
                                           GestureDetector(
                                             onTap: () => edit(reverseIndex),
@@ -157,7 +134,7 @@ class _HomePageState extends State<HomePage> {
                                               dateValue: dateValue,
                                               date: date,
                                               noTitle: noTitle,
-                                              noContent: noContent,
+                                              noContent: false,
                                               showDate: C.settings["showDate"],
                                               showShadow:
                                                   C.settings["showShadow"],
@@ -170,15 +147,7 @@ class _HomePageState extends State<HomePage> {
                                           ),
                                           Padding(
                                             padding: EdgeInsets.symmetric(
-                                              horizontal:
-                                                  notes[reverseIndex]["layout"] ==
-                                                          0 ||
-                                                      notes[reverseIndex]["layout"] ==
-                                                          2
-                                                  ? 10
-                                                  : C.isTablet
-                                                  ? 15
-                                                  : 10,
+                                              horizontal: C.isTablet ? 15 : 10,
                                               vertical: C.width * 0.02037,
                                             ),
                                             child: IconButton(
@@ -200,13 +169,7 @@ class _HomePageState extends State<HomePage> {
                                         ],
                                       )
                                     : Stack(
-                                        alignment:
-                                            notes[reverseIndex]["layout"] ==
-                                                    0 ||
-                                                notes[reverseIndex]["layout"] ==
-                                                    2
-                                            ? Alignment.topRight
-                                            : Alignment.topLeft,
+                                        alignment: Alignment.topRight,
                                         children: [
                                           GestureDetector(
                                             onTap: () => edit(reverseIndex),
@@ -218,7 +181,7 @@ class _HomePageState extends State<HomePage> {
                                               dateValue: dateValue,
                                               date: date,
                                               noTitle: noTitle,
-                                              noContent: noContent,
+                                              noContent: false,
                                               showDate: C.settings["showDate"],
                                               showShadow:
                                                   C.settings["showShadow"],
@@ -275,9 +238,6 @@ class _HomePageState extends State<HomePage> {
                                 notes[reverseIndex]["title"] == ""
                                     ? noTitle = true
                                     : noTitle = false;
-                                notes[reverseIndex]["content"] == ""
-                                    ? noContent = true
-                                    : noContent = false;
                                 int dateValue = C.calculateDifference(
                                   notes[reverseIndex]["time"],
                                 );
@@ -285,11 +245,7 @@ class _HomePageState extends State<HomePage> {
                                   notes[reverseIndex]["time"],
                                 );
                                 return Stack(
-                                  alignment:
-                                      notes[reverseIndex]["layout"] == 0 ||
-                                          notes[reverseIndex]["layout"] == 2
-                                      ? Alignment.topRight
-                                      : Alignment.topLeft,
+                                  alignment: Alignment.topRight,
                                   children: [
                                     GestureDetector(
                                       onTap: () => edit(reverseIndex),
@@ -301,7 +257,7 @@ class _HomePageState extends State<HomePage> {
                                         dateValue: dateValue,
                                         date: date,
                                         noTitle: noTitle,
-                                        noContent: noContent,
+                                        noContent: false,
                                         showDate: C.settings["showDate"],
                                         showShadow: C.settings["showShadow"],
                                         showEdited: C.settings["showEdited"],
@@ -339,13 +295,13 @@ class _HomePageState extends State<HomePage> {
                       padding: const EdgeInsets.symmetric(vertical: 200),
                       child: Center(
                         child: Text(
-                          "N1".tr(),
+                          "N3".tr(),
                           style: TextStyle(
                             color: C.settings["colorful"]
-                                ? C.colors[0]
+                                ? C.colors[3]
                                 : primaryColor,
                             fontWeight: FontWeight.w400,
-                          ),
+                          ), //B.colors[3]
                         ),
                       ),
                     ),
@@ -357,6 +313,10 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  showDelete(index) {
+    C.showDeleteDialog(context, notes, index);
+  }
+
   Widget leading() {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -365,7 +325,7 @@ class _HomePageState extends State<HomePage> {
         IconButton(
           onPressed: () {
             searchOn = !searchOn;
-            C.search(query: searchController.text, where: "home");
+            C.search(query: searchController.text, where: "voice");
             C.onChanged();
           },
           icon: Icon(
@@ -373,19 +333,21 @@ class _HomePageState extends State<HomePage> {
             size: 30,
             color: searchOn
                 ? C.settings["colorful"]
-                      ? C.colors[0]
+                      ? C.colors[3]
                       : primaryColor
-                : C.theme.onSurfaceVariant, //const Color(0xffff8b34)
+                : C
+                      .theme
+                      .onSurfaceVariant, //Theme.of(context).textTheme.bodyMedium!.color,
           ),
         ),
         IconButton(
           onPressed: () {
             viewIndex < 2 ? viewIndex++ : viewIndex = 0;
-            C.box.put("viewIndex", viewIndex);
+            C.box.put("viewIndexV", viewIndex);
             C.onChanged();
           },
           icon: viewIndex == 0
-              ? const Icon(Icons.indeterminate_check_box_sharp)
+              ? const Icon(Icons.indeterminate_check_box)
               : viewIndex == 1
               ? const Icon(Icons.view_agenda_sharp)
               : const Icon(Icons.grid_view_sharp),
@@ -394,28 +356,10 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  create1() {
-    showBottomSheet(context: context, builder: (context) => const CreateNote());
-  }
-
-  create2() {
-    showBottomSheet(
-      enableDrag: false,
-      context: context,
-      builder: (context) => const CreateVoice(),
-    );
-  }
-
-  edit(reverseIndex) {
+  edit(index) {
     showBottomSheet(
       context: context,
-      builder: (context) => notes[reverseIndex]['type'] == 0
-          ? EditNote(note: notes[reverseIndex])
-          : EditVoice(note: notes[reverseIndex]),
+      builder: (context) => EditVoice(note: notes[index]),
     );
-  }
-
-  showDelete(index) {
-    C.showDeleteDialog(context, notes, index);
   }
 }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:colorful_notes/Cubit/notes_cubit.dart';
+import 'package:colorful_notes/old_logic/notes_cubit.dart';
 
 Widget sideBar({
   required ColorScheme theme,

@@ -9,7 +9,7 @@ import 'package:dynamic_color/dynamic_color.dart';
 import 'package:easy_localization/easy_localization.dart' hide TextDirection;
 import 'package:external_path/external_path.dart';
 import 'package:hive_ce/hive.dart';
-import 'package:colorful_notes/Screens/SideBar/home.dart';
+import 'package:colorful_notes/features/home/ui/home.dart';
 import 'package:path/path.dart' as path;
 import 'package:material_dialogs/material_dialogs.dart';
 import 'package:material_dialogs/widgets/buttons/icon_button.dart';
@@ -17,8 +17,8 @@ import 'package:material_dialogs/widgets/buttons/icon_outline_button.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:colorful_notes/Data/colors.dart';
-import '../Services/home_widget_config.dart';
+import 'package:colorful_notes/core/colors.dart';
+import '../core/home_widget_config.dart';
 
 part 'notes_state.dart';
 
