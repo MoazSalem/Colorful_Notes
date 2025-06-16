@@ -1,7 +1,8 @@
+import 'package:colorful_notes/core/di/dependency_injection.dart';
 import 'package:colorful_notes/features/home/ui/home_screen.dart';
-import 'package:colorful_notes/main.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:hive_ce/hive.dart';
 import 'package:lottie/lottie.dart';
 
 class OnboardingPageWidget extends StatelessWidget {
@@ -57,7 +58,7 @@ class OnboardingPageWidget extends StatelessWidget {
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
               ),
               onPressed: () async {
-                C.box.put('showHome', true);
+                getIt<Box>().put('showHome', true);
                 Navigator.of(context).pushReplacement(
                   MaterialPageRoute(builder: (context) => const Home()),
                 );

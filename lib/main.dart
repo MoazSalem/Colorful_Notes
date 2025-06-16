@@ -1,3 +1,4 @@
+import 'package:colorful_notes/core/di/dependency_injection.dart';
 import 'package:flutter/material.dart';
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -17,31 +18,25 @@ void main() async {
   await EasyLocalization.ensureInitialized();
   // Initialize the Hive services.
   await Hive.initFlutter();
-  // open a named hive box to store settings
-  Box box = await Hive.openBox("settingsBox");
-  // Skip Starting screen if not first time
-  final bool showHome = box.get('showHome') ?? false;
+  await setupGetIt();
   runApp(
     EasyLocalization(
       useOnlyLangCode: true,
       supportedLocales: const [Locale('en'), Locale('ar')],
       path: 'assets/translations',
       fallbackLocale: const Locale('en'),
-      child: MyApp(showHome: showHome, box: box),
+      child: MyApp(),
     ),
   );
 }
 
 class MyApp extends StatelessWidget {
-  final bool showHome;
-  final Box box;
-
-  const MyApp({super.key, required this.showHome, required this.box});
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => NotesCubit(box)..startPage(),
+      create: (context) => NotesCubit(getIt<Box>())..startPage(),
       child: BlocConsumer<NotesCubit, NotesState>(
         listener: (context, state) {},
         builder: (context, state) {
@@ -78,7 +73,10 @@ class MyApp extends StatelessWidget {
                     localizationsDelegates: context.localizationDelegates,
                     supportedLocales: context.supportedLocales,
                     locale: context.locale,
-                    home: showHome ? const Home() : const IntroPage(),
+                    // Skip on boarding screen if not first time
+                    home: getIt<Box>().get('showHome') ?? false
+                        ? const Home()
+                        : const IntroPage(),
                   ),
                 ),
               );
