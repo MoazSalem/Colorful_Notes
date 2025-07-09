@@ -31,27 +31,30 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      body: Consumer(
-        builder: (context, ref, child) {
-          final database = ref.watch(databaseProvider);
-          return database.when(
-            loading: () => CustomLoadingWidget(),
-            error: (error, stackTrace) {
-              return Center(child: Text(error.toString()));
-            },
-            data: (data) {
-              return Row(
-                children: [
-                  SideBar(
-                    currentIndex: C.currentIndex,
-                    onIndexChanged: (i) => {C.onIndexChanged(i)},
-                  ),
-                  Expanded(flex: 5, child: AppConsts.pagesList[C.currentIndex]),
-                ],
+      body: Row(
+        children: [
+          SideBar(
+            currentIndex: C.currentIndex,
+            onIndexChanged: (i) => {C.onIndexChanged(i)},
+          ),
+          Consumer(
+            builder: (context, ref, child) {
+              final database = ref.watch(databaseProvider);
+              return database.when(
+                loading: () => CustomLoadingWidget(),
+                error: (error, stackTrace) {
+                  return Center(child: Text(error.toString()));
+                },
+                data: (data) {
+                  return Expanded(
+                    flex: 5,
+                    child: AppConsts.pagesList[C.currentIndex],
+                  );
+                },
               );
             },
-          );
-        },
+          ),
+        ],
       ),
     );
   }

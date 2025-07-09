@@ -1,10 +1,8 @@
 import 'dart:ui' as ui;
 import 'package:colorful_notes/core/shared_widgets/custom_appbar.dart';
-import 'package:colorful_notes/features/home/ui/widgets/appbar_action_widgets.dart';
 import 'package:colorful_notes/features/home/ui/widgets/search_bar_widget.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:colorful_notes/core/services/service_locator.dart';
 import 'package:colorful_notes/features/home/ui/widgets/custom_fab.dart';
 import 'package:colorful_notes/features/home/ui/widgets/notes.dart';
@@ -14,10 +12,17 @@ import 'package:colorful_notes/features/notes_creation/ui/edit_note.dart';
 import 'package:colorful_notes/features/notes_creation/ui/edit_voice.dart';
 import 'package:colorful_notes/main.dart';
 import 'package:colorful_notes/core/models/settings_model.dart';
-import 'package:colorful_notes/old_logic/notes_cubit.dart';
 import 'package:colorful_notes/core/services/settings_service.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import 'home_screen.dart';
 
 final TextEditingController searchController = TextEditingController();
+
+final notesProvider = FutureProvider<List<Map<String, dynamic>>>((ref) async {
+  final database = ref.watch(databaseProvider).value!;
+  return database.getAllNotes();
+});
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -30,49 +35,52 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final settingsService = serviceLocator<SettingsService>();
-    final notesCubit = context.watch<NotesCubit>();
     bool isSearching = false;
 
     return ValueListenableBuilder<SettingsModel>(
       valueListenable: settingsService.settings,
       builder: (context, settings, child) {
-        return BlocBuilder<NotesCubit, NotesState>(
-          builder: (context, noteState) {
-            final notes = isSearching
-                ? notesCubit.notes['homeSearched']!
-                : notesCubit.notes['homeNotes']!;
-
-            return Scaffold(
-              backgroundColor: C.theme.surface,
-              floatingActionButtonLocation: settings.fabIndex == 0
-                  ? FloatingActionButtonLocation.endFloat
-                  : FloatingActionButtonLocation.startFloat,
-              floatingActionButton: _buildFab(context, settings),
-              body: ListView(
-                padding: EdgeInsets.zero,
-                children: [
-                  CustomAppbar(
-                    title: "Home".tr(),
-                    top: 65,
-                    locale: settings.lang,
-                    leading: AppbarActionWidgets(
-                      searchController: searchController,
-                      C: notesCubit,
-                      settings: settings,
-                      onToggle: () =>
-                          setState(() => isSearching = !isSearching),
-                    ),
-                  ),
-                  SearchBarWidget(
-                    isSearching: isSearching,
-                    searchController: searchController,
-                    C: C,
-                  ),
-                  _buildNotesList(context, settings, notes, notesCubit),
-                ],
+        return Scaffold(
+          backgroundColor: C.theme.surface,
+          floatingActionButtonLocation: settings.fabIndex == 0
+              ? FloatingActionButtonLocation.endFloat
+              : FloatingActionButtonLocation.startFloat,
+          floatingActionButton: _buildFab(context, settings),
+          body: ListView(
+            padding: EdgeInsets.zero,
+            children: [
+              CustomAppbar(
+                title: "Home".tr(),
+                top: 65,
+                locale: settings.lang,
+                // leading: AppbarActionWidgets(
+                //   searchController: searchController,
+                //   settings: settings,
+                //   onToggle: () =>
+                //       setState(() => isSearching = !isSearching),
+                // ),
               ),
-            );
-          },
+              SearchBarWidget(
+                isSearching: isSearching,
+                searchController: searchController,
+                C: C,
+              ),
+              Consumer(
+                builder: (context, ref, child) {
+                  final notes = ref.watch(notesProvider);
+                  return notes.when(
+                    data: (data) => _buildNotesList(context, settings, data),
+                    error: (Object error, StackTrace stackTrace) {
+                      return Center(child: Text(error.toString()));
+                    },
+                    loading: () {
+                      return Center(child: CircularProgressIndicator());
+                    },
+                  );
+                },
+              ),
+            ],
+          ),
         );
       },
     );
@@ -102,7 +110,6 @@ class _HomePageState extends State<HomePage> {
     BuildContext context,
     SettingsModel settings,
     List<Map> notes,
-    NotesCubit notesCubit,
   ) {
     final int viewIndex = C.box.get('viewIndex') ?? 0;
 
@@ -137,7 +144,6 @@ class _HomePageState extends State<HomePage> {
             settings,
             notes,
             notes.length - 1 - index,
-            notesCubit,
             isGridView: true,
           );
         },
@@ -155,7 +161,6 @@ class _HomePageState extends State<HomePage> {
             settings,
             notes,
             notes.length - 1 - index,
-            notesCubit,
           );
         },
       );
@@ -166,8 +171,7 @@ class _HomePageState extends State<HomePage> {
     BuildContext context,
     SettingsModel settings,
     List<Map> notes,
-    int index,
-    NotesCubit notesCubit, {
+    int index, {
     bool isGridView = false,
   }) {
     final note = notes[index];
@@ -243,7 +247,8 @@ class _HomePageState extends State<HomePage> {
             vertical: C.isTablet ? 8.0 : 0,
           ),
           child: IconButton(
-            onPressed: () => notesCubit.showDeleteDialog(context, notes, index),
+            onPressed: () =>
+                {}, //notesCubit.showDeleteDialog(context, notes, index),
             icon: Icon(
               Icons.highlight_remove,
               color: note['tindex'] == 0 ? Colors.white : Colors.black,
