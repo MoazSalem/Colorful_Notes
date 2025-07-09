@@ -2,6 +2,7 @@
 
 import 'dart:async';
 import 'dart:io';
+import 'package:colorful_notes/core/consts.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,7 +18,6 @@ import 'package:material_dialogs/widgets/buttons/icon_outline_button.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:colorful_notes/core/colors.dart';
 import '../core/home_widget_config.dart';
 
 part 'notes_state.dart';
@@ -32,7 +32,7 @@ class NotesCubit extends Cubit<NotesState> {
   late double width;
   late Directory appDir;
   late List<String> extDir;
-  late List<Color> colors = lightColors;
+  late List<Color> colors = AppConsts.lightColors;
   late Brightness brightness;
   int currentIndex = 0;
   bool isDark = false;
@@ -253,19 +253,19 @@ class NotesCubit extends Cubit<NotesState> {
   void harmonizeColors() {
     List<Color> hlColors = [];
     List<Color> hdColors = [];
-    for (var color in lightColors) {
+    for (var color in AppConsts.lightColors) {
       hlColors.add(color.harmonizeWith(theme.primary));
     }
-    for (var color in darkerColors) {
+    for (var color in AppConsts.darkerColors) {
       hdColors.add(color.harmonizeWith(theme.primary));
     }
     colors = settings["darkColors"]
         ? settings["harmonizeColor"]
               ? hdColors
-              : darkerColors
+              : AppConsts.darkerColors
         : settings["harmonizeColor"]
         ? hlColors
-        : lightColors;
+        : AppConsts.lightColors;
     emit(ColorsHarmonized());
   }
 

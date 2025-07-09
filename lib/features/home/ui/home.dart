@@ -1,16 +1,21 @@
+import 'dart:ui' as ui;
+import 'package:colorful_notes/core/shared_widgets/custom_appbar.dart';
+import 'package:colorful_notes/features/home/ui/widgets/appbar_action_widgets.dart';
+import 'package:colorful_notes/features/home/ui/widgets/search_bar_widget.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:easy_localization/easy_localization.dart';
-import 'package:colorful_notes/features/home/ui/home_screen.dart';
-import 'package:colorful_notes/main.dart';
-import 'package:colorful_notes/old_logic/notes_cubit.dart';
-import 'package:colorful_notes/features/notes_creation/ui/edit_note.dart';
-import 'package:colorful_notes/features/notes_creation/ui/edit_voice.dart';
+import 'package:colorful_notes/core/services/service_locator.dart';
 import 'package:colorful_notes/features/home/ui/widgets/custom_fab.dart';
 import 'package:colorful_notes/features/home/ui/widgets/notes.dart';
 import 'package:colorful_notes/features/notes_creation/ui/create_note.dart';
 import 'package:colorful_notes/features/notes_creation/ui/create_voice.dart';
-import 'dart:ui' as ui;
+import 'package:colorful_notes/features/notes_creation/ui/edit_note.dart';
+import 'package:colorful_notes/features/notes_creation/ui/edit_voice.dart';
+import 'package:colorful_notes/main.dart';
+import 'package:colorful_notes/core/models/settings_model.dart';
+import 'package:colorful_notes/old_logic/notes_cubit.dart';
+import 'package:colorful_notes/core/services/settings_service.dart';
 
 final TextEditingController searchController = TextEditingController();
 
@@ -22,400 +27,251 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late int viewIndex;
-  late List<Map> notes;
-  bool noTitle = false;
-  bool noContent = false;
-  bool searchOn = false;
-  bool openFab = false;
-
-  @override
-  void initState() {
-    viewIndex = C.box.get('viewIndex') ?? 0;
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<NotesCubit, NotesState>(
-      builder: (context, state) {
-        notes = (searchOn ? C.notes['homeSearched'] : C.notes['homeNotes'])!;
-        return Scaffold(
-          backgroundColor: C.theme.surface,
-          floatingActionButtonLocation: C.settings["fabIndex"] == 0
-              ? FloatingActionButtonLocation.endFloat
-              : FloatingActionButtonLocation.startFloat,
-          floatingActionButton: C.settings["fabIndex"] == 0
-              ? customFab(
-                  theme: C.theme,
-                  colors: C.colors,
-                  action1: create1,
-                  action2: create2,
-                  colorful: C.settings["colorful"],
-                  isTablet: C.isTablet,
-                )
-              : Directionality(
-                  textDirection: C.settings["lang"] == 'en'
-                      ? ui.TextDirection.rtl
-                      : ui.TextDirection.ltr,
-                  child: customFab(
-                    theme: C.theme,
-                    colors: C.colors,
-                    action1: create1,
-                    action2: create2,
-                    colorful: C.settings["colorful"],
-                    isTablet: C.isTablet,
-                  ),
-                ),
-          body: ListView(
-            padding: EdgeInsets.zero,
-            children: [
-              C.customAppBar("Home".tr(), 65, leading()),
-              searchOn
-                  ? Center(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 10,
-                          horizontal: 20,
-                        ),
-                        child: TextFormField(
-                          autofocus: true,
-                          controller: searchController,
-                          onChanged: (query) =>
-                              C.search(query: query, where: "home"),
-                          maxLines: 1,
-                          cursorColor: C.theme.primary,
-                          decoration: InputDecoration(
-                            contentPadding: EdgeInsets.symmetric(
-                              vertical: C.isTablet ? 20 : 5,
-                              horizontal: 20,
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Colors.grey.shade300,
-                              ),
-                              borderRadius: BorderRadius.circular(0),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: C.theme.primary),
-                              borderRadius: BorderRadius.circular(0),
-                            ),
-                            hintText: "Search".tr(),
-                            filled: true,
-                            fillColor: Theme.of(context).cardColor,
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(0),
-                            ),
-                          ),
-                        ),
-                      ),
-                    )
-                  : Container(),
-              notes.isNotEmpty
-                  ? viewIndex != 2
-                        ? Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: 2,
-                            ),
-                            child: ListView.builder(
-                              padding: EdgeInsets.zero,
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemCount: notes.length,
-                              itemBuilder: (context, index) {
-                                int reverseIndex = notes.length - index - 1;
-                                notes[reverseIndex]["title"] == ""
-                                    ? noTitle = true
-                                    : noTitle = false;
-                                notes[reverseIndex]["content"] == ""
-                                    ? noContent = true
-                                    : noContent = false;
-                                int dateValue = C.calculateDifference(
-                                  notes[reverseIndex]["time"],
-                                );
-                                String date = C.parseDate(
-                                  notes[reverseIndex]["time"],
-                                );
-                                Widget chosenView = viewIndex == 0
-                                    ? Stack(
-                                        alignment:
-                                            notes[reverseIndex]["layout"] ==
-                                                    0 ||
-                                                notes[reverseIndex]["layout"] ==
-                                                    2
-                                            ? Alignment.topRight
-                                            : Alignment.topLeft,
-                                        children: [
-                                          GestureDetector(
-                                            onTap: () => edit(reverseIndex),
-                                            child: listView(
-                                              context: context,
-                                              notes: notes,
-                                              colors: C.colors,
-                                              index: reverseIndex,
-                                              dateValue: dateValue,
-                                              date: date,
-                                              noTitle: noTitle,
-                                              noContent: noContent,
-                                              showDate: C.settings["showDate"],
-                                              showShadow:
-                                                  C.settings["showShadow"],
-                                              showEdited:
-                                                  C.settings["showEdited"],
-                                              isTablet: C.isTablet,
-                                              lang: context.locale.toString(),
-                                              width: C.width,
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding: EdgeInsets.symmetric(
-                                              horizontal:
-                                                  notes[reverseIndex]["layout"] ==
-                                                          0 ||
-                                                      notes[reverseIndex]["layout"] ==
-                                                          2
-                                                  ? 10
-                                                  : C.isTablet
-                                                  ? 15
-                                                  : 10,
-                                              vertical: C.width * 0.02037,
-                                            ),
-                                            child: IconButton(
-                                              focusColor: Colors.blue,
-                                              onPressed: () async {
-                                                showDelete(reverseIndex);
-                                              },
-                                              icon: Icon(
-                                                Icons.highlight_remove,
-                                                color:
-                                                    notes[reverseIndex]['tindex'] ==
-                                                        0
-                                                    ? Colors.white
-                                                    : Colors.black,
-                                                size: C.width * 0.06620,
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      )
-                                    : Stack(
-                                        alignment:
-                                            notes[reverseIndex]["layout"] ==
-                                                    0 ||
-                                                notes[reverseIndex]["layout"] ==
-                                                    2
-                                            ? Alignment.topRight
-                                            : Alignment.topLeft,
-                                        children: [
-                                          GestureDetector(
-                                            onTap: () => edit(reverseIndex),
-                                            child: smallListView(
-                                              context: context,
-                                              notes: notes,
-                                              colors: C.colors,
-                                              index: reverseIndex,
-                                              dateValue: dateValue,
-                                              date: date,
-                                              noTitle: noTitle,
-                                              noContent: noContent,
-                                              showDate: C.settings["showDate"],
-                                              showShadow:
-                                                  C.settings["showShadow"],
-                                              showEdited:
-                                                  C.settings["showEdited"],
-                                              isTablet: C.isTablet,
-                                              lang: context.locale.toString(),
-                                              width: C.width,
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding: EdgeInsets.symmetric(
-                                              horizontal: C.isTablet ? 8.0 : 0,
-                                              vertical: C.isTablet ? 8.0 : 0,
-                                            ),
-                                            child: IconButton(
-                                              focusColor: Colors.blue,
-                                              onPressed: () async {
-                                                showDelete(reverseIndex);
-                                              },
-                                              icon: Icon(
-                                                Icons.highlight_remove,
-                                                color:
-                                                    notes[reverseIndex]['tindex'] ==
-                                                        0
-                                                    ? Colors.white
-                                                    : Colors.black,
-                                                size: C.width * 0.0662,
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      );
-                                return chosenView;
-                              },
-                            ),
-                          )
-                        : Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: 2,
-                            ),
-                            child: GridView.builder(
-                              padding: EdgeInsets.zero,
-                              gridDelegate:
-                                  const SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 2,
-                                  ),
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemCount: notes.length,
-                              itemBuilder: (context, index) {
-                                int reverseIndex = notes.length - index - 1;
-                                notes[reverseIndex]["title"] == ""
-                                    ? noTitle = true
-                                    : noTitle = false;
-                                notes[reverseIndex]["content"] == ""
-                                    ? noContent = true
-                                    : noContent = false;
-                                int dateValue = C.calculateDifference(
-                                  notes[reverseIndex]["time"],
-                                );
-                                String date = C.parseDate(
-                                  notes[reverseIndex]["time"],
-                                );
-                                return Stack(
-                                  alignment:
-                                      notes[reverseIndex]["layout"] == 0 ||
-                                          notes[reverseIndex]["layout"] == 2
-                                      ? Alignment.topRight
-                                      : Alignment.topLeft,
-                                  children: [
-                                    GestureDetector(
-                                      onTap: () => edit(reverseIndex),
-                                      child: gridView(
-                                        context: context,
-                                        notes: notes,
-                                        colors: C.colors,
-                                        index: reverseIndex,
-                                        dateValue: dateValue,
-                                        date: date,
-                                        noTitle: noTitle,
-                                        noContent: noContent,
-                                        showDate: C.settings["showDate"],
-                                        showShadow: C.settings["showShadow"],
-                                        showEdited: C.settings["showEdited"],
-                                        isTablet: C.isTablet,
-                                        lang: context.locale.toString(),
-                                        width: C.width,
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.symmetric(
-                                        horizontal: C.isTablet ? 8.0 : 0,
-                                        vertical: C.isTablet ? 8.0 : 0,
-                                      ),
-                                      child: IconButton(
-                                        focusColor: Colors.blue,
-                                        onPressed: () async {
-                                          showDelete(reverseIndex);
-                                        },
-                                        icon: Icon(
-                                          Icons.highlight_remove,
-                                          color:
-                                              notes[reverseIndex]['tindex'] == 0
-                                              ? Colors.white
-                                              : Colors.black,
-                                          size: C.width * 0.0662,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                );
-                              },
-                            ),
-                          )
-                  : Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 200),
-                      child: Center(
-                        child: Text(
-                          "N1".tr(),
-                          style: TextStyle(
-                            color: C.settings["colorful"]
-                                ? C.colors[0]
-                                : C.theme.primary,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                      ),
+    final settingsService = serviceLocator<SettingsService>();
+    final notesCubit = context.watch<NotesCubit>();
+    bool isSearching = false;
+
+    return ValueListenableBuilder<SettingsModel>(
+      valueListenable: settingsService.settings,
+      builder: (context, settings, child) {
+        return BlocBuilder<NotesCubit, NotesState>(
+          builder: (context, noteState) {
+            final notes = isSearching
+                ? notesCubit.notes['homeSearched']!
+                : notesCubit.notes['homeNotes']!;
+
+            return Scaffold(
+              backgroundColor: C.theme.surface,
+              floatingActionButtonLocation: settings.fabIndex == 0
+                  ? FloatingActionButtonLocation.endFloat
+                  : FloatingActionButtonLocation.startFloat,
+              floatingActionButton: _buildFab(context, settings),
+              body: ListView(
+                padding: EdgeInsets.zero,
+                children: [
+                  CustomAppbar(
+                    title: "Home".tr(),
+                    top: 65,
+                    locale: settings.lang,
+                    leading: AppbarActionWidgets(
+                      searchController: searchController,
+                      C: notesCubit,
+                      settings: settings,
+                      onToggle: () =>
+                          setState(() => isSearching = !isSearching),
                     ),
-              const SizedBox(height: 20),
-            ],
-          ),
+                  ),
+                  SearchBarWidget(
+                    isSearching: isSearching,
+                    searchController: searchController,
+                    C: C,
+                  ),
+                  _buildNotesList(context, settings, notes, notesCubit),
+                ],
+              ),
+            );
+          },
         );
       },
     );
   }
 
-  Widget leading() {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        IconButton(
-          onPressed: () {
-            searchOn = !searchOn;
-            C.search(query: searchController.text, where: "home");
-            C.onChanged();
-          },
-          icon: Icon(
-            Icons.search,
-            size: 30,
-            color: searchOn
-                ? C.settings["colorful"]
-                      ? C.colors[0]
-                      : C.theme.primary
-                : C.theme.onSurfaceVariant, //const Color(0xffff8b34)
+  Widget _buildFab(BuildContext context, SettingsModel settings) {
+    final fab = customFab(
+      theme: C.theme,
+      colors: C.colors,
+      action1: () => _createNote(context),
+      action2: () => _createVoice(context),
+      colorful: settings.colorful,
+      isTablet: C.isTablet,
+    );
+
+    return settings.fabIndex == 0
+        ? fab
+        : Directionality(
+            textDirection: settings.lang == 'en'
+                ? ui.TextDirection.rtl
+                : ui.TextDirection.ltr,
+            child: fab,
+          );
+  }
+
+  Widget _buildNotesList(
+    BuildContext context,
+    SettingsModel settings,
+    List<Map> notes,
+    NotesCubit notesCubit,
+  ) {
+    final int viewIndex = C.box.get('viewIndex') ?? 0;
+
+    if (notes.isEmpty) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 200),
+        child: Center(
+          child: Text(
+            "N1".tr(),
+            style: TextStyle(
+              color: settings.colorful ? C.colors[0] : C.theme.primary,
+              fontWeight: FontWeight.w400,
+            ),
           ),
         ),
-        IconButton(
-          onPressed: () {
-            viewIndex < 2 ? viewIndex++ : viewIndex = 0;
-            C.box.put("viewIndex", viewIndex);
-            C.onChanged();
-          },
-          icon: viewIndex == 0
-              ? const Icon(Icons.indeterminate_check_box_sharp)
-              : viewIndex == 1
-              ? const Icon(Icons.view_agenda_sharp)
-              : const Icon(Icons.grid_view_sharp),
+      );
+    }
+
+    if (viewIndex == 2) {
+      // Grid View
+      return GridView.builder(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+        ),
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        itemCount: notes.length,
+        itemBuilder: (context, index) {
+          return _buildNoteItem(
+            context,
+            settings,
+            notes,
+            notes.length - 1 - index,
+            notesCubit,
+            isGridView: true,
+          );
+        },
+      );
+    } else {
+      // List View (Normal or Small)
+      return ListView.builder(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        itemCount: notes.length,
+        itemBuilder: (context, index) {
+          return _buildNoteItem(
+            context,
+            settings,
+            notes,
+            notes.length - 1 - index,
+            notesCubit,
+          );
+        },
+      );
+    }
+  }
+
+  Widget _buildNoteItem(
+    BuildContext context,
+    SettingsModel settings,
+    List<Map> notes,
+    int index,
+    NotesCubit notesCubit, {
+    bool isGridView = false,
+  }) {
+    final note = notes[index];
+    final bool noTitle = note["title"] == "";
+    final bool noContent = note["content"] == "";
+    final String date = C.parseDate(note["time"]);
+    final int dateValue = C.calculateDifference(note["time"]);
+    final int viewIndex = C.box.get('viewIndex') ?? 0;
+
+    Widget noteView;
+    if (isGridView) {
+      noteView = gridView(
+        context: context,
+        notes: notes,
+        colors: C.colors,
+        index: index,
+        dateValue: dateValue,
+        date: date,
+        noTitle: noTitle,
+        noContent: noContent,
+        showDate: settings.showDate,
+        showShadow: settings.showShadow,
+        showEdited: settings.showEdited,
+        isTablet: C.isTablet,
+        lang: settings.lang,
+        width: C.width,
+      );
+    } else if (viewIndex == 0) {
+      noteView = listView(
+        context: context,
+        notes: notes,
+        colors: C.colors,
+        index: index,
+        dateValue: dateValue,
+        date: date,
+        noTitle: noTitle,
+        noContent: noContent,
+        showDate: settings.showDate,
+        showShadow: settings.showShadow,
+        showEdited: settings.showEdited,
+        isTablet: C.isTablet,
+        lang: settings.lang,
+        width: C.width,
+      );
+    } else {
+      noteView = smallListView(
+        context: context,
+        notes: notes,
+        colors: C.colors,
+        index: index,
+        dateValue: dateValue,
+        date: date,
+        noTitle: noTitle,
+        noContent: noContent,
+        showDate: settings.showDate,
+        showShadow: settings.showShadow,
+        showEdited: settings.showEdited,
+        isTablet: C.isTablet,
+        lang: settings.lang,
+        width: C.width,
+      );
+    }
+
+    return Stack(
+      alignment: note["layout"] == 0 || note["layout"] == 2
+          ? Alignment.topRight
+          : Alignment.topLeft,
+      children: [
+        GestureDetector(onTap: () => _editNote(context, note), child: noteView),
+        Padding(
+          padding: EdgeInsets.symmetric(
+            horizontal: C.isTablet ? 8.0 : 0,
+            vertical: C.isTablet ? 8.0 : 0,
+          ),
+          child: IconButton(
+            onPressed: () => notesCubit.showDeleteDialog(context, notes, index),
+            icon: Icon(
+              Icons.highlight_remove,
+              color: note['tindex'] == 0 ? Colors.white : Colors.black,
+              size: C.width * 0.0662,
+            ),
+          ),
         ),
       ],
     );
   }
 
-  create1() {
+  void _createNote(BuildContext context) {
     showBottomSheet(context: context, builder: (context) => const CreateNote());
   }
 
-  create2() {
+  void _createVoice(BuildContext context) {
     showBottomSheet(
-      enableDrag: false,
       context: context,
+      enableDrag: false,
       builder: (context) => const CreateVoice(),
     );
   }
 
-  edit(reverseIndex) {
+  void _editNote(BuildContext context, Map note) {
     showBottomSheet(
       context: context,
-      builder: (context) => notes[reverseIndex]['type'] == 0
-          ? EditNote(note: notes[reverseIndex])
-          : EditVoice(note: notes[reverseIndex]),
+      builder: (context) =>
+          note['type'] == 0 ? EditNote(note: note) : EditVoice(note: note),
     );
-  }
-
-  showDelete(index) {
-    C.showDeleteDialog(context, notes, index);
   }
 }
