@@ -1,5 +1,6 @@
 import 'dart:ui' as ui;
 import 'package:colorful_notes/core/shared_widgets/custom_appbar.dart';
+import 'package:colorful_notes/features/home/ui/widgets/appbar_action_widgets.dart';
 import 'package:colorful_notes/features/home/ui/widgets/search_bar_widget.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -32,6 +33,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  int viewIndex = 0;
   @override
   Widget build(BuildContext context) {
     final settingsService = serviceLocator<SettingsService>();
@@ -53,12 +55,14 @@ class _HomePageState extends State<HomePage> {
                 title: "Home".tr(),
                 top: 65,
                 locale: settings.lang,
-                // leading: AppbarActionWidgets(
-                //   searchController: searchController,
-                //   settings: settings,
-                //   onToggle: () =>
-                //       setState(() => isSearching = !isSearching),
-                // ),
+                leading: AppbarActionWidgets(
+                  searchController: searchController,
+                  settings: settings,
+                  onToggle: () => setState(() => isSearching = !isSearching),
+                  switchView: () =>
+                      setState(() => viewIndex = (viewIndex + 1) % 3),
+                  viewIndex: viewIndex,
+                ),
               ),
               SearchBarWidget(
                 isSearching: isSearching,
@@ -69,7 +73,8 @@ class _HomePageState extends State<HomePage> {
                 builder: (context, ref, child) {
                   final notes = ref.watch(notesProvider);
                   return notes.when(
-                    data: (data) => _buildNotesList(context, settings, data),
+                    data: (data) =>
+                        _buildNotesList(context, settings, data, viewIndex),
                     error: (Object error, StackTrace stackTrace) {
                       return Center(child: Text(error.toString()));
                     },
@@ -110,9 +115,8 @@ class _HomePageState extends State<HomePage> {
     BuildContext context,
     SettingsModel settings,
     List<Map> notes,
+    int viewIndex,
   ) {
-    final int viewIndex = C.box.get('viewIndex') ?? 0;
-
     if (notes.isEmpty) {
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 200),
@@ -144,6 +148,7 @@ class _HomePageState extends State<HomePage> {
             settings,
             notes,
             notes.length - 1 - index,
+            viewIndex,
             isGridView: true,
           );
         },
@@ -161,6 +166,7 @@ class _HomePageState extends State<HomePage> {
             settings,
             notes,
             notes.length - 1 - index,
+            viewIndex,
           );
         },
       );
@@ -171,7 +177,8 @@ class _HomePageState extends State<HomePage> {
     BuildContext context,
     SettingsModel settings,
     List<Map> notes,
-    int index, {
+    int index,
+    int viewIndex, {
     bool isGridView = false,
   }) {
     final note = notes[index];
@@ -179,7 +186,6 @@ class _HomePageState extends State<HomePage> {
     final bool noContent = note["content"] == "";
     final String date = C.parseDate(note["time"]);
     final int dateValue = C.calculateDifference(note["time"]);
-    final int viewIndex = C.box.get('viewIndex') ?? 0;
 
     Widget noteView;
     if (isGridView) {
