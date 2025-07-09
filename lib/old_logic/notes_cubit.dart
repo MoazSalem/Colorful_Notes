@@ -79,7 +79,6 @@ class NotesCubit extends Cubit<NotesState> {
 
   startPage() async {
     setSettings();
-    await startDatabase();
     await localPath();
     await getHomePage();
     loading = false;

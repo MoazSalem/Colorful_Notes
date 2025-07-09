@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:colorful_notes/old_logic/notes_cubit.dart';
@@ -21,12 +22,14 @@ void main() async {
   // Initialize get it.
   await setupServiceLocator();
   runApp(
-    EasyLocalization(
-      useOnlyLangCode: true,
-      supportedLocales: const [Locale('en'), Locale('ar')],
-      path: 'assets/translations',
-      fallbackLocale: const Locale('en'),
-      child: MyApp(),
+    ProviderScope(
+      child: EasyLocalization(
+        useOnlyLangCode: true,
+        supportedLocales: const [Locale('en'), Locale('ar')],
+        path: 'assets/translations',
+        fallbackLocale: const Locale('en'),
+        child: MyApp(),
+      ),
     ),
   );
 }
