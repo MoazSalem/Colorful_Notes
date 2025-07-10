@@ -1,10 +1,11 @@
+import 'package:colorful_notes/core/models/note_model.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart' hide TextDirection;
-import 'package:colorful_notes/features/home/ui/widgets/sound_player.dart';
+import 'package:colorful_notes/features/main_screen/ui/widgets/sound_player.dart';
 
 Widget listView({
   required BuildContext context,
-  required List<Map> notes,
+  required List<Note> notes,
   required List<Color> colors,
   required int index,
   required int dateValue,
@@ -27,13 +28,13 @@ Widget listView({
           SizedBox(
             height: isTablet ? width * 0.9 : width * 0.7639,
             child: Card(
-              color: notes[index]['cindex'] == 99
-                  ? Color(int.parse(notes[index]['extra']))
-                  : colors[notes[index]['cindex']],
+              color: notes[index].cIndex == 99
+                  ? Color(int.parse(notes[index].extra))
+                  : colors[notes[index].cIndex],
               elevation: showShadow ? 4 : 0,
-              shadowColor: notes[index]['cindex'] == 99
-                  ? Color(int.parse(notes[index]['extra']))
-                  : colors[notes[index]['cindex']],
+              shadowColor: notes[index].cIndex == 99
+                  ? Color(int.parse(notes[index].extra))
+                  : colors[notes[index].cIndex],
               shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(0)),
               ),
@@ -54,8 +55,8 @@ Widget listView({
                             child: SizedBox(
                               width: double.infinity,
                               child: Text(
-                                notes[index]["title"],
-                                maxLines: notes[index]["type"] == 0
+                                notes[index].title,
+                                maxLines: notes[index].type == 0
                                     ? isTablet
                                           ? 2
                                           : 1
@@ -63,37 +64,35 @@ Widget listView({
                                 overflow: TextOverflow.ellipsis,
                                 textAlign: TextAlign.center,
                                 textDirection:
-                                    notes[index]["layout"] == 0 ||
-                                        notes[index]["layout"] == 2
+                                    notes[index].layout == 0 ||
+                                        notes[index].layout == 2
                                     ? TextDirection.ltr
                                     : TextDirection.rtl,
                                 style: TextStyle(
                                   fontWeight: FontWeight.w800,
                                   fontSize: 24,
-                                  color: notes[index]['tindex'] == 0
+                                  color: notes[index].tIndex == 0
                                       ? Colors.white
                                       : Colors.black,
                                 ),
                               ),
                             ),
                           ),
-                    notes[index]["type"] == 0
+                    notes[index].type == 0
                         ? Expanded(
                             flex: 7,
                             child: SizedBox(
                               width: double.infinity,
                               child: Text(
-                                noContent
-                                    ? "Empty".tr()
-                                    : notes[index]["content"],
+                                noContent ? "Empty".tr() : notes[index].content,
                                 textAlign:
-                                    notes[index]["layout"] == 1 ||
-                                        notes[index]["layout"] == 2
+                                    notes[index].layout == 1 ||
+                                        notes[index].layout == 2
                                     ? TextAlign.right
                                     : TextAlign.left,
                                 textDirection:
-                                    notes[index]["layout"] == 1 ||
-                                        notes[index]["layout"] == 2
+                                    notes[index].layout == 1 ||
+                                        notes[index].layout == 2
                                     ? TextDirection.rtl
                                     : TextDirection.ltr,
                                 maxLines: showDate
@@ -106,10 +105,10 @@ Widget listView({
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
                                   color: noContent
-                                      ? notes[index]['tindex'] == 0
+                                      ? notes[index].tIndex == 0
                                             ? Colors.white38
                                             : Colors.black38
-                                      : notes[index]['tindex'] == 0
+                                      : notes[index].tIndex == 0
                                       ? Colors.white
                                       : Colors.black,
                                   fontSize: noTitle ? 21 : 16,
@@ -132,12 +131,10 @@ Widget listView({
                                   ),
                                   child: SoundPlayer(
                                     index: index,
-                                    voiceMap: notes,
-                                    color: notes[index]['cindex'] == 99
-                                        ? Color(
-                                            int.parse(notes[index]['extra']),
-                                          )
-                                        : colors[notes[index]['cindex']],
+                                    voiceNotes: notes,
+                                    color: notes[index].cIndex == 99
+                                        ? Color(int.parse(notes[index].extra))
+                                        : colors[notes[index].cIndex],
                                     viewMode: 0,
                                     isTablet: isTablet,
                                   ),
@@ -160,7 +157,7 @@ Widget listView({
                                       ? "Yesterday".tr()
                                       : date,
                                   style: TextStyle(
-                                    color: notes[index]['tindex'] == 0
+                                    color: notes[index].tIndex == 0
                                         ? Colors.white
                                         : Colors.black,
                                     fontWeight: FontWeight.w500,
@@ -171,12 +168,12 @@ Widget listView({
                                   children: [
                                     Text(
                                       showEdited
-                                          ? notes[index]["edited"] == "yes"
+                                          ? notes[index].edited == "yes"
                                                 ? "Edited".tr()
                                                 : ""
                                           : "",
                                       style: TextStyle(
-                                        color: notes[index]['tindex'] == 0
+                                        color: notes[index].tIndex == 0
                                             ? Colors.white38
                                             : Colors.black38,
                                       ),
@@ -200,7 +197,7 @@ Widget listView({
 
 Widget smallListView({
   required BuildContext context,
-  required List<Map> notes,
+  required List<Note> notes,
   required List<Color> colors,
   required int index,
   required int dateValue,
@@ -227,13 +224,13 @@ Widget smallListView({
               alignment: Alignment.bottomLeft,
               children: [
                 Card(
-                  color: notes[index]['cindex'] == 99
-                      ? Color(int.parse(notes[index]['extra']))
-                      : colors[notes[index]['cindex']],
+                  color: notes[index].cIndex == 99
+                      ? Color(int.parse(notes[index].extra))
+                      : colors[notes[index].cIndex],
                   elevation: showShadow ? width * 0.01018 : 0,
-                  shadowColor: notes[index]['cindex'] == 99
-                      ? Color(int.parse(notes[index]['extra']))
-                      : colors[notes[index]['cindex']],
+                  shadowColor: notes[index].cIndex == 99
+                      ? Color(int.parse(notes[index].extra))
+                      : colors[notes[index].cIndex],
                   shape: const RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(0)),
                   ),
@@ -241,11 +238,11 @@ Widget smallListView({
                     width: width,
                     child: Padding(
                       padding: EdgeInsets.only(
-                        left: notes[index]["type"] == 0
+                        left: notes[index].type == 0
                             ? width * 0.038194
                             : width * 0.01273,
                         right: noTitle ? width * 0.076388 : width * 0.05092,
-                        top: notes[index]["type"] == 0
+                        top: notes[index].type == 0
                             ? noTitle
                                   ? width * 0.035648
                                   : width * 0.030555
@@ -257,17 +254,17 @@ Widget smallListView({
                         children: [
                           noTitle
                               ? Container()
-                              : notes[index]["type"] == 0
+                              : notes[index].type == 0
                               ? Padding(
                                   padding: EdgeInsets.only(
                                     right:
-                                        notes[index]["layout"] == 0 ||
-                                            notes[index]["layout"] == 2
+                                        notes[index].layout == 0 ||
+                                            notes[index].layout == 2
                                         ? width * 0.050926
                                         : 0,
                                     left:
-                                        notes[index]["layout"] == 0 ||
-                                            notes[index]["layout"] == 2
+                                        notes[index].layout == 0 ||
+                                            notes[index].layout == 2
                                         ? 0
                                         : width * 0.050926,
                                   ),
@@ -275,31 +272,31 @@ Widget smallListView({
                                     width: double.infinity,
                                     child: Padding(
                                       padding: EdgeInsets.only(
-                                        top: notes[index]["layout"] == 0
+                                        top: notes[index].layout == 0
                                             ? 0
                                             : width * 0.02546,
-                                        bottom: notes[index]["layout"] == 0
+                                        bottom: notes[index].layout == 0
                                             ? 0
-                                            : notes[index]["layout"] == 2
+                                            : notes[index].layout == 2
                                             ? width * 0.01273
                                             : width * 0.02037,
                                       ),
                                       child: Text(
-                                        notes[index]["title"],
+                                        notes[index].title,
                                         strutStyle: StrutStyle(
                                           forceStrutHeight:
-                                              notes[index]["layout"] == 0
+                                              notes[index].layout == 0
                                               ? false
                                               : true,
                                         ),
                                         textAlign:
-                                            notes[index]["layout"] == 0 ||
-                                                notes[index]["layout"] == 2
+                                            notes[index].layout == 0 ||
+                                                notes[index].layout == 2
                                             ? TextAlign.left
                                             : TextAlign.right,
                                         textDirection:
-                                            notes[index]["layout"] == 0 ||
-                                                notes[index]["layout"] == 2
+                                            notes[index].layout == 0 ||
+                                                notes[index].layout == 2
                                             ? TextDirection.ltr
                                             : TextDirection.rtl,
                                         maxLines: 1,
@@ -307,7 +304,7 @@ Widget smallListView({
                                         style: TextStyle(
                                           fontWeight: FontWeight.w800,
                                           fontSize: 22,
-                                          color: notes[index]['tindex'] == 0
+                                          color: notes[index].tIndex == 0
                                               ? Colors.white
                                               : Colors.black,
                                         ),
@@ -316,7 +313,7 @@ Widget smallListView({
                                   ),
                                 )
                               : Container(),
-                          notes[index]["type"] == 0
+                          notes[index].type == 0
                               ? Expanded(
                                   flex: noTitle ? 2 : 1,
                                   child: SizedBox(
@@ -328,22 +325,22 @@ Widget smallListView({
                                       child: Text(
                                         noContent
                                             ? "Empty".tr()
-                                            : notes[index]["content"],
+                                            : notes[index].content,
                                         strutStyle: StrutStyle(
                                           forceStrutHeight:
-                                              notes[index]["layout"] == 0 ||
-                                                  notes[index]["layout"] == 1
+                                              notes[index].layout == 0 ||
+                                                  notes[index].layout == 1
                                               ? false
                                               : true,
                                         ),
                                         textAlign:
-                                            notes[index]["layout"] == 1 ||
-                                                notes[index]["layout"] == 2
+                                            notes[index].layout == 1 ||
+                                                notes[index].layout == 2
                                             ? TextAlign.right
                                             : TextAlign.left,
                                         textDirection:
-                                            notes[index]["layout"] == 1 ||
-                                                notes[index]["layout"] == 2
+                                            notes[index].layout == 1 ||
+                                                notes[index].layout == 2
                                             ? TextDirection.rtl
                                             : TextDirection.ltr,
                                         maxLines: noTitle
@@ -364,10 +361,10 @@ Widget smallListView({
                                         overflow: TextOverflow.ellipsis,
                                         style: TextStyle(
                                           color: noContent
-                                              ? notes[index]['tindex'] == 0
+                                              ? notes[index].tIndex == 0
                                                     ? Colors.white38
                                                     : Colors.black38
-                                              : notes[index]['tindex'] == 0
+                                              : notes[index].tIndex == 0
                                               ? Colors.white
                                               : Colors.black,
                                           fontSize: noTitle ? 21 : 16,
@@ -387,14 +384,12 @@ Widget smallListView({
                                         ),
                                         child: SoundPlayer(
                                           index: index,
-                                          voiceMap: notes,
-                                          color: notes[index]['cindex'] == 99
+                                          voiceNotes: notes,
+                                          color: notes[index].cIndex == 99
                                               ? Color(
-                                                  int.parse(
-                                                    notes[index]['extra'],
-                                                  ),
+                                                  int.parse(notes[index].extra),
                                                 )
-                                              : colors[notes[index]['cindex']],
+                                              : colors[notes[index].cIndex],
                                           viewMode: 1,
                                           isTablet: isTablet,
                                         ),
@@ -425,7 +420,7 @@ Widget smallListView({
                                   ? "Yesterday".tr()
                                   : date,
                               style: TextStyle(
-                                color: notes[index]['tindex'] == 0
+                                color: notes[index].tIndex == 0
                                     ? Colors.white
                                     : Colors.black,
                                 fontWeight: FontWeight.w500,
@@ -436,12 +431,12 @@ Widget smallListView({
                               children: [
                                 Text(
                                   showEdited
-                                      ? notes[index]["edited"] == "yes"
+                                      ? notes[index].edited == "yes"
                                             ? "Edited".tr()
                                             : ""
                                       : "",
                                   style: TextStyle(
-                                    color: notes[index]['tindex'] == 0
+                                    color: notes[index].tIndex == 0
                                         ? Colors.white38
                                         : Colors.black38,
                                   ),
@@ -462,14 +457,14 @@ Widget smallListView({
                     vertical: showDate ? width * 0.03564 : width * 0.04074,
                     horizontal: width * 0.203703,
                   ),
-                  child: notes[index]["type"] == 0
+                  child: notes[index].type == 0
                       ? Container()
                       : Text(
-                          notes[index]["title"],
+                          notes[index].title,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
-                            color: notes[index]['tindex'] == 0
+                            color: notes[index].tIndex == 0
                                 ? Colors.white
                                 : Colors.black,
                             fontSize: 18,
@@ -485,7 +480,7 @@ Widget smallListView({
 
 Widget gridView({
   required BuildContext context,
-  required List<Map> notes,
+  required List<Note> notes,
   required List<Color> colors,
   required int index,
   required int dateValue,
@@ -509,13 +504,13 @@ Widget gridView({
             height: width * 0.4584,
             width: width * 0.4584,
             child: Card(
-              color: notes[index]['cindex'] == 99
-                  ? Color(int.parse(notes[index]['extra']))
-                  : colors[notes[index]['cindex']],
+              color: notes[index].cIndex == 99
+                  ? Color(int.parse(notes[index].extra))
+                  : colors[notes[index].cIndex],
               elevation: showShadow ? width * 0.01018 : 0,
-              shadowColor: notes[index]['cindex'] == 99
-                  ? Color(int.parse(notes[index]['extra']))
-                  : colors[notes[index]['cindex']],
+              shadowColor: notes[index].cIndex == 99
+                  ? Color(int.parse(notes[index].extra))
+                  : colors[notes[index].cIndex],
               shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(0)),
               ),
@@ -523,8 +518,8 @@ Widget gridView({
                 padding: EdgeInsets.only(
                   left: width * 0.03819,
                   right: width * 0.050926,
-                  top: noTitle || notes[index]["type"] == 1
-                      ? notes[index]["type"] == 1
+                  top: noTitle || notes[index].type == 1
+                      ? notes[index].type == 1
                             ? width * 0.07384
                             : width * 0.03565
                       : width * 0.03565,
@@ -533,34 +528,34 @@ Widget gridView({
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    noTitle || notes[index]["type"] == 1
+                    noTitle || notes[index].type == 1
                         ? Container()
                         : Padding(
                             padding: EdgeInsets.only(
                               bottom: width * 0.01528,
                               right:
-                                  notes[index]["layout"] == 0 ||
-                                      notes[index]["layout"] == 2
+                                  notes[index].layout == 0 ||
+                                      notes[index].layout == 2
                                   ? width * 0.050926
                                   : 0,
                               left:
-                                  notes[index]["layout"] == 0 ||
-                                      notes[index]["layout"] == 2
+                                  notes[index].layout == 0 ||
+                                      notes[index].layout == 2
                                   ? 0
                                   : width * 0.050926,
                             ),
                             child: SizedBox(
                               width: double.infinity,
                               child: Text(
-                                notes[index]["title"],
+                                notes[index].title,
                                 textAlign:
-                                    notes[index]["layout"] == 0 ||
-                                        notes[index]["layout"] == 2
+                                    notes[index].layout == 0 ||
+                                        notes[index].layout == 2
                                     ? TextAlign.left
                                     : TextAlign.right,
                                 textDirection:
-                                    notes[index]["layout"] == 0 ||
-                                        notes[index]["layout"] == 2
+                                    notes[index].layout == 0 ||
+                                        notes[index].layout == 2
                                     ? TextDirection.ltr
                                     : TextDirection.rtl,
                                 maxLines: 2,
@@ -568,14 +563,14 @@ Widget gridView({
                                 style: TextStyle(
                                   fontWeight: FontWeight.w800,
                                   fontSize: 18,
-                                  color: notes[index]['tindex'] == 0
+                                  color: notes[index].tIndex == 0
                                       ? Colors.white
                                       : Colors.black,
                                 ),
                               ),
                             ),
                           ),
-                    notes[index]["type"] == 0
+                    notes[index].type == 0
                         ? Expanded(
                             flex: noTitle ? 3 : 2,
                             child: Padding(
@@ -587,15 +582,15 @@ Widget gridView({
                                 child: Text(
                                   noContent
                                       ? "Empty".tr()
-                                      : notes[index]["content"],
+                                      : notes[index].content,
                                   textAlign:
-                                      notes[index]["layout"] == 1 ||
-                                          notes[index]["layout"] == 2
+                                      notes[index].layout == 1 ||
+                                          notes[index].layout == 2
                                       ? TextAlign.right
                                       : TextAlign.left,
                                   textDirection:
-                                      notes[index]["layout"] == 1 ||
-                                          notes[index]["layout"] == 2
+                                      notes[index].layout == 1 ||
+                                          notes[index].layout == 2
                                       ? TextDirection.rtl
                                       : TextDirection.ltr,
                                   maxLines: noTitle
@@ -616,10 +611,10 @@ Widget gridView({
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
                                     color: noContent
-                                        ? notes[index]['tindex'] == 0
+                                        ? notes[index].tIndex == 0
                                               ? Colors.white38
                                               : Colors.black38
-                                        : notes[index]['tindex'] == 0
+                                        : notes[index].tIndex == 0
                                         ? Colors.white
                                         : Colors.black,
                                     fontSize: noTitle ? 18 : 13,
@@ -632,10 +627,10 @@ Widget gridView({
                             flex: noTitle ? 3 : 2,
                             child: SoundPlayer(
                               index: index,
-                              voiceMap: notes,
-                              color: notes[index]['cindex'] == 99
-                                  ? Color(int.parse(notes[index]['extra']))
-                                  : colors[notes[index]['cindex']],
+                              voiceNotes: notes,
+                              color: notes[index].cIndex == 99
+                                  ? Color(int.parse(notes[index].extra))
+                                  : colors[notes[index].cIndex],
                               viewMode: 3,
                               isTablet: isTablet,
                             ),
@@ -653,10 +648,10 @@ Widget gridView({
                                     ? "Yesterday".tr()
                                     : date,
                                 style: TextStyle(
-                                  color: notes[index]['tindex'] == 0
+                                  color: notes[index].tIndex == 0
                                       ? Colors.white
                                       : Colors.black,
-                                  fontSize: notes[index]["type"] == 0 ? 13 : 12,
+                                  fontSize: notes[index].type == 0 ? 13 : 12,
                                   fontWeight: FontWeight.w500,
                                 ),
                               ),
@@ -665,12 +660,12 @@ Widget gridView({
                                 children: [
                                   Text(
                                     showEdited
-                                        ? notes[index]["edited"] == "yes"
+                                        ? notes[index].edited == "yes"
                                               ? "Edited".tr()
                                               : ""
                                         : "",
                                     style: TextStyle(
-                                      color: notes[index]['tindex'] == 0
+                                      color: notes[index].tIndex == 0
                                           ? Colors.white38
                                           : Colors.black38,
                                     ),

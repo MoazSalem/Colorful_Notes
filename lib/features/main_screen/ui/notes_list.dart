@@ -1,13 +1,14 @@
 import 'dart:ui' as ui;
+import 'package:colorful_notes/core/models/note_model.dart';
 import 'package:colorful_notes/core/providers/notes_provider.dart';
 import 'package:colorful_notes/core/shared_widgets/custom_appbar.dart';
-import 'package:colorful_notes/features/home/ui/widgets/appbar_action_widgets.dart';
-import 'package:colorful_notes/features/home/ui/widgets/search_bar_widget.dart';
+import 'package:colorful_notes/features/main_screen/ui/widgets/appbar_action_widgets.dart';
+import 'package:colorful_notes/features/main_screen/ui/widgets/search_bar_widget.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:colorful_notes/core/services/service_locator.dart';
-import 'package:colorful_notes/features/home/ui/widgets/custom_fab.dart';
-import 'package:colorful_notes/features/home/ui/widgets/notes.dart';
+import 'package:colorful_notes/features/main_screen/ui/widgets/custom_fab.dart';
+import 'package:colorful_notes/features/main_screen/ui/widgets/notes.dart';
 import 'package:colorful_notes/features/notes_creation/ui/create_note.dart';
 import 'package:colorful_notes/features/notes_creation/ui/create_voice.dart';
 import 'package:colorful_notes/features/notes_creation/ui/edit_note.dart';
@@ -19,14 +20,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final TextEditingController searchController = TextEditingController();
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class NotesList extends StatefulWidget {
+  const NotesList({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<NotesList> createState() => _NotesListState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _NotesListState extends State<NotesList> {
   int viewIndex = 0;
   @override
   Widget build(BuildContext context) {
@@ -108,7 +109,7 @@ class _HomePageState extends State<HomePage> {
   Widget _buildNotesList(
     BuildContext context,
     SettingsModel settings,
-    List<Map> notes,
+    List<Note> notes,
     int viewIndex,
   ) {
     if (notes.isEmpty) {
@@ -170,16 +171,16 @@ class _HomePageState extends State<HomePage> {
   Widget _buildNoteItem(
     BuildContext context,
     SettingsModel settings,
-    List<Map> notes,
+    List<Note> notes,
     int index,
     int viewIndex, {
     bool isGridView = false,
   }) {
     final note = notes[index];
-    final bool noTitle = note["title"] == "";
-    final bool noContent = note["content"] == "";
-    final String date = C.parseDate(note["time"]);
-    final int dateValue = C.calculateDifference(note["time"]);
+    final bool noTitle = note.title == "";
+    final bool noContent = note.content == "";
+    final String date = C.parseDate(note.time);
+    final int dateValue = C.calculateDifference(note.time);
 
     Widget noteView;
     if (isGridView) {
@@ -236,11 +237,14 @@ class _HomePageState extends State<HomePage> {
     }
 
     return Stack(
-      alignment: note["layout"] == 0 || note["layout"] == 2
+      alignment: note.layout == 0 || note.layout == 2
           ? Alignment.topRight
           : Alignment.topLeft,
       children: [
-        GestureDetector(onTap: () => _editNote(context, note), child: noteView),
+        GestureDetector(
+          onTap: () => {}, //_editNote(context, note)
+          child: noteView,
+        ),
         Padding(
           padding: EdgeInsets.symmetric(
             horizontal: C.isTablet ? 8.0 : 0,
@@ -251,7 +255,7 @@ class _HomePageState extends State<HomePage> {
                 {}, //notesCubit.showDeleteDialog(context, notes, index),
             icon: Icon(
               Icons.highlight_remove,
-              color: note['tindex'] == 0 ? Colors.white : Colors.black,
+              color: note.tIndex == 0 ? Colors.white : Colors.black,
               size: C.width * 0.0662,
             ),
           ),

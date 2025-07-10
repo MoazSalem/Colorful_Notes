@@ -1,5 +1,6 @@
 import 'package:colorful_notes/core/consts.dart';
 import 'package:colorful_notes/core/helpers/widgets_helper.dart';
+import 'package:colorful_notes/core/models/note_model.dart';
 import 'package:colorful_notes/core/providers/database_provider.dart';
 import 'package:colorful_notes/core/providers/notes_provider.dart';
 import 'package:flutter/material.dart';
@@ -106,18 +107,23 @@ class _CreateNoteState extends State<CreateNote> {
                             titleC.text != "" || contentC.text != ""
                                 ? {
                                     await database.insertToDatabase(
-                                      title: titleC.text,
-                                      time: DateTime.now().toString(),
-                                      content: contentC.text,
-                                      index: chosenIndex,
-                                      tIndex: textColor,
-                                      extra: chosenIndex == 99
-                                          ? pickerColor.toString()
-                                          : "",
-                                      layout: getLayout(),
+                                      note: Note(
+                                        title: titleC.text,
+                                        time: DateTime.now().toString(),
+                                        content: contentC.text,
+                                        cIndex: chosenIndex,
+                                        tIndex: textColor,
+                                        extra: chosenIndex == 99
+                                            ? pickerColor.toString()
+                                            : "",
+                                        layout: getLayout(),
+                                        id: '',
+                                        type: 0,
+                                        edited: '',
+                                      ),
                                     ),
-                                    titleC.text = "",
-                                    contentC.text = "",
+                                    titleC.clear(),
+                                    contentC.clear(),
                                     ref.invalidate(notesProvider),
                                     if (context.mounted)
                                       {Navigator.pop(context)},

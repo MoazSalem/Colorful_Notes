@@ -1,19 +1,19 @@
 import 'package:colorful_notes/core/consts.dart';
 import 'package:colorful_notes/core/providers/database_provider.dart';
 import 'package:colorful_notes/core/shared_widgets/custom_loading_widget.dart';
+import 'package:colorful_notes/features/main_screen/ui/widgets/sidebar.dart';
 import 'package:flutter/material.dart';
-import 'package:colorful_notes/features/home/ui/widgets/sidebar.dart';
 import 'package:colorful_notes/main.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final class Home extends StatefulWidget {
-  const Home({super.key});
+final class MainScreen extends StatefulWidget {
+  const MainScreen({super.key});
 
   @override
-  State<Home> createState() => _HomeState();
+  State<MainScreen> createState() => _MainScreenState();
 }
 
-class _HomeState extends State<Home> {
+class _MainScreenState extends State<MainScreen> {
   @override
   didChangeDependencies() {
     C.theme = Theme.of(context).colorScheme;

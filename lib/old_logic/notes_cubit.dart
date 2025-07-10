@@ -1,5 +1,3 @@
-// ignore_for_file: invalid_use_of_visible_for_testing_member
-
 import 'dart:async';
 import 'dart:io';
 import 'package:colorful_notes/core/consts.dart';
@@ -10,7 +8,6 @@ import 'package:dynamic_color/dynamic_color.dart';
 import 'package:easy_localization/easy_localization.dart' hide TextDirection;
 import 'package:external_path/external_path.dart';
 import 'package:hive_ce/hive.dart';
-import 'package:colorful_notes/features/home/ui/home.dart';
 import 'package:path/path.dart' as path;
 import 'package:material_dialogs/material_dialogs.dart';
 import 'package:material_dialogs/widgets/buttons/icon_button.dart';
@@ -70,9 +67,6 @@ class NotesCubit extends Cubit<NotesState> {
   }
 
   onCreateNote() async {
-    search(query: searchController.text, where: 'home');
-    search(query: searchController.text, where: 'text');
-    search(query: searchController.text, where: 'voice');
     await Future.delayed(const Duration(seconds: 1));
     emit(NoteCreate());
   }

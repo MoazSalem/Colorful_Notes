@@ -1,4 +1,4 @@
-import 'package:colorful_notes/features/home/ui/home.dart';
+import 'package:colorful_notes/features/main_screen/ui/notes_list.dart';
 import 'package:colorful_notes/features/settings/ui/settings.dart';
 import 'package:colorful_notes/features/about/ui/info.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +7,7 @@ class AppConsts {
   static const String gitHubLink =
       'https://github.com/MoazSalem/Colorful_Notes';
   static const List<Widget> pagesList = [
-    HomePage(),
+    NotesList(),
     SettingsPage(),
     InfoPage(),
   ];

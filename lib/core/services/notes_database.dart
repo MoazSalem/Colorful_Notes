@@ -1,3 +1,4 @@
+import 'package:colorful_notes/core/models/note_model.dart';
 import 'package:sqflite/sqflite.dart';
 
 class NotesDatabase {
@@ -26,49 +27,40 @@ class NotesDatabase {
     );
   }
 
-  Future<List<Map<String, dynamic>>> getAllNotes() async {
-    return await database.query('Notes');
+  Future<List<Note>> getAllNotes() async {
+    final List<Map<String, Object?>> notes = await database.query('Notes');
+    final List<Note> noteList = [];
+    for (var element in notes) {
+      noteList.add(Note.fromMap(element));
+    }
+    return noteList;
   }
 
-  Future<void> destroyDatabase() async {
-    await deleteDatabase('notes.db');
-  }
-
-  Future<void> insertToDatabase({
-    required String title,
-    required String content,
-    required int index,
-    required String time,
-    required int layout,
-    required tIndex,
-    required String extra,
-    int? type = 0,
-    String? edited = 'no',
-  }) async {
+  Future<void> insertToDatabase({required Note note}) async {
     await database.transaction((txn) async {
       txn
           .rawInsert(
-            'INSERT INTO Notes(title, content, cindex, tindex, type, time, edited ,layout, extra) VALUES("$title", "$content", "$index", "$tIndex", "$type","$time","$edited","$layout","$extra")',
+            'INSERT INTO Notes(title, content, cindex, tindex, type, time, edited ,layout, extra) VALUES("${note.title}", "${note.content}", "${note.cIndex}", "${note.tIndex}", "${note.type}","${note.time}","${note.edited}","${note.layout}","${note.extra}")',
           )
           .then((value) {});
     });
   }
 
-  Future<void> editDatabaseItem({
-    required int id,
-    required String content,
-    required String time,
-    required int index,
-    required int type,
-    required String title,
-    required int layout,
-    required int tIndex,
-    required String extra,
-    String? edited = 'yes',
-  }) async {
+  Future<void> editDatabaseItem({required Note note}) async {
     await database.rawUpdate(
       'UPDATE Notes SET title = ?, content = ?, time = ?, cindex = ?, tindex = ?, type = ?, edited = ?, layout = ?, extra = ? WHERE id = ?',
-      [title, content, time, index, tIndex, type, edited, layout, extra, id],
+      [
+        note.title,
+        note.content,
+        note.time,
+        note.cIndex,
+        note.tIndex,
+        note.type,
+        note.edited,
+        note.layout,
+        note.extra,
+        note.id,
+      ],
     );
   }
 
@@ -77,5 +69,9 @@ class NotesDatabase {
       '$id',
     ]);
     assert(count == 1);
+  }
+
+  Future<void> destroyDatabase() async {
+    await deleteDatabase('notes.db');
   }
 }
