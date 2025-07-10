@@ -1,4 +1,3 @@
-import 'dart:ui' as ui;
 import 'package:colorful_notes/core/models/note_model.dart';
 import 'package:colorful_notes/core/providers/notes_provider.dart';
 import 'package:colorful_notes/core/shared_widgets/custom_appbar.dart';
@@ -7,10 +6,7 @@ import 'package:colorful_notes/features/main_screen/ui/widgets/search_bar_widget
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:colorful_notes/core/services/service_locator.dart';
-import 'package:colorful_notes/features/main_screen/ui/widgets/custom_fab.dart';
 import 'package:colorful_notes/features/main_screen/ui/widgets/notes.dart';
-import 'package:colorful_notes/features/notes_creation/ui/create_note.dart';
-import 'package:colorful_notes/features/notes_creation/ui/create_voice.dart';
 import 'package:colorful_notes/features/notes_creation/ui/edit_note.dart';
 import 'package:colorful_notes/features/notes_creation/ui/edit_voice.dart';
 import 'package:colorful_notes/main.dart';
@@ -37,73 +33,46 @@ class _NotesListState extends State<NotesList> {
     return ValueListenableBuilder<SettingsModel>(
       valueListenable: settingsService.settings,
       builder: (context, settings, child) {
-        return Scaffold(
-          backgroundColor: C.theme.surface,
-          floatingActionButtonLocation: settings.fabIndex == 0
-              ? FloatingActionButtonLocation.endFloat
-              : FloatingActionButtonLocation.startFloat,
-          floatingActionButton: _buildFab(context, settings),
-          body: ListView(
-            padding: EdgeInsets.zero,
-            children: [
-              CustomAppbar(
-                title: "Home".tr(),
-                top: 65,
-                locale: settings.lang,
-                leading: AppbarActionWidgets(
-                  searchController: searchController,
-                  settings: settings,
-                  onToggle: () => setState(() => isSearching = !isSearching),
-                  switchView: () =>
-                      setState(() => viewIndex = (viewIndex + 1) % 3),
-                  viewIndex: viewIndex,
-                ),
-              ),
-              SearchBarWidget(
-                isSearching: isSearching,
+        return ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            CustomAppbar(
+              title: "Home".tr(),
+              top: 65,
+              locale: settings.lang,
+              leading: AppbarActionWidgets(
                 searchController: searchController,
-                C: C,
+                settings: settings,
+                onToggle: () => setState(() => isSearching = !isSearching),
+                switchView: () =>
+                    setState(() => viewIndex = (viewIndex + 1) % 3),
+                viewIndex: viewIndex,
               ),
-              Consumer(
-                builder: (context, ref, child) {
-                  final notes = ref.watch(notesProvider);
-                  return notes.when(
-                    data: (data) =>
-                        _buildNotesList(context, settings, data, viewIndex),
-                    error: (Object error, StackTrace stackTrace) {
-                      return Center(child: Text(error.toString()));
-                    },
-                    loading: () {
-                      return Center(child: CircularProgressIndicator());
-                    },
-                  );
-                },
-              ),
-            ],
-          ),
+            ),
+            SearchBarWidget(
+              isSearching: isSearching,
+              searchController: searchController,
+              C: C,
+            ),
+            Consumer(
+              builder: (context, ref, child) {
+                final notes = ref.watch(notesProvider);
+                return notes.when(
+                  data: (data) =>
+                      _buildNotesList(context, settings, data, viewIndex),
+                  error: (Object error, StackTrace stackTrace) {
+                    return Center(child: Text(error.toString()));
+                  },
+                  loading: () {
+                    return Center(child: CircularProgressIndicator());
+                  },
+                );
+              },
+            ),
+          ],
         );
       },
     );
-  }
-
-  Widget _buildFab(BuildContext context, SettingsModel settings) {
-    final fab = customFab(
-      theme: C.theme,
-      colors: C.colors,
-      action1: () => _createNote(context),
-      action2: () => _createVoice(context),
-      colorful: settings.colorful,
-      isTablet: C.isTablet,
-    );
-
-    return settings.fabIndex == 0
-        ? fab
-        : Directionality(
-            textDirection: settings.lang == 'en'
-                ? ui.TextDirection.rtl
-                : ui.TextDirection.ltr,
-            child: fab,
-          );
   }
 
   Widget _buildNotesList(
@@ -261,18 +230,6 @@ class _NotesListState extends State<NotesList> {
           ),
         ),
       ],
-    );
-  }
-
-  void _createNote(BuildContext context) {
-    showBottomSheet(context: context, builder: (context) => const CreateNote());
-  }
-
-  void _createVoice(BuildContext context) {
-    showBottomSheet(
-      context: context,
-      enableDrag: false,
-      builder: (context) => const CreateVoice(),
     );
   }
 

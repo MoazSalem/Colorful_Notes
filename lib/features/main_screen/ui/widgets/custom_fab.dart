@@ -1,6 +1,48 @@
+import 'dart:ui' as ui;
+
+import 'package:colorful_notes/core/models/settings_model.dart';
+import 'package:colorful_notes/features/notes_creation/ui/create_note.dart';
+import 'package:colorful_notes/features/notes_creation/ui/create_voice.dart';
 import 'package:colorful_notes/main.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
+
+class CustomFab extends StatelessWidget {
+  const CustomFab({super.key, required this.settings});
+  final SettingsModel settings;
+
+  @override
+  Widget build(BuildContext context) {
+    final fab = customFab(
+      theme: C.theme,
+      colors: C.colors,
+      action1: () => _createNote(context),
+      action2: () => _createVoice(context),
+      colorful: settings.colorful,
+      isTablet: C.isTablet,
+    );
+    return settings.fabIndex == 0
+        ? fab
+        : Directionality(
+            textDirection: settings.lang == 'en'
+                ? ui.TextDirection.rtl
+                : ui.TextDirection.ltr,
+            child: fab,
+          );
+  }
+}
+
+void _createNote(BuildContext context) {
+  showBottomSheet(context: context, builder: (context) => const CreateNote());
+}
+
+void _createVoice(BuildContext context) {
+  showBottomSheet(
+    context: context,
+    enableDrag: false,
+    builder: (context) => const CreateVoice(),
+  );
+}
 
 bool _openFab = false;
 
