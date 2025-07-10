@@ -1,4 +1,5 @@
 import 'dart:ui' as ui;
+import 'package:colorful_notes/core/providers/notes_provider.dart';
 import 'package:colorful_notes/core/shared_widgets/custom_appbar.dart';
 import 'package:colorful_notes/features/home/ui/widgets/appbar_action_widgets.dart';
 import 'package:colorful_notes/features/home/ui/widgets/search_bar_widget.dart';
@@ -16,14 +17,7 @@ import 'package:colorful_notes/core/models/settings_model.dart';
 import 'package:colorful_notes/core/services/settings_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'home_screen.dart';
-
 final TextEditingController searchController = TextEditingController();
-
-final notesProvider = FutureProvider<List<Map<String, dynamic>>>((ref) async {
-  final database = ref.watch(databaseProvider).value!;
-  return database.getAllNotes();
-});
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});

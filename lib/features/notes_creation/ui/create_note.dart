@@ -1,7 +1,7 @@
 import 'package:colorful_notes/core/consts.dart';
 import 'package:colorful_notes/core/helpers/widgets_helper.dart';
-import 'package:colorful_notes/features/home/ui/home.dart';
-import 'package:colorful_notes/features/home/ui/home_screen.dart';
+import 'package:colorful_notes/core/providers/database_provider.dart';
+import 'package:colorful_notes/core/providers/notes_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart' hide TextDirection;
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
@@ -112,7 +112,7 @@ class _CreateNoteState extends State<CreateNote> {
                                       index: chosenIndex,
                                       tIndex: textColor,
                                       extra: chosenIndex == 99
-                                          ? pickerColor.value.toString()
+                                          ? pickerColor.toString()
                                           : "",
                                       layout: getLayout(),
                                     ),

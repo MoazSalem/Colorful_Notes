@@ -1,16 +1,10 @@
 import 'package:colorful_notes/core/consts.dart';
-import 'package:colorful_notes/core/services/notes_database.dart';
+import 'package:colorful_notes/core/providers/database_provider.dart';
 import 'package:colorful_notes/core/shared_widgets/custom_loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:colorful_notes/features/home/ui/widgets/sidebar.dart';
 import 'package:colorful_notes/main.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-final databaseProvider = FutureProvider<NotesDatabase>((ref) async {
-  final db = NotesDatabase();
-  await db.startDatabase();
-  return db;
-});
 
 final class Home extends StatefulWidget {
   const Home({super.key});
