@@ -1,5 +1,7 @@
 import 'dart:ui';
 
+import 'package:easy_localization/easy_localization.dart' hide TextDirection;
+
 class WidgetsHelper {
   static TextDirection getDirection(String v) {
     final string = v.trim();
@@ -58,5 +60,14 @@ class WidgetsHelper {
       }
     }
     return layout;
+  }
+
+  static String parseDate(String stringDate) {
+    var date = DateTime.parse(stringDate);
+    String parsedDate = DateFormat.EEEE().format(date);
+    String parsedDate0 = DateFormat.H().format(date);
+    String parsedDate1 = DateFormat.m().format(date);
+    String parsedDate2 = DateFormat.s().format(date);
+    return parsedDate + parsedDate0 + parsedDate1 + parsedDate2;
   }
 }
