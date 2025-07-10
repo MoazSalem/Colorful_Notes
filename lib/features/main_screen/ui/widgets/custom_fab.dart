@@ -1,7 +1,7 @@
 import 'dart:ui' as ui;
 
 import 'package:colorful_notes/core/models/settings_model.dart';
-import 'package:colorful_notes/features/notes_creation/ui/create_note.dart';
+import 'package:colorful_notes/features/notes_creation/ui/text_note.dart';
 import 'package:colorful_notes/features/notes_creation/ui/create_voice.dart';
 import 'package:colorful_notes/main.dart';
 import 'package:flutter/material.dart';
@@ -33,7 +33,7 @@ class CustomFab extends StatelessWidget {
 }
 
 void _createNote(BuildContext context) {
-  showBottomSheet(context: context, builder: (context) => const CreateNote());
+  showBottomSheet(context: context, builder: (context) => const TextNote());
 }
 
 void _createVoice(BuildContext context) {

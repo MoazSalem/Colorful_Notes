@@ -3,12 +3,11 @@ import 'package:colorful_notes/core/providers/notes_provider.dart';
 import 'package:colorful_notes/core/shared_widgets/custom_appbar.dart';
 import 'package:colorful_notes/features/main_screen/ui/widgets/appbar_action_widgets.dart';
 import 'package:colorful_notes/features/main_screen/ui/widgets/search_bar_widget.dart';
+import 'package:colorful_notes/features/notes_creation/ui/text_note.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:colorful_notes/core/services/service_locator.dart';
 import 'package:colorful_notes/features/main_screen/ui/widgets/notes.dart';
-import 'package:colorful_notes/features/notes_creation/ui/edit_note.dart';
-import 'package:colorful_notes/features/notes_creation/ui/edit_voice.dart';
 import 'package:colorful_notes/main.dart';
 import 'package:colorful_notes/core/models/settings_model.dart';
 import 'package:colorful_notes/core/services/settings_service.dart';
@@ -210,10 +209,7 @@ class _NotesListState extends State<NotesList> {
           ? Alignment.topRight
           : Alignment.topLeft,
       children: [
-        GestureDetector(
-          onTap: () => {}, //_editNote(context, note)
-          child: noteView,
-        ),
+        GestureDetector(onTap: () => _editNote(context, note), child: noteView),
         Padding(
           padding: EdgeInsets.symmetric(
             horizontal: C.isTablet ? 8.0 : 0,
@@ -233,11 +229,12 @@ class _NotesListState extends State<NotesList> {
     );
   }
 
-  void _editNote(BuildContext context, Map note) {
+  void _editNote(BuildContext context, Note note) {
     showBottomSheet(
       context: context,
-      builder: (context) =>
-          note['type'] == 0 ? EditNote(note: note) : EditVoice(note: note),
+      builder: (context) => note.type == 0
+          ? TextNote(note: note)
+          : Container(), // EditVoice(note: note),
     );
   }
 }

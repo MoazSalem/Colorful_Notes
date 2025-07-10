@@ -30,4 +30,33 @@ class WidgetsHelper {
     }
     return TextDirection.ltr;
   }
+
+  static int getLayout({
+    required TextDirection titleDir,
+    required TextDirection contentDir,
+    required String title,
+    required String content,
+  }) {
+    int layout = 0;
+    if (titleDir == TextDirection.ltr && contentDir == TextDirection.ltr) {
+      layout = 0;
+    } else if (titleDir == TextDirection.rtl &&
+        contentDir == TextDirection.rtl) {
+      layout = 1;
+    } else if (titleDir == TextDirection.ltr &&
+        contentDir == TextDirection.rtl) {
+      if (title == "") {
+        layout = 1;
+      } else {
+        layout = 2;
+      }
+    } else {
+      if (content == "") {
+        layout = 1;
+      } else {
+        layout = 3;
+      }
+    }
+    return layout;
+  }
 }

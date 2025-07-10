@@ -33,4 +33,30 @@ class Note {
       layout = map['layout'],
       extra = map['extra'].toString(),
       edited = map['edited'].toString();
+
+  Note copyWith({
+    String? id,
+    String? title,
+    String? content,
+    String? time,
+    int? type,
+    int? cIndex,
+    int? tIndex,
+    int? layout,
+    String? extra,
+    String? edited,
+  }) {
+    return Note(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      content: content ?? this.content,
+      time: time ?? this.time,
+      type: type ?? this.type,
+      cIndex: cIndex ?? this.cIndex,
+      tIndex: tIndex ?? this.tIndex,
+      layout: layout ?? this.layout,
+      extra: extra ?? this.extra,
+      edited: edited ?? this.edited,
+    );
+  }
 }
