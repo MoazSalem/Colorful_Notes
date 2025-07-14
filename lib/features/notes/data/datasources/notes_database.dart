@@ -64,9 +64,9 @@ class NotesDatabase {
     );
   }
 
-  Future<void> deleteFromDatabase({required int id}) async {
+  Future<void> deleteFromDatabase({required String id}) async {
     int count = await database.rawDelete('DELETE FROM Notes WHERE id = ?', [
-      '$id',
+      id,
     ]);
     assert(count == 1);
   }
