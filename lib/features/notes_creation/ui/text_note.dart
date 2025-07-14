@@ -132,7 +132,8 @@ class _TextNoteState extends State<TextNote> {
                                                 cIndex: chosenColorIndex,
                                                 tIndex: textColorIndex,
                                                 extra: chosenColorIndex == 99
-                                                    ? pickerColor.toString()
+                                                    ? pickerColor.value
+                                                          .toString()
                                                     : "",
                                                 layout: WidgetsHelper.getLayout(
                                                   titleDir:
@@ -143,6 +144,7 @@ class _TextNoteState extends State<TextNote> {
                                                   content:
                                                       contentController.text,
                                                 ),
+                                                edited: 'yes',
                                               ),
                                             ),
                                           }
@@ -156,7 +158,8 @@ class _TextNoteState extends State<TextNote> {
                                                 cIndex: chosenColorIndex,
                                                 tIndex: textColorIndex,
                                                 extra: chosenColorIndex == 99
-                                                    ? pickerColor.toString()
+                                                    ? pickerColor.value
+                                                          .toString()
                                                     : "",
                                               ),
                                             ),
@@ -172,7 +175,7 @@ class _TextNoteState extends State<TextNote> {
                                             cIndex: chosenColorIndex,
                                             tIndex: textColorIndex,
                                             extra: chosenColorIndex == 99
-                                                ? pickerColor.toString()
+                                                ? pickerColor.value.toString()
                                                 : "",
                                             layout: WidgetsHelper.getLayout(
                                               titleDir: titleDirection.value,

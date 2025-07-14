@@ -27,8 +27,7 @@ class VoiceNote extends StatefulWidget {
 class _VoiceNoteState extends State<VoiceNote> {
   final TextEditingController titleController = TextEditingController();
   final record = AudioRecorder();
-  late String title;
-  late String content;
+  final String extension = '.m4a';
   String name = "";
   String time = "";
   bool isRecording = false;
@@ -40,6 +39,7 @@ class _VoiceNoteState extends State<VoiceNote> {
   int chosenColorIndex = 0;
   late final Directory appDir;
   late final String filePath;
+  late final String file;
 
   @override
   void dispose() {
@@ -51,15 +51,23 @@ class _VoiceNoteState extends State<VoiceNote> {
   }
 
   @override
-  void initState() async {
+  void initState() {
     if (widget.note != null) {
       titleController.text = widget.note!.title;
       chosenColorIndex = widget.note!.cIndex;
       textColorIndex = widget.note!.tIndex;
+      file = widget.note!.content;
+      chosenColorIndex == 99
+          ? pickerColor = Color(int.parse(widget.note!.extra!))
+          : null;
     }
-    appDir = await getApplicationDocumentsDirectory();
-    filePath = '${appDir.path}/$name.mp3';
+    getAppDir();
     super.initState();
+  }
+
+  getAppDir() async {
+    appDir = await getApplicationDocumentsDirectory();
+    filePath = '${appDir.path}/Voice/';
   }
 
   @override
@@ -97,11 +105,11 @@ class _VoiceNoteState extends State<VoiceNote> {
                             ),
                             child: GestureDetector(
                               onTap: () async {
-                                await record.stop();
-                                stopWatchTimer.onResetTimer();
-                                isRecording = false;
-                                name == "" ? null : {deleteFile(filePath)};
                                 if (context.mounted) {
+                                  await record.stop();
+                                  stopWatchTimer.onResetTimer();
+                                  isRecording = false;
+                                  name == "" ? null : {deleteFile(filePath)};
                                   Navigator.pop(context);
                                 }
                               },
@@ -124,7 +132,66 @@ class _VoiceNoteState extends State<VoiceNote> {
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 12.0),
                         child: GestureDetector(
-                          onTap: () async {},
+                          onTap: () async {
+                            if (widget.note == null) {
+                              await record.stop();
+                              time == ""
+                                  ? context.mounted
+                                        ? Navigator.pop(context)
+                                        : null
+                                  : {
+                                      await database.insertToDatabase(
+                                        note: Note(
+                                          title: titleController.text,
+                                          time: time,
+                                          content: file,
+                                          tIndex: textColorIndex,
+                                          extra: chosenColorIndex == 99
+                                              ? pickerColor.value.toString()
+                                              : "",
+                                          type: 1,
+                                          layout: 0,
+                                          id: '',
+                                          cIndex: chosenColorIndex,
+                                          edited: '',
+                                        ),
+                                      ),
+                                      stopWatchTimer.onResetTimer(),
+                                    };
+                            } else if (titleController.text !=
+                                widget.note!.title) {
+                              await database.deleteFromDatabase(
+                                id: int.parse(widget.note!.id),
+                              );
+                              await database.insertToDatabase(
+                                note: widget.note!.copyWith(
+                                  title: titleController.text,
+                                  tIndex: textColorIndex,
+                                  extra: chosenColorIndex == 99
+                                      ? pickerColor.value.toString()
+                                      : "",
+                                  cIndex: chosenColorIndex,
+                                  edited: 'yes',
+                                ),
+                              );
+                            } else if (chosenColorIndex !=
+                                    widget.note!.cIndex ||
+                                textColorIndex != widget.note!.tIndex) {
+                              await database.editDatabaseItem(
+                                note: widget.note!.copyWith(
+                                  cIndex: chosenColorIndex,
+                                  extra: chosenColorIndex == 99
+                                      ? pickerColor.value.toString()
+                                      : "",
+                                  tIndex: textColorIndex,
+                                ),
+                              );
+                            }
+                            ref.invalidate(notesProvider);
+                            if (context.mounted) {
+                              Navigator.pop(context);
+                            }
+                          },
                           child: CircleAvatar(
                             backgroundColor: textColor,
                             radius: 25,
@@ -175,64 +242,95 @@ class _VoiceNoteState extends State<VoiceNote> {
                                   ),
                                 ),
                                 SizedBox(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      StreamBuilder<int>(
-                                        stream: stopWatchTimer.rawTime,
-                                        initialData: 0,
-                                        builder: (context, snap) {
-                                          final value = snap.data;
-                                          final time =
-                                              StopWatchTimer.getDisplayTime(
-                                                value!,
-                                              );
-                                          var displayTime = time.split(".");
-                                          return Column(
-                                            children: <Widget>[
-                                              Padding(
-                                                padding: const EdgeInsets.all(
-                                                  8,
-                                                ),
-                                                child: Text(
-                                                  displayTime[0],
-                                                  style: TextStyle(
-                                                    fontSize: 40,
-                                                    fontWeight: FontWeight.w500,
-                                                    color: value == 0
-                                                        ? semiTransparentColor
-                                                        : textColor,
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          );
-                                        },
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsets.symmetric(
-                                          vertical: 50.0,
-                                        ),
-                                        child: isRecording
-                                            ? isPaused
-                                                  ? IconButton(
-                                                      constraints:
-                                                          const BoxConstraints.tightFor(
-                                                            height: 120,
-                                                            width: 120,
+                                  child: widget.note == null
+                                      ? Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            StreamBuilder<int>(
+                                              stream: stopWatchTimer.rawTime,
+                                              initialData: 0,
+                                              builder: (context, snap) {
+                                                final value = snap.data;
+                                                final time =
+                                                    StopWatchTimer.getDisplayTime(
+                                                      value!,
+                                                    );
+                                                var displayTime = time.split(
+                                                  ".",
+                                                );
+                                                return Column(
+                                                  children: <Widget>[
+                                                    Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                            8,
                                                           ),
-                                                      onPressed: () async {
-                                                        await record.resume();
-                                                        stopWatchTimer
-                                                            .onStartTimer();
-                                                        isPaused = false;
-                                                      },
-                                                      icon: Icon(
-                                                        Icons.play_arrow,
-                                                        size: 100,
-                                                        color: textColor,
+                                                      child: Text(
+                                                        displayTime[0],
+                                                        style: TextStyle(
+                                                          fontSize: 40,
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          color: value == 0
+                                                              ? semiTransparentColor
+                                                              : textColor,
+                                                        ),
                                                       ),
-                                                    )
+                                                    ),
+                                                  ],
+                                                );
+                                              },
+                                            ),
+                                            Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                vertical: 50.0,
+                                              ),
+                                              child: isRecording
+                                                  ? isPaused
+                                                        ? IconButton(
+                                                            constraints:
+                                                                const BoxConstraints.tightFor(
+                                                                  height: 120,
+                                                                  width: 120,
+                                                                ),
+                                                            onPressed: () async {
+                                                              await record
+                                                                  .resume();
+                                                              stopWatchTimer
+                                                                  .onStartTimer();
+                                                              setState(() {
+                                                                isPaused =
+                                                                    false;
+                                                              });
+                                                            },
+                                                            icon: Icon(
+                                                              Icons.play_arrow,
+                                                              size: 100,
+                                                              color: textColor,
+                                                            ),
+                                                          )
+                                                        : IconButton(
+                                                            constraints:
+                                                                const BoxConstraints.tightFor(
+                                                                  height: 120,
+                                                                  width: 120,
+                                                                ),
+                                                            onPressed: () async {
+                                                              await record
+                                                                  .pause();
+                                                              stopWatchTimer
+                                                                  .onStopTimer();
+                                                              setState(() {
+                                                                isPaused = true;
+                                                              });
+                                                            },
+                                                            icon: Icon(
+                                                              Icons.pause,
+                                                              size: 100,
+                                                              color: textColor,
+                                                            ),
+                                                          )
                                                   : IconButton(
                                                       constraints:
                                                           const BoxConstraints.tightFor(
@@ -240,94 +338,88 @@ class _VoiceNoteState extends State<VoiceNote> {
                                                             width: 120,
                                                           ),
                                                       onPressed: () async {
-                                                        await record.pause();
-                                                        stopWatchTimer
-                                                            .onStopTimer();
-                                                        isPaused = true;
+                                                        titleFocusNode
+                                                            .unfocus();
+                                                        time == ""
+                                                            ? {
+                                                                time = DateTime.now()
+                                                                    .toString(),
+                                                                name =
+                                                                    WidgetsHelper.parseDate(
+                                                                      time,
+                                                                    ).toString(),
+                                                              }
+                                                            : {
+                                                                stopWatchTimer
+                                                                    .onResetTimer(),
+                                                                time = DateTime.now()
+                                                                    .toString(),
+                                                                name =
+                                                                    WidgetsHelper.parseDate(
+                                                                      time,
+                                                                    ).toString(),
+                                                              };
+                                                        if (await record
+                                                            .hasPermission()) {
+                                                          await createVoiceFolder(
+                                                            appDir,
+                                                          );
+                                                          // Start timer.
+                                                          stopWatchTimer
+                                                              .onStartTimer();
+                                                          // Start recording
+                                                          setState(() {
+                                                            isRecording = true;
+                                                            isPaused = false;
+                                                          });
+                                                          file =
+                                                              "$filePath$name$extension";
+                                                          await record.start(
+                                                            const RecordConfig(),
+                                                            path: file,
+                                                          );
+                                                        }
                                                       },
                                                       icon: Icon(
-                                                        Icons.pause,
+                                                        Icons
+                                                            .keyboard_voice_rounded,
                                                         size: 100,
-                                                        color: textColor,
+                                                        color:
+                                                            semiTransparentColor,
                                                       ),
-                                                    )
-                                            : IconButton(
+                                                    ),
+                                            ),
+                                            Padding(
+                                              padding: EdgeInsets.only(
+                                                bottom: 16,
+                                              ),
+                                              child: IconButton(
                                                 constraints:
                                                     const BoxConstraints.tightFor(
                                                       height: 120,
                                                       width: 120,
                                                     ),
                                                 onPressed: () async {
-                                                  titleFocusNode.unfocus();
-                                                  time == ""
-                                                      ? {
-                                                          time = DateTime.now()
-                                                              .toString(),
-                                                          name =
-                                                              WidgetsHelper.parseDate(
-                                                                time,
-                                                              ).toString(),
-                                                        }
-                                                      : {
-                                                          stopWatchTimer
-                                                              .onResetTimer(),
-                                                          time = DateTime.now()
-                                                              .toString(),
-                                                          name =
-                                                              WidgetsHelper.parseDate(
-                                                                time,
-                                                              ).toString(),
-                                                        };
-                                                  if (await record
-                                                      .hasPermission()) {
-                                                    await createVoiceFolder(
-                                                      appDir,
-                                                    );
-                                                    // Start timer.
-                                                    stopWatchTimer
-                                                        .onStartTimer();
-                                                    // Start recording
-                                                    isRecording = true;
+                                                  // Stop timer.
+                                                  stopWatchTimer.onStopTimer();
+                                                  await record.stop();
+                                                  setState(() {
+                                                    isRecording = false;
                                                     isPaused = false;
-                                                    await record.start(
-                                                      const RecordConfig(),
-                                                      path: filePath,
-                                                    );
-                                                  }
+                                                  });
                                                 },
                                                 icon: Icon(
-                                                  Icons.keyboard_voice_rounded,
+                                                  Icons.stop_circle,
                                                   size: 100,
-                                                  color: semiTransparentColor,
+                                                  color: isRecording
+                                                      ? textColor
+                                                      : semiTransparentColor,
                                                 ),
                                               ),
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsets.only(bottom: 16),
-                                        child: IconButton(
-                                          constraints:
-                                              const BoxConstraints.tightFor(
-                                                height: 120,
-                                                width: 120,
-                                              ),
-                                          onPressed: () async {
-                                            // Stop timer.
-                                            stopWatchTimer.onStopTimer();
-                                            await record.stop();
-                                            isRecording = false;
-                                            isPaused = false;
-                                          },
-                                          icon: Icon(
-                                            Icons.stop_circle,
-                                            size: 100,
-                                            color: isRecording
-                                                ? textColor
-                                                : semiTransparentColor,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
+                                            ),
+                                          ],
+                                        )
+                                      : SizedBox.shrink(),
                                 ),
                               ],
                             ),

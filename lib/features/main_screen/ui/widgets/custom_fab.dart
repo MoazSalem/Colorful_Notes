@@ -2,7 +2,7 @@ import 'dart:ui' as ui;
 
 import 'package:colorful_notes/core/models/settings_model.dart';
 import 'package:colorful_notes/features/notes_creation/ui/text_note.dart';
-import 'package:colorful_notes/features/notes_creation/ui/create_voice.dart';
+import 'package:colorful_notes/features/notes_creation/ui/voice_note.dart';
 import 'package:colorful_notes/main.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -40,7 +40,7 @@ void _createVoice(BuildContext context) {
   showBottomSheet(
     context: context,
     enableDrag: false,
-    builder: (context) => const CreateVoice(),
+    builder: (context) => const VoiceNote(),
   );
 }
 

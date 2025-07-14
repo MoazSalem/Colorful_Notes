@@ -4,6 +4,7 @@ import 'package:colorful_notes/core/shared_widgets/custom_appbar.dart';
 import 'package:colorful_notes/features/main_screen/ui/widgets/appbar_action_widgets.dart';
 import 'package:colorful_notes/features/main_screen/ui/widgets/search_bar_widget.dart';
 import 'package:colorful_notes/features/notes_creation/ui/text_note.dart';
+import 'package:colorful_notes/features/notes_creation/ui/voice_note.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:colorful_notes/core/services/service_locator.dart';
@@ -232,9 +233,8 @@ class _NotesListState extends State<NotesList> {
   void _editNote(BuildContext context, Note note) {
     showBottomSheet(
       context: context,
-      builder: (context) => note.type == 0
-          ? TextNote(note: note)
-          : Container(), // EditVoice(note: note),
+      builder: (context) =>
+          note.type == 0 ? TextNote(note: note) : VoiceNote(note: note),
     );
   }
 }
