@@ -27,16 +27,16 @@ class NotesDatabase {
     );
   }
 
-  Future<List<Note>> getAllNotes() async {
+  Future<List<NoteModel>> getAllNotes() async {
     final List<Map<String, Object?>> notes = await database.query('Notes');
-    final List<Note> noteList = [];
+    final List<NoteModel> noteList = [];
     for (var element in notes) {
-      noteList.add(Note.fromMap(element));
+      noteList.add(NoteModel.fromMap(element));
     }
     return noteList;
   }
 
-  Future<void> insertToDatabase({required Note note}) async {
+  Future<void> insertToDatabase({required NoteModel note}) async {
     await database.transaction((txn) async {
       txn
           .rawInsert(
@@ -46,7 +46,7 @@ class NotesDatabase {
     });
   }
 
-  Future<void> editDatabaseItem({required Note note}) async {
+  Future<void> editDatabaseItem({required NoteModel note}) async {
     await database.rawUpdate(
       'UPDATE Notes SET title = ?, content = ?, time = ?, cindex = ?, tindex = ?, type = ?, edited = ?, layout = ?, extra = ? WHERE id = ?',
       [

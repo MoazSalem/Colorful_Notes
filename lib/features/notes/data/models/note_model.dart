@@ -1,4 +1,6 @@
-class Note {
+import 'package:colorful_notes/features/notes/domain/entities/note.dart';
+
+class NoteModel {
   final String id;
   final String title;
   final String content;
@@ -9,7 +11,8 @@ class Note {
   final int layout;
   final String extra;
   final String edited;
-  Note({
+
+  const NoteModel({
     required this.id,
     required this.title,
     required this.content,
@@ -22,41 +25,67 @@ class Note {
     required this.edited,
   });
 
-  Note.fromMap(Map<String, dynamic> map)
-    : id = map['id'].toString(),
-      title = map['title'].toString(),
-      content = map['content'].toString(),
-      time = map['time'].toString(),
-      type = map['type'],
-      cIndex = map['cindex'],
-      tIndex = map['tindex'],
-      layout = map['layout'],
-      extra = map['extra'].toString(),
-      edited = map['edited'].toString();
+  /// Convert DB Map to Model
+  factory NoteModel.fromMap(Map<String, dynamic> map) {
+    return NoteModel(
+      id: map['id'].toString(),
+      title: map['title'].toString(),
+      content: map['content'].toString(),
+      time: map['time'].toString(),
+      type: map['type'],
+      cIndex: map['cindex'],
+      tIndex: map['tindex'],
+      layout: map['layout'],
+      extra: map['extra'].toString(),
+      edited: map['edited'].toString(),
+    );
+  }
 
-  Note copyWith({
-    String? id,
-    String? title,
-    String? content,
-    String? time,
-    int? type,
-    int? cIndex,
-    int? tIndex,
-    int? layout,
-    String? extra,
-    String? edited,
-  }) {
+  /// Convert Model to Map for DB
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'title': title,
+      'content': content,
+      'time': time,
+      'type': type,
+      'cindex': cIndex,
+      'tindex': tIndex,
+      'layout': layout,
+      'extra': extra,
+      'edited': edited,
+    };
+  }
+
+  /// Convert to Domain Entity
+  Note toEntity() {
     return Note(
-      id: id ?? this.id,
-      title: title ?? this.title,
-      content: content ?? this.content,
-      time: time ?? this.time,
-      type: type ?? this.type,
-      cIndex: cIndex ?? this.cIndex,
-      tIndex: tIndex ?? this.tIndex,
-      layout: layout ?? this.layout,
-      extra: extra ?? this.extra,
-      edited: edited ?? this.edited,
+      id: id,
+      title: title,
+      content: content,
+      time: time,
+      type: type,
+      cIndex: cIndex,
+      tIndex: tIndex,
+      layout: layout,
+      extra: extra,
+      edited: edited,
+    );
+  }
+
+  /// Create Model from Entity
+  factory NoteModel.fromEntity(Note note) {
+    return NoteModel(
+      id: note.id,
+      title: note.title,
+      content: note.content,
+      time: note.time,
+      type: note.type,
+      cIndex: note.cIndex,
+      tIndex: note.tIndex,
+      layout: note.layout,
+      extra: note.extra,
+      edited: note.edited,
     );
   }
 }
