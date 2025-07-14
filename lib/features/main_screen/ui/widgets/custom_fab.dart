@@ -1,9 +1,8 @@
 import 'dart:ui' as ui;
-
+import 'package:colorful_notes/core/consts.dart';
 import 'package:colorful_notes/core/models/settings_model.dart';
 import 'package:colorful_notes/features/notes_creation/ui/text_note.dart';
 import 'package:colorful_notes/features/notes_creation/ui/voice_note.dart';
-import 'package:colorful_notes/main.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 
@@ -13,14 +12,7 @@ class CustomFab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final fab = customFab(
-      theme: C.theme,
-      colors: C.colors,
-      action1: () => _createNote(context),
-      action2: () => _createVoice(context),
-      colorful: settings.colorful,
-      isTablet: C.isTablet,
-    );
+    final fab = CustomFabWithChildren(colorful: settings.colorful);
     return settings.fabIndex == 0
         ? fab
         : Directionality(
@@ -32,114 +24,48 @@ class CustomFab extends StatelessWidget {
   }
 }
 
-void _createNote(BuildContext context) {
-  showBottomSheet(context: context, builder: (context) => const TextNote());
-}
-
-void _createVoice(BuildContext context) {
-  showBottomSheet(
+void _createNote(BuildContext context, {bool voice = false}) {
+  showModalBottomSheet(
+    isScrollControlled: true,
     context: context,
-    enableDrag: false,
-    builder: (context) => const VoiceNote(),
+    builder: (context) => voice ? const VoiceNote() : const TextNote(),
   );
 }
 
-bool _openFab = false;
+class CustomFabWithChildren extends StatefulWidget {
+  const CustomFabWithChildren({super.key, required this.colorful});
+  final bool colorful;
+  @override
+  State<CustomFabWithChildren> createState() => _CustomFabWithChildrenState();
+}
 
-Widget customFab({
-  required ColorScheme theme,
-  required colors,
-  required bool colorful,
-  required bool isTablet,
-  required action1,
-  required action2,
-}) {
-  return StatefulBuilder(
-    builder: (context, setState) => SizedBox(
+class _CustomFabWithChildrenState extends State<CustomFabWithChildren> {
+  bool openFab = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context).colorScheme;
+    final colors = AppConsts.lightColors;
+    return SizedBox(
       child: Column(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.end,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: isTablet ? 0 : 8,
-              vertical: isTablet ? 12 : 8,
-            ),
+            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
             child: AnimatedSwitcher(
               duration: const Duration(milliseconds: 200),
-              child: _openFab
+              child: openFab
                   ? Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         GestureDetector(
                           onTap: () {
-                            _openFab = !_openFab;
-                            action2();
-                            setState(() {});
-                          },
-                          child: Padding(
-                            padding: EdgeInsets.only(
-                              bottom: isTablet ? 8.0 : 0,
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                    left: 12.0,
-                                    right: 12.0,
-                                  ),
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(12),
-                                      color: theme.primary.withOpacity(0.15),
-                                    ),
-                                    width: isTablet ? 160 : 100,
-                                    height: isTablet ? 50 : 40,
-                                    child: Center(
-                                      child: Text(
-                                        "Voice Note".tr(),
-                                        style: TextStyle(
-                                          color: colorful
-                                              ? colors[3]
-                                              : C.theme.primary,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: isTablet ? 60 : 40,
-                                  child: FloatingActionButton(
-                                    backgroundColor: theme.primary.withOpacity(
-                                      0.15,
-                                    ),
-                                    mini: isTablet ? false : true,
-                                    onPressed: () {
-                                      _openFab = !_openFab;
-                                      action2();
-                                      setState(() {});
-                                    },
-                                    elevation: 0,
-                                    child: Icon(
-                                      Icons.mic,
-                                      color: colorful
-                                          ? colors[3]
-                                          : C.theme.primary,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            _openFab = !_openFab;
-                            action1();
-                            setState(() {});
+                            setState(() {
+                              openFab = !openFab;
+                            });
+                            _createNote(context, voice: true);
                           },
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
@@ -153,43 +79,97 @@ Widget customFab({
                                 child: Container(
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(12),
-                                    color: theme.primary.withOpacity(
-                                      0.15,
-                                    ), //colors[1],
+                                    color: theme.secondary,
                                   ),
-                                  width: isTablet ? 160 : 100,
-                                  height: isTablet ? 50 : 40,
+                                  width: 100,
+                                  height: 40,
                                   child: Center(
                                     child: Text(
-                                      "Text Note".tr(),
+                                      "Voice Note".tr(),
                                       style: TextStyle(
-                                        color: colorful
-                                            ? colors[1]
-                                            : C.theme.primary,
+                                        color: widget.colorful
+                                            ? colors[3]
+                                            : theme.onSecondary,
                                       ),
                                     ),
                                   ),
                                 ),
                               ),
                               SizedBox(
-                                width: isTablet ? 60 : 40,
+                                width: 40,
                                 child: FloatingActionButton(
-                                  backgroundColor: theme.primary.withOpacity(
-                                    0.15,
-                                  ),
-                                  //colors[1],
-                                  mini: isTablet ? false : true,
+                                  backgroundColor: theme.secondary,
+                                  mini: true,
                                   onPressed: () {
-                                    _openFab = !_openFab;
-                                    action1();
-                                    setState(() {});
+                                    setState(() {
+                                      openFab = !openFab;
+                                    });
+                                    _createNote(context, voice: true);
                                   },
                                   elevation: 0,
                                   child: Icon(
+                                    Icons.mic,
+                                    color: widget.colorful
+                                        ? colors[3]
+                                        : theme.onSecondary,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              openFab = !openFab;
+                            });
+                            _createNote(context, voice: false);
+                          },
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                  left: 12.0,
+                                  right: 12.0,
+                                ),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(12),
+                                    color: theme.secondary,
+                                  ),
+                                  width: 100,
+                                  height: 40,
+                                  child: Center(
+                                    child: Text(
+                                      "Text Note".tr(),
+                                      style: TextStyle(
+                                        color: widget.colorful
+                                            ? colors[1]
+                                            : theme.onSecondary,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                width: 40,
+                                child: FloatingActionButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      openFab = !openFab;
+                                    });
+                                    _createNote(context, voice: false);
+                                  },
+                                  backgroundColor: theme.secondary,
+                                  mini: true,
+                                  elevation: 0,
+                                  child: Icon(
                                     Icons.sticky_note_2,
-                                    color: colorful
+                                    color: widget.colorful
                                         ? colors[1]
-                                        : C.theme.primary,
+                                        : theme.onSecondary,
                                   ),
                                 ),
                               ),
@@ -198,20 +178,17 @@ Widget customFab({
                         ),
                       ],
                     )
-                  : Container(width: isTablet ? 200 : 160),
+                  : Container(width: 160),
             ),
           ),
           FloatingActionButton(
-            backgroundColor: colorful ? colors[0] : C.theme.primary,
-            //openFab ? colors[afterTap] : colors[main],
-            //splashColor: theme.primaryContainer,
-            //openFab ? colors[main] : colors[afterTap],
+            backgroundColor: widget.colorful ? colors[0] : theme.primary,
             onPressed: () {
-              _openFab = !_openFab;
-              setState(() {});
+              setState(() {
+                openFab = !openFab;
+              });
             },
             elevation: 0,
-
             child: Icon(
               Icons.add,
               color: theme.onPrimary, //white
@@ -219,6 +196,6 @@ Widget customFab({
           ),
         ],
       ),
-    ),
-  );
+    );
+  }
 }

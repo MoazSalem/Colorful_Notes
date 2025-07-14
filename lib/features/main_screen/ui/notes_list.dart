@@ -231,7 +231,8 @@ class _NotesListState extends State<NotesList> {
   }
 
   void _editNote(BuildContext context, Note note) {
-    showBottomSheet(
+    showModalBottomSheet(
+      isScrollControlled: true,
       context: context,
       builder: (context) =>
           note.type == 0 ? TextNote(note: note) : VoiceNote(note: note),

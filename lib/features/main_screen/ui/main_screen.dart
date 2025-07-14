@@ -34,6 +34,8 @@ class _MainScreenState extends State<MainScreen> {
       valueListenable: settingsService.settings,
       builder: (context, settings, child) {
         return Scaffold(
+          floatingActionButtonAnimator:
+              FloatingActionButtonAnimator.noAnimation,
           floatingActionButtonLocation: settings.fabIndex == 0
               ? FloatingActionButtonLocation.endFloat
               : FloatingActionButtonLocation.startFloat,
