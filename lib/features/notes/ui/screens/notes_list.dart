@@ -1,5 +1,5 @@
-import 'package:colorful_notes/core/models/note_model.dart';
-import 'package:colorful_notes/core/providers/notes_provider.dart';
+import 'package:colorful_notes/features/notes/data/models/note_model.dart';
+import 'package:colorful_notes/features/notes/ui/providers/notes_provider.dart';
 import 'package:colorful_notes/core/shared_widgets/custom_appbar.dart';
 import 'package:colorful_notes/features/notes/ui/screens/voice_note.dart';
 import 'package:colorful_notes/features/notes/ui/widgets/appbar_action_widgets.dart';

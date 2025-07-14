@@ -1,9 +1,9 @@
 import 'package:colorful_notes/core/consts.dart';
 import 'package:colorful_notes/core/models/settings_model.dart';
-import 'package:colorful_notes/core/providers/database_provider.dart';
 import 'package:colorful_notes/core/services/service_locator.dart';
 import 'package:colorful_notes/core/services/settings_service.dart';
 import 'package:colorful_notes/core/shared_widgets/custom_loading_widget.dart';
+import 'package:colorful_notes/features/notes/ui/providers/database_provider.dart';
 import 'package:colorful_notes/features/notes/ui/widgets/custom_fab.dart';
 import 'package:colorful_notes/features/notes/ui/widgets/sidebar.dart';
 import 'package:flutter/material.dart';

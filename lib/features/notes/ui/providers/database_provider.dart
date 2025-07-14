@@ -1,4 +1,4 @@
-import 'package:colorful_notes/core/services/notes_database.dart';
+import 'package:colorful_notes/features/notes/data/datasources/notes_database.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final databaseProvider = FutureProvider<NotesDatabase>((ref) async {
