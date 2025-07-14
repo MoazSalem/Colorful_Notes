@@ -8,6 +8,8 @@ class AppConsts {
       'https://github.com/MoazSalem/Colorful_Notes';
   static const List<Widget> pagesList = [
     NotesList(),
+    SizedBox(),
+    SizedBox(),
     SettingsPage(),
     InfoPage(),
   ];

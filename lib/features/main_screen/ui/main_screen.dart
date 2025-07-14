@@ -19,6 +19,7 @@ final class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   final settingsService = serviceLocator<SettingsService>();
+  int currentIndex = 0;
 
   @override
   didChangeDependencies() {
@@ -36,13 +37,15 @@ class _MainScreenState extends State<MainScreen> {
           floatingActionButtonLocation: settings.fabIndex == 0
               ? FloatingActionButtonLocation.endFloat
               : FloatingActionButtonLocation.startFloat,
-          floatingActionButton: CustomFab(settings: settings),
+          floatingActionButton: currentIndex != 0
+              ? null
+              : CustomFab(settings: settings),
           resizeToAvoidBottomInset: false,
           body: Row(
             children: [
               SideBar(
-                currentIndex: C.currentIndex,
-                onIndexChanged: (i) => {C.onIndexChanged(i)},
+                currentIndex: currentIndex,
+                onIndexChanged: (i) => {setState(() => currentIndex = i)},
               ),
               Consumer(
                 builder: (context, ref, child) {
@@ -55,7 +58,7 @@ class _MainScreenState extends State<MainScreen> {
                     data: (data) {
                       return Expanded(
                         flex: 5,
-                        child: AppConsts.pagesList[C.currentIndex],
+                        child: AppConsts.pagesList[currentIndex],
                       );
                     },
                   );
