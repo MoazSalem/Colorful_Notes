@@ -10,7 +10,7 @@ import 'package:colorful_notes/features/notes/ui/providers/database_provider.dar
 import 'notifier_provider.dart';
 
 final notesNotifierProvider = AsyncNotifierProvider<NotesNotifier, List<Note>>(
-  () => NotesNotifier(),
+  NotesNotifier.new,
 );
 
 final noteRepositoryProvider = Provider<NoteRepository>((ref) {
