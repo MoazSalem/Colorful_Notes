@@ -1,9 +1,7 @@
 import 'dart:io';
-
 import 'package:colorful_notes/core/consts.dart';
 import 'package:colorful_notes/core/helpers/widgets_helper.dart';
-import 'package:colorful_notes/features/notes/data/models/note_model.dart';
-import 'package:colorful_notes/features/notes/ui/providers/database_provider.dart';
+import 'package:colorful_notes/features/notes/domain/entities/note.dart';
 import 'package:colorful_notes/features/notes/ui/providers/notes_provider.dart';
 import 'package:colorful_notes/features/notes/ui/widgets/color_bar.dart';
 import 'package:flutter/foundation.dart';
@@ -82,7 +80,7 @@ class _VoiceNoteState extends State<VoiceNote> {
         : Colors.black54;
     return Consumer(
       builder: (context, ref, child) {
-        final database = ref.watch(databaseProvider).value!;
+        final notesController = ref.read(notesNotifierProvider.notifier);
         return Scaffold(
           resizeToAvoidBottomInset: false,
           backgroundColor: color,
@@ -140,8 +138,8 @@ class _VoiceNoteState extends State<VoiceNote> {
                                         ? Navigator.pop(context)
                                         : null
                                   : {
-                                      await database.insertToDatabase(
-                                        note: Note(
+                                      await notesController.add(
+                                        Note(
                                           title: titleController.text,
                                           time: time,
                                           content: file,
@@ -160,11 +158,9 @@ class _VoiceNoteState extends State<VoiceNote> {
                                     };
                             } else if (titleController.text !=
                                 widget.note!.title) {
-                              await database.deleteFromDatabase(
-                                id: int.parse(widget.note!.id),
-                              );
-                              await database.insertToDatabase(
-                                note: widget.note!.copyWith(
+                              await notesController.delete(widget.note!.id);
+                              await notesController.add(
+                                widget.note!.copyWith(
                                   title: titleController.text,
                                   tIndex: textColorIndex,
                                   extra: chosenColorIndex == 99
@@ -177,8 +173,8 @@ class _VoiceNoteState extends State<VoiceNote> {
                             } else if (chosenColorIndex !=
                                     widget.note!.cIndex ||
                                 textColorIndex != widget.note!.tIndex) {
-                              await database.editDatabaseItem(
-                                note: widget.note!.copyWith(
+                              await notesController.updateNote(
+                                widget.note!.copyWith(
                                   cIndex: chosenColorIndex,
                                   extra: chosenColorIndex == 99
                                       ? pickerColor.value.toString()
@@ -187,7 +183,7 @@ class _VoiceNoteState extends State<VoiceNote> {
                                 ),
                               );
                             }
-                            ref.invalidate(notesProvider);
+                            ref.invalidate(notesNotifierProvider);
                             if (context.mounted) {
                               Navigator.pop(context);
                             }

@@ -1,4 +1,4 @@
-import 'package:colorful_notes/features/notes/data/models/note_model.dart';
+import 'package:colorful_notes/features/notes/domain/entities/note.dart';
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 

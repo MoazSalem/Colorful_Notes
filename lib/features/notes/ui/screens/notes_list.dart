@@ -1,4 +1,4 @@
-import 'package:colorful_notes/features/notes/data/models/note_model.dart';
+import 'package:colorful_notes/features/notes/domain/entities/note.dart';
 import 'package:colorful_notes/features/notes/ui/providers/notes_provider.dart';
 import 'package:colorful_notes/core/shared_widgets/custom_appbar.dart';
 import 'package:colorful_notes/features/notes/ui/screens/voice_note.dart';
@@ -56,7 +56,7 @@ class _NotesListState extends State<NotesList> {
             ),
             Consumer(
               builder: (context, ref, child) {
-                final notes = ref.watch(notesProvider);
+                final notes = ref.watch(notesNotifierProvider);
                 return notes.when(
                   data: (data) =>
                       _buildNotesList(context, settings, data, viewIndex),

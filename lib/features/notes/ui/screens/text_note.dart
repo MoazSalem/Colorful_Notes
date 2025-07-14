@@ -1,7 +1,6 @@
 import 'package:colorful_notes/core/consts.dart';
 import 'package:colorful_notes/core/helpers/widgets_helper.dart';
-import 'package:colorful_notes/features/notes/data/models/note_model.dart';
-import 'package:colorful_notes/features/notes/ui/providers/database_provider.dart';
+import 'package:colorful_notes/features/notes/domain/entities/note.dart';
 import 'package:colorful_notes/features/notes/ui/providers/notes_provider.dart';
 import 'package:colorful_notes/features/notes/ui/widgets/color_bar.dart';
 import 'package:flutter/material.dart';
@@ -67,7 +66,7 @@ class _TextNoteState extends State<TextNote> {
         : Colors.black54;
     return Consumer(
       builder: (context, ref, child) {
-        final database = ref.watch(databaseProvider).value!;
+        final notesController = ref.read(notesNotifierProvider.notifier);
         return Scaffold(
           resizeToAvoidBottomInset: false,
           backgroundColor: color,
@@ -122,11 +121,11 @@ class _TextNoteState extends State<TextNote> {
                                             contentController.text !=
                                                 widget.note!.content)
                                           {
-                                            await database.deleteFromDatabase(
-                                              id: int.parse(widget.note!.id),
+                                            await notesController.delete(
+                                              widget.note!.id,
                                             ),
-                                            await database.insertToDatabase(
-                                              note: widget.note!.copyWith(
+                                            await notesController.add(
+                                              widget.note!.copyWith(
                                                 title: titleController.text,
                                                 content: contentController.text,
                                                 cIndex: chosenColorIndex,
@@ -153,8 +152,8 @@ class _TextNoteState extends State<TextNote> {
                                             textColorIndex !=
                                                 widget.note!.tIndex)
                                           {
-                                            await database.editDatabaseItem(
-                                              note: widget.note!.copyWith(
+                                            await notesController.updateNote(
+                                              widget.note!.copyWith(
                                                 cIndex: chosenColorIndex,
                                                 tIndex: textColorIndex,
                                                 extra: chosenColorIndex == 99
@@ -167,8 +166,8 @@ class _TextNoteState extends State<TextNote> {
                                       }
                                     else
                                       {
-                                        await database.insertToDatabase(
-                                          note: Note(
+                                        await notesController.add(
+                                          Note(
                                             title: titleController.text,
                                             time: DateTime.now().toString(),
                                             content: contentController.text,
@@ -190,7 +189,7 @@ class _TextNoteState extends State<TextNote> {
                                           ),
                                         ),
                                       },
-                                    ref.invalidate(notesProvider),
+                                    ref.invalidate(notesNotifierProvider),
                                     if (context.mounted)
                                       {Navigator.pop(context)},
                                   }
