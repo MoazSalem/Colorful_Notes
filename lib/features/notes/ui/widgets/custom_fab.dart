@@ -1,8 +1,8 @@
 import 'dart:ui' as ui;
 import 'package:colorful_notes/core/consts.dart';
 import 'package:colorful_notes/core/models/settings_model.dart';
-import 'package:colorful_notes/features/notes_creation/ui/text_note.dart';
-import 'package:colorful_notes/features/notes_creation/ui/voice_note.dart';
+import 'package:colorful_notes/features/notes/ui/screens/text_note.dart';
+import 'package:colorful_notes/features/notes/ui/screens/voice_note.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 

@@ -1,5 +1,5 @@
 import 'package:colorful_notes/core/services/service_locator.dart';
-import 'package:colorful_notes/features/main_screen/ui/main_screen.dart';
+import 'package:colorful_notes/features/notes/ui/screens/main_screen.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_ce/hive.dart';

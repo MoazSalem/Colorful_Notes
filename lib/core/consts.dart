@@ -1,4 +1,4 @@
-import 'package:colorful_notes/features/main_screen/ui/notes_list.dart';
+import 'package:colorful_notes/features/notes/ui/screens/notes_list.dart';
 import 'package:colorful_notes/features/settings/ui/settings.dart';
 import 'package:colorful_notes/features/about/ui/info.dart';
 import 'package:flutter/material.dart';

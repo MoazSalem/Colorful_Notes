@@ -1,7 +1,7 @@
 import 'package:colorful_notes/core/models/note_model.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart' hide TextDirection;
-import 'package:colorful_notes/features/main_screen/ui/widgets/sound_player.dart';
+import 'package:colorful_notes/features/notes/ui/widgets/sound_player.dart';
 
 Widget listView({
   required BuildContext context,

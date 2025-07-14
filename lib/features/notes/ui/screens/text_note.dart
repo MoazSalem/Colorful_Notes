@@ -3,7 +3,7 @@ import 'package:colorful_notes/core/helpers/widgets_helper.dart';
 import 'package:colorful_notes/core/models/note_model.dart';
 import 'package:colorful_notes/core/providers/database_provider.dart';
 import 'package:colorful_notes/core/providers/notes_provider.dart';
-import 'package:colorful_notes/features/notes_creation/ui/widgets/color_bar.dart';
+import 'package:colorful_notes/features/notes/ui/widgets/color_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart' hide TextDirection;
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
