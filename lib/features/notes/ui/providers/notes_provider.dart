@@ -7,11 +7,11 @@ import 'package:colorful_notes/features/notes/domain/usecases/get_notes.dart';
 import 'package:colorful_notes/features/notes/domain/usecases/update_note.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:colorful_notes/features/notes/ui/providers/database_provider.dart';
+import 'notifier_provider.dart';
 
-final notesProvider = FutureProvider<List<Note>>((ref) async {
-  final useCase = ref.watch(getNotesUseCaseProvider);
-  return useCase();
-});
+final notesNotifierProvider = AsyncNotifierProvider<NotesNotifier, List<Note>>(
+  () => NotesNotifier(),
+);
 
 final noteRepositoryProvider = Provider<NoteRepository>((ref) {
   final database = ref.watch(databaseProvider).value!;
