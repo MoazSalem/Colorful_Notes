@@ -1,3 +1,6 @@
+# This Branch is still a WIP !! app is broken if you try to build it.
+
+
 # Colorful Notes 📝
 
 A Clean Modern and Colorful Notes App Using a Local Database with Sqflite.
