@@ -28,7 +28,9 @@ void _createNote(BuildContext context, {bool voice = false}) {
   showModalBottomSheet(
     isScrollControlled: true,
     context: context,
-    builder: (context) => voice ? const VoiceNote() : const TextNote(),
+    builder: (context) => voice
+        ? const VoiceNote(isEditing: true)
+        : const TextNote(isEditing: true),
   );
 }
 

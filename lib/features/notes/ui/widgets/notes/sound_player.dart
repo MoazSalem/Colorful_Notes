@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 class SoundPlayer extends StatefulWidget {
   final Note voiceNote;
   final Color color;
+  final Color? iconColor;
   final int viewMode;
 
   const SoundPlayer({
@@ -12,6 +13,7 @@ class SoundPlayer extends StatefulWidget {
     required this.voiceNote,
     required this.color,
     required this.viewMode,
+    this.iconColor,
   });
 
   @override
@@ -56,7 +58,9 @@ class _SoundPlayerState extends State<SoundPlayer> {
 
   @override
   Widget build(BuildContext context) {
-    final color = widget.voiceNote.tIndex == 0 ? Colors.white : Colors.black;
+    final color =
+        widget.iconColor ??
+        (widget.voiceNote.tIndex == 0 ? Colors.white : Colors.black);
     final semiTransparentColor = color.withAlpha(100);
     return widget.viewMode == 0
         ? Directionality(

@@ -117,14 +117,14 @@ class _NotesListState extends State<NotesList> {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: viewIndex == 2 ? 2 : 1,
-        childAspectRatio: viewIndex == 1 ? 2.9 : 1.0,
+        childAspectRatio: viewIndex == 1 ? 2.95 : 1.0,
       ),
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       itemCount: notes.length,
       itemBuilder: (context, index) {
         return Padding(
-          padding: const EdgeInsets.all(4.0),
+          padding: EdgeInsets.all(4.0),
           child: _buildNoteItem(
             context,
             settings,
@@ -160,8 +160,9 @@ class _NotesListState extends State<NotesList> {
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
-      builder: (context) =>
-          note.type == 0 ? TextNote(note: note) : VoiceNote(note: note),
+      builder: (context) => note.type == 0
+          ? TextNote(note: note, isEditing: false)
+          : VoiceNote(note: note, isEditing: false),
     );
   }
 }

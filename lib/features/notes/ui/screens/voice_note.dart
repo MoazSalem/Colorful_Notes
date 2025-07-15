@@ -4,6 +4,7 @@ import 'package:colorful_notes/core/helpers/widgets_helper.dart';
 import 'package:colorful_notes/features/notes/domain/entities/note.dart';
 import 'package:colorful_notes/features/notes/ui/providers/notes_provider.dart';
 import 'package:colorful_notes/features/notes/ui/widgets/color_bar.dart';
+import 'package:colorful_notes/features/notes/ui/widgets/notes/sound_player.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart' hide TextDirection;
@@ -15,8 +16,9 @@ import 'package:record/record.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 
 class VoiceNote extends StatefulWidget {
-  const VoiceNote({super.key, this.note});
+  const VoiceNote({super.key, this.note, required this.isEditing});
   final Note? note;
+  final bool isEditing;
 
   @override
   State<VoiceNote> createState() => _VoiceNoteState();
@@ -26,6 +28,7 @@ class _VoiceNoteState extends State<VoiceNote> {
   final TextEditingController titleController = TextEditingController();
   final record = AudioRecorder();
   final String extension = '.m4a';
+  late bool isEditing = widget.isEditing;
   String name = "";
   String time = "";
   bool isRecording = false;
@@ -125,77 +128,98 @@ class _VoiceNoteState extends State<VoiceNote> {
                         ],
                       ),
                     ),
-                    Expanded(
-                      flex: 1,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                        child: GestureDetector(
-                          onTap: () async {
-                            if (widget.note == null) {
-                              await record.stop();
-                              time == ""
-                                  ? context.mounted
-                                        ? Navigator.pop(context)
-                                        : null
-                                  : {
-                                      await notesController.add(
-                                        Note(
-                                          title: titleController.text,
-                                          time: time,
-                                          content: file,
-                                          tIndex: textColorIndex,
-                                          extra: chosenColorIndex == 99
-                                              ? pickerColor.value.toString()
-                                              : "",
-                                          type: 1,
-                                          layout: 0,
-                                          id: '',
-                                          cIndex: chosenColorIndex,
-                                          edited: '',
-                                        ),
-                                      ),
-                                      stopWatchTimer.onResetTimer(),
-                                    };
-                            } else if (titleController.text !=
-                                widget.note!.title) {
-                              await notesController.delete(widget.note!.id);
-                              await notesController.add(
-                                widget.note!.copyWith(
-                                  title: titleController.text,
-                                  tIndex: textColorIndex,
-                                  extra: chosenColorIndex == 99
-                                      ? pickerColor.value.toString()
-                                      : "",
-                                  cIndex: chosenColorIndex,
-                                  edited: 'yes',
-                                ),
-                              );
-                            } else if (chosenColorIndex !=
-                                    widget.note!.cIndex ||
-                                textColorIndex != widget.note!.tIndex) {
-                              await notesController.updateNote(
-                                widget.note!.copyWith(
-                                  cIndex: chosenColorIndex,
-                                  extra: chosenColorIndex == 99
-                                      ? pickerColor.value.toString()
-                                      : "",
-                                  tIndex: textColorIndex,
-                                ),
-                              );
-                            }
-                            ref.invalidate(notesNotifierProvider);
-                            if (context.mounted) {
-                              Navigator.pop(context);
-                            }
-                          },
-                          child: CircleAvatar(
-                            backgroundColor: textColor,
-                            radius: 25,
-                            child: Icon(Icons.done, color: color, size: 36),
+                    if (!isEditing)
+                      Expanded(
+                        flex: 1,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                          child: GestureDetector(
+                            onTap: () async {
+                              setState(() {
+                                isEditing = true;
+                                titleFocusNode.requestFocus();
+                              });
+                            },
+                            child: CircleAvatar(
+                              backgroundColor: textColor,
+                              radius: 25,
+                              child: Icon(Icons.edit, color: color, size: 30),
+                            ),
                           ),
                         ),
                       ),
-                    ),
+                    if (isEditing)
+                      Expanded(
+                        flex: 1,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                          child: GestureDetector(
+                            onTap: () async {
+                              if (widget.note == null) {
+                                await record.stop();
+                                time == ""
+                                    ? context.mounted
+                                          ? Navigator.pop(context)
+                                          : null
+                                    : {
+                                        await notesController.add(
+                                          Note(
+                                            title: titleController.text,
+                                            time: time,
+                                            content: file,
+                                            tIndex: textColorIndex,
+                                            extra: chosenColorIndex == 99
+                                                ? pickerColor.value.toString()
+                                                : "",
+                                            type: 1,
+                                            layout: 0,
+                                            id: '',
+                                            cIndex: chosenColorIndex,
+                                            edited: '',
+                                          ),
+                                        ),
+                                        stopWatchTimer.onResetTimer(),
+                                      };
+                              } else if (titleController.text !=
+                                  widget.note!.title) {
+                                await notesController.delete(widget.note!.id);
+                                await notesController.add(
+                                  widget.note!.copyWith(
+                                    title: titleController.text,
+                                    tIndex: textColorIndex,
+                                    extra: chosenColorIndex == 99
+                                        ? pickerColor.value.toString()
+                                        : "",
+                                    cIndex: chosenColorIndex,
+                                    edited: 'yes',
+                                  ),
+                                );
+                              } else if (chosenColorIndex !=
+                                      widget.note!.cIndex ||
+                                  textColorIndex != widget.note!.tIndex) {
+                                await notesController.updateNote(
+                                  widget.note!.copyWith(
+                                    cIndex: chosenColorIndex,
+                                    extra: chosenColorIndex == 99
+                                        ? pickerColor.value.toString()
+                                        : "",
+                                    tIndex: textColorIndex,
+                                  ),
+                                );
+                              }
+                              ref.invalidate(notesNotifierProvider);
+                              if (context.mounted) {
+                                Navigator.pop(context);
+                              }
+                            },
+                            child: CircleAvatar(
+                              backgroundColor: textColor,
+                              radius: 25,
+                              child: Icon(Icons.done, color: color, size: 36),
+                            ),
+                          ),
+                        ),
+                      ),
                   ],
                 ),
                 const SizedBox(height: 8),
@@ -220,7 +244,7 @@ class _VoiceNoteState extends State<VoiceNote> {
                                     focusNode: titleFocusNode,
                                     maxLines: 2,
                                     cursorColor: textColor,
-                                    autofocus: true,
+                                    autofocus: false,
                                     textInputAction: TextInputAction.done,
                                     controller: titleController,
                                     style: TextStyle(
@@ -415,55 +439,62 @@ class _VoiceNoteState extends State<VoiceNote> {
                                             ),
                                           ],
                                         )
-                                      : SizedBox.shrink(),
+                                      : SoundPlayer(
+                                          voiceNote: widget.note!,
+                                          color: color,
+                                          viewMode: 0,
+                                          iconColor: textColor,
+                                        ),
                                 ),
                               ],
                             ),
                           ],
                         ),
                       ),
-                      ColorBar(
-                        colors: colors,
-                        textColor: textColor,
-                        textColorIndex: textColorIndex,
-                        pickerColor: pickerColor,
-                        chosenIndex: chosenColorIndex,
-                        semiTransparentColor: semiTransparentColor,
-                        setIndex: (int index) {
-                          setState(() {
-                            chosenColorIndex = index;
-                          });
-                        },
-                        changeTextColor: () =>
-                            textColorIndex = textColorIndex == 0 ? 1 : 0,
-                        setCustomColor: () {
-                          chosenColorIndex = 99;
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) => AlertDialog(
-                              title: const Text('Choose Color'),
-                              content: SingleChildScrollView(
-                                child: ColorPicker(
-                                  pickerColor: pickerColor,
-                                  onColorChanged: (color) =>
-                                      setState(() => pickerColor = color),
-                                  enableAlpha: false,
-                                  hexInputBar: true,
-                                  paletteType: PaletteType.hueWheel,
+                      if (isEditing)
+                        ColorBar(
+                          colors: colors,
+                          textColor: textColor,
+                          textColorIndex: textColorIndex,
+                          pickerColor: pickerColor,
+                          chosenIndex: chosenColorIndex,
+                          semiTransparentColor: semiTransparentColor,
+                          setIndex: (int index) {
+                            setState(() {
+                              chosenColorIndex = index;
+                            });
+                          },
+                          changeTextColor: () => setState(
+                            () => textColorIndex = textColorIndex == 0 ? 1 : 0,
+                          ),
+                          setCustomColor: () {
+                            chosenColorIndex = 99;
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) => AlertDialog(
+                                title: const Text('Choose Color'),
+                                content: SingleChildScrollView(
+                                  child: ColorPicker(
+                                    pickerColor: pickerColor,
+                                    onColorChanged: (color) =>
+                                        setState(() => pickerColor = color),
+                                    enableAlpha: false,
+                                    hexInputBar: true,
+                                    paletteType: PaletteType.hueWheel,
+                                  ),
                                 ),
+                                actions: <Widget>[
+                                  ElevatedButton(
+                                    child: const Text('Done'),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                ],
                               ),
-                              actions: <Widget>[
-                                ElevatedButton(
-                                  child: const Text('Done'),
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                      ),
+                            );
+                          },
+                        ),
                     ],
                   ),
                 ),
