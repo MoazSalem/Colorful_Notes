@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:colorful_notes/core/consts.dart';
 import 'package:colorful_notes/features/notes/domain/entities/note.dart';
 import 'package:colorful_notes/features/notes/ui/providers/notes_provider.dart';
@@ -124,7 +125,12 @@ class _NotesListState extends State<NotesList> {
       itemBuilder: (context, index) {
         return Padding(
           padding: const EdgeInsets.all(4.0),
-          child: _buildNoteItem(context, settings, notes[index], viewIndex),
+          child: _buildNoteItem(
+            context,
+            settings,
+            notes.reversed.toList()[index],
+            viewIndex,
+          ),
         );
       },
     );
@@ -144,24 +150,9 @@ class _NotesListState extends State<NotesList> {
     } else {
       noteView = WideSmallNoteWidget(note: note, settings: settings);
     }
-    return Stack(
-      alignment: note.layout == 0 || note.layout == 2
-          ? Alignment.topRight
-          : Alignment.topLeft,
-      children: [
-        GestureDetector(onTap: () => _editNote(context, note), child: noteView),
-        Padding(
-          padding: EdgeInsets.all(note.layout == 2 ? 2 : 8.0),
-          child: GestureDetector(
-            onTap: () => {},
-            child: Icon(
-              Icons.highlight_remove,
-              color: note.tIndex == 0 ? Colors.white : Colors.black,
-              size: 20,
-            ),
-          ),
-        ),
-      ],
+    return GestureDetector(
+      onTap: () => _editNote(context, note),
+      child: noteView,
     );
   }
 
