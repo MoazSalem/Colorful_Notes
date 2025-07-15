@@ -31,7 +31,7 @@ class _MainScreenState extends State<MainScreen> {
           floatingActionButtonLocation: settings.fabIndex == 0
               ? FloatingActionButtonLocation.endFloat
               : FloatingActionButtonLocation.startFloat,
-          floatingActionButton: currentIndex != 0
+          floatingActionButton: [3, 4].contains(currentIndex)
               ? null
               : CustomFab(settings: settings),
           resizeToAvoidBottomInset: false,
