@@ -1,7 +1,5 @@
 {
   "Home": "الرئيسية",
-  "Text": "نصية",
-  "Voice": "صوتية",
   "Settings": "الاعدادات",
   "Info": "معلومات",
   "Language": "اللغة",
@@ -80,8 +78,8 @@
   "October": "اكتوبر",
   "November": "نوفمبر",
   "December": "ديسمبر",
-  "Text Note": "ملحوظة مكتوبة",
-  "Voice Note": "ملحوظة صوتية",
+  "Text Note": "ملاحظات مكتوبة",
+  "Voice Note": "ملاحظات صوتية",
   "Text Recognition Note": "ملحوظة ملتقطة من كتابة",
   "Skip": "تخطي",
   "Next": "التالي",

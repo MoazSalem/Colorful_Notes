@@ -7,9 +7,9 @@ class AppConsts {
   static const String gitHubLink =
       'https://github.com/MoazSalem/Colorful_Notes';
   static const List<Widget> pagesList = [
-    NotesList(),
-    SizedBox(),
-    SizedBox(),
+    NotesList(typeIndex: 0),
+    NotesList(typeIndex: 1),
+    NotesList(typeIndex: 2),
     SettingsPage(),
     InfoPage(),
   ];

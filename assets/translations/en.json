@@ -1,7 +1,5 @@
 {
   "Home": "Home",
-  "Text": "Text",
-  "Voice": "Voice",
   "Settings": "Settings",
   "Info": "Info",
   "Language": "Language",
@@ -80,8 +78,8 @@
   "October": "October",
   "November": "November",
   "December": "December",
-  "Text Note": "Text Note",
-  "Voice Note": "Voice Note",
+  "Text Note": "Text Notes",
+  "Voice Note": "Voice Notes",
   "Text Recognition Note": "Text Recognition Note",
   "Skip": "Skip",
   "Next": "Next",

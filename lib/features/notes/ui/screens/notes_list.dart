@@ -18,7 +18,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 final TextEditingController searchController = TextEditingController();
 
 class NotesList extends StatefulWidget {
-  const NotesList({super.key});
+  const NotesList({super.key, required this.typeIndex});
+  final int typeIndex;
 
   @override
   State<NotesList> createState() => _NotesListState();
@@ -29,6 +30,7 @@ class _NotesListState extends State<NotesList> {
   @override
   Widget build(BuildContext context) {
     final settingsService = serviceLocator<SettingsService>();
+    final String pageTitle = getPageTitle(widget.typeIndex);
     bool isSearching = false;
 
     return ValueListenableBuilder<SettingsModel>(
@@ -38,7 +40,7 @@ class _NotesListState extends State<NotesList> {
           padding: EdgeInsets.zero,
           children: [
             CustomAppbar(
-              title: "Home".tr(),
+              title: pageTitle,
               top: 65,
               locale: settings.lang,
               leading: AppbarActionWidgets(
@@ -57,6 +59,17 @@ class _NotesListState extends State<NotesList> {
             Consumer(
               builder: (context, ref, child) {
                 final notes = ref.watch(notesNotifierProvider);
+                if (widget.typeIndex == 0) {
+                  Future.microtask(() {
+                    ref.read(notesNotifierProvider.notifier).getNotes();
+                  });
+                } else {
+                  Future.microtask(() {
+                    ref
+                        .read(notesNotifierProvider.notifier)
+                        .getNotesOfType(widget.typeIndex == 2);
+                  });
+                }
                 return notes.when(
                   data: (data) =>
                       _buildNotesList(context, settings, data, viewIndex),
@@ -231,5 +244,18 @@ class _NotesListState extends State<NotesList> {
       builder: (context) =>
           note.type == 0 ? TextNote(note: note) : VoiceNote(note: note),
     );
+  }
+}
+
+String getPageTitle(int index) {
+  switch (index) {
+    case 0:
+      return "Home".tr();
+    case 1:
+      return "Text Note".tr();
+    case 2:
+      return "Voice Note".tr();
+    default:
+      return "Home".tr();
   }
 }

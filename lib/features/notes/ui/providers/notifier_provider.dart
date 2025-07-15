@@ -22,11 +22,15 @@ class NotesNotifier extends AsyncNotifier<List<Note>> {
 
   @override
   Future<List<Note>> build() async {
-    return _getNotes();
+    return [];
   }
 
-  Future<List<Note>> getNotesOfType(bool voice) async {
-    return await _getNotesOfType(voice);
+  Future<void> getNotes() async {
+    state = await AsyncValue.guard(() => _getNotes());
+  }
+
+  Future<void> getNotesOfType(bool voice) async {
+    state = await AsyncValue.guard(() => _getNotesOfType(voice));
   }
 
   Future<void> add(Note note) async {
