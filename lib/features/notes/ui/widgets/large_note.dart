@@ -33,7 +33,7 @@ class LargeNote extends StatelessWidget {
                     BoxShadow(
                       color: color,
                       blurRadius: 4,
-                      offset: const Offset(0, 2),
+                      offset: const Offset(0, 1),
                     ),
                   ]
                 : [],

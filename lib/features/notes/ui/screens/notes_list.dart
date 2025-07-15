@@ -8,6 +8,7 @@ import 'package:colorful_notes/features/notes/ui/widgets/appbar_action_widgets.d
 import 'package:colorful_notes/features/notes/ui/widgets/large_note.dart';
 import 'package:colorful_notes/features/notes/ui/widgets/search_bar_widget.dart';
 import 'package:colorful_notes/features/notes/ui/screens/text_note.dart';
+import 'package:colorful_notes/features/notes/ui/widgets/small_grid_note.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:colorful_notes/core/services/service_locator.dart';
@@ -122,7 +123,7 @@ class _NotesListState extends State<NotesList> {
       itemCount: notes.length,
       itemBuilder: (context, index) {
         return Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          padding: const EdgeInsets.all(4.0),
           child: _buildNoteItem(
             context,
             settings,
@@ -152,21 +153,7 @@ class _NotesListState extends State<NotesList> {
 
     Widget noteView;
     if (isGridView) {
-      noteView = gridView(
-        context: context,
-        notes: notes,
-        colors: AppConsts.lightColors,
-        index: index,
-        dateValue: dateValue,
-        date: date,
-        noTitle: noTitle,
-        noContent: noContent,
-        showDate: settings.showDate,
-        showShadow: settings.showShadow,
-        showEdited: settings.showEdited,
-        lang: settings.lang,
-        width: MediaQuery.of(context).size.width,
-      );
+      noteView = SmallGridNote(note: note, settings: settings);
     } else if (viewIndex == 0) {
       noteView = LargeNote(note: note, settings: settings);
     } else {
