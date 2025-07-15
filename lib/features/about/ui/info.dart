@@ -19,7 +19,11 @@ class _InfoPageState extends State<InfoPage> {
       body: ListView(
         padding: EdgeInsets.zero,
         children: [
-          CustomAppbar(title: "Info".tr(), top: 65, locale: 'en'),
+          CustomAppbar(
+            title: "Info".tr(),
+            top: 65,
+            locale: context.locale == Locale('ar') ? 'ar' : 'en',
+          ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 22.0, vertical: 20),
             child: Column(
@@ -27,7 +31,11 @@ class _InfoPageState extends State<InfoPage> {
               children: [
                 RichText(
                   text: TextSpan(
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w300),
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w300,
+                      color: theme.onSurface,
+                    ),
                     children: <TextSpan>[
                       TextSpan(text: "I1".tr()),
                       TextSpan(
@@ -41,7 +49,11 @@ class _InfoPageState extends State<InfoPage> {
                 const SizedBox(height: 20),
                 RichText(
                   text: TextSpan(
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w300),
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w300,
+                      color: theme.onSurface,
+                    ),
                     children: <TextSpan>[
                       TextSpan(text: "I6".tr()),
                       TextSpan(

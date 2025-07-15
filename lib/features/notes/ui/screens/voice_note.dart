@@ -108,7 +108,7 @@ class _VoiceNoteState extends State<VoiceNote> {
                                   stopWatchTimer.onResetTimer();
                                   isRecording = false;
                                   name == "" ? null : {deleteFile(filePath)};
-                                  Navigator.pop(context);
+                                  if (context.mounted) Navigator.pop(context);
                                 }
                               },
                               child: CircleAvatar(

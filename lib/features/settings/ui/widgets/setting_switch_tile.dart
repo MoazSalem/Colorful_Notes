@@ -34,7 +34,7 @@ class SettingsSwitchTile extends StatelessWidget {
       ),
       trailing: SwitcherButton(
         onColor: Theme.of(context).colorScheme.primary,
-        offColor: Theme.of(context).colorScheme.surfaceVariant,
+        offColor: Theme.of(context).colorScheme.surfaceContainer,
         size: switchSize,
         value: value,
         onChange: onChanged,
