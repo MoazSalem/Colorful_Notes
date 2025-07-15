@@ -50,58 +50,52 @@ class LargeNote extends StatelessWidget {
               children: [
                 noTitle
                     ? Container()
-                    : Expanded(
-                        flex: 2,
-                        child: SizedBox(
-                          width: double.infinity,
-                          child: Text(
-                            note.title,
-                            maxLines: note.type == 0 ? 1 : 2,
-                            overflow: TextOverflow.ellipsis,
-                            textAlign: TextAlign.center,
-                            textDirection: note.layout == 0 || note.layout == 2
-                                ? TextDirection.ltr
-                                : TextDirection.rtl,
-                            style: TextStyle(
-                              fontWeight: FontWeight.w800,
-                              fontSize: 24,
-                              color: note.tIndex == 0
-                                  ? Colors.white
-                                  : Colors.black,
-                            ),
+                    : SizedBox(
+                        width: double.infinity,
+                        child: Text(
+                          note.title,
+                          maxLines: note.type == 0 ? 1 : 2,
+                          overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.center,
+                          textDirection: note.layout == 0 || note.layout == 2
+                              ? TextDirection.ltr
+                              : TextDirection.rtl,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w800,
+                            fontSize: 24,
+                            color: note.tIndex == 0
+                                ? Colors.white
+                                : Colors.black,
                           ),
                         ),
                       ),
                 note.type == 0
-                    ? Expanded(
-                        flex: 7,
-                        child: SizedBox(
-                          width: double.infinity,
-                          child: Text(
-                            noContent ? "Empty".tr() : note.content,
-                            textAlign: note.layout == 1 || note.layout == 2
-                                ? TextAlign.right
-                                : TextAlign.left,
-                            textDirection: note.layout == 1 || note.layout == 2
-                                ? TextDirection.rtl
-                                : TextDirection.ltr,
-                            maxLines: settings.showDate ? 8 : 9,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              color: noContent
-                                  ? note.tIndex == 0
-                                        ? Colors.white38
-                                        : Colors.black38
-                                  : note.tIndex == 0
-                                  ? Colors.white
-                                  : Colors.black,
-                              fontSize: noTitle ? 21 : 16,
-                            ),
+                    ? Padding(
+                        padding: EdgeInsets.only(top: noTitle ? 0 : 20.0),
+                        child: Text(
+                          noContent ? "Empty".tr() : note.content,
+                          textAlign: note.layout == 1 || note.layout == 2
+                              ? TextAlign.right
+                              : TextAlign.left,
+                          textDirection: note.layout == 1 || note.layout == 2
+                              ? TextDirection.rtl
+                              : TextDirection.ltr,
+                          maxLines: settings.showDate ? 8 : 9,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            color: noContent
+                                ? note.tIndex == 0
+                                      ? Colors.white38
+                                      : Colors.black38
+                                : note.tIndex == 0
+                                ? Colors.white
+                                : Colors.black,
+                            fontSize: noTitle ? 21 : 16,
                           ),
                         ),
                       )
                     : Padding(
-                        padding: EdgeInsets.only(top: noTitle ? 60 : 0),
+                        padding: EdgeInsets.only(top: noTitle ? 60 : 40),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
