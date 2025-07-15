@@ -16,8 +16,8 @@ Widget listView({
   required bool showShadow,
   required bool showEdited,
   required String lang,
+  bool isTablet = false,
   required double width,
-  required bool isTablet,
 }) {
   return Center(
     child: Padding(
@@ -209,7 +209,7 @@ Widget smallListView({
   required bool showEdited,
   required String lang,
   required double width,
-  required bool isTablet,
+  bool isTablet = false,
 }) {
   return Center(
     child: Padding(
@@ -492,7 +492,7 @@ Widget gridView({
   required bool showEdited,
   required String lang,
   required double width,
-  required bool isTablet,
+  bool isTablet = false,
 }) {
   return Center(
     child: Padding(

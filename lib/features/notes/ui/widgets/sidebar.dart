@@ -1,9 +1,8 @@
+import 'package:colorful_notes/core/consts.dart';
 import 'package:flutter/material.dart';
 import 'package:colorful_notes/core/services/service_locator.dart';
 import 'package:colorful_notes/core/models/settings_model.dart';
 import 'package:colorful_notes/core/services/settings_service.dart';
-
-import 'package:colorful_notes/main.dart';
 
 /// Data class to hold information for each sidebar button.
 class _SideBarItem {
@@ -98,7 +97,7 @@ class SideBar extends StatelessWidget {
 
         return Container(
           width: 60,
-          decoration: BoxDecoration(color: theme.primary.withOpacity(0.15)),
+          decoration: BoxDecoration(color: theme.primary.withAlpha(60)),
           child: isInverted
               ? _buildInvertedLayout(
                   navButtons.reversed.toList(),
@@ -173,7 +172,8 @@ class _SideBarButton extends StatelessWidget {
         isSelected ? item.selectedIcon : item.icon,
         size: isSelected ? selectedSize : unselectedSize,
         color: settings.colorful
-            ? C.colors[item.colorIndex] // Assuming C.colors is a static list
+            ? AppConsts.lightColors[item
+                  .colorIndex] // Assuming C.colors is a static list
             : theme.onSurfaceVariant,
       ),
     );

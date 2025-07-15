@@ -1,4 +1,3 @@
-import 'package:colorful_notes/old_logic/notes_cubit.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
@@ -7,14 +6,13 @@ class SearchBarWidget extends StatelessWidget {
     super.key,
     required this.isSearching,
     required this.searchController,
-    required this.C,
   });
   final bool isSearching;
   final TextEditingController searchController;
-  final NotesCubit C;
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context).colorScheme;
     if (!isSearching) {
       return const SizedBox.shrink();
     }
@@ -24,22 +22,19 @@ class SearchBarWidget extends StatelessWidget {
       child: TextFormField(
         autofocus: true,
         controller: searchController,
-        onChanged: (query) => C.search(query: query, where: "home"),
-        cursorColor: C.theme.primary,
+        //onChanged: (query) => search(query: query, where: "home"),
+        cursorColor: theme.primary,
         decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-            vertical: C.isTablet ? 20 : 5,
-            horizontal: 20,
-          ),
+          contentPadding: EdgeInsets.symmetric(vertical: 5, horizontal: 20),
           enabledBorder: OutlineInputBorder(
             borderSide: BorderSide(color: Colors.grey.shade300),
           ),
           focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: C.theme.primary),
+            borderSide: BorderSide(color: theme.primary),
           ),
           hintText: "Search".tr(),
           filled: true,
-          fillColor: Theme.of(context).cardColor,
+          fillColor: theme.primaryContainer,
           border: const OutlineInputBorder(),
         ),
       ),

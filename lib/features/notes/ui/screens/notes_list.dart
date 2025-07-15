@@ -1,3 +1,5 @@
+import 'package:colorful_notes/core/consts.dart';
+import 'package:colorful_notes/core/helpers/widgets_helper.dart';
 import 'package:colorful_notes/features/notes/domain/entities/note.dart';
 import 'package:colorful_notes/features/notes/ui/providers/notes_provider.dart';
 import 'package:colorful_notes/core/shared_widgets/custom_appbar.dart';
@@ -9,7 +11,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:colorful_notes/core/services/service_locator.dart';
 import 'package:colorful_notes/features/notes/ui/widgets/notes.dart';
-import 'package:colorful_notes/main.dart';
 import 'package:colorful_notes/core/models/settings_model.dart';
 import 'package:colorful_notes/core/services/settings_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -52,7 +53,6 @@ class _NotesListState extends State<NotesList> {
             SearchBarWidget(
               isSearching: isSearching,
               searchController: searchController,
-              C: C,
             ),
             Consumer(
               builder: (context, ref, child) {
@@ -81,6 +81,7 @@ class _NotesListState extends State<NotesList> {
     List<Note> notes,
     int viewIndex,
   ) {
+    final theme = Theme.of(context).colorScheme;
     if (notes.isEmpty) {
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 200),
@@ -88,7 +89,9 @@ class _NotesListState extends State<NotesList> {
           child: Text(
             "N1".tr(),
             style: TextStyle(
-              color: settings.colorful ? C.colors[0] : C.theme.primary,
+              color: settings.colorful
+                  ? AppConsts.lightColors[0]
+                  : theme.primary,
               fontWeight: FontWeight.w400,
             ),
           ),
@@ -148,15 +151,15 @@ class _NotesListState extends State<NotesList> {
     final note = notes[index];
     final bool noTitle = note.title == "";
     final bool noContent = note.content == "";
-    final String date = C.parseDate(note.time);
-    final int dateValue = C.calculateDifference(note.time);
+    final String date = WidgetsHelper.parsedDate(note.time, settings.lang);
+    final int dateValue = WidgetsHelper.calculateDifference(note.time);
 
     Widget noteView;
     if (isGridView) {
       noteView = gridView(
         context: context,
         notes: notes,
-        colors: C.colors,
+        colors: AppConsts.lightColors,
         index: index,
         dateValue: dateValue,
         date: date,
@@ -165,15 +168,14 @@ class _NotesListState extends State<NotesList> {
         showDate: settings.showDate,
         showShadow: settings.showShadow,
         showEdited: settings.showEdited,
-        isTablet: C.isTablet,
         lang: settings.lang,
-        width: C.width,
+        width: MediaQuery.of(context).size.width,
       );
     } else if (viewIndex == 0) {
       noteView = listView(
         context: context,
         notes: notes,
-        colors: C.colors,
+        colors: AppConsts.lightColors,
         index: index,
         dateValue: dateValue,
         date: date,
@@ -182,15 +184,14 @@ class _NotesListState extends State<NotesList> {
         showDate: settings.showDate,
         showShadow: settings.showShadow,
         showEdited: settings.showEdited,
-        isTablet: C.isTablet,
         lang: settings.lang,
-        width: C.width,
+        width: MediaQuery.of(context).size.width,
       );
     } else {
       noteView = smallListView(
         context: context,
         notes: notes,
-        colors: C.colors,
+        colors: AppConsts.lightColors,
         index: index,
         dateValue: dateValue,
         date: date,
@@ -199,9 +200,8 @@ class _NotesListState extends State<NotesList> {
         showDate: settings.showDate,
         showShadow: settings.showShadow,
         showEdited: settings.showEdited,
-        isTablet: C.isTablet,
         lang: settings.lang,
-        width: C.width,
+        width: MediaQuery.of(context).size.width,
       );
     }
 
@@ -211,19 +211,13 @@ class _NotesListState extends State<NotesList> {
           : Alignment.topLeft,
       children: [
         GestureDetector(onTap: () => _editNote(context, note), child: noteView),
-        Padding(
-          padding: EdgeInsets.symmetric(
-            horizontal: C.isTablet ? 8.0 : 0,
-            vertical: C.isTablet ? 8.0 : 0,
-          ),
-          child: IconButton(
-            onPressed: () =>
-                {}, //notesCubit.showDeleteDialog(context, notes, index),
-            icon: Icon(
-              Icons.highlight_remove,
-              color: note.tIndex == 0 ? Colors.white : Colors.black,
-              size: C.width * 0.0662,
-            ),
+        IconButton(
+          onPressed: () =>
+              {}, //notesCubit.showDeleteDialog(context, notes, index),
+          icon: Icon(
+            Icons.highlight_remove,
+            color: note.tIndex == 0 ? Colors.white : Colors.black,
+            size: 20,
           ),
         ),
       ],

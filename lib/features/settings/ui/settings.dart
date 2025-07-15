@@ -3,7 +3,6 @@ import 'package:colorful_notes/core/shared_widgets/custom_appbar.dart';
 import 'package:colorful_notes/core/shared_widgets/custom_divider.dart';
 import 'package:colorful_notes/features/settings/ui/widgets/setting_switch_tile.dart';
 import 'package:colorful_notes/features/settings/ui/widgets/settings_dropdown_tile.dart';
-import 'package:colorful_notes/old_logic/notes_cubit.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:colorful_notes/core/services/service_locator.dart';
 import 'package:colorful_notes/core/models/settings_model.dart';
@@ -16,13 +15,11 @@ class SettingsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     // Get the SettingsService instance from the locator
     final settingsService = serviceLocator<SettingsService>();
-    // will be changed later
-    final isTablet = getDeviceType() == 'tablet';
 
     // Define UI constants based on device type
-    final double titleSize = isTablet ? 26 : 22;
-    final double subtitleSize = isTablet ? 16 : 12;
-    final double switchSize = isTablet ? 100 : 50;
+    final double titleSize = 22;
+    final double subtitleSize = 12;
+    final double switchSize = 50;
     const List<String> sbItems = [
       "Top Left",
       "Bottom Left",

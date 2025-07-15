@@ -70,4 +70,24 @@ class WidgetsHelper {
     String parsedDate2 = DateFormat.s().format(date);
     return parsedDate + parsedDate0 + parsedDate1 + parsedDate2;
   }
+
+  static int calculateDifference(String stringDate) {
+    var date = DateTime.parse(stringDate);
+    DateTime now = DateTime.now();
+    return DateTime(
+      date.year,
+      date.month,
+      date.day,
+    ).difference(DateTime(now.year, now.month, now.day)).inDays;
+  }
+
+  static String parsedDate(String stringDate, String lang) {
+    var date = DateTime.parse(stringDate);
+    String parsedDate = DateFormat.MMMMd().format(date);
+    List<String> translate = parsedDate.split(' ');
+    parsedDate = lang == 'en'
+        ? parsedDate
+        : "${translate[1]} ${translate[0].tr()}";
+    return parsedDate;
+  }
 }

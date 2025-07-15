@@ -2,7 +2,6 @@ import 'package:colorful_notes/core/consts.dart';
 import 'package:colorful_notes/core/shared_widgets/custom_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:colorful_notes/main.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class InfoPage extends StatefulWidget {
@@ -15,6 +14,7 @@ class InfoPage extends StatefulWidget {
 class _InfoPageState extends State<InfoPage> {
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context).colorScheme;
     return Scaffold(
       body: ListView(
         padding: EdgeInsets.zero,
@@ -60,7 +60,7 @@ class _InfoPageState extends State<InfoPage> {
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.w300,
-                      color: C.theme.primary,
+                      color: theme.primary,
                     ),
                   ),
                 ),

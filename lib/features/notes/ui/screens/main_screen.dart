@@ -7,7 +7,6 @@ import 'package:colorful_notes/features/notes/ui/providers/database_provider.dar
 import 'package:colorful_notes/features/notes/ui/widgets/custom_fab.dart';
 import 'package:colorful_notes/features/notes/ui/widgets/sidebar.dart';
 import 'package:flutter/material.dart';
-import 'package:colorful_notes/main.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final class MainScreen extends StatefulWidget {
@@ -20,13 +19,6 @@ final class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   final settingsService = serviceLocator<SettingsService>();
   int currentIndex = 0;
-
-  @override
-  didChangeDependencies() {
-    C.theme = Theme.of(context).colorScheme;
-    C.width = MediaQuery.sizeOf(context).width;
-    super.didChangeDependencies();
-  }
 
   @override
   Widget build(BuildContext bContext) {
