@@ -56,250 +56,289 @@ class _SoundPlayerState extends State<SoundPlayer> {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
+    final color = widget.voiceNote.tIndex == 0 ? Colors.white : Colors.black;
+    final semiTransparentColor = color.withAlpha(100);
     return widget.viewMode == 0
-        ? StatefulBuilder(
-            builder: (context, setState) {
-              return Directionality(
-                textDirection: TextDirection.ltr,
-                child: SizedBox(
-                  width: double.infinity,
-                  child: Column(
-                    children: [
-                      FittedBox(
-                        child: Padding(
-                          padding: EdgeInsets.only(bottom: width * 0.050926),
-                          child: SizedBox(
-                            width: width * 0.50926,
-                            height: width * 0.050926,
-                            child: SliderTheme(
-                              data: SliderThemeData(
-                                trackHeight: width * 0.025463,
-                                thumbShape: RoundSliderThumbShape(
-                                  enabledThumbRadius: width * 0.01567,
-                                  elevation: 0,
-                                  pressedElevation: 0,
-                                ),
-                                overlayShape: RoundSliderOverlayShape(
-                                  overlayRadius: width * 0.03565,
-                                ),
-                              ),
-                              child: Slider(
-                                activeColor: widget.voiceNote.tIndex == 0
-                                    ? Colors.white
-                                    : Colors.black,
-                                thumbColor: widget.voiceNote.tIndex == 0
-                                    ? Colors.white
-                                    : Colors.black,
-                                inactiveColor: widget.voiceNote.tIndex == 0
-                                    ? Colors.white54
-                                    : Colors.black54,
-                                value: position.inSeconds.toDouble(),
-                                min: 0,
-                                max: duration.inSeconds.toDouble(),
-                                onChanged: (value) {
-                                  setState(() async {
-                                    final position = Duration(
-                                      seconds: value.toInt(),
-                                    );
-                                    await audioPlayer.seek(position);
-                                    play = true;
-                                  });
-                                },
-                              ),
-                            ),
-                          ),
+        ? Directionality(
+            textDirection: TextDirection.ltr,
+            child: SizedBox(
+              width: double.infinity,
+              child: Column(
+                spacing: 12,
+                children: [
+                  SizedBox(
+                    width: 240,
+                    child: SliderTheme(
+                      data: SliderThemeData(
+                        trackHeight: 12,
+                        thumbShape: RoundSliderThumbShape(
+                          enabledThumbRadius: 9,
+                          elevation: 0,
+                          pressedElevation: 0,
+                        ),
+                        overlayShape: RoundSliderOverlayShape(
+                          overlayRadius: 12,
                         ),
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.only(right: width * 0.030556),
-                            child: IconButton(
-                              constraints: BoxConstraints.tightForFinite(
-                                height: width * 0.229167,
-                                width: width * 0.229167,
-                              ),
-                              onPressed: () async {
-                                play = !play;
-                                play
-                                    ? {await audioPlayer.resume()}
-                                    : await audioPlayer.pause();
+                      child: Slider(
+                        activeColor: color,
+                        thumbColor: color,
+                        inactiveColor: semiTransparentColor,
+                        value: position.inSeconds.toDouble(),
+                        min: 0,
+                        max: duration.inSeconds.toDouble(),
+                        onChanged: (value) {
+                          setState(() async {
+                            final position = Duration(seconds: value.toInt());
+                            await audioPlayer.seek(position);
+                            play = true;
+                          });
+                        },
+                      ),
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      IconButton(
+                        onPressed: () async {
+                          play = !play;
+                          play
+                              ? {await audioPlayer.resume()}
+                              : await audioPlayer.pause();
 
-                                setState(() {});
-                              },
-                              icon: play
-                                  ? Icon(
-                                      Icons.pause_circle,
-                                      size: width * 0.19097,
-                                      color: widget.voiceNote.tIndex == 0
-                                          ? Colors.white
-                                          : Colors.black,
-                                    )
-                                  : Icon(
-                                      Icons.play_circle,
-                                      size: width * 0.19097,
-                                      color: widget.voiceNote.tIndex == 0
-                                          ? Colors.white
-                                          : Colors.black,
-                                    ),
+                          setState(() {});
+                        },
+                        icon: play
+                            ? Icon(Icons.pause_circle, size: 90, color: color)
+                            : Icon(Icons.play_circle, size: 90, color: color),
+                      ),
+                      Column(
+                        spacing: 10,
+                        children: [
+                          FittedBox(
+                            child: Text(
+                              play
+                                  ? parseTime(position)
+                                  : currentState != PlayerState.paused
+                                  ? parseTime(duration)
+                                  : parseTime(position),
+                              style: TextStyle(color: color),
                             ),
                           ),
-                          Padding(
-                            padding: EdgeInsets.only(bottom: width * 0.02037),
-                            child: Column(
-                              children: [
-                                FittedBox(
-                                  child: Padding(
-                                    padding: EdgeInsets.all(width * 0.02037),
-                                    child: Text(
-                                      play
-                                          ? parseTime(position)
-                                          : currentState != PlayerState.paused
-                                          ? parseTime(duration)
-                                          : parseTime(position),
-                                      style: TextStyle(
-                                        color: widget.voiceNote.tIndex == 0
-                                            ? Colors.white
-                                            : Colors.black,
+                          GestureDetector(
+                            onTap: () async {
+                              currentState == PlayerState.playing
+                                  ? {
+                                      playbackSpeed < 2.0
+                                          ? playbackSpeed += 0.5
+                                          : playbackSpeed = 1.0,
+                                      await audioPlayer.setPlaybackRate(
+                                        playbackSpeed,
                                       ),
+                                    }
+                                  : null;
+                              setState(() {});
+                            },
+                            child: Container(
+                              width: 50,
+                              decoration: BoxDecoration(
+                                color: color,
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    "${playbackSpeed % 1 == 0 ? playbackSpeed.toInt() : playbackSpeed.toStringAsFixed(1)}x",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 15,
+                                      color: widget.color,
                                     ),
                                   ),
                                 ),
-                                GestureDetector(
-                                  onTap: () async {
-                                    currentState == PlayerState.playing
-                                        ? {
-                                            playbackSpeed < 2.0
-                                                ? playbackSpeed += 0.5
-                                                : playbackSpeed = 1.0,
-                                            await audioPlayer.setPlaybackRate(
-                                              playbackSpeed,
-                                            ),
-                                          }
-                                        : null;
-                                    setState(() {});
-                                  },
-                                  child: Container(
-                                    height: width * 0.07639,
-                                    width: width * 0.10185,
-                                    decoration: BoxDecoration(
-                                      color: widget.voiceNote.tIndex == 0
-                                          ? Colors.white
-                                          : Colors.black,
-                                      borderRadius: BorderRadius.circular(
-                                        width * 0.050926,
-                                      ),
-                                    ),
-                                    child: Center(
-                                      child: Text(
-                                        "${playbackSpeed % 1 == 0 ? playbackSpeed.toInt() : playbackSpeed.toStringAsFixed(1)}x",
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 13,
-                                          color: widget.color,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
+                              ),
                             ),
                           ),
                         ],
                       ),
                     ],
                   ),
-                ),
-              );
-            },
+                ],
+              ),
+            ),
           )
         : widget.viewMode == 1
         ? Directionality(
             textDirection: TextDirection.ltr,
-            child: SizedBox(
-              height: width * 0.155324,
-              child: StatefulBuilder(
-                builder: (context, setState) {
-                  return Stack(
-                    alignment: Alignment.bottomCenter,
-                    children: [
-                      FittedBox(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            IconButton(
-                              constraints: BoxConstraints.tightForFinite(
-                                height: width * 0.15278,
-                                width: width * 0.1324,
-                              ),
-                              onPressed: () async {
-                                play = !play;
-                                play
-                                    ? {await audioPlayer.resume()}
-                                    : await audioPlayer.pause();
+            child: StatefulBuilder(
+              builder: (context, setState) {
+                return Stack(
+                  alignment: Alignment.bottomCenter,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(
+                          onPressed: () async {
+                            play = !play;
+                            play
+                                ? {await audioPlayer.resume()}
+                                : await audioPlayer.pause();
 
-                                setState(() {});
-                              },
-                              icon: play
-                                  ? Icon(
-                                      Icons.pause_circle,
-                                      size: width * 0.10185,
-                                      color: widget.voiceNote.tIndex == 0
-                                          ? Colors.white
-                                          : Colors.black,
-                                    )
-                                  : Icon(
-                                      Icons.play_circle,
-                                      size: width * 0.10185,
-                                      color: widget.voiceNote.tIndex == 0
-                                          ? Colors.white
-                                          : Colors.black,
-                                    ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(
-                                bottom: width * 0.030555,
+                            setState(() {});
+                          },
+                          icon: play
+                              ? Icon(Icons.pause_circle, size: 50, color: color)
+                              : Icon(Icons.play_circle, size: 50, color: color),
+                        ),
+                        SizedBox(
+                          width: 175,
+                          child: SliderTheme(
+                            data: SliderThemeData(
+                              trackHeight: 12,
+                              thumbShape: RoundSliderThumbShape(
+                                enabledThumbRadius: 8,
+                                elevation: 0,
+                                pressedElevation: 0,
                               ),
-                              child: SizedBox(
-                                width: width * 0.39468,
-                                height: width * 0.101852,
-                                child: SliderTheme(
-                                  data: SliderThemeData(
-                                    trackHeight: 10,
-                                    thumbShape: RoundSliderThumbShape(
-                                      enabledThumbRadius: width * 0.015878,
-                                      elevation: 0,
-                                      pressedElevation: 0,
+                              overlayShape: RoundSliderOverlayShape(
+                                overlayRadius: 10,
+                              ),
+                            ),
+                            child: Slider(
+                              activeColor: color,
+                              thumbColor: color,
+                              inactiveColor: semiTransparentColor,
+                              value: position.inSeconds.toDouble(),
+                              min: 0,
+                              max: duration.inSeconds.toDouble(),
+                              onChanged: (value) async {
+                                final position = Duration(
+                                  seconds: value.toInt(),
+                                );
+                                await audioPlayer.seek(position);
+                              },
+                            ),
+                          ),
+                        ),
+
+                        GestureDetector(
+                          onTap: () async {
+                            currentState == PlayerState.playing
+                                ? {
+                                    playbackSpeed < 2.0
+                                        ? playbackSpeed += 0.5
+                                        : playbackSpeed = 1.0,
+                                    await audioPlayer.setPlaybackRate(
+                                      playbackSpeed,
                                     ),
-                                    overlayShape: RoundSliderOverlayShape(
-                                      overlayRadius: width * 0.035649,
-                                    ),
-                                  ),
-                                  child: Slider(
-                                    activeColor: widget.voiceNote.tIndex == 0
-                                        ? Colors.white
-                                        : Colors.black,
-                                    thumbColor: widget.voiceNote.tIndex == 0
-                                        ? Colors.white
-                                        : Colors.black,
-                                    inactiveColor: widget.voiceNote.tIndex == 0
-                                        ? Colors.white54
-                                        : Colors.black54,
-                                    value: position.inSeconds.toDouble(),
-                                    min: 0,
-                                    max: duration.inSeconds.toDouble(),
-                                    onChanged: (value) async {
-                                      final position = Duration(
-                                        seconds: value.toInt(),
-                                      );
-                                      await audioPlayer.seek(position);
-                                    },
-                                  ),
+                                  }
+                                : null;
+                            setState(() {});
+                          },
+                          child: Container(
+                            width: 34,
+                            height: 26,
+                            decoration: BoxDecoration(
+                              color: color,
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Center(
+                              child: Text(
+                                "x${playbackSpeed % 1 == 0 ? playbackSpeed.toInt() : playbackSpeed.toStringAsFixed(1)}",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 13,
+                                  color: widget.color,
                                 ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    FittedBox(
+                      child: Text(
+                        play
+                            ? parseTime(position)
+                            : currentState != PlayerState.paused
+                            ? parseTime(duration)
+                            : parseTime(position),
+                        style: TextStyle(color: color),
+                      ),
+                    ),
+                  ],
+                );
+              },
+            ),
+          )
+        : Directionality(
+            textDirection: TextDirection.ltr,
+            child: SizedBox(
+              width: double.infinity,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  FittedBox(
+                    child: SliderTheme(
+                      data: SliderThemeData(
+                        trackHeight: 14,
+                        thumbShape: RoundSliderThumbShape(
+                          enabledThumbRadius: 8,
+                          elevation: 0,
+                          pressedElevation: 0,
+                        ),
+                        overlayShape: RoundSliderOverlayShape(
+                          overlayRadius: 15,
+                        ),
+                      ),
+                      child: Slider(
+                        activeColor: color,
+                        thumbColor: color,
+                        inactiveColor: semiTransparentColor,
+                        value: position.inSeconds.toDouble(),
+                        min: 0,
+                        max: duration.inSeconds.toDouble(),
+                        onChanged: (value) async {
+                          final position = Duration(seconds: value.toInt());
+                          await audioPlayer.seek(position);
+                        },
+                      ),
+                    ),
+                  ),
+                  FittedBox(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        IconButton(
+                          onPressed: () async {
+                            play = !play;
+                            play
+                                ? {await audioPlayer.resume()}
+                                : await audioPlayer.pause();
+
+                            setState(() {});
+                          },
+                          icon: play
+                              ? Icon(size: 60, Icons.pause_circle, color: color)
+                              : Icon(size: 60, Icons.play_circle, color: color),
+                        ),
+                        Column(
+                          spacing: 5,
+                          children: [
+                            FittedBox(
+                              child: Text(
+                                play
+                                    ? parseTime(position)
+                                    : currentState != PlayerState.paused
+                                    ? parseTime(duration)
+                                    : parseTime(position),
+                                style: TextStyle(color: color),
                               ),
                             ),
                             GestureDetector(
@@ -317,19 +356,15 @@ class _SoundPlayerState extends State<SoundPlayer> {
                                 setState(() {});
                               },
                               child: Container(
-                                height: width * 0.07639,
-                                width: width * 0.10185,
+                                height: 20,
+                                width: 35,
                                 decoration: BoxDecoration(
-                                  color: widget.voiceNote.tIndex == 0
-                                      ? Colors.white
-                                      : Colors.black,
-                                  borderRadius: BorderRadius.circular(
-                                    width * 0.050926,
-                                  ),
+                                  color: color,
+                                  borderRadius: BorderRadius.circular(20),
                                 ),
                                 child: Center(
                                   child: Text(
-                                    "${playbackSpeed % 1 == 0 ? playbackSpeed.toInt() : playbackSpeed.toStringAsFixed(1)}x",
+                                    "x${playbackSpeed % 1 == 0 ? playbackSpeed.toInt() : playbackSpeed.toStringAsFixed(1)}",
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 13,
@@ -341,187 +376,12 @@ class _SoundPlayerState extends State<SoundPlayer> {
                             ),
                           ],
                         ),
-                      ),
-                      FittedBox(
-                        child: Padding(
-                          padding: EdgeInsets.only(
-                            right: width * 0.2037,
-                            bottom: width * 0.015278,
-                          ),
-                          child: Text(
-                            play
-                                ? parseTime(position)
-                                : currentState != PlayerState.paused
-                                ? parseTime(duration)
-                                : parseTime(position),
-                            style: TextStyle(
-                              color: widget.voiceNote.tIndex == 0
-                                  ? Colors.white
-                                  : Colors.black,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  );
-                },
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ),
-          )
-        : StatefulBuilder(
-            builder: (context, setState) {
-              return Directionality(
-                textDirection: TextDirection.ltr,
-                child: SizedBox(
-                  width: double.infinity,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      FittedBox(
-                        child: SizedBox(
-                          width: width * 0.50926,
-                          height: width * 0.050926,
-                          child: SliderTheme(
-                            data: SliderThemeData(
-                              trackHeight: 10,
-                              thumbShape: RoundSliderThumbShape(
-                                enabledThumbRadius: width * 0.015278,
-                                elevation: 0,
-                                pressedElevation: 0,
-                              ),
-                              overlayShape: RoundSliderOverlayShape(
-                                overlayRadius: width * 0.035649,
-                              ),
-                            ),
-                            child: Slider(
-                              activeColor: widget.voiceNote.tIndex == 0
-                                  ? Colors.white
-                                  : Colors.black,
-                              thumbColor: widget.voiceNote.tIndex == 0
-                                  ? Colors.white
-                                  : Colors.black,
-                              inactiveColor: widget.voiceNote.tIndex == 0
-                                  ? Colors.white54
-                                  : Colors.black54,
-                              value: position.inSeconds.toDouble(),
-                              min: 0,
-                              max: duration.inSeconds.toDouble(),
-                              onChanged: (value) async {
-                                final position = Duration(
-                                  seconds: value.toInt(),
-                                );
-                                await audioPlayer.seek(position);
-                              },
-                            ),
-                          ),
-                        ),
-                      ),
-                      FittedBox(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.only(right: width * 0.03056),
-                              child: IconButton(
-                                constraints: BoxConstraints.tightForFinite(
-                                  height: width * 0.229166,
-                                  width: width * 0.229166,
-                                ),
-                                onPressed: () async {
-                                  play = !play;
-                                  play
-                                      ? {await audioPlayer.resume()}
-                                      : await audioPlayer.pause();
-
-                                  setState(() {});
-                                },
-                                icon: play
-                                    ? Icon(
-                                        Icons.pause_circle,
-                                        size: width * 0.190972,
-                                        color: widget.voiceNote.tIndex == 0
-                                            ? Colors.white
-                                            : Colors.black,
-                                      )
-                                    : Icon(
-                                        Icons.play_circle,
-                                        size: width * 0.190972,
-                                        color: widget.voiceNote.tIndex == 0
-                                            ? Colors.white
-                                            : Colors.black,
-                                      ),
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(bottom: width * 0.02037),
-                              child: Column(
-                                children: [
-                                  FittedBox(
-                                    child: Padding(
-                                      padding: EdgeInsets.all(width * 0.02037),
-                                      child: Text(
-                                        play
-                                            ? parseTime(position)
-                                            : currentState != PlayerState.paused
-                                            ? parseTime(duration)
-                                            : parseTime(position),
-                                        style: TextStyle(
-                                          color: widget.voiceNote.tIndex == 0
-                                              ? Colors.white
-                                              : Colors.black,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  GestureDetector(
-                                    onTap: () async {
-                                      currentState == PlayerState.playing
-                                          ? {
-                                              playbackSpeed < 2.0
-                                                  ? playbackSpeed += 0.5
-                                                  : playbackSpeed = 1.0,
-                                              await audioPlayer.setPlaybackRate(
-                                                playbackSpeed,
-                                              ),
-                                            }
-                                          : null;
-                                      setState(() {});
-                                    },
-                                    child: Container(
-                                      height: width * 0.07639,
-                                      width: width * 0.10185,
-                                      decoration: BoxDecoration(
-                                        color: widget.voiceNote.tIndex == 0
-                                            ? Colors.white
-                                            : Colors.black,
-                                        borderRadius: BorderRadius.circular(
-                                          width * 0.050926,
-                                        ),
-                                      ),
-                                      child: Center(
-                                        child: Text(
-                                          "${playbackSpeed % 1 == 0 ? playbackSpeed.toInt() : playbackSpeed.toStringAsFixed(1)}x",
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 13,
-                                            color: widget.color,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            },
           );
   }
 }

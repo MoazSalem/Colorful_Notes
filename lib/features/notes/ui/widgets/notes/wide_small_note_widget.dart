@@ -145,7 +145,7 @@ class WideSmallNoteWidget extends StatelessWidget {
                       style: TextStyle(
                         color: note.tIndex == 0 ? Colors.white : Colors.black,
                         fontWeight: FontWeight.w500,
-                        fontSize: 14,
+                        fontSize: 13,
                       ),
                     ),
                     Row(

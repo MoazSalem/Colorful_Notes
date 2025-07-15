@@ -43,16 +43,14 @@ class SmallGridNote extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   if (!noTitle)
                     SizedBox(
                       width: double.infinity,
                       child: Text(
                         note.title,
-                        textAlign: note.layout == 0 || note.layout == 2
-                            ? TextAlign.left
-                            : TextAlign.right,
+                        textAlign: TextAlign.center,
                         textDirection: note.layout == 0 || note.layout == 2
                             ? TextDirection.ltr
                             : TextDirection.rtl,

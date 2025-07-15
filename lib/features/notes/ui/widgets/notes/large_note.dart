@@ -100,8 +100,8 @@ class LargeNote extends StatelessWidget {
                           ),
                         ),
                       )
-                    : Expanded(
-                        flex: noTitle ? 7 : 4,
+                    : Padding(
+                        padding: EdgeInsets.only(top: noTitle ? 60 : 0),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
