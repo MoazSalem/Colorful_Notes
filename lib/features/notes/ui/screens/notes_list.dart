@@ -5,6 +5,7 @@ import 'package:colorful_notes/features/notes/ui/providers/notes_provider.dart';
 import 'package:colorful_notes/core/shared_widgets/custom_appbar.dart';
 import 'package:colorful_notes/features/notes/ui/screens/voice_note.dart';
 import 'package:colorful_notes/features/notes/ui/widgets/appbar_action_widgets.dart';
+import 'package:colorful_notes/features/notes/ui/widgets/large_note.dart';
 import 'package:colorful_notes/features/notes/ui/widgets/search_bar_widget.dart';
 import 'package:colorful_notes/features/notes/ui/screens/text_note.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -111,46 +112,28 @@ class _NotesListState extends State<NotesList> {
         ),
       );
     }
-
-    if (viewIndex == 2) {
-      // Grid View
-      return GridView.builder(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-        ),
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        itemCount: notes.length,
-        itemBuilder: (context, index) {
-          return _buildNoteItem(
+    return GridView.builder(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: viewIndex == 2 ? 2 : 1,
+      ),
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: notes.length,
+      itemBuilder: (context, index) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          child: _buildNoteItem(
             context,
             settings,
             notes,
             notes.length - 1 - index,
             viewIndex,
-            isGridView: true,
-          );
-        },
-      );
-    } else {
-      // List View (Normal or Small)
-      return ListView.builder(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        itemCount: notes.length,
-        itemBuilder: (context, index) {
-          return _buildNoteItem(
-            context,
-            settings,
-            notes,
-            notes.length - 1 - index,
-            viewIndex,
-          );
-        },
-      );
-    }
+            isGridView: viewIndex == 2,
+          ),
+        );
+      },
+    );
   }
 
   Widget _buildNoteItem(
