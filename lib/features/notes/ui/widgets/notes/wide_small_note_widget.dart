@@ -1,0 +1,171 @@
+import 'package:colorful_notes/core/consts.dart';
+import 'package:colorful_notes/core/helpers/widgets_helper.dart';
+import 'package:colorful_notes/core/models/settings_model.dart';
+import 'package:colorful_notes/features/notes/domain/entities/note.dart';
+import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart' hide TextDirection;
+import 'package:colorful_notes/features/notes/ui/widgets/notes/sound_player.dart';
+
+class WideSmallNoteWidget extends StatelessWidget {
+  const WideSmallNoteWidget({
+    super.key,
+    required this.note,
+    required this.settings,
+  });
+  final Note note;
+  final SettingsModel settings;
+
+  @override
+  Widget build(BuildContext context) {
+    final color = note.cIndex == 99
+        ? Color(int.parse(note.extra))
+        : settings.darkColors
+        ? AppConsts.darkerColors[note.cIndex]
+        : AppConsts.lightColors[note.cIndex];
+    final noTitle = note.title == "";
+    final noContent = note.content == "";
+    final date = WidgetsHelper.parsedDate(note.time, settings.lang);
+    final int dateValue = WidgetsHelper.calculateDifference(note.time);
+    return Center(
+      child: Container(
+        height: 100,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(0),
+          color: color,
+          boxShadow: settings.showShadow
+              ? [
+                  BoxShadow(
+                    color: color,
+                    blurRadius: 4,
+                    offset: const Offset(0, 1),
+                  ),
+                ]
+              : [],
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Stack(
+            alignment: Alignment.bottomLeft,
+            children: [
+              Column(
+                children: [
+                  noTitle
+                      ? Container()
+                      : note.type == 0
+                      ? Text(
+                          note.title,
+                          strutStyle: StrutStyle(
+                            forceStrutHeight: note.layout == 0 ? false : true,
+                          ),
+                          textAlign: note.layout == 0 || note.layout == 2
+                              ? TextAlign.left
+                              : TextAlign.right,
+                          textDirection: note.layout == 0 || note.layout == 2
+                              ? TextDirection.ltr
+                              : TextDirection.rtl,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w800,
+                            fontSize: 22,
+                            color: note.tIndex == 0
+                                ? Colors.white
+                                : Colors.black,
+                          ),
+                        )
+                      : Container(),
+                  note.type == 0
+                      ? Expanded(
+                          flex: noTitle ? 2 : 1,
+                          child: SizedBox(
+                            width: double.infinity,
+                            child: Text(
+                              noContent ? "Empty".tr() : note.content,
+                              strutStyle: StrutStyle(
+                                forceStrutHeight:
+                                    note.layout == 0 || note.layout == 1
+                                    ? false
+                                    : true,
+                              ),
+                              textAlign: note.layout == 1 || note.layout == 2
+                                  ? TextAlign.right
+                                  : TextAlign.left,
+                              textDirection:
+                                  note.layout == 1 || note.layout == 2
+                                  ? TextDirection.rtl
+                                  : TextDirection.ltr,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                color: noContent
+                                    ? note.tIndex == 0
+                                          ? Colors.white38
+                                          : Colors.black38
+                                    : note.tIndex == 0
+                                    ? Colors.white
+                                    : Colors.black,
+                                fontSize: noTitle ? 18 : 16,
+                              ),
+                            ),
+                          ),
+                        )
+                      : Expanded(
+                          flex: noTitle ? 2 : 1,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SoundPlayer(
+                                index: 0,
+                                voiceNotes: [note],
+                                color: color,
+                                viewMode: 1,
+                                isTablet: false,
+                              ),
+                            ],
+                          ),
+                        ),
+                ],
+              ),
+              if (settings.showDate)
+                Stack(
+                  alignment: settings.lang == 'en'
+                      ? Alignment.centerLeft
+                      : Alignment.centerRight,
+                  children: [
+                    Text(
+                      dateValue == 0
+                          ? "Today".tr()
+                          : dateValue == -1
+                          ? "Yesterday".tr()
+                          : date,
+                      style: TextStyle(
+                        color: note.tIndex == 0 ? Colors.white : Colors.black,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text(
+                          settings.showEdited
+                              ? note.edited == "yes"
+                                    ? "Edited".tr()
+                                    : ""
+                              : "",
+                          style: TextStyle(
+                            color: note.tIndex == 0
+                                ? Colors.white38
+                                : Colors.black38,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}

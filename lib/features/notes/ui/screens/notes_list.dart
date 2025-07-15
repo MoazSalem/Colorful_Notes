@@ -1,18 +1,17 @@
 import 'package:colorful_notes/core/consts.dart';
-import 'package:colorful_notes/core/helpers/widgets_helper.dart';
 import 'package:colorful_notes/features/notes/domain/entities/note.dart';
 import 'package:colorful_notes/features/notes/ui/providers/notes_provider.dart';
 import 'package:colorful_notes/core/shared_widgets/custom_appbar.dart';
 import 'package:colorful_notes/features/notes/ui/screens/voice_note.dart';
 import 'package:colorful_notes/features/notes/ui/widgets/appbar_action_widgets.dart';
-import 'package:colorful_notes/features/notes/ui/widgets/large_note.dart';
+import 'package:colorful_notes/features/notes/ui/widgets/notes/large_note.dart';
+import 'package:colorful_notes/features/notes/ui/widgets/notes/wide_small_note_widget.dart';
 import 'package:colorful_notes/features/notes/ui/widgets/search_bar_widget.dart';
 import 'package:colorful_notes/features/notes/ui/screens/text_note.dart';
-import 'package:colorful_notes/features/notes/ui/widgets/small_grid_note.dart';
+import 'package:colorful_notes/features/notes/ui/widgets/notes/small_grid_note.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:colorful_notes/core/services/service_locator.dart';
-import 'package:colorful_notes/features/notes/ui/widgets/notes.dart';
 import 'package:colorful_notes/core/models/settings_model.dart';
 import 'package:colorful_notes/core/services/settings_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -117,6 +116,7 @@ class _NotesListState extends State<NotesList> {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: viewIndex == 2 ? 2 : 1,
+        childAspectRatio: viewIndex == 1 ? 2.9 : 1.0,
       ),
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
@@ -124,14 +124,7 @@ class _NotesListState extends State<NotesList> {
       itemBuilder: (context, index) {
         return Padding(
           padding: const EdgeInsets.all(4.0),
-          child: _buildNoteItem(
-            context,
-            settings,
-            notes,
-            notes.length - 1 - index,
-            viewIndex,
-            isGridView: viewIndex == 2,
-          ),
+          child: _buildNoteItem(context, settings, notes[index], viewIndex),
         );
       },
     );
@@ -140,53 +133,32 @@ class _NotesListState extends State<NotesList> {
   Widget _buildNoteItem(
     BuildContext context,
     SettingsModel settings,
-    List<Note> notes,
-    int index,
-    int viewIndex, {
-    bool isGridView = false,
-  }) {
-    final note = notes[index];
-    final bool noTitle = note.title == "";
-    final bool noContent = note.content == "";
-    final String date = WidgetsHelper.parsedDate(note.time, settings.lang);
-    final int dateValue = WidgetsHelper.calculateDifference(note.time);
-
+    Note note,
+    int viewIndex,
+  ) {
     Widget noteView;
-    if (isGridView) {
+    if (viewIndex == 2) {
       noteView = SmallGridNote(note: note, settings: settings);
     } else if (viewIndex == 0) {
       noteView = LargeNote(note: note, settings: settings);
     } else {
-      noteView = smallListView(
-        context: context,
-        notes: notes,
-        colors: AppConsts.lightColors,
-        index: index,
-        dateValue: dateValue,
-        date: date,
-        noTitle: noTitle,
-        noContent: noContent,
-        showDate: settings.showDate,
-        showShadow: settings.showShadow,
-        showEdited: settings.showEdited,
-        lang: settings.lang,
-        width: MediaQuery.of(context).size.width,
-      );
+      noteView = WideSmallNoteWidget(note: note, settings: settings);
     }
-
     return Stack(
       alignment: note.layout == 0 || note.layout == 2
           ? Alignment.topRight
           : Alignment.topLeft,
       children: [
         GestureDetector(onTap: () => _editNote(context, note), child: noteView),
-        IconButton(
-          onPressed: () =>
-              {}, //notesCubit.showDeleteDialog(context, notes, index),
-          icon: Icon(
-            Icons.highlight_remove,
-            color: note.tIndex == 0 ? Colors.white : Colors.black,
-            size: 20,
+        Padding(
+          padding: EdgeInsets.all(note.layout == 2 ? 2 : 8.0),
+          child: GestureDetector(
+            onTap: () => {},
+            child: Icon(
+              Icons.highlight_remove,
+              color: note.tIndex == 0 ? Colors.white : Colors.black,
+              size: 20,
+            ),
           ),
         ),
       ],

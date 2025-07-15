@@ -2,7 +2,7 @@ import 'package:colorful_notes/core/consts.dart';
 import 'package:colorful_notes/core/helpers/widgets_helper.dart';
 import 'package:colorful_notes/core/models/settings_model.dart';
 import 'package:colorful_notes/features/notes/domain/entities/note.dart';
-import 'package:colorful_notes/features/notes/ui/widgets/sound_player.dart';
+import 'package:colorful_notes/features/notes/ui/widgets/notes/sound_player.dart';
 import 'package:easy_localization/easy_localization.dart' hide TextDirection;
 import 'package:flutter/material.dart';
 
