@@ -106,11 +106,9 @@ class LargeNote extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             SoundPlayer(
-                              index: 0,
-                              voiceNotes: [note],
+                              voiceNote: note,
                               color: color,
                               viewMode: 0,
-                              isTablet: false,
                             ),
                           ],
                         ),

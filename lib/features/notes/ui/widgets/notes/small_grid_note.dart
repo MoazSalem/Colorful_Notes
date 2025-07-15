@@ -37,68 +37,74 @@ class SmallGridNote extends StatelessWidget {
                 ]
               : [],
         ),
-        child: Padding(
-          padding: EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 10),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              if (!noTitle)
-                SizedBox(
-                  width: double.infinity,
-                  child: Text(
-                    note.title,
-                    textAlign: note.layout == 0 || note.layout == 2
-                        ? TextAlign.left
-                        : TextAlign.right,
-                    textDirection: note.layout == 0 || note.layout == 2
-                        ? TextDirection.ltr
-                        : TextDirection.rtl,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontWeight: FontWeight.w800,
-                      fontSize: 18,
-                      color: note.tIndex == 0 ? Colors.white : Colors.black,
-                    ),
-                  ),
-                ),
-              note.type == 0
-                  ? Expanded(
-                      flex: noTitle ? 3 : 2,
+        child: Stack(
+          alignment: Alignment.bottomLeft,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (!noTitle)
+                    SizedBox(
+                      width: double.infinity,
                       child: Text(
-                        noContent ? "Empty".tr() : note.content,
-                        textAlign: note.layout == 1 || note.layout == 2
-                            ? TextAlign.right
-                            : TextAlign.left,
-                        textDirection: note.layout == 1 || note.layout == 2
-                            ? TextDirection.rtl
-                            : TextDirection.ltr,
-                        maxLines: 4,
+                        note.title,
+                        textAlign: note.layout == 0 || note.layout == 2
+                            ? TextAlign.left
+                            : TextAlign.right,
+                        textDirection: note.layout == 0 || note.layout == 2
+                            ? TextDirection.ltr
+                            : TextDirection.rtl,
+                        maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
-                          color: noContent
-                              ? note.tIndex == 0
-                                    ? Colors.white38
-                                    : Colors.black38
-                              : note.tIndex == 0
-                              ? Colors.white
-                              : Colors.black,
-                          fontSize: noTitle ? 16 : 13,
+                          fontWeight: FontWeight.w800,
+                          fontSize: 18,
+                          color: note.tIndex == 0 ? Colors.white : Colors.black,
                         ),
                       ),
-                    )
-                  : Expanded(
-                      flex: noTitle ? 3 : 2,
-                      child: SoundPlayer(
-                        index: 0,
-                        voiceNotes: [note],
-                        color: color,
-                        viewMode: 3,
-                        isTablet: false,
-                      ),
                     ),
-              if (settings.showDate)
-                Stack(
+                  note.type == 0
+                      ? Text(
+                          noContent ? "Empty".tr() : note.content,
+                          textAlign: note.layout == 1 || note.layout == 2
+                              ? TextAlign.right
+                              : TextAlign.left,
+                          textDirection: note.layout == 1 || note.layout == 2
+                              ? TextDirection.rtl
+                              : TextDirection.ltr,
+                          maxLines: 5,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            color: noContent
+                                ? note.tIndex == 0
+                                      ? Colors.white38
+                                      : Colors.black38
+                                : note.tIndex == 0
+                                ? Colors.white
+                                : Colors.black,
+                            fontSize: noTitle ? 16 : 13,
+                          ),
+                        )
+                      : Padding(
+                          padding: EdgeInsets.only(top: noTitle ? 24 : 4.0),
+                          child: SoundPlayer(
+                            voiceNote: note,
+                            color: color,
+                            viewMode: 3,
+                          ),
+                        ),
+                ],
+              ),
+            ),
+            if (settings.showDate)
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 4.0,
+                  horizontal: 8,
+                ),
+                child: Stack(
                   alignment: settings.lang == 'en'
                       ? Alignment.centerLeft
                       : Alignment.centerRight,
@@ -134,8 +140,8 @@ class SmallGridNote extends StatelessWidget {
                     ),
                   ],
                 ),
-            ],
-          ),
+              ),
+          ],
         ),
       ),
     );

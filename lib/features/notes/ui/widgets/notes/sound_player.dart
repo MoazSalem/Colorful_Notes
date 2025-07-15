@@ -1,21 +1,17 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:colorful_notes/features/notes/domain/entities/note.dart';
 import 'package:flutter/material.dart';
-import 'package:audioplayers/audioplayers.dart';
 
 class SoundPlayer extends StatefulWidget {
-  final List<Note> voiceNotes;
-  final int index;
+  final Note voiceNote;
   final Color color;
   final int viewMode;
-  final bool isTablet;
 
   const SoundPlayer({
     super.key,
-    required this.voiceNotes,
-    required this.index,
+    required this.voiceNote,
     required this.color,
     required this.viewMode,
-    required this.isTablet,
   });
 
   @override
@@ -23,7 +19,7 @@ class SoundPlayer extends StatefulWidget {
 }
 
 class _SoundPlayerState extends State<SoundPlayer> {
-  final audioPlayer = AudioPlayer();
+  final AudioPlayer audioPlayer = AudioPlayer();
   Duration duration = Duration.zero;
   Duration position = Duration.zero;
   double playbackSpeed = 1.0;
@@ -45,9 +41,7 @@ class _SoundPlayerState extends State<SoundPlayer> {
     );
     audioPlayer.onPlayerComplete.listen((event) {
       setState(() {
-        audioPlayer.setSourceDeviceFile(
-          widget.voiceNotes[widget.index].content,
-        );
+        audioPlayer.setSourceDeviceFile(widget.voiceNote.content);
         position = Duration.zero;
         play = false;
       });
@@ -57,7 +51,7 @@ class _SoundPlayerState extends State<SoundPlayer> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    audioPlayer.setSourceDeviceFile(widget.voiceNotes[widget.index].content);
+    audioPlayer.setSourceDeviceFile(widget.voiceNote.content);
   }
 
   @override
@@ -91,16 +85,13 @@ class _SoundPlayerState extends State<SoundPlayer> {
                                 ),
                               ),
                               child: Slider(
-                                activeColor:
-                                    widget.voiceNotes[widget.index].tIndex == 0
+                                activeColor: widget.voiceNote.tIndex == 0
                                     ? Colors.white
                                     : Colors.black,
-                                thumbColor:
-                                    widget.voiceNotes[widget.index].tIndex == 0
+                                thumbColor: widget.voiceNote.tIndex == 0
                                     ? Colors.white
                                     : Colors.black,
-                                inactiveColor:
-                                    widget.voiceNotes[widget.index].tIndex == 0
+                                inactiveColor: widget.voiceNote.tIndex == 0
                                     ? Colors.white54
                                     : Colors.black54,
                                 value: position.inSeconds.toDouble(),
@@ -143,22 +134,14 @@ class _SoundPlayerState extends State<SoundPlayer> {
                                   ? Icon(
                                       Icons.pause_circle,
                                       size: width * 0.19097,
-                                      color:
-                                          widget
-                                                  .voiceNotes[widget.index]
-                                                  .tIndex ==
-                                              0
+                                      color: widget.voiceNote.tIndex == 0
                                           ? Colors.white
                                           : Colors.black,
                                     )
                                   : Icon(
                                       Icons.play_circle,
                                       size: width * 0.19097,
-                                      color:
-                                          widget
-                                                  .voiceNotes[widget.index]
-                                                  .tIndex ==
-                                              0
+                                      color: widget.voiceNote.tIndex == 0
                                           ? Colors.white
                                           : Colors.black,
                                     ),
@@ -178,11 +161,7 @@ class _SoundPlayerState extends State<SoundPlayer> {
                                           ? parseTime(duration)
                                           : parseTime(position),
                                       style: TextStyle(
-                                        color:
-                                            widget
-                                                    .voiceNotes[widget.index]
-                                                    .tIndex ==
-                                                0
+                                        color: widget.voiceNote.tIndex == 0
                                             ? Colors.white
                                             : Colors.black,
                                       ),
@@ -207,11 +186,7 @@ class _SoundPlayerState extends State<SoundPlayer> {
                                     height: width * 0.07639,
                                     width: width * 0.10185,
                                     decoration: BoxDecoration(
-                                      color:
-                                          widget
-                                                  .voiceNotes[widget.index]
-                                                  .tIndex ==
-                                              0
+                                      color: widget.voiceNote.tIndex == 0
                                           ? Colors.white
                                           : Colors.black,
                                       borderRadius: BorderRadius.circular(
@@ -273,22 +248,14 @@ class _SoundPlayerState extends State<SoundPlayer> {
                                   ? Icon(
                                       Icons.pause_circle,
                                       size: width * 0.10185,
-                                      color:
-                                          widget
-                                                  .voiceNotes[widget.index]
-                                                  .tIndex ==
-                                              0
+                                      color: widget.voiceNote.tIndex == 0
                                           ? Colors.white
                                           : Colors.black,
                                     )
                                   : Icon(
                                       Icons.play_circle,
                                       size: width * 0.10185,
-                                      color:
-                                          widget
-                                                  .voiceNotes[widget.index]
-                                                  .tIndex ==
-                                              0
+                                      color: widget.voiceNote.tIndex == 0
                                           ? Colors.white
                                           : Colors.black,
                                     ),
@@ -298,9 +265,7 @@ class _SoundPlayerState extends State<SoundPlayer> {
                                 bottom: width * 0.030555,
                               ),
                               child: SizedBox(
-                                width: widget.isTablet
-                                    ? width * 0.47468
-                                    : width * 0.39468,
+                                width: width * 0.39468,
                                 height: width * 0.101852,
                                 child: SliderTheme(
                                   data: SliderThemeData(
@@ -311,31 +276,17 @@ class _SoundPlayerState extends State<SoundPlayer> {
                                       pressedElevation: 0,
                                     ),
                                     overlayShape: RoundSliderOverlayShape(
-                                      overlayRadius: widget.isTablet
-                                          ? width * 0.030649
-                                          : width * 0.035649,
+                                      overlayRadius: width * 0.035649,
                                     ),
                                   ),
                                   child: Slider(
-                                    activeColor:
-                                        widget
-                                                .voiceNotes[widget.index]
-                                                .tIndex ==
-                                            0
+                                    activeColor: widget.voiceNote.tIndex == 0
                                         ? Colors.white
                                         : Colors.black,
-                                    thumbColor:
-                                        widget
-                                                .voiceNotes[widget.index]
-                                                .tIndex ==
-                                            0
+                                    thumbColor: widget.voiceNote.tIndex == 0
                                         ? Colors.white
                                         : Colors.black,
-                                    inactiveColor:
-                                        widget
-                                                .voiceNotes[widget.index]
-                                                .tIndex ==
-                                            0
+                                    inactiveColor: widget.voiceNote.tIndex == 0
                                         ? Colors.white54
                                         : Colors.black54,
                                     value: position.inSeconds.toDouble(),
@@ -369,9 +320,7 @@ class _SoundPlayerState extends State<SoundPlayer> {
                                 height: width * 0.07639,
                                 width: width * 0.10185,
                                 decoration: BoxDecoration(
-                                  color:
-                                      widget.voiceNotes[widget.index].tIndex ==
-                                          0
+                                  color: widget.voiceNote.tIndex == 0
                                       ? Colors.white
                                       : Colors.black,
                                   borderRadius: BorderRadius.circular(
@@ -396,9 +345,7 @@ class _SoundPlayerState extends State<SoundPlayer> {
                       FittedBox(
                         child: Padding(
                           padding: EdgeInsets.only(
-                            right: widget.isTablet
-                                ? width * 0.3037
-                                : width * 0.2037,
+                            right: width * 0.2037,
                             bottom: width * 0.015278,
                           ),
                           child: Text(
@@ -408,7 +355,7 @@ class _SoundPlayerState extends State<SoundPlayer> {
                                 ? parseTime(duration)
                                 : parseTime(position),
                             style: TextStyle(
-                              color: widget.voiceNotes[widget.index].tIndex == 0
+                              color: widget.voiceNote.tIndex == 0
                                   ? Colors.white
                                   : Colors.black,
                             ),
@@ -447,16 +394,13 @@ class _SoundPlayerState extends State<SoundPlayer> {
                               ),
                             ),
                             child: Slider(
-                              activeColor:
-                                  widget.voiceNotes[widget.index].tIndex == 0
+                              activeColor: widget.voiceNote.tIndex == 0
                                   ? Colors.white
                                   : Colors.black,
-                              thumbColor:
-                                  widget.voiceNotes[widget.index].tIndex == 0
+                              thumbColor: widget.voiceNote.tIndex == 0
                                   ? Colors.white
                                   : Colors.black,
-                              inactiveColor:
-                                  widget.voiceNotes[widget.index].tIndex == 0
+                              inactiveColor: widget.voiceNote.tIndex == 0
                                   ? Colors.white54
                                   : Colors.black54,
                               value: position.inSeconds.toDouble(),
@@ -496,22 +440,14 @@ class _SoundPlayerState extends State<SoundPlayer> {
                                     ? Icon(
                                         Icons.pause_circle,
                                         size: width * 0.190972,
-                                        color:
-                                            widget
-                                                    .voiceNotes[widget.index]
-                                                    .tIndex ==
-                                                0
+                                        color: widget.voiceNote.tIndex == 0
                                             ? Colors.white
                                             : Colors.black,
                                       )
                                     : Icon(
                                         Icons.play_circle,
                                         size: width * 0.190972,
-                                        color:
-                                            widget
-                                                    .voiceNotes[widget.index]
-                                                    .tIndex ==
-                                                0
+                                        color: widget.voiceNote.tIndex == 0
                                             ? Colors.white
                                             : Colors.black,
                                       ),
@@ -531,11 +467,7 @@ class _SoundPlayerState extends State<SoundPlayer> {
                                             ? parseTime(duration)
                                             : parseTime(position),
                                         style: TextStyle(
-                                          color:
-                                              widget
-                                                      .voiceNotes[widget.index]
-                                                      .tIndex ==
-                                                  0
+                                          color: widget.voiceNote.tIndex == 0
                                               ? Colors.white
                                               : Colors.black,
                                         ),
@@ -560,11 +492,7 @@ class _SoundPlayerState extends State<SoundPlayer> {
                                       height: width * 0.07639,
                                       width: width * 0.10185,
                                       decoration: BoxDecoration(
-                                        color:
-                                            widget
-                                                    .voiceNotes[widget.index]
-                                                    .tIndex ==
-                                                0
+                                        color: widget.voiceNote.tIndex == 0
                                             ? Colors.white
                                             : Colors.black,
                                         borderRadius: BorderRadius.circular(

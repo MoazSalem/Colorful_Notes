@@ -42,12 +42,12 @@ class WideSmallNoteWidget extends StatelessWidget {
                 ]
               : [],
         ),
-        child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Stack(
-            alignment: Alignment.bottomLeft,
-            children: [
-              Column(
+        child: Stack(
+          alignment: Alignment.bottomLeft,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),
+              child: Column(
                 children: [
                   noTitle
                       ? Container()
@@ -94,7 +94,7 @@ class WideSmallNoteWidget extends StatelessWidget {
                                   note.layout == 1 || note.layout == 2
                                   ? TextDirection.rtl
                                   : TextDirection.ltr,
-                              maxLines: 2,
+                              maxLines: noTitle ? 3 : 2,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
                                 color: noContent
@@ -104,7 +104,7 @@ class WideSmallNoteWidget extends StatelessWidget {
                                     : note.tIndex == 0
                                     ? Colors.white
                                     : Colors.black,
-                                fontSize: noTitle ? 18 : 16,
+                                fontSize: noTitle ? 17 : 15,
                               ),
                             ),
                           ),
@@ -115,19 +115,23 @@ class WideSmallNoteWidget extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               SoundPlayer(
-                                index: 0,
-                                voiceNotes: [note],
+                                voiceNote: note,
                                 color: color,
                                 viewMode: 1,
-                                isTablet: false,
                               ),
                             ],
                           ),
                         ),
                 ],
               ),
-              if (settings.showDate)
-                Stack(
+            ),
+            if (settings.showDate)
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 3.0,
+                  horizontal: 8,
+                ),
+                child: Stack(
                   alignment: settings.lang == 'en'
                       ? Alignment.centerLeft
                       : Alignment.centerRight,
@@ -141,6 +145,7 @@ class WideSmallNoteWidget extends StatelessWidget {
                       style: TextStyle(
                         color: note.tIndex == 0 ? Colors.white : Colors.black,
                         fontWeight: FontWeight.w500,
+                        fontSize: 14,
                       ),
                     ),
                     Row(
@@ -162,8 +167,8 @@ class WideSmallNoteWidget extends StatelessWidget {
                     ),
                   ],
                 ),
-            ],
-          ),
+              ),
+          ],
         ),
       ),
     );
