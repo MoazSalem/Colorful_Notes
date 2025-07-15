@@ -4,6 +4,7 @@ import 'package:colorful_notes/features/notes/domain/repositories/note_repositor
 import 'package:colorful_notes/features/notes/domain/usecases/add_note.dart';
 import 'package:colorful_notes/features/notes/domain/usecases/delete_note.dart';
 import 'package:colorful_notes/features/notes/domain/usecases/get_notes.dart';
+import 'package:colorful_notes/features/notes/domain/usecases/get_notes_of_type.dart';
 import 'package:colorful_notes/features/notes/domain/usecases/update_note.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:colorful_notes/features/notes/ui/providers/database_provider.dart';
@@ -21,6 +22,11 @@ final noteRepositoryProvider = Provider<NoteRepository>((ref) {
 final getNotesUseCaseProvider = Provider<GetNotesUseCase>((ref) {
   final repo = ref.watch(noteRepositoryProvider);
   return GetNotesUseCase(repo);
+});
+
+final getNotesOfTypeUseCaseProvider = Provider<GetNotesOfTypeUseCase>((ref) {
+  final repo = ref.watch(noteRepositoryProvider);
+  return GetNotesOfTypeUseCase(repo);
 });
 
 final addNoteUseCaseProvider = Provider<AddNoteUseCase>((ref) {

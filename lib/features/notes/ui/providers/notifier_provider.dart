@@ -2,6 +2,7 @@ import 'package:colorful_notes/features/notes/domain/entities/note.dart';
 import 'package:colorful_notes/features/notes/domain/usecases/add_note.dart';
 import 'package:colorful_notes/features/notes/domain/usecases/delete_note.dart';
 import 'package:colorful_notes/features/notes/domain/usecases/get_notes.dart';
+import 'package:colorful_notes/features/notes/domain/usecases/get_notes_of_type.dart';
 import 'package:colorful_notes/features/notes/domain/usecases/update_note.dart';
 import 'package:colorful_notes/features/notes/ui/providers/notes_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -15,10 +16,17 @@ class NotesNotifier extends AsyncNotifier<List<Note>> {
   late final DeleteNoteUseCase _deleteNote = ref.read(
     deleteNoteUseCaseProvider,
   );
+  late final GetNotesOfTypeUseCase _getNotesOfType = ref.read(
+    getNotesOfTypeUseCaseProvider,
+  );
 
   @override
   Future<List<Note>> build() async {
     return _getNotes();
+  }
+
+  Future<List<Note>> getNotesOfType(bool voice) async {
+    return await _getNotesOfType(voice);
   }
 
   Future<void> add(Note note) async {

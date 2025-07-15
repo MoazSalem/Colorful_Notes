@@ -29,4 +29,10 @@ class NoteRepositoryImpl implements NoteRepository {
     final model = NoteModel.fromEntity(note);
     await database.editDatabaseItem(note: model);
   }
+
+  @override
+  Future<List<Note>> getNotesOfType(bool voice) async {
+    final models = await database.getNotesOfType(voice);
+    return models.map((m) => m.toEntity()).toList();
+  }
 }

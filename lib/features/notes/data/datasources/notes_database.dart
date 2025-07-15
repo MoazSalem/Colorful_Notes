@@ -36,6 +36,19 @@ class NotesDatabase {
     return noteList;
   }
 
+  Future<List<NoteModel>> getNotesOfType(bool voice) async {
+    final List<Map<String, dynamic>> result = await database.query(
+      'Notes', // table name
+      where: 'type = ?', // condition
+      whereArgs: [voice ? 1 : 0], // condition arguments
+    );
+    final List<NoteModel> noteList = [];
+    for (var element in result) {
+      noteList.add(NoteModel.fromMap(element));
+    }
+    return noteList;
+  }
+
   Future<void> insertToDatabase({required NoteModel note}) async {
     await database.transaction((txn) async {
       txn
