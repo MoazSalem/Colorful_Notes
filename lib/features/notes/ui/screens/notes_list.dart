@@ -168,21 +168,7 @@ class _NotesListState extends State<NotesList> {
         width: MediaQuery.of(context).size.width,
       );
     } else if (viewIndex == 0) {
-      noteView = listView(
-        context: context,
-        notes: notes,
-        colors: AppConsts.lightColors,
-        index: index,
-        dateValue: dateValue,
-        date: date,
-        noTitle: noTitle,
-        noContent: noContent,
-        showDate: settings.showDate,
-        showShadow: settings.showShadow,
-        showEdited: settings.showEdited,
-        lang: settings.lang,
-        width: MediaQuery.of(context).size.width,
-      );
+      noteView = LargeNote(note: note, settings: settings);
     } else {
       noteView = smallListView(
         context: context,
