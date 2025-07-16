@@ -48,6 +48,9 @@ class _CustomFabWithChildrenState extends State<CustomFabWithChildren> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context).colorScheme;
     final colors = AppConsts.lightColors;
+    final firstBackgroundColor = widget.colorful ? colors[1] : theme.primary;
+    final secondBackgroundColor = widget.colorful ? colors[2] : theme.primary;
+    final foregroundColor = widget.colorful ? Colors.white : theme.onPrimary;
     return SizedBox(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -81,18 +84,14 @@ class _CustomFabWithChildrenState extends State<CustomFabWithChildren> {
                                 child: Container(
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(12),
-                                    color: theme.secondary,
+                                    color: secondBackgroundColor,
                                   ),
                                   width: 100,
                                   height: 40,
                                   child: Center(
                                     child: Text(
                                       "Voice Note".tr(),
-                                      style: TextStyle(
-                                        color: widget.colorful
-                                            ? colors[3]
-                                            : theme.onSecondary,
-                                      ),
+                                      style: TextStyle(color: foregroundColor),
                                     ),
                                   ),
                                 ),
@@ -100,7 +99,7 @@ class _CustomFabWithChildrenState extends State<CustomFabWithChildren> {
                               SizedBox(
                                 width: 40,
                                 child: FloatingActionButton(
-                                  backgroundColor: theme.secondary,
+                                  backgroundColor: secondBackgroundColor,
                                   mini: true,
                                   onPressed: () {
                                     setState(() {
@@ -111,9 +110,7 @@ class _CustomFabWithChildrenState extends State<CustomFabWithChildren> {
                                   elevation: 0,
                                   child: Icon(
                                     Icons.mic,
-                                    color: widget.colorful
-                                        ? colors[3]
-                                        : theme.onSecondary,
+                                    color: foregroundColor,
                                   ),
                                 ),
                               ),
@@ -139,18 +136,14 @@ class _CustomFabWithChildrenState extends State<CustomFabWithChildren> {
                                 child: Container(
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(12),
-                                    color: theme.secondary,
+                                    color: firstBackgroundColor,
                                   ),
                                   width: 100,
                                   height: 40,
                                   child: Center(
                                     child: Text(
                                       "Text Note".tr(),
-                                      style: TextStyle(
-                                        color: widget.colorful
-                                            ? colors[1]
-                                            : theme.onSecondary,
-                                      ),
+                                      style: TextStyle(color: foregroundColor),
                                     ),
                                   ),
                                 ),
@@ -164,14 +157,12 @@ class _CustomFabWithChildrenState extends State<CustomFabWithChildren> {
                                     });
                                     _createNote(context, voice: false);
                                   },
-                                  backgroundColor: theme.secondary,
+                                  backgroundColor: firstBackgroundColor,
                                   mini: true,
                                   elevation: 0,
                                   child: Icon(
                                     Icons.sticky_note_2,
-                                    color: widget.colorful
-                                        ? colors[1]
-                                        : theme.onSecondary,
+                                    color: foregroundColor,
                                   ),
                                 ),
                               ),
@@ -193,7 +184,7 @@ class _CustomFabWithChildrenState extends State<CustomFabWithChildren> {
             elevation: 0,
             child: Icon(
               Icons.add,
-              color: theme.onPrimary, //white
+              color: widget.colorful ? Colors.white : theme.onPrimary, //white
             ),
           ),
         ],
