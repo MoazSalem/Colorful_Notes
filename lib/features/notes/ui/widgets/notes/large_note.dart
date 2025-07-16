@@ -113,44 +113,40 @@ class LargeNote extends StatelessWidget {
                   ],
                 ),
                 if (settings.showDate)
-                  Expanded(
-                    child: Stack(
-                      alignment: settings.lang == 'en'
-                          ? Alignment.centerLeft
-                          : Alignment.centerRight,
-                      children: [
-                        Text(
-                          dateValue == 0
-                              ? "Today".tr()
-                              : dateValue == -1
-                              ? "Yesterday".tr()
-                              : date,
-                          style: TextStyle(
-                            color: note.tIndex == 0
-                                ? Colors.white
-                                : Colors.black,
-                            fontWeight: FontWeight.w500,
-                          ),
+                  Stack(
+                    alignment: settings.lang == 'en'
+                        ? Alignment.centerLeft
+                        : Alignment.centerRight,
+                    children: [
+                      Text(
+                        dateValue == 0
+                            ? "Today".tr()
+                            : dateValue == -1
+                            ? "Yesterday".tr()
+                            : date,
+                        style: TextStyle(
+                          color: note.tIndex == 0 ? Colors.white : Colors.black,
+                          fontWeight: FontWeight.w500,
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Text(
-                              settings.showEdited
-                                  ? note.edited == "yes"
-                                        ? "Edited".tr()
-                                        : ""
-                                  : "",
-                              style: TextStyle(
-                                color: note.tIndex == 0
-                                    ? Colors.white38
-                                    : Colors.black38,
-                              ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Text(
+                            settings.showEdited
+                                ? note.edited == "yes"
+                                      ? "Edited".tr()
+                                      : ""
+                                : "",
+                            style: TextStyle(
+                              color: note.tIndex == 0
+                                  ? Colors.white38
+                                  : Colors.black38,
                             ),
-                          ],
-                        ),
-                      ],
-                    ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
               ],
             ),
