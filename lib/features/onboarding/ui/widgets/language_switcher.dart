@@ -12,14 +12,20 @@ class LanguageSwitcher extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context).colorScheme;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20),
       child: GestureDetector(
         onTap: onToggle,
         child: CircleAvatar(
+          backgroundColor: theme.primary,
           child: Text(
             isArabic ? 'عر' : 'En',
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 19),
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 19,
+              color: theme.onPrimary,
+            ),
           ),
         ),
       ),

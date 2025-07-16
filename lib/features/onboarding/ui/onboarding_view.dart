@@ -36,7 +36,7 @@ class _IntroPageState extends State<IntroPage> {
       child: SafeArea(
         child: Scaffold(
           body: Stack(
-            alignment: Alignment.topRight,
+            alignment: isArabic ? Alignment.topLeft : Alignment.topRight,
             children: [
               PageView(
                 onPageChanged: (index) {
@@ -48,9 +48,7 @@ class _IntroPageState extends State<IntroPage> {
                 // Removed const to allow pages to rebuild on language change
                 children: [
                   OnboardingPageWidget(
-                    lottieAsset: isArabic
-                        ? 'assets/animations/hello2.json'
-                        : 'assets/animations/hello.json',
+                    lottieAsset: 'assets/animations/hello.json',
                     titleKey: 'T1',
                     bodyKey: 'B1',
                   ),

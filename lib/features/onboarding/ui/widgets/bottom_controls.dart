@@ -16,6 +16,7 @@ class BottomControls extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context).colorScheme;
     return Container(
       height: 60,
       padding: const EdgeInsets.symmetric(horizontal: 40),
@@ -26,13 +27,22 @@ class BottomControls extends StatelessWidget {
             onPressed: onSkip,
             child: Text(
               'Skip'.tr(),
-              style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 20),
+              style: TextStyle(
+                fontWeight: FontWeight.w700,
+                fontSize: 20,
+                color: theme.secondary,
+              ),
             ),
           ),
           SmoothPageIndicator(
             controller: controller,
             count: 4,
-            effect: const WormEffect(dotHeight: 5, dotWidth: 10, spacing: 5),
+            effect: WormEffect(
+              dotHeight: 5,
+              dotWidth: 10,
+              spacing: 5,
+              activeDotColor: theme.primary,
+            ),
           ),
           TextButton(
             onPressed: onNext,

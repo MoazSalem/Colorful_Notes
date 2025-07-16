@@ -21,6 +21,7 @@ class OnboardingPageWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context).colorScheme;
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -45,6 +46,7 @@ class OnboardingPageWidget extends StatelessWidget {
             padding: const EdgeInsets.only(top: 20),
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
+                backgroundColor: theme.primary,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30),
                 ),
@@ -53,9 +55,13 @@ class OnboardingPageWidget extends StatelessWidget {
                   vertical: 15,
                 ),
               ),
-              child: const Text(
+              child: Text(
                 'START',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                  color: theme.onPrimary,
+                ),
               ),
               onPressed: () async {
                 serviceLocator<Box>().put('showHome', true);
