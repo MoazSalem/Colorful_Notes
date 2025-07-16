@@ -538,14 +538,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.11.1"
-  material_dialogs:
-    dependency: "direct main"
-    description:
-      name: material_dialogs
-      sha256: f072d8c11b3392a2aa6a2f279239e5063654113e1e851b62ef009b500d512f17
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.1.5"
   meta:
     dependency: transitive
     description:
@@ -579,7 +571,7 @@ packages:
     source: hosted
     version: "1.9.1"
   path_provider:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: path_provider
       sha256: "50c5dd5b6e1aaf6fb3a78b33f6aa3afca52bf903a8a5298f53101fdaee55bbcd"
@@ -786,14 +778,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.6"
-  responsive_framework:
-    dependency: "direct main"
-    description:
-      name: responsive_framework
-      sha256: a8e1c13d4ba980c60cbf6fa1e9907cd60662bf2585184d7c96ca46c43de91552
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.5.1"
   riverpod:
     dependency: transitive
     description:
@@ -1015,14 +999,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.4.1"
-  switcher_button:
-    dependency: "direct main"
-    description:
-      name: switcher_button
-      sha256: "532fa81813faf0fd21f233b75e0ca955512b86b6f784fd33804a5ababa4ac71b"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.0.4"
   synchronized:
     dependency: transitive
     description:

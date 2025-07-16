@@ -6,7 +6,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
-import 'package:responsive_framework/responsive_framework.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -46,15 +45,6 @@ class MyApp extends StatelessWidget {
         statusBarIconBrightness: oppositeBrightness,
       ),
       child: MaterialApp(
-        builder: (context, child) => ResponsiveBreakpoints.builder(
-          child: child!,
-          breakpoints: [
-            const Breakpoint(start: 0, end: 600),
-            const Breakpoint(start: 600, end: 800),
-            const Breakpoint(start: 800, end: 1000),
-            const Breakpoint(start: 1000, end: 1200),
-          ],
-        ),
         theme: ThemeData(),
         darkTheme: ThemeData.dark(),
         initialRoute: '/',

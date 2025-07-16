@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:switcher_button/switcher_button.dart';
 
 class SettingsSwitchTile extends StatelessWidget {
   final String title;
@@ -32,13 +31,7 @@ class SettingsSwitchTile extends StatelessWidget {
         subtitle,
         style: TextStyle(fontSize: subtitleSize, fontWeight: FontWeight.w300),
       ),
-      trailing: SwitcherButton(
-        onColor: Theme.of(context).colorScheme.primary,
-        offColor: Theme.of(context).colorScheme.surfaceContainer,
-        size: switchSize,
-        value: value,
-        onChange: onChanged,
-      ),
+      trailing: Switch(value: value, onChanged: onChanged),
     );
   }
 }
