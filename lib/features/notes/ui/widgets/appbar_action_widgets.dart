@@ -1,7 +1,5 @@
 import 'package:colorful_notes/core/models/settings_model.dart';
-import 'package:colorful_notes/core/services/service_locator.dart';
 import 'package:flutter/material.dart';
-import 'package:hive_ce/hive.dart';
 
 class AppbarActionWidgets extends StatelessWidget {
   const AppbarActionWidgets({

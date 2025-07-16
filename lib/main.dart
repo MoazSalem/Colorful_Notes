@@ -7,6 +7,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
 
+import 'core/theme.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // Initialize the Localization services.
@@ -45,8 +47,8 @@ class MyApp extends StatelessWidget {
         statusBarIconBrightness: oppositeBrightness,
       ),
       child: MaterialApp(
-        theme: ThemeData(),
-        darkTheme: ThemeData.dark(),
+        theme: lightTheme,
+        darkTheme: darkTheme,
         initialRoute: '/',
         debugShowCheckedModeBanner: false,
         title: 'Colorful Notes',

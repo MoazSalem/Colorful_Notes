@@ -47,6 +47,7 @@ dependencies:
   flutter_colorpicker: ^1.1.0
   home_widget: ^0.7.0+1
   get_it: ^8.0.3
+  path_provider: ^2.1.5
 
 dev_dependencies:
   flutter_test:

@@ -1,4 +1,3 @@
-import 'package:audioplayers/audioplayers.dart';
 import 'package:colorful_notes/core/consts.dart';
 import 'package:colorful_notes/features/notes/domain/entities/note.dart';
 import 'package:colorful_notes/features/notes/ui/providers/notes_provider.dart';

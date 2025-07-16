@@ -2,7 +2,7 @@ import 'package:colorful_notes/core/services/service_locator.dart';
 import 'package:colorful_notes/features/notes/ui/screens/main_screen.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:hive_ce/hive.dart';
+import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:lottie/lottie.dart';
 
 class OnboardingPageWidget extends StatelessWidget {

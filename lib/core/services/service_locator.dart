@@ -1,6 +1,6 @@
 import 'package:colorful_notes/core/services/settings_service.dart';
 import 'package:get_it/get_it.dart';
-import 'package:hive_ce/hive.dart';
+import 'package:hive_ce_flutter/hive_flutter.dart';
 
 final serviceLocator = GetIt.instance;
 
