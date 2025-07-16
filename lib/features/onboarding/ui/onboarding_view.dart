@@ -31,58 +31,61 @@ class _IntroPageState extends State<IntroPage> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: Stack(
-          alignment: Alignment.topRight,
-          children: [
-            PageView(
-              onPageChanged: (index) {
-                setState(() {
-                  isLastPage = index == 3;
-                });
-              },
-              controller: controller,
-              // Removed const to allow pages to rebuild on language change
-              children: [
-                OnboardingPageWidget(
-                  lottieAsset: isArabic
-                      ? 'assets/animations/hello2.json'
-                      : 'assets/animations/hello.json',
-                  titleKey: 'T1',
-                  bodyKey: 'B1',
-                ),
-                OnboardingPageWidget(
-                  lottieAsset: 'assets/animations/notes.json',
-                  titleKey: 'T2',
-                  bodyKey: 'B2',
-                ),
-                OnboardingPageWidget(
-                  lottieAsset: 'assets/animations/voice.json',
-                  titleKey: 'T3',
-                  bodyKey: 'B3',
-                ),
-                OnboardingPageWidget(
-                  lottieAsset: 'assets/animations/start.json',
-                  titleKey: 'T5',
-                  bodyKey: '',
-                  isLastPage: true,
-                ),
-              ],
-            ),
-            LanguageSwitcher(isArabic: isArabic, onToggle: _toggleLanguage),
-          ],
-        ),
-        bottomSheet: isLastPage
-            ? null
-            : BottomControls(
+    return Container(
+      color: Theme.of(context).colorScheme.surface,
+      child: SafeArea(
+        child: Scaffold(
+          body: Stack(
+            alignment: Alignment.topRight,
+            children: [
+              PageView(
+                onPageChanged: (index) {
+                  setState(() {
+                    isLastPage = index == 3;
+                  });
+                },
                 controller: controller,
-                onSkip: () => controller.jumpToPage(3),
-                onNext: () => controller.nextPage(
-                  duration: const Duration(milliseconds: 500),
-                  curve: Curves.easeInOut,
-                ),
+                // Removed const to allow pages to rebuild on language change
+                children: [
+                  OnboardingPageWidget(
+                    lottieAsset: isArabic
+                        ? 'assets/animations/hello2.json'
+                        : 'assets/animations/hello.json',
+                    titleKey: 'T1',
+                    bodyKey: 'B1',
+                  ),
+                  OnboardingPageWidget(
+                    lottieAsset: 'assets/animations/notes.json',
+                    titleKey: 'T2',
+                    bodyKey: 'B2',
+                  ),
+                  OnboardingPageWidget(
+                    lottieAsset: 'assets/animations/voice.json',
+                    titleKey: 'T3',
+                    bodyKey: 'B3',
+                  ),
+                  OnboardingPageWidget(
+                    lottieAsset: 'assets/animations/start.json',
+                    titleKey: 'T5',
+                    bodyKey: '',
+                    isLastPage: true,
+                  ),
+                ],
               ),
+              LanguageSwitcher(isArabic: isArabic, onToggle: _toggleLanguage),
+            ],
+          ),
+          bottomNavigationBar: isLastPage
+              ? null
+              : BottomControls(
+                  controller: controller,
+                  onSkip: () => controller.jumpToPage(3),
+                  onNext: () => controller.nextPage(
+                    duration: const Duration(milliseconds: 500),
+                    curve: Curves.easeInOut,
+                  ),
+                ),
+        ),
       ),
     );
   }

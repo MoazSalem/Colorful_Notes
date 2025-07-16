@@ -2,7 +2,6 @@ import 'package:colorful_notes/core/services/service_locator.dart';
 import 'package:colorful_notes/features/notes/ui/screens/main_screen.dart.';
 import 'package:colorful_notes/features/onboarding/ui/onboarding_view.dart';
 import 'package:flutter/material.dart';
-import 'package:dynamic_color/dynamic_color.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -35,46 +34,40 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DynamicColorBuilder(
-      builder: (lightColorScheme, darkColorScheme) {
-        final isDarkMode =
-            MediaQuery.of(context).platformBrightness == Brightness.dark;
-        final oppositeBrightness = isDarkMode
-            ? Brightness.light
-            : Brightness.dark;
-        return AnnotatedRegion<SystemUiOverlayStyle>(
-          value: SystemUiOverlayStyle(
-            statusBarColor: Colors.transparent,
-            systemNavigationBarColor: Colors.transparent,
-            systemNavigationBarIconBrightness: oppositeBrightness,
-            statusBarIconBrightness: oppositeBrightness,
-          ),
-          child: Container(
-            color: Theme.of(context).colorScheme.surface,
-            child: MaterialApp(
-              builder: (context, child) => ResponsiveBreakpoints.builder(
-                child: child!,
-                breakpoints: [
-                  const Breakpoint(start: 0, end: 600),
-                  const Breakpoint(start: 600, end: 800),
-                  const Breakpoint(start: 800, end: 1000),
-                  const Breakpoint(start: 1000, end: 1200),
-                ],
-              ),
-              initialRoute: '/',
-              debugShowCheckedModeBanner: false,
-              title: 'Colorful Notes',
-              localizationsDelegates: context.localizationDelegates,
-              supportedLocales: context.supportedLocales,
-              locale: context.locale,
-              // Skip on boarding screen if not first time
-              home: serviceLocator<Box>().get('showHome') ?? false
-                  ? const MainScreen()
-                  : const IntroPage(),
-            ),
-          ),
-        );
-      },
+    Brightness oppositeBrightness =
+        MediaQuery.of(context).platformBrightness == Brightness.dark
+        ? Brightness.light
+        : Brightness.dark;
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        systemNavigationBarColor: Colors.transparent,
+        systemNavigationBarIconBrightness: oppositeBrightness,
+        statusBarIconBrightness: oppositeBrightness,
+      ),
+      child: MaterialApp(
+        builder: (context, child) => ResponsiveBreakpoints.builder(
+          child: child!,
+          breakpoints: [
+            const Breakpoint(start: 0, end: 600),
+            const Breakpoint(start: 600, end: 800),
+            const Breakpoint(start: 800, end: 1000),
+            const Breakpoint(start: 1000, end: 1200),
+          ],
+        ),
+        theme: ThemeData(),
+        darkTheme: ThemeData.dark(),
+        initialRoute: '/',
+        debugShowCheckedModeBanner: false,
+        title: 'Colorful Notes',
+        localizationsDelegates: context.localizationDelegates,
+        supportedLocales: context.supportedLocales,
+        locale: context.locale,
+        // Skip on boarding screen if not first time
+        home: serviceLocator<Box>().get('showHome') ?? false
+            ? const MainScreen()
+            : const IntroPage(),
+      ),
     );
   }
 }
