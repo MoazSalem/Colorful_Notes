@@ -25,6 +25,7 @@ class SettingsPage extends StatelessWidget {
       "Bottom Left",
       "Top Right",
       "Bottom Right",
+      "Bottom Bar",
     ];
     const List<String> fabItems = ["Right", "Left"];
 

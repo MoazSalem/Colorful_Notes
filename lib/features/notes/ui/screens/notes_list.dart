@@ -116,7 +116,11 @@ class _NotesListState extends State<NotesList> {
       padding: const EdgeInsets.only(top: 0, bottom: 32, left: 12, right: 12),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: viewIndex == 2 ? 2 : 1,
-        childAspectRatio: viewIndex == 1 ? 3.05 : 1.0,
+        childAspectRatio: viewIndex == 1
+            ? settings.sbIndex == 4
+                  ? 3.6
+                  : 3.05
+            : 1.0,
       ),
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),

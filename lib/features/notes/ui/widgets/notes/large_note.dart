@@ -49,6 +49,10 @@ class LargeNote extends StatelessWidget {
               alignment: Alignment.bottomLeft,
               children: [
                 Column(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: noTitle && note.type == 1
+                      ? MainAxisAlignment.center
+                      : MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     if (!noTitle)
@@ -98,7 +102,7 @@ class LargeNote extends StatelessWidget {
                             ),
                           )
                         : Padding(
-                            padding: EdgeInsets.only(top: noTitle ? 60 : 40),
+                            padding: EdgeInsets.only(top: noTitle ? 0 : 40),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [

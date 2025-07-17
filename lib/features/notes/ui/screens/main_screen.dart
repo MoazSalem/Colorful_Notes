@@ -4,6 +4,7 @@ import 'package:colorful_notes/core/services/service_locator.dart';
 import 'package:colorful_notes/core/services/settings_service.dart';
 import 'package:colorful_notes/core/shared_widgets/custom_loading_widget.dart';
 import 'package:colorful_notes/features/notes/ui/providers/database_provider.dart';
+import 'package:colorful_notes/features/notes/ui/widgets/custom_bottom_navigation_bar.dart';
 import 'package:colorful_notes/features/notes/ui/widgets/custom_fab.dart';
 import 'package:colorful_notes/features/notes/ui/widgets/sidebar.dart';
 import 'package:flutter/material.dart';
@@ -33,7 +34,13 @@ class _MainScreenState extends State<MainScreen> {
               : FloatingActionButtonLocation.startFloat,
           floatingActionButton: [3, 4].contains(currentIndex)
               ? null
-              : CustomFab(settings: settings),
+              : Padding(
+                  padding: EdgeInsets.only(
+                    left: [0, 1].contains(settings.sbIndex) ? 60.0 : 0.0,
+                    right: [2, 3].contains(settings.sbIndex) ? 60.0 : 0.0,
+                  ),
+                  child: CustomFab(settings: settings),
+                ),
           resizeToAvoidBottomInset: false,
           body: Row(
             children: [
@@ -66,6 +73,12 @@ class _MainScreenState extends State<MainScreen> {
                 ),
             ],
           ),
+          bottomNavigationBar: settings.sbIndex == 4
+              ? CustomBottomNavigationBar(
+                  currentIndex: currentIndex,
+                  onIndexChanged: (i) => {setState(() => currentIndex = i)},
+                )
+              : null,
         );
       },
     );

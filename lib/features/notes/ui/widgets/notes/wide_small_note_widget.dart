@@ -109,15 +109,19 @@ class WideSmallNoteWidget extends StatelessWidget {
                             ),
                           ],
                         )
-                      : Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SoundPlayer(
-                              voiceNote: note,
-                              color: color,
-                              viewMode: 1,
-                            ),
-                          ],
+                      : SizedBox(
+                          width: double.infinity,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              SoundPlayer(
+                                voiceNote: note,
+                                color: color,
+                                viewMode: 1,
+                              ),
+                            ],
+                          ),
                         ),
                 ],
               ),
