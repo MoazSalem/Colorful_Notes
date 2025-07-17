@@ -37,11 +37,7 @@ class SettingsPage extends StatelessWidget {
           body: ListView(
             padding: EdgeInsets.zero,
             children: [
-              CustomAppbar(
-                title: "Settings".tr(),
-                top: 65,
-                locale: settings.lang,
-              ),
+              CustomAppbar(title: "Settings".tr(), top: 65),
 
               // --- Language Setting ---
               SettingsDropdownTile<String>(

@@ -25,10 +25,10 @@ class AppbarActionWidgets extends StatelessWidget {
         IconButton(
           onPressed: switchView,
           icon: viewIndex == 0
-              ? const Icon(Icons.indeterminate_check_box_sharp)
+              ? const Icon(Icons.indeterminate_check_box_sharp, size: 28)
               : viewIndex == 1
-              ? const Icon(Icons.view_agenda_sharp)
-              : const Icon(Icons.grid_view_sharp),
+              ? const Icon(Icons.view_agenda_sharp, size: 28)
+              : const Icon(Icons.grid_view_sharp, size: 28),
         ),
       ],
     );

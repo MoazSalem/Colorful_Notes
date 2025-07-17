@@ -43,7 +43,6 @@ class _NotesListState extends State<NotesList> {
             CustomAppbar(
               title: pageTitle,
               top: 65,
-              locale: settings.lang,
               leading: AppbarActionWidgets(
                 searchController: searchController,
                 settings: settings,

@@ -8,15 +8,14 @@ class CustomAppbar extends StatelessWidget {
     required this.title,
     required this.top,
     this.leading,
-    required this.locale,
   });
   final String title;
-  final String locale;
   final double top;
   final Widget? leading;
 
   @override
   Widget build(BuildContext context) {
+    final String locale = Localizations.localeOf(context).languageCode;
     return Column(
       children: [
         Padding(
