@@ -55,12 +55,6 @@ class SideBar extends StatelessWidget {
       colorIndex: 2,
     ),
   ];
-  static const _SideBarItem _infoItem = _SideBarItem(
-    icon: Icons.info_outline,
-    selectedIcon: Icons.info,
-    index: 4,
-    colorIndex: 4,
-  );
 
   @override
   Widget build(BuildContext context) {
@@ -86,58 +80,33 @@ class SideBar extends StatelessWidget {
               ),
             )
             .toList();
-
-        // Build the standalone info button
-        final Widget infoButton = _SideBarButton(
-          item: _infoItem,
-          isSelected: currentIndex == _infoItem.index,
-          settings: settings,
-          onPressed: () => onIndexChanged(_infoItem.index),
-        );
-
         return Container(
           width: 60,
           decoration: BoxDecoration(color: theme.primaryContainer),
           child: isInverted
-              ? _buildInvertedLayout(
-                  navButtons.reversed.toList(),
-                  infoButton,
-                  sizeBox,
-                )
-              : _buildNormalLayout(navButtons, infoButton, sizeBox),
+              ? _buildInvertedLayout(navButtons.reversed.toList(), sizeBox)
+              : _buildNormalLayout(navButtons, sizeBox),
         );
       },
     );
   }
 
   /// Builds the top-aligned layout.
-  Widget _buildNormalLayout(
-    List<Widget> navButtons,
-    Widget infoButton,
-    double spacing,
-  ) {
+  Widget _buildNormalLayout(List<Widget> navButtons, double spacing) {
     return Column(
       children: [
         const SizedBox(height: 65), // Top padding
         ...navButtons.expand((button) => [button, SizedBox(height: spacing)]),
-        const Spacer(),
-        infoButton,
-        SizedBox(height: spacing), // Bottom padding
+        const Spacer(), // Bottom padding
       ],
     );
   }
 
   /// Builds the bottom-aligned (inverted) layout.
-  Widget _buildInvertedLayout(
-    List<Widget> navButtons,
-    Widget infoButton,
-    double spacing,
-  ) {
+  Widget _buildInvertedLayout(List<Widget> navButtons, double spacing) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        infoButton,
-        SizedBox(height: spacing),
         ...navButtons.expand((button) => [button, SizedBox(height: spacing)]),
       ],
     );

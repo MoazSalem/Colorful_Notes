@@ -1,6 +1,5 @@
 import 'package:colorful_notes/features/notes/ui/screens/notes_list.dart';
 import 'package:colorful_notes/features/settings/ui/settings.dart';
-import 'package:colorful_notes/features/about/ui/info.dart';
 import 'package:flutter/material.dart';
 
 class AppConsts {
@@ -11,7 +10,6 @@ class AppConsts {
     NotesList(typeIndex: 1),
     NotesList(typeIndex: 2),
     SettingsPage(),
-    InfoPage(),
   ];
 
   static List<Color> lightColors = [

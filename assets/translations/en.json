@@ -96,12 +96,6 @@
   "N1": "You Don't Have Any Notes",
   "N2": "You Don't Have Any Text Notes",
   "N3": "You Don't Have Any Voice Notes",
-  "I1": "This app was made by ",
-  "I2": "MoazSalem ",
-  "I3": "using flutter to learn new stuff!",
-  "I6": "The app uses ",
-  "I7": "Sqflite ",
-  "I8": "to make a database to store all of your notes data locally on your phone",
   "Dynamic Colors": "Dynamic Colors",
   "DC": "Use systems theme, this will only work as intended on android 12+",
   "Ab": "Ab"
