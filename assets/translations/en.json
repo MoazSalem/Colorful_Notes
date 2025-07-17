@@ -50,7 +50,7 @@
   "Delete": "Delete",
   "DeleteN": "Delete Note",
   "Cancel": "Cancel",
-  "msg": "Are You Sure ? You Can't Undo This !",
+  "msg": "Are you sure want to delete this note ? This action cannot be undone !",
   "m2": "You're about to make a backup of all your Notes, they will be saved at 'Colorful Notes' folder on your phone, please keep it safe",
   "m3": "You're about to restore your notes to a backup, this will delete any notes not inside of that backup, do you want to continue?",
   "Backup Complete": "Backup Complete",
