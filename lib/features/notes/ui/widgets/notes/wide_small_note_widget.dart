@@ -47,80 +47,77 @@ class WideSmallNoteWidget extends StatelessWidget {
           children: [
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),
-              child: Column(
+              child: Stack(
+                alignment: Alignment.topCenter,
                 children: [
-                  noTitle
-                      ? Container()
-                      : note.type == 0
-                      ? Text(
-                          note.title,
-                          strutStyle: StrutStyle(
-                            forceStrutHeight: note.layout == 0 ? false : true,
-                          ),
-                          textAlign: note.layout == 0 || note.layout == 2
-                              ? TextAlign.left
-                              : TextAlign.right,
-                          textDirection: note.layout == 0 || note.layout == 2
-                              ? TextDirection.ltr
-                              : TextDirection.rtl,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w800,
-                            fontSize: 22,
-                            color: note.tIndex == 0
-                                ? Colors.white
-                                : Colors.black,
-                          ),
-                        )
-                      : Container(),
+                  if (!noTitle)
+                    Text(
+                      note.title,
+                      strutStyle: StrutStyle(
+                        forceStrutHeight: note.layout == 0 ? false : true,
+                      ),
+                      textAlign: note.layout == 0 || note.layout == 2
+                          ? TextAlign.left
+                          : TextAlign.right,
+                      textDirection: note.layout == 0 || note.layout == 2
+                          ? TextDirection.ltr
+                          : TextDirection.rtl,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w800,
+                        fontSize: 20,
+                        color: note.tIndex == 0 ? Colors.white : Colors.black,
+                      ),
+                    ),
                   note.type == 0
-                      ? Expanded(
-                          flex: noTitle ? 2 : 1,
-                          child: SizedBox(
-                            width: double.infinity,
-                            child: Text(
-                              noContent ? "Empty".tr() : note.content,
-                              strutStyle: StrutStyle(
-                                forceStrutHeight:
-                                    note.layout == 0 || note.layout == 1
-                                    ? false
-                                    : true,
-                              ),
-                              textAlign: note.layout == 1 || note.layout == 2
-                                  ? TextAlign.right
-                                  : TextAlign.left,
-                              textDirection:
-                                  note.layout == 1 || note.layout == 2
-                                  ? TextDirection.rtl
-                                  : TextDirection.ltr,
-                              maxLines: noTitle ? 3 : 2,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                color: noContent
-                                    ? note.tIndex == 0
-                                          ? Colors.white38
-                                          : Colors.black38
-                                    : note.tIndex == 0
-                                    ? Colors.white
-                                    : Colors.black,
-                                fontSize: noTitle ? 17 : 15,
+                      ? Column(
+                          mainAxisAlignment: noTitle
+                              ? MainAxisAlignment.start
+                              : MainAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                              width: double.infinity,
+                              child: Text(
+                                noContent ? "Empty".tr() : note.content,
+                                strutStyle: StrutStyle(
+                                  forceStrutHeight:
+                                      note.layout == 0 || note.layout == 1
+                                      ? false
+                                      : true,
+                                ),
+                                textAlign: note.layout == 1 || note.layout == 2
+                                    ? TextAlign.right
+                                    : TextAlign.left,
+                                textDirection:
+                                    note.layout == 1 || note.layout == 2
+                                    ? TextDirection.rtl
+                                    : TextDirection.ltr,
+                                maxLines: noTitle ? 3 : 2,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  color: noContent
+                                      ? note.tIndex == 0
+                                            ? Colors.white38
+                                            : Colors.black38
+                                      : note.tIndex == 0
+                                      ? Colors.white
+                                      : Colors.black,
+                                  fontSize: noTitle ? 17 : 15,
+                                ),
                               ),
                             ),
-                          ),
+                          ],
                         )
-                      : Expanded(
-                          flex: noTitle ? 2 : 1,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              SoundPlayer(
-                                voiceNote: note,
-                                color: color,
-                                viewMode: 1,
-                              ),
-                            ],
-                          ),
+                      : Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SoundPlayer(
+                              voiceNote: note,
+                              color: color,
+                              viewMode: 1,
+                            ),
+                          ],
                         ),
                 ],
               ),
