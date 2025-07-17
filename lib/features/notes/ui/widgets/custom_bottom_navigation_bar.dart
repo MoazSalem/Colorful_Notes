@@ -24,10 +24,10 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
     final theme = Theme.of(context).colorScheme;
     final colors = widget.settings.colorful
         ? AppConsts.lightColors
-        : List<Color>.generate(4, (_) => theme.onPrimaryContainer);
+        : List<Color>.generate(4, (_) => theme.onSurfaceVariant);
     return NavigationBar(
       height: 60,
-      backgroundColor: theme.primaryContainer,
+      backgroundColor: theme.surfaceContainerHigh,
       indicatorColor: Colors.transparent,
       selectedIndex: widget.currentIndex,
       onDestinationSelected: widget.onIndexChanged,

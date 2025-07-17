@@ -82,7 +82,7 @@ class SideBar extends StatelessWidget {
             .toList();
         return Container(
           width: 60,
-          decoration: BoxDecoration(color: theme.primaryContainer),
+          decoration: BoxDecoration(color: theme.surfaceContainerHigh),
           child: isInverted
               ? _buildInvertedLayout(navButtons.reversed.toList(), sizeBox)
               : _buildNormalLayout(navButtons, sizeBox),

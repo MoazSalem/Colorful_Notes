@@ -42,7 +42,7 @@ class SettingsDropdownTile<T> extends StatelessWidget {
               item.toString().tr(),
               style: TextStyle(
                 fontSize: 14,
-                color: Theme.of(context).colorScheme.onPrimaryContainer,
+                color: Theme.of(context).colorScheme.onSurface,
               ),
             ),
           );

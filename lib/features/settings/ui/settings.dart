@@ -29,6 +29,14 @@ class SettingsPage extends StatelessWidget {
     ];
     const List<String> fabItems = ["Right", "Left"];
 
+    const List<String> themeItems = [
+      "Default",
+      "Blue",
+      "Green",
+      "Red",
+      "Yellow",
+    ];
+
     // Use ValueListenableBuilder to reactively build the UI
     return ValueListenableBuilder<SettingsModel>(
       valueListenable: settingsService.settings,
@@ -86,6 +94,24 @@ class SettingsPage extends StatelessWidget {
                   final newIndex = fabItems.indexOf(newValue!);
                   settingsService.updateSettings(
                     settings.copyWith(fabIndex: newIndex),
+                  );
+                },
+                titleSize: titleSize,
+                subtitleSize: subtitleSize,
+              ),
+
+              CustomDivider(),
+
+              // --- Create Button Location ---
+              SettingsDropdownTile<String>(
+                title: "Current Theme".tr(),
+                subtitle: "sCurrent Theme".tr(),
+                value: themeItems[settings.themeIndex],
+                items: themeItems,
+                onChanged: (newValue) {
+                  final newIndex = themeItems.indexOf(newValue!);
+                  settingsService.updateSettings(
+                    settings.copyWith(themeIndex: newIndex),
                   );
                 },
                 titleSize: titleSize,

@@ -47,8 +47,8 @@ class MyApp extends StatelessWidget {
         statusBarIconBrightness: oppositeBrightness,
       ),
       child: MaterialApp(
-        theme: lightTheme,
-        darkTheme: darkTheme,
+        theme: AppTheme.light,
+        darkTheme: AppTheme.dark,
         initialRoute: '/',
         debugShowCheckedModeBanner: false,
         title: 'Colorful Notes',
