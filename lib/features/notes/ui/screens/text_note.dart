@@ -2,7 +2,9 @@ import 'package:colorful_notes/core/consts.dart';
 import 'package:colorful_notes/core/helpers/widgets_helper.dart';
 import 'package:colorful_notes/features/notes/domain/entities/note.dart';
 import 'package:colorful_notes/features/notes/ui/providers/notes_provider.dart';
+import 'package:colorful_notes/features/notes/ui/providers/notifier_provider.dart';
 import 'package:colorful_notes/features/notes/ui/widgets/color_bar.dart';
+import 'package:colorful_notes/features/notes/ui/widgets/delete_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart' hide TextDirection;
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
@@ -69,7 +71,9 @@ class _TextNoteState extends State<TextNote> {
         : Colors.black54;
     return Consumer(
       builder: (context, ref, child) {
-        final notesController = ref.read(notesNotifierProvider.notifier);
+        final NotesNotifier notesController = ref.read(
+          notesNotifierProvider.notifier,
+        );
         return Scaffold(
           resizeToAvoidBottomInset: false,
           backgroundColor: color,
@@ -79,159 +83,204 @@ class _TextNoteState extends State<TextNote> {
               children: [
                 // Back and Save Buttons
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Expanded(
-                      flex: 4,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                      child: GestureDetector(
+                        onTap: () async {
+                          Navigator.pop(context);
+                        },
+                        child: CircleAvatar(
+                          backgroundColor: semiTransparentColor,
+                          radius: 25,
+                          child: Icon(Icons.arrow_back, color: color, size: 36),
+                        ),
+                      ),
+                    ),
+                    Row(
+                      children: [
+                        if (!isEditing)
                           Padding(
                             padding: const EdgeInsets.symmetric(
                               horizontal: 12.0,
                             ),
                             child: GestureDetector(
-                              onTap: () async {
-                                Navigator.pop(context);
+                              onTap: () {
+                                showDeleteNoteDialog(
+                                  context,
+                                  widget.note!.id,
+                                  notesController,
+                                ).then((value) {
+                                  if (context.mounted && value == true) {
+                                    Navigator.pop(context);
+                                  }
+                                });
                               },
                               child: CircleAvatar(
-                                backgroundColor: semiTransparentColor,
+                                backgroundColor: textColor,
                                 radius: 25,
                                 child: Icon(
-                                  Icons.arrow_back,
+                                  Icons.delete,
                                   color: color,
                                   size: 36,
                                 ),
                               ),
                             ),
                           ),
-                        ],
-                      ),
-                    ),
-                    if (!isEditing)
-                      Expanded(
-                        flex: 1,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                          child: GestureDetector(
-                            onTap: () async {
-                              setState(() {
-                                isEditing = true;
-                                titleFocus.requestFocus();
-                              });
-                            },
-                            child: CircleAvatar(
-                              backgroundColor: textColor,
-                              radius: 25,
-                              child: Icon(Icons.edit, color: color, size: 30),
-                            ),
-                          ),
-                        ),
-                      ),
-                    if (isEditing)
-                      Expanded(
-                        flex: 1,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                          child: GestureDetector(
-                            onTap: () async {
-                              titleController.text != "" ||
-                                      contentController.text != ""
-                                  ? {
-                                      if (widget.note != null)
-                                        {
-                                          if (titleController.text !=
-                                                  widget.note!.title ||
-                                              contentController.text !=
-                                                  widget.note!.content)
-                                            {
-                                              await notesController.delete(
-                                                widget.note!.id,
-                                              ),
-                                              await notesController.add(
-                                                widget.note!.copyWith(
-                                                  title: titleController.text,
-                                                  content:
-                                                      contentController.text,
-                                                  cIndex: chosenColorIndex,
-                                                  tIndex: textColorIndex,
-                                                  extra: chosenColorIndex == 99
-                                                      ? pickerColor.value
-                                                            .toString()
-                                                      : "",
-                                                  layout:
-                                                      WidgetsHelper.getLayout(
-                                                        titleDir: titleDirection
-                                                            .value,
-                                                        contentDir:
-                                                            contentDirection
-                                                                .value,
+                        isEditing
+                            ? Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 12.0,
+                                ),
+                                child: GestureDetector(
+                                  onTap: () async {
+                                    titleController.text != "" ||
+                                            contentController.text != ""
+                                        ? {
+                                            if (widget.note != null)
+                                              {
+                                                if (titleController.text !=
+                                                        widget.note!.title ||
+                                                    contentController.text !=
+                                                        widget.note!.content)
+                                                  {
+                                                    await notesController
+                                                        .delete(
+                                                          widget.note!.id,
+                                                        ),
+                                                    await notesController.add(
+                                                      widget.note!.copyWith(
                                                         title: titleController
                                                             .text,
                                                         content:
                                                             contentController
                                                                 .text,
+                                                        cIndex:
+                                                            chosenColorIndex,
+                                                        tIndex: textColorIndex,
+                                                        extra:
+                                                            chosenColorIndex ==
+                                                                99
+                                                            ? pickerColor.value
+                                                                  .toString()
+                                                            : "",
+                                                        layout: WidgetsHelper.getLayout(
+                                                          titleDir:
+                                                              titleDirection
+                                                                  .value,
+                                                          contentDir:
+                                                              contentDirection
+                                                                  .value,
+                                                          title: titleController
+                                                              .text,
+                                                          content:
+                                                              contentController
+                                                                  .text,
+                                                        ),
+                                                        edited: 'yes',
                                                       ),
-                                                  edited: 'yes',
+                                                    ),
+                                                  }
+                                                else if (chosenColorIndex !=
+                                                        widget.note!.cIndex ||
+                                                    textColorIndex !=
+                                                        widget.note!.tIndex)
+                                                  {
+                                                    await notesController.updateNote(
+                                                      widget.note!.copyWith(
+                                                        cIndex:
+                                                            chosenColorIndex,
+                                                        tIndex: textColorIndex,
+                                                        extra:
+                                                            chosenColorIndex ==
+                                                                99
+                                                            ? pickerColor.value
+                                                                  .toString()
+                                                            : "",
+                                                      ),
+                                                    ),
+                                                  },
+                                              }
+                                            else
+                                              {
+                                                await notesController.add(
+                                                  Note(
+                                                    title: titleController.text,
+                                                    time: DateTime.now()
+                                                        .toString(),
+                                                    content:
+                                                        contentController.text,
+                                                    cIndex: chosenColorIndex,
+                                                    tIndex: textColorIndex,
+                                                    extra:
+                                                        chosenColorIndex == 99
+                                                        ? pickerColor.value
+                                                              .toString()
+                                                        : "",
+                                                    layout:
+                                                        WidgetsHelper.getLayout(
+                                                          titleDir:
+                                                              titleDirection
+                                                                  .value,
+                                                          contentDir:
+                                                              contentDirection
+                                                                  .value,
+                                                          title: titleController
+                                                              .text,
+                                                          content:
+                                                              contentController
+                                                                  .text,
+                                                        ),
+                                                    id: '',
+                                                    type: 0,
+                                                    edited: '',
+                                                  ),
                                                 ),
-                                              ),
-                                            }
-                                          else if (chosenColorIndex !=
-                                                  widget.note!.cIndex ||
-                                              textColorIndex !=
-                                                  widget.note!.tIndex)
-                                            {
-                                              await notesController.updateNote(
-                                                widget.note!.copyWith(
-                                                  cIndex: chosenColorIndex,
-                                                  tIndex: textColorIndex,
-                                                  extra: chosenColorIndex == 99
-                                                      ? pickerColor.value
-                                                            .toString()
-                                                      : "",
-                                                ),
-                                              ),
-                                            },
-                                        }
-                                      else
-                                        {
-                                          await notesController.add(
-                                            Note(
-                                              title: titleController.text,
-                                              time: DateTime.now().toString(),
-                                              content: contentController.text,
-                                              cIndex: chosenColorIndex,
-                                              tIndex: textColorIndex,
-                                              extra: chosenColorIndex == 99
-                                                  ? pickerColor.value.toString()
-                                                  : "",
-                                              layout: WidgetsHelper.getLayout(
-                                                titleDir: titleDirection.value,
-                                                contentDir:
-                                                    contentDirection.value,
-                                                title: titleController.text,
-                                                content: contentController.text,
-                                              ),
-                                              id: '',
-                                              type: 0,
-                                              edited: '',
+                                              },
+                                            ref.invalidate(
+                                              notesNotifierProvider,
                                             ),
-                                          ),
-                                        },
-                                      ref.invalidate(notesNotifierProvider),
-                                      if (context.mounted)
-                                        {Navigator.pop(context)},
-                                    }
-                                  : Navigator.pop(context);
-                            },
-                            child: CircleAvatar(
-                              backgroundColor: textColor,
-                              radius: 25,
-                              child: Icon(Icons.done, color: color, size: 36),
-                            ),
-                          ),
-                        ),
-                      ),
+                                            if (context.mounted)
+                                              {Navigator.pop(context)},
+                                          }
+                                        : Navigator.pop(context);
+                                  },
+                                  child: CircleAvatar(
+                                    backgroundColor: textColor,
+                                    radius: 25,
+                                    child: Icon(
+                                      Icons.save,
+                                      color: color,
+                                      size: 36,
+                                    ),
+                                  ),
+                                ),
+                              )
+                            : Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 12.0,
+                                ),
+                                child: GestureDetector(
+                                  onTap: () async {
+                                    setState(() {
+                                      isEditing = true;
+                                      titleFocus.requestFocus();
+                                    });
+                                  },
+                                  child: CircleAvatar(
+                                    backgroundColor: textColor,
+                                    radius: 25,
+                                    child: Icon(
+                                      Icons.edit,
+                                      color: color,
+                                      size: 30,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                      ],
+                    ),
                   ],
                 ),
                 const SizedBox(height: 8),

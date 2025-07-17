@@ -4,6 +4,7 @@ import 'package:colorful_notes/core/helpers/widgets_helper.dart';
 import 'package:colorful_notes/features/notes/domain/entities/note.dart';
 import 'package:colorful_notes/features/notes/ui/providers/notes_provider.dart';
 import 'package:colorful_notes/features/notes/ui/widgets/color_bar.dart';
+import 'package:colorful_notes/features/notes/ui/widgets/delete_dialog.dart';
 import 'package:colorful_notes/features/notes/ui/widgets/notes/sound_player.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -93,133 +94,159 @@ class _VoiceNoteState extends State<VoiceNote> {
               children: [
                 // Back and Save Buttons
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Expanded(
-                      flex: 4,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                      child: GestureDetector(
+                        onTap: () async {
+                          if (context.mounted) {
+                            await record.stop();
+                            stopWatchTimer.onResetTimer();
+                            isRecording = false;
+                            name == "" ? null : {deleteFile(filePath)};
+                            if (context.mounted) Navigator.pop(context);
+                          }
+                        },
+                        child: CircleAvatar(
+                          backgroundColor: semiTransparentColor,
+                          radius: 25,
+                          child: Icon(Icons.arrow_back, color: color, size: 36),
+                        ),
+                      ),
+                    ),
+                    Row(
+                      children: [
+                        if (!isEditing)
                           Padding(
                             padding: const EdgeInsets.symmetric(
                               horizontal: 12.0,
                             ),
                             child: GestureDetector(
-                              onTap: () async {
-                                if (context.mounted) {
-                                  await record.stop();
-                                  stopWatchTimer.onResetTimer();
-                                  isRecording = false;
-                                  name == "" ? null : {deleteFile(filePath)};
-                                  if (context.mounted) Navigator.pop(context);
-                                }
+                              onTap: () {
+                                showDeleteNoteDialog(
+                                  context,
+                                  widget.note!.id,
+                                  notesController,
+                                ).then((value) {
+                                  if (context.mounted && value == true) {
+                                    Navigator.pop(context);
+                                  }
+                                });
                               },
                               child: CircleAvatar(
-                                backgroundColor: semiTransparentColor,
+                                backgroundColor: textColor,
                                 radius: 25,
                                 child: Icon(
-                                  Icons.arrow_back,
+                                  Icons.delete,
                                   color: color,
                                   size: 36,
                                 ),
                               ),
                             ),
                           ),
-                        ],
-                      ),
-                    ),
-                    if (!isEditing)
-                      Expanded(
-                        flex: 1,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                          child: GestureDetector(
-                            onTap: () async {
-                              setState(() {
-                                isEditing = true;
-                                titleFocusNode.requestFocus();
-                              });
-                            },
-                            child: CircleAvatar(
-                              backgroundColor: textColor,
-                              radius: 25,
-                              child: Icon(Icons.edit, color: color, size: 30),
-                            ),
-                          ),
-                        ),
-                      ),
-                    if (isEditing)
-                      Expanded(
-                        flex: 1,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                          child: GestureDetector(
-                            onTap: () async {
-                              if (widget.note == null) {
-                                await record.stop();
-                                time == ""
-                                    ? context.mounted
-                                          ? Navigator.pop(context)
-                                          : null
-                                    : {
-                                        await notesController.add(
-                                          Note(
-                                            title: titleController.text,
-                                            time: time,
-                                            content: file,
-                                            tIndex: textColorIndex,
-                                            extra: chosenColorIndex == 99
-                                                ? pickerColor.value.toString()
-                                                : "",
-                                            type: 1,
-                                            layout: 0,
-                                            id: '',
-                                            cIndex: chosenColorIndex,
-                                            edited: '',
-                                          ),
+                        isEditing
+                            ? Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 12.0,
+                                ),
+                                child: GestureDetector(
+                                  onTap: () async {
+                                    if (widget.note == null) {
+                                      await record.stop();
+                                      time == ""
+                                          ? context.mounted
+                                                ? Navigator.pop(context)
+                                                : null
+                                          : {
+                                              await notesController.add(
+                                                Note(
+                                                  title: titleController.text,
+                                                  time: time,
+                                                  content: file,
+                                                  tIndex: textColorIndex,
+                                                  extra: chosenColorIndex == 99
+                                                      ? pickerColor.value
+                                                            .toString()
+                                                      : "",
+                                                  type: 1,
+                                                  layout: 0,
+                                                  id: '',
+                                                  cIndex: chosenColorIndex,
+                                                  edited: '',
+                                                ),
+                                              ),
+                                              stopWatchTimer.onResetTimer(),
+                                            };
+                                    } else if (titleController.text !=
+                                        widget.note!.title) {
+                                      await notesController.delete(
+                                        widget.note!.id,
+                                      );
+                                      await notesController.add(
+                                        widget.note!.copyWith(
+                                          title: titleController.text,
+                                          tIndex: textColorIndex,
+                                          extra: chosenColorIndex == 99
+                                              ? pickerColor.value.toString()
+                                              : "",
+                                          cIndex: chosenColorIndex,
+                                          edited: 'yes',
                                         ),
-                                        stopWatchTimer.onResetTimer(),
-                                      };
-                              } else if (titleController.text !=
-                                  widget.note!.title) {
-                                await notesController.delete(widget.note!.id);
-                                await notesController.add(
-                                  widget.note!.copyWith(
-                                    title: titleController.text,
-                                    tIndex: textColorIndex,
-                                    extra: chosenColorIndex == 99
-                                        ? pickerColor.value.toString()
-                                        : "",
-                                    cIndex: chosenColorIndex,
-                                    edited: 'yes',
+                                      );
+                                    } else if (chosenColorIndex !=
+                                            widget.note!.cIndex ||
+                                        textColorIndex != widget.note!.tIndex) {
+                                      await notesController.updateNote(
+                                        widget.note!.copyWith(
+                                          cIndex: chosenColorIndex,
+                                          extra: chosenColorIndex == 99
+                                              ? pickerColor.value.toString()
+                                              : "",
+                                          tIndex: textColorIndex,
+                                        ),
+                                      );
+                                    }
+                                    ref.invalidate(notesNotifierProvider);
+                                    if (context.mounted) {
+                                      Navigator.pop(context);
+                                    }
+                                  },
+                                  child: CircleAvatar(
+                                    backgroundColor: textColor,
+                                    radius: 25,
+                                    child: Icon(
+                                      Icons.done,
+                                      color: color,
+                                      size: 36,
+                                    ),
                                   ),
-                                );
-                              } else if (chosenColorIndex !=
-                                      widget.note!.cIndex ||
-                                  textColorIndex != widget.note!.tIndex) {
-                                await notesController.updateNote(
-                                  widget.note!.copyWith(
-                                    cIndex: chosenColorIndex,
-                                    extra: chosenColorIndex == 99
-                                        ? pickerColor.value.toString()
-                                        : "",
-                                    tIndex: textColorIndex,
+                                ),
+                              )
+                            : Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 12.0,
+                                ),
+                                child: GestureDetector(
+                                  onTap: () async {
+                                    setState(() {
+                                      isEditing = true;
+                                      titleFocusNode.requestFocus();
+                                    });
+                                  },
+                                  child: CircleAvatar(
+                                    backgroundColor: textColor,
+                                    radius: 25,
+                                    child: Icon(
+                                      Icons.edit,
+                                      color: color,
+                                      size: 30,
+                                    ),
                                   ),
-                                );
-                              }
-                              ref.invalidate(notesNotifierProvider);
-                              if (context.mounted) {
-                                Navigator.pop(context);
-                              }
-                            },
-                            child: CircleAvatar(
-                              backgroundColor: textColor,
-                              radius: 25,
-                              child: Icon(Icons.done, color: color, size: 36),
-                            ),
-                          ),
-                        ),
-                      ),
+                                ),
+                              ),
+                      ],
+                    ),
                   ],
                 ),
                 const SizedBox(height: 8),
