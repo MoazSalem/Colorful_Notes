@@ -38,8 +38,12 @@ class SettingsDropdownTile<T> extends StatelessWidget {
           return DropdownMenuItem<T>(
             value: item,
             child: Text(
+              textAlign: TextAlign.right,
               item.toString().tr(),
-              style: const TextStyle(fontSize: 14, color: Colors.black),
+              style: TextStyle(
+                fontSize: 14,
+                color: Theme.of(context).colorScheme.onPrimaryContainer,
+              ),
             ),
           );
         }).toList(),

@@ -10,7 +10,6 @@ class SettingsModel {
   final bool darkColors;
   final bool harmonizeColor;
   final String lang;
-  final String openPage;
   final ThemeMode currentTheme;
 
   const SettingsModel({
@@ -23,7 +22,6 @@ class SettingsModel {
     this.darkColors = false,
     this.harmonizeColor = false,
     this.lang = "en",
-    this.openPage = "Home",
     this.currentTheme = ThemeMode.system,
   });
 
@@ -37,7 +35,6 @@ class SettingsModel {
     bool? darkColors,
     bool? harmonizeColor,
     String? lang,
-    String? openPage,
     ThemeMode? currentTheme,
   }) {
     return SettingsModel(
@@ -50,7 +47,6 @@ class SettingsModel {
       darkColors: darkColors ?? this.darkColors,
       harmonizeColor: harmonizeColor ?? this.harmonizeColor,
       lang: lang ?? this.lang,
-      openPage: openPage ?? this.openPage,
       currentTheme: currentTheme ?? this.currentTheme,
     );
   }
@@ -67,7 +63,6 @@ class SettingsModel {
       'darkColors': darkColors,
       'harmonizeColor': harmonizeColor,
       'lang': lang,
-      'openPage': openPage,
       // Store ThemeMode as a string name
       'currentTheme': currentTheme.name,
     };
@@ -85,7 +80,6 @@ class SettingsModel {
       darkColors: json['darkColors'] ?? false,
       harmonizeColor: json['harmonizeColor'] ?? true,
       lang: json['lang'] ?? 'en',
-      openPage: json['openPage'] ?? 'Home',
       // Convert string name back to ThemeMode enum
       currentTheme: ThemeMode.values.firstWhere(
         (e) => e.name == json['currentTheme'],

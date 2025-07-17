@@ -61,23 +61,6 @@ class SettingsPage extends StatelessWidget {
 
               CustomDivider(),
 
-              // --- Start In Page Setting ---
-              SettingsDropdownTile<String>(
-                title: "Start In".tr(),
-                subtitle: "sStart In".tr(),
-                value: settings.openPage,
-                items: const ["Home", "Text", "Voice"],
-                onChanged: (newValue) {
-                  settingsService.updateSettings(
-                    settings.copyWith(openPage: newValue),
-                  );
-                },
-                titleSize: titleSize,
-                subtitleSize: subtitleSize,
-              ),
-
-              CustomDivider(),
-
               // --- Side Bar Location ---
               SettingsDropdownTile<String>(
                 title: "Side Bar".tr(),
@@ -216,6 +199,8 @@ class SettingsPage extends StatelessWidget {
               ),
 
               CustomDivider(),
+
+              SizedBox(height: 20),
 
               // --- Backup and Restore ---
               // SizedBox(
