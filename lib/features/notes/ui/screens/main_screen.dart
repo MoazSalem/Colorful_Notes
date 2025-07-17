@@ -77,6 +77,7 @@ class _MainScreenState extends State<MainScreen> {
               ? CustomBottomNavigationBar(
                   currentIndex: currentIndex,
                   onIndexChanged: (i) => {setState(() => currentIndex = i)},
+                  settings: settings,
                 )
               : null,
         );

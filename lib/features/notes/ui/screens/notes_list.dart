@@ -96,6 +96,7 @@ class _NotesListState extends State<NotesList> {
     int viewIndex,
   ) {
     final theme = Theme.of(context).colorScheme;
+    final double padding = settings.sbIndex == 4 ? 28 : 12;
     if (notes.isEmpty) {
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 200),
@@ -113,12 +114,17 @@ class _NotesListState extends State<NotesList> {
       );
     }
     return GridView.builder(
-      padding: const EdgeInsets.only(top: 0, bottom: 32, left: 12, right: 12),
+      padding: EdgeInsets.only(
+        top: settings.sbIndex == 4 ? 16 : 0,
+        bottom: 32,
+        left: padding,
+        right: padding,
+      ),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: viewIndex == 2 ? 2 : 1,
         childAspectRatio: viewIndex == 1
             ? settings.sbIndex == 4
-                  ? 3.6
+                  ? 3.25
                   : 3.05
             : 1.0,
       ),
