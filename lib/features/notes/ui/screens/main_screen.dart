@@ -37,10 +37,11 @@ class _MainScreenState extends State<MainScreen> {
           resizeToAvoidBottomInset: false,
           body: Row(
             children: [
-              SideBar(
-                currentIndex: currentIndex,
-                onIndexChanged: (i) => {setState(() => currentIndex = i)},
-              ),
+              if ([0, 1].contains(settings.sbIndex))
+                SideBar(
+                  currentIndex: currentIndex,
+                  onIndexChanged: (i) => {setState(() => currentIndex = i)},
+                ),
               Consumer(
                 builder: (context, ref, child) {
                   final database = ref.watch(databaseProvider);
@@ -58,6 +59,11 @@ class _MainScreenState extends State<MainScreen> {
                   );
                 },
               ),
+              if ([2, 3].contains(settings.sbIndex))
+                SideBar(
+                  currentIndex: currentIndex,
+                  onIndexChanged: (i) => {setState(() => currentIndex = i)},
+                ),
             ],
           ),
         );
