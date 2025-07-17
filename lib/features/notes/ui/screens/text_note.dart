@@ -298,6 +298,7 @@ class _TextNoteState extends State<TextNote> {
                                 valueListenable: titleDirection,
                                 builder: (context, value, child) =>
                                     TextFormField(
+                                      enabled: isEditing,
                                       maxLines: 2,
                                       textAlign: TextAlign.center,
                                       textDirection: value,
@@ -337,6 +338,7 @@ class _TextNoteState extends State<TextNote> {
                                 valueListenable: contentDirection,
                                 builder: (context, value, child) =>
                                     TextFormField(
+                                      enabled: isEditing,
                                       textDirection: value,
                                       onChanged: (input) {
                                         if (input.trim().length < 2) {

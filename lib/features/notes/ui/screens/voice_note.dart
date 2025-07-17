@@ -267,6 +267,7 @@ class _VoiceNoteState extends State<VoiceNote> {
                                     vertical: 10,
                                   ),
                                   child: TextFormField(
+                                    enabled: isEditing,
                                     textAlign: TextAlign.center,
                                     focusNode: titleFocusNode,
                                     maxLines: 2,
