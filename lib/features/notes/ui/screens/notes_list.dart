@@ -113,10 +113,10 @@ class _NotesListState extends State<NotesList> {
       );
     }
     return GridView.builder(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
+      padding: const EdgeInsets.only(top: 0, bottom: 32, left: 12, right: 12),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: viewIndex == 2 ? 2 : 1,
-        childAspectRatio: viewIndex == 1 ? 2.95 : 1.0,
+        childAspectRatio: viewIndex == 1 ? 3.05 : 1.0,
       ),
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
