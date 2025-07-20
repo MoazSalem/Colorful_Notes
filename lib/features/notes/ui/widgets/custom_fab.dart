@@ -76,6 +76,7 @@ class _CustomFabWithChildrenState extends State<CustomFabWithChildren> {
               duration: const Duration(milliseconds: 200),
               child: openFab
                   ? Column(
+                      spacing: 10,
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         GestureDetector(
@@ -102,6 +103,13 @@ class _CustomFabWithChildrenState extends State<CustomFabWithChildren> {
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(12),
                                     color: secondBackgroundColor,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black12,
+                                        blurRadius: 4,
+                                        offset: const Offset(0, 4),
+                                      ),
+                                    ],
                                   ),
                                   width: 100,
                                   height: 40,
@@ -113,27 +121,21 @@ class _CustomFabWithChildrenState extends State<CustomFabWithChildren> {
                                   ),
                                 ),
                               ),
-                              SizedBox(
+                              Container(
                                 width: 40,
-                                child: FloatingActionButton(
-                                  backgroundColor: secondBackgroundColor,
-                                  mini: true,
-                                  onPressed: () {
-                                    setState(() {
-                                      openFab = !openFab;
-                                    });
-                                    _createNote(
-                                      context,
-                                      voice: true,
-                                      typeIndex: widget.typeIndex,
-                                    );
-                                  },
-                                  elevation: 0,
-                                  child: Icon(
-                                    Icons.mic,
-                                    color: foregroundColor,
-                                  ),
+                                height: 40,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12),
+                                  color: secondBackgroundColor,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black12,
+                                      blurRadius: 4,
+                                      offset: const Offset(0, 4),
+                                    ),
+                                  ],
                                 ),
+                                child: Icon(Icons.mic, color: foregroundColor),
                               ),
                             ],
                           ),
@@ -162,6 +164,13 @@ class _CustomFabWithChildrenState extends State<CustomFabWithChildren> {
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(12),
                                     color: firstBackgroundColor,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black12,
+                                        blurRadius: 4,
+                                        offset: const Offset(0, 4),
+                                      ),
+                                    ],
                                   ),
                                   width: 100,
                                   height: 40,
@@ -173,26 +182,23 @@ class _CustomFabWithChildrenState extends State<CustomFabWithChildren> {
                                   ),
                                 ),
                               ),
-                              SizedBox(
+                              Container(
                                 width: 40,
-                                child: FloatingActionButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      openFab = !openFab;
-                                    });
-                                    _createNote(
-                                      context,
-                                      voice: false,
-                                      typeIndex: widget.typeIndex,
-                                    );
-                                  },
-                                  backgroundColor: firstBackgroundColor,
-                                  mini: true,
-                                  elevation: 0,
-                                  child: Icon(
-                                    Icons.sticky_note_2,
-                                    color: foregroundColor,
-                                  ),
+                                height: 40,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12),
+                                  color: firstBackgroundColor,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black12,
+                                      blurRadius: 4,
+                                      offset: const Offset(0, 4),
+                                    ),
+                                  ],
+                                ),
+                                child: Icon(
+                                  Icons.sticky_note_2,
+                                  color: foregroundColor,
                                 ),
                               ),
                             ],

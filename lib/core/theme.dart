@@ -62,7 +62,7 @@ final List<ThemeData> _themesDark = [
 ];
 
 final Map<String, Color> _themeColors = {
-  'default': Color(0xFF000000),
+  'colorful': Color(0xFFFFFFFF),
   'amber': Color(0xFFFFC107),
   'aquaBlue': Color(0xFF00BCD4),
   'bahamaBlue': Color(0xFF005C99),
