@@ -1,4 +1,4 @@
-import 'package:colorful_notes/core/theme.dart';
+import 'package:colorful_notes/core/consts.dart';
 import 'package:colorful_notes/features/settings/ui/widgets/theme_popup_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:colorful_notes/core/shared_widgets/custom_appbar.dart';
@@ -35,6 +35,9 @@ class SettingsPage extends StatelessWidget {
     return ValueListenableBuilder<SettingsModel>(
       valueListenable: settingsService.settings,
       builder: (context, settings, child) {
+        List<Color> colors = settingsService.settings.value.darkColors
+            ? AppConsts.darkerColors
+            : AppConsts.lightColors;
         return Scaffold(
           body: ListView(
             padding: EdgeInsets.zero,
@@ -138,6 +141,7 @@ class SettingsPage extends StatelessWidget {
                 switchSize: switchSize,
                 titleSize: titleSize,
                 subtitleSize: subtitleSize,
+                color: settings.colorful ? colors[0] : null,
               ),
 
               CustomDivider(),
@@ -155,6 +159,7 @@ class SettingsPage extends StatelessWidget {
                 switchSize: switchSize,
                 titleSize: titleSize,
                 subtitleSize: subtitleSize,
+                color: settings.colorful ? colors[1] : null,
               ),
 
               CustomDivider(),
@@ -172,6 +177,7 @@ class SettingsPage extends StatelessWidget {
                 switchSize: switchSize,
                 titleSize: titleSize,
                 subtitleSize: subtitleSize,
+                color: settings.colorful ? colors[2] : null,
               ),
 
               // Add other settings tiles here in the same pattern...
@@ -190,6 +196,7 @@ class SettingsPage extends StatelessWidget {
                 switchSize: switchSize,
                 titleSize: titleSize,
                 subtitleSize: subtitleSize,
+                color: settings.colorful ? colors[3] : null,
               ),
 
               CustomDivider(),
@@ -207,6 +214,7 @@ class SettingsPage extends StatelessWidget {
                 switchSize: switchSize,
                 titleSize: titleSize,
                 subtitleSize: subtitleSize,
+                color: settings.colorful ? colors[4] : null,
               ),
 
               CustomDivider(),

@@ -23,7 +23,9 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context).colorScheme;
     final colors = widget.settings.colorful
-        ? AppConsts.lightColors
+        ? widget.settings.darkColors
+              ? AppConsts.darkerColors
+              : AppConsts.lightColors
         : List<Color>.generate(4, (_) => theme.onSurfaceVariant);
     return NavigationBar(
       height: 60,
@@ -34,23 +36,23 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
       labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
       destinations: [
         NavigationDestination(
-          icon: Icon(Icons.home_outlined, color: colors[0], size: 20),
-          selectedIcon: Icon(Icons.home, color: colors[0], size: 30),
+          icon: Icon(Icons.home_outlined, color: colors[0], size: 24),
+          selectedIcon: Icon(Icons.home, color: colors[0], size: 32),
           label: '',
         ),
         NavigationDestination(
-          icon: Icon(Icons.sticky_note_2_outlined, color: colors[1], size: 20),
-          selectedIcon: Icon(Icons.sticky_note_2, color: colors[1], size: 30),
+          icon: Icon(Icons.sticky_note_2_outlined, color: colors[1], size: 24),
+          selectedIcon: Icon(Icons.sticky_note_2, color: colors[1], size: 32),
           label: '',
         ),
         NavigationDestination(
-          icon: Icon(Icons.keyboard_voice_outlined, color: colors[2], size: 20),
-          selectedIcon: Icon(Icons.keyboard_voice, color: colors[2], size: 30),
+          icon: Icon(Icons.keyboard_voice_outlined, color: colors[2], size: 24),
+          selectedIcon: Icon(Icons.keyboard_voice, color: colors[2], size: 32),
           label: '',
         ),
         NavigationDestination(
-          icon: Icon(Icons.settings_outlined, color: colors[3], size: 20),
-          selectedIcon: Icon(Icons.settings, color: colors[3], size: 30),
+          icon: Icon(Icons.settings_outlined, color: colors[3], size: 24),
+          selectedIcon: Icon(Icons.settings, color: colors[3], size: 32),
           label: '',
         ),
       ],

@@ -8,6 +8,7 @@ class SettingsSwitchTile extends StatelessWidget {
   final double switchSize;
   final double titleSize;
   final double subtitleSize;
+  final Color? color;
 
   const SettingsSwitchTile({
     super.key,
@@ -18,10 +19,12 @@ class SettingsSwitchTile extends StatelessWidget {
     required this.switchSize,
     required this.titleSize,
     required this.subtitleSize,
+    this.color,
   });
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context).colorScheme;
     return ListTile(
       title: Text(
         title,
@@ -31,7 +34,14 @@ class SettingsSwitchTile extends StatelessWidget {
         subtitle,
         style: TextStyle(fontSize: subtitleSize, fontWeight: FontWeight.w300),
       ),
-      trailing: Switch(value: value, onChanged: onChanged),
+      trailing: Switch(
+        value: value,
+        onChanged: onChanged,
+        activeColor: theme.onPrimary,
+        activeTrackColor: color ?? theme.primary,
+        inactiveThumbColor: Colors.grey.shade400,
+        inactiveTrackColor: Colors.grey.shade200,
+      ),
     );
   }
 }

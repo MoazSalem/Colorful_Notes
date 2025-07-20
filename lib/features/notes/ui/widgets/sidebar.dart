@@ -50,6 +50,9 @@ class SideBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final settingsService = serviceLocator<SettingsService>();
     final theme = Theme.of(context).colorScheme;
+    List<Color> colors = settingsService.settings.value.darkColors
+        ? AppConsts.darkerColors
+        : AppConsts.lightColors;
 
     return ValueListenableBuilder<SettingsModel>(
       valueListenable: settingsService.settings,
@@ -67,6 +70,7 @@ class SideBar extends StatelessWidget {
                 isSelected: currentIndex == item.index,
                 settings: settings,
                 onPressed: () => onIndexChanged(item.index),
+                colors: colors,
               ),
             )
             .toList();
@@ -109,12 +113,14 @@ class _SideBarButton extends StatelessWidget {
   final bool isSelected;
   final SettingsModel settings;
   final VoidCallback onPressed;
+  final List<Color> colors;
 
   const _SideBarButton({
     required this.item,
     required this.isSelected,
     required this.settings,
     required this.onPressed,
+    required this.colors,
   });
 
   @override
@@ -129,9 +135,7 @@ class _SideBarButton extends StatelessWidget {
       icon: Icon(
         isSelected ? item.selectedIcon : item.icon,
         size: isSelected ? selectedSize : unselectedSize,
-        color: settings.colorful
-            ? AppConsts.lightColors[item.index]
-            : theme.onSurfaceVariant,
+        color: settings.colorful ? colors[item.index] : theme.onSurfaceVariant,
       ),
     );
   }
