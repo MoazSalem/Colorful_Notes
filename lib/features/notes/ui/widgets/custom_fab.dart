@@ -1,6 +1,8 @@
 import 'dart:ui' as ui;
 import 'package:colorful_notes/core/consts.dart';
 import 'package:colorful_notes/core/models/settings_model.dart';
+import 'package:colorful_notes/core/services/service_locator.dart';
+import 'package:colorful_notes/core/services/settings_service.dart';
 import 'package:colorful_notes/features/notes/ui/screens/text_note.dart';
 import 'package:colorful_notes/features/notes/ui/screens/voice_note.dart';
 import 'package:flutter/material.dart';
@@ -60,7 +62,9 @@ class _CustomFabWithChildrenState extends State<CustomFabWithChildren> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context).colorScheme;
-    final colors = AppConsts.lightColors;
+    final colors = serviceLocator<SettingsService>().settings.value.darkColors
+        ? AppConsts.darkerColors
+        : AppConsts.lightColors;
     final firstBackgroundColor = widget.colorful ? colors[1] : theme.primary;
     final secondBackgroundColor = widget.colorful ? colors[2] : theme.primary;
     final foregroundColor = widget.colorful ? Colors.white : theme.onPrimary;

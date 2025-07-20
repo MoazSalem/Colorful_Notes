@@ -32,7 +32,11 @@ class CustomAppbar extends StatelessWidget {
             children: [
               Text(
                 title,
-                style: TextStyle(fontSize: 34, fontWeight: FontWeight.w600),
+                style: TextStyle(
+                  fontSize: 34,
+                  fontWeight: FontWeight.w600,
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.only(right: 5),
