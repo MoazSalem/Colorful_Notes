@@ -17,9 +17,15 @@ import 'package:record/record.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 
 class VoiceNote extends StatefulWidget {
-  const VoiceNote({super.key, this.note, required this.isEditing});
+  const VoiceNote({
+    super.key,
+    this.note,
+    required this.isEditing,
+    required this.typeIndex,
+  });
   final Note? note;
   final bool isEditing;
+  final int typeIndex;
 
   @override
   State<VoiceNote> createState() => _VoiceNoteState();
@@ -153,11 +159,8 @@ class _VoiceNoteState extends State<VoiceNote> {
                                 child: GestureDetector(
                                   onTap: () async {
                                     if (widget.note == null) {
-                                      await record.stop();
                                       time == ""
-                                          ? context.mounted
-                                                ? Navigator.pop(context)
-                                                : null
+                                          ? null
                                           : {
                                               await notesController.add(
                                                 Note(
@@ -207,7 +210,15 @@ class _VoiceNoteState extends State<VoiceNote> {
                                         ),
                                       );
                                     }
-                                    ref.invalidate(notesNotifierProvider);
+                                    Future.microtask(() {
+                                      ref
+                                          .read(notesNotifierProvider.notifier)
+                                          .getNotes(
+                                            widget.typeIndex == 0
+                                                ? null
+                                                : widget.typeIndex == 2,
+                                          );
+                                    });
                                     if (context.mounted) {
                                       Navigator.pop(context);
                                     }

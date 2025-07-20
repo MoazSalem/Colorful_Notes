@@ -39,7 +39,7 @@ class _MainScreenState extends State<MainScreen> {
                     left: [0, 1].contains(settings.sbIndex) ? 60.0 : 0.0,
                     right: [2, 3].contains(settings.sbIndex) ? 60.0 : 0.0,
                   ),
-                  child: CustomFab(settings: settings),
+                  child: CustomFab(settings: settings, typeIndex: currentIndex),
                 ),
           resizeToAvoidBottomInset: false,
           body: Row(

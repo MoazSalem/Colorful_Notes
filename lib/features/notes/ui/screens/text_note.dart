@@ -11,9 +11,15 @@ import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class TextNote extends StatefulWidget {
-  const TextNote({super.key, this.note, required this.isEditing});
+  const TextNote({
+    super.key,
+    this.note,
+    required this.isEditing,
+    required this.typeIndex,
+  });
   final Note? note;
   final bool isEditing;
+  final int typeIndex;
 
   @override
   State<TextNote> createState() => _TextNoteState();
@@ -238,9 +244,18 @@ class _TextNoteState extends State<TextNote> {
                                                   ),
                                                 ),
                                               },
-                                            ref.invalidate(
-                                              notesNotifierProvider,
-                                            ),
+                                            Future.microtask(() {
+                                              ref
+                                                  .read(
+                                                    notesNotifierProvider
+                                                        .notifier,
+                                                  )
+                                                  .getNotes(
+                                                    widget.typeIndex == 0
+                                                        ? null
+                                                        : widget.typeIndex == 2,
+                                                  );
+                                            }),
                                             if (context.mounted)
                                               {Navigator.pop(context)},
                                           }

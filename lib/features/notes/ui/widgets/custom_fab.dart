@@ -7,12 +7,16 @@ import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 class CustomFab extends StatelessWidget {
-  const CustomFab({super.key, required this.settings});
+  const CustomFab({super.key, required this.settings, required this.typeIndex});
   final SettingsModel settings;
+  final int typeIndex;
 
   @override
   Widget build(BuildContext context) {
-    final fab = CustomFabWithChildren(colorful: settings.colorful);
+    final fab = CustomFabWithChildren(
+      colorful: settings.colorful,
+      typeIndex: typeIndex,
+    );
     return settings.fabIndex == 0
         ? fab
         : Directionality(
@@ -24,19 +28,28 @@ class CustomFab extends StatelessWidget {
   }
 }
 
-void _createNote(BuildContext context, {bool voice = false}) {
+void _createNote(
+  BuildContext context, {
+  bool voice = false,
+  required int typeIndex,
+}) {
   showModalBottomSheet(
     isScrollControlled: true,
     context: context,
     builder: (context) => voice
-        ? const VoiceNote(isEditing: true)
-        : const TextNote(isEditing: true),
+        ? VoiceNote(isEditing: true, typeIndex: typeIndex)
+        : TextNote(isEditing: true, typeIndex: typeIndex),
   );
 }
 
 class CustomFabWithChildren extends StatefulWidget {
-  const CustomFabWithChildren({super.key, required this.colorful});
+  const CustomFabWithChildren({
+    super.key,
+    required this.colorful,
+    required this.typeIndex,
+  });
   final bool colorful;
+  final int typeIndex;
   @override
   State<CustomFabWithChildren> createState() => _CustomFabWithChildrenState();
 }
@@ -70,7 +83,11 @@ class _CustomFabWithChildrenState extends State<CustomFabWithChildren> {
                             setState(() {
                               openFab = !openFab;
                             });
-                            _createNote(context, voice: true);
+                            _createNote(
+                              context,
+                              voice: true,
+                              typeIndex: widget.typeIndex,
+                            );
                           },
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
@@ -105,7 +122,11 @@ class _CustomFabWithChildrenState extends State<CustomFabWithChildren> {
                                     setState(() {
                                       openFab = !openFab;
                                     });
-                                    _createNote(context, voice: true);
+                                    _createNote(
+                                      context,
+                                      voice: true,
+                                      typeIndex: widget.typeIndex,
+                                    );
                                   },
                                   elevation: 0,
                                   child: Icon(
@@ -122,7 +143,11 @@ class _CustomFabWithChildrenState extends State<CustomFabWithChildren> {
                             setState(() {
                               openFab = !openFab;
                             });
-                            _createNote(context, voice: false);
+                            _createNote(
+                              context,
+                              voice: false,
+                              typeIndex: widget.typeIndex,
+                            );
                           },
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
@@ -155,7 +180,11 @@ class _CustomFabWithChildrenState extends State<CustomFabWithChildren> {
                                     setState(() {
                                       openFab = !openFab;
                                     });
-                                    _createNote(context, voice: false);
+                                    _createNote(
+                                      context,
+                                      voice: false,
+                                      typeIndex: widget.typeIndex,
+                                    );
                                   },
                                   backgroundColor: firstBackgroundColor,
                                   mini: true,
@@ -181,7 +210,6 @@ class _CustomFabWithChildrenState extends State<CustomFabWithChildren> {
                 openFab = !openFab;
               });
             },
-            elevation: 0,
             child: Icon(
               Icons.add,
               color: widget.colorful ? Colors.white : theme.onPrimary, //white

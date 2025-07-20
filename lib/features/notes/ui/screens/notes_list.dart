@@ -34,17 +34,11 @@ class _NotesListState extends ConsumerState<NotesList> {
   Widget build(BuildContext context) {
     if (!isSearching) {
       // if not searching, refetch notes
-      if (widget.typeIndex == 0) {
-        Future.microtask(() {
-          ref.read(notesNotifierProvider.notifier).getNotes();
-        });
-      } else {
-        Future.microtask(() {
-          ref
-              .read(notesNotifierProvider.notifier)
-              .getNotesOfType(widget.typeIndex == 2);
-        });
-      }
+      Future.microtask(() {
+        ref
+            .read(notesNotifierProvider.notifier)
+            .getNotes(widget.typeIndex == 0 ? null : widget.typeIndex == 2);
+      });
     }
     final String pageTitle = getPageTitle(widget.typeIndex);
     return ValueListenableBuilder<SettingsModel>(
@@ -175,8 +169,12 @@ class _NotesListState extends ConsumerState<NotesList> {
       isScrollControlled: true,
       context: context,
       builder: (context) => note.type == 0
-          ? TextNote(note: note, isEditing: false)
-          : VoiceNote(note: note, isEditing: false),
+          ? TextNote(note: note, isEditing: false, typeIndex: widget.typeIndex)
+          : VoiceNote(
+              note: note,
+              isEditing: false,
+              typeIndex: widget.typeIndex,
+            ),
     );
   }
 }

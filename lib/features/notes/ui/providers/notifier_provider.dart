@@ -25,12 +25,10 @@ class NotesNotifier extends AsyncNotifier<List<Note>> {
     return [];
   }
 
-  Future<void> getNotes() async {
-    state = await AsyncValue.guard(() => _getNotes());
-  }
-
-  Future<void> getNotesOfType(bool voice) async {
-    state = await AsyncValue.guard(() => _getNotesOfType(voice));
+  Future<void> getNotes(bool? voice) async {
+    state = await AsyncValue.guard(
+      () => voice == null ? _getNotes() : _getNotesOfType(voice),
+    );
   }
 
   Future<void> searchNote(String query, int type) async {
