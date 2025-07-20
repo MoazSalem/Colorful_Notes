@@ -38,7 +38,6 @@ class NotesNotifier extends AsyncNotifier<List<Note>> {
         color: AppConsts.lightColors,
       );
       updatedWidgetsNotes = true;
-      print("Widgets updated");
     }
   }
 

@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:colorful_notes/core/helpers/widgets_helper.dart';
 import 'package:colorful_notes/features/notes/domain/entities/note.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:home_widget/home_widget.dart';
@@ -16,7 +17,7 @@ class HomescreenWidgetsService {
       titles += notes[i].title;
       contents += notes[i].content;
       colors += notes[i].cIndex == 99
-          ? Color(int.parse(notes[i].extra)).toHexString()
+          ? WidgetsHelper.parseColor(notes[i].extra).toHexString()
           : color[notes[i].cIndex].toHexString();
       textColors += notes[i].tIndex.toString();
       // add separator if not last note

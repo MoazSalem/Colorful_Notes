@@ -168,8 +168,8 @@ class _TextNoteState extends State<TextNote> {
                                                         extra:
                                                             chosenColorIndex ==
                                                                 99
-                                                            ? pickerColor.value
-                                                                  .toString()
+                                                            ? pickerColor
+                                                                  .toHexString()
                                                             : "",
                                                         layout: WidgetsHelper.getLayout(
                                                           titleDir:
@@ -201,8 +201,8 @@ class _TextNoteState extends State<TextNote> {
                                                         extra:
                                                             chosenColorIndex ==
                                                                 99
-                                                            ? pickerColor.value
-                                                                  .toString()
+                                                            ? pickerColor
+                                                                  .toHexString()
                                                             : "",
                                                       ),
                                                     ),
@@ -221,8 +221,8 @@ class _TextNoteState extends State<TextNote> {
                                                     tIndex: textColorIndex,
                                                     extra:
                                                         chosenColorIndex == 99
-                                                        ? pickerColor.value
-                                                              .toString()
+                                                        ? pickerColor
+                                                              .toHexString()
                                                         : "",
                                                     layout:
                                                         WidgetsHelper.getLayout(

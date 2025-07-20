@@ -18,7 +18,7 @@ class WideSmallNoteWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final color = note.cIndex == 99
-        ? Color(int.parse(note.extra))
+        ? WidgetsHelper.parseColor(note.extra)
         : settings.darkColors
         ? AppConsts.darkerColors[note.cIndex]
         : AppConsts.lightColors[note.cIndex];

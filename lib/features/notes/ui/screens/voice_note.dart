@@ -169,8 +169,8 @@ class _VoiceNoteState extends State<VoiceNote> {
                                                   content: file,
                                                   tIndex: textColorIndex,
                                                   extra: chosenColorIndex == 99
-                                                      ? pickerColor.value
-                                                            .toString()
+                                                      ? pickerColor
+                                                            .toHexString()
                                                       : "",
                                                   type: 1,
                                                   layout: 0,
@@ -191,7 +191,7 @@ class _VoiceNoteState extends State<VoiceNote> {
                                           title: titleController.text,
                                           tIndex: textColorIndex,
                                           extra: chosenColorIndex == 99
-                                              ? pickerColor.value.toString()
+                                              ? pickerColor.toHexString()
                                               : "",
                                           cIndex: chosenColorIndex,
                                           edited: 'yes',
@@ -204,7 +204,7 @@ class _VoiceNoteState extends State<VoiceNote> {
                                         widget.note!.copyWith(
                                           cIndex: chosenColorIndex,
                                           extra: chosenColorIndex == 99
-                                              ? pickerColor.value.toString()
+                                              ? pickerColor.toHexString()
                                               : "",
                                           tIndex: textColorIndex,
                                         ),

@@ -90,4 +90,32 @@ class WidgetsHelper {
         : "${translate[1]} ${translate[0].tr()}";
     return parsedDate;
   }
+
+  static Color parseColor(dynamic input) {
+    int color;
+
+    if (input is int) {
+      color = input;
+    } else if (input is String) {
+      String cleaned = input.trim().toUpperCase();
+
+      // Remove common prefixes
+      if (cleaned.startsWith('#')) cleaned = cleaned.substring(1);
+      if (cleaned.startsWith('0X')) cleaned = cleaned.substring(2);
+
+      if (RegExp(r'^\d+$').hasMatch(cleaned)) {
+        // Pure decimal string
+        color = int.parse(cleaned);
+      } else if (RegExp(r'^[0-9A-F]{8}$').hasMatch(cleaned)) {
+        // 8-char ARGB hex
+        color = int.parse(cleaned, radix: 16);
+      } else {
+        throw FormatException("Invalid color format: $input");
+      }
+    } else {
+      throw ArgumentError("Unsupported input type: ${input.runtimeType}");
+    }
+
+    return Color(color);
+  }
 }
