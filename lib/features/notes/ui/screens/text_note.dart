@@ -58,6 +58,9 @@ class _TextNoteState extends State<TextNote> {
       contentDirection = ValueNotifier(
         WidgetsHelper.getDirection(contentController.text),
       );
+      chosenColorIndex == 99
+          ? pickerColor = WidgetsHelper.parseColor(widget.note!.extra)
+          : null;
     } else {
       titleDirection = ValueNotifier(TextDirection.ltr);
       contentDirection = ValueNotifier(TextDirection.ltr);

@@ -66,7 +66,7 @@ class _VoiceNoteState extends State<VoiceNote> {
       textColorIndex = widget.note!.tIndex;
       file = widget.note!.content;
       chosenColorIndex == 99
-          ? pickerColor = Color(int.parse(widget.note!.extra))
+          ? pickerColor = WidgetsHelper.parseColor(widget.note!.extra)
           : null;
     }
     getAppDir();
