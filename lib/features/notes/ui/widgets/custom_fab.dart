@@ -75,7 +75,7 @@ class _CustomFabWithChildrenState extends State<CustomFabWithChildren> {
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+            padding: EdgeInsets.symmetric(horizontal: 6, vertical: 12),
             child: AnimatedSwitcher(
               duration: const Duration(milliseconds: 200),
               child: openFab
@@ -105,7 +105,6 @@ class _CustomFabWithChildrenState extends State<CustomFabWithChildren> {
                                 ),
                                 child: Container(
                                   decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(12),
                                     color: secondBackgroundColor,
                                     boxShadow: [
                                       BoxShadow(
@@ -129,7 +128,6 @@ class _CustomFabWithChildrenState extends State<CustomFabWithChildren> {
                                 width: 40,
                                 height: 40,
                                 decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(12),
                                   color: secondBackgroundColor,
                                   boxShadow: [
                                     BoxShadow(
@@ -166,7 +164,6 @@ class _CustomFabWithChildrenState extends State<CustomFabWithChildren> {
                                 ),
                                 child: Container(
                                   decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(12),
                                     color: firstBackgroundColor,
                                     boxShadow: [
                                       BoxShadow(
@@ -190,15 +187,7 @@ class _CustomFabWithChildrenState extends State<CustomFabWithChildren> {
                                 width: 40,
                                 height: 40,
                                 decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(12),
                                   color: firstBackgroundColor,
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.black12,
-                                      blurRadius: 4,
-                                      offset: const Offset(0, 4),
-                                    ),
-                                  ],
                                 ),
                                 child: Icon(
                                   Icons.sticky_note_2,
@@ -213,16 +202,30 @@ class _CustomFabWithChildrenState extends State<CustomFabWithChildren> {
                   : Container(width: 160),
             ),
           ),
-          FloatingActionButton(
-            backgroundColor: widget.colorful ? colors[0] : theme.primary,
-            onPressed: () {
+          InkWell(
+            onTap: () {
               setState(() {
                 openFab = !openFab;
               });
             },
-            child: Icon(
-              Icons.add,
-              color: widget.colorful ? Colors.white : theme.onPrimary, //white
+            child: Container(
+              width: 52,
+              height: 52,
+              decoration: BoxDecoration(
+                color: widget.colorful ? colors[0] : theme.primary,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black12,
+                    blurRadius: 8,
+                    offset: const Offset(-4, 4),
+                  ),
+                ],
+              ),
+
+              child: Icon(
+                Icons.add,
+                color: widget.colorful ? Colors.white : theme.onPrimary, //white
+              ),
             ),
           ),
         ],

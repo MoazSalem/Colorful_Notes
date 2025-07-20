@@ -36,8 +36,8 @@ class _MainScreenState extends State<MainScreen> {
               ? null
               : Padding(
                   padding: EdgeInsets.only(
-                    left: [0, 1].contains(settings.sbIndex) ? 60.0 : 0.0,
-                    right: [2, 3].contains(settings.sbIndex) ? 60.0 : 0.0,
+                    left: [0, 1].contains(settings.sbIndex) ? 72.0 : 6.0,
+                    right: [2, 3].contains(settings.sbIndex) ? 72.0 : 6.0,
                   ),
                   child: CustomFab(settings: settings, typeIndex: currentIndex),
                 ),
