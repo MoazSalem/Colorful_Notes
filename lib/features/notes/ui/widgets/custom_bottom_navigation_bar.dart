@@ -44,13 +44,13 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
           label: '',
         ),
         NavigationDestination(
-          icon: Icon(Icons.keyboard_voice_outlined, color: colors[3], size: 20),
-          selectedIcon: Icon(Icons.keyboard_voice, color: colors[3], size: 30),
+          icon: Icon(Icons.keyboard_voice_outlined, color: colors[2], size: 20),
+          selectedIcon: Icon(Icons.keyboard_voice, color: colors[2], size: 30),
           label: '',
         ),
         NavigationDestination(
-          icon: Icon(Icons.settings_outlined, color: colors[2], size: 20),
-          selectedIcon: Icon(Icons.settings, color: colors[2], size: 30),
+          icon: Icon(Icons.settings_outlined, color: colors[3], size: 20),
+          selectedIcon: Icon(Icons.settings, color: colors[3], size: 30),
           label: '',
         ),
       ],

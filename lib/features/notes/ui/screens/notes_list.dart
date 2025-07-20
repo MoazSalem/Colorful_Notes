@@ -77,7 +77,8 @@ class _NotesListState extends State<NotesList> {
                     return Center(child: Text(error.toString()));
                   },
                   loading: () {
-                    return Center(child: CircularProgressIndicator());
+                    // should be unnoticeable, so no loading widget
+                    return Container();
                   },
                 );
               },
@@ -104,7 +105,7 @@ class _NotesListState extends State<NotesList> {
             "N1".tr(),
             style: TextStyle(
               color: settings.colorful
-                  ? AppConsts.lightColors[0]
+                  ? AppConsts.lightColors[widget.typeIndex]
                   : theme.primary,
               fontWeight: FontWeight.w400,
             ),

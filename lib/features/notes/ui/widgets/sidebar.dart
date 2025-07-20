@@ -9,13 +9,11 @@ class _SideBarItem {
   final IconData icon;
   final IconData selectedIcon;
   final int index;
-  final int colorIndex;
 
   const _SideBarItem({
     required this.icon,
     required this.selectedIcon,
     required this.index,
-    required this.colorIndex,
   });
 }
 
@@ -30,29 +28,21 @@ class SideBar extends StatelessWidget {
   });
 
   static const List<_SideBarItem> _navItems = [
-    _SideBarItem(
-      icon: Icons.home_outlined,
-      selectedIcon: Icons.home,
-      index: 0,
-      colorIndex: 0,
-    ),
+    _SideBarItem(icon: Icons.home_outlined, selectedIcon: Icons.home, index: 0),
     _SideBarItem(
       icon: Icons.sticky_note_2_outlined,
       selectedIcon: Icons.sticky_note_2_sharp,
       index: 1,
-      colorIndex: 1,
     ),
     _SideBarItem(
       icon: Icons.keyboard_voice_outlined,
       selectedIcon: Icons.keyboard_voice,
       index: 2,
-      colorIndex: 3,
     ),
     _SideBarItem(
       icon: Icons.settings_outlined,
       selectedIcon: Icons.settings_rounded,
       index: 3,
-      colorIndex: 2,
     ),
   ];
 
@@ -130,7 +120,6 @@ class _SideBarButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context).colorScheme;
-
     final double selectedSize = 30;
     final double unselectedSize = 20;
 
@@ -141,8 +130,7 @@ class _SideBarButton extends StatelessWidget {
         isSelected ? item.selectedIcon : item.icon,
         size: isSelected ? selectedSize : unselectedSize,
         color: settings.colorful
-            ? AppConsts.lightColors[item
-                  .colorIndex] // Assuming C.colors is a static list
+            ? AppConsts.lightColors[item.index]
             : theme.onSurfaceVariant,
       ),
     );

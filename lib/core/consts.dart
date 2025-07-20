@@ -15,8 +15,8 @@ class AppConsts {
   static List<Color> lightColors = [
     const Color(0xffffc107),
     const Color(0xfff77b85),
-    const Color(0xffff8b34),
     const Color(0xff66c6c2),
+    const Color(0xffff8b34),
     const Color(0xfff169a7),
     const Color(0xffd09ce6),
     const Color(0xffc4e228),
@@ -28,8 +28,8 @@ class AppConsts {
   static List<Color> darkerColors = [
     const Color(0xffcc9a05),
     const Color(0xffc36169),
-    const Color(0xffcc6f29),
     const Color(0xff4b9390),
+    const Color(0xffcc6f29),
     const Color(0xffbe5283),
     const Color(0xffa179b3),
     const Color(0xff97af1e),
