@@ -53,7 +53,7 @@ class _MainScreenState extends State<MainScreen> {
                 builder: (context, ref, child) {
                   final database = ref.watch(databaseProvider);
                   return database.when(
-                    loading: () => CustomLoadingWidget(),
+                    loading: () => Expanded(child: CustomLoadingWidget()),
                     error: (error, stackTrace) {
                       return Center(child: Text(error.toString()));
                     },
