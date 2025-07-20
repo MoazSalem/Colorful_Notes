@@ -6,11 +6,15 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
+import 'package:home_widget/home_widget.dart';
+import 'package:workmanager/workmanager.dart';
 
 import 'core/theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // Initialize the Work manager services, this is for background process to allow for home screen widgets.
+  Workmanager().initialize(callbackDispatcher, isInDebugMode: true);
   // Initialize the Localization services.
   await EasyLocalization.ensureInitialized();
   // Initialize the Hive services.

@@ -1,3 +1,5 @@
+import 'package:colorful_notes/core/consts.dart';
+import 'package:colorful_notes/core/services/homescreen_widgets_service.dart';
 import 'package:colorful_notes/features/notes/domain/entities/note.dart';
 import 'package:colorful_notes/features/notes/domain/usecases/add_note.dart';
 import 'package:colorful_notes/features/notes/domain/usecases/delete_note.dart';
@@ -19,6 +21,7 @@ class NotesNotifier extends AsyncNotifier<List<Note>> {
   late final GetNotesOfTypeUseCase _getNotesOfType = ref.read(
     getNotesOfTypeUseCaseProvider,
   );
+  bool updatedWidgetsNotes = false;
 
   @override
   Future<List<Note>> build() async {
@@ -29,6 +32,14 @@ class NotesNotifier extends AsyncNotifier<List<Note>> {
     state = await AsyncValue.guard(
       () => voice == null ? _getNotes() : _getNotesOfType(voice),
     );
+    if (!updatedWidgetsNotes) {
+      HomescreenWidgetsService.update(
+        notes: state.value!,
+        color: AppConsts.lightColors,
+      );
+      updatedWidgetsNotes = true;
+      print("Widgets updated");
+    }
   }
 
   Future<void> searchNote(String query, int type) async {
@@ -54,16 +65,19 @@ class NotesNotifier extends AsyncNotifier<List<Note>> {
 
   Future<void> add(Note note) async {
     await _addNote(note);
+    updatedWidgetsNotes = false;
     state = await AsyncValue.guard(() => _getNotes());
   }
 
   Future<void> updateNote(Note note) async {
     await _updateNote(note);
+    updatedWidgetsNotes = false;
     state = await AsyncValue.guard(() => _getNotes());
   }
 
   Future<void> delete(String id) async {
     await _deleteNote(id);
+    updatedWidgetsNotes = false;
     state = await AsyncValue.guard(() => _getNotes());
   }
 }

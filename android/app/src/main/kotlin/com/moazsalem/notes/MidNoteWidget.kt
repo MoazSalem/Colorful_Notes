@@ -29,16 +29,22 @@ class MidNoteWidget : AppWidgetProvider() {
             // Create RemoteViews
             val views = RemoteViews(context.packageName, R.layout.mid_note_widget).apply {
                 val widgetData = HomeWidgetPlugin.getData(context)
-                val titlesArray = widgetData.getString("titles", "No Notes")?.split("||S||")
-                val contentsArray = widgetData.getString("contents", "Add Notes from App")?.split("||S||")
-                val colorsArray = widgetData.getString("colors", "#ff8b34")?.split("||S||")
-                val textCArray = widgetData.getString("textColors", "")?.split("||S||")
+                val titlesArray = widgetData.getString("titles", "No Notes")?.split("||S||").orEmpty()
+                val contentsArray = widgetData.getString("contents", "Add Notes from App")?.split("||S||").orEmpty()
+                val colorsArray = widgetData.getString("colors", "#ff8b34")?.split("||S||").orEmpty()
+                val textCArray = widgetData.getString("textColors", "")?.split("||S||").orEmpty()
                 val textColor = if(textCArray?.get(globalIndex) == "1") "#000000" else "#ffffff"
+                val rawColor = colorsArray.getOrNull(globalIndex) ?: "FFFFC107"
+                val parsedColor = try {
+                    Color.parseColor("#$rawColor")
+                } catch (e: IllegalArgumentException) {
+                    Color.parseColor("#F4B907") // fallback color
+                }
                 setTextViewText(R.id.title, titlesArray?.get(globalIndex) ?: "No Title")
                 setTextColor(R.id.title, Color.parseColor(textColor))
                 setTextViewText(R.id.content, contentsArray?.get(globalIndex) ?: "No Content")
                 setTextColor(R.id.content, Color.parseColor(textColor))
-                setInt(R.id.background, "setBackgroundColor", Color.parseColor(colorsArray?.get(globalIndex) ?: "#ff8b34"))
+                setInt(R.id.background, "setBackgroundColor", parsedColor)
                 // Set the click action to increment globalIndex
                 setOnClickPendingIntent(R.id.background, pendingIntent)
             }

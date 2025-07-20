@@ -45,6 +45,7 @@ dependencies:
   easy_localization: ^3.0.7+1
   flutter_colorpicker: ^1.1.0
   home_widget: ^0.7.0+1
+  workmanager: ^0.8.0
   get_it: ^8.0.3
   path_provider: ^2.1.5
 
