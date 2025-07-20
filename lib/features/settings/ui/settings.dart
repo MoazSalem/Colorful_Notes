@@ -1,3 +1,5 @@
+import 'package:colorful_notes/core/theme.dart';
+import 'package:colorful_notes/features/settings/ui/widgets/theme_popup_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:colorful_notes/core/shared_widgets/custom_appbar.dart';
 import 'package:colorful_notes/core/shared_widgets/custom_divider.dart';
@@ -28,14 +30,6 @@ class SettingsPage extends StatelessWidget {
       "Bottom Bar",
     ];
     const List<String> fabItems = ["Right", "Left"];
-
-    const List<String> themeItems = [
-      "Default",
-      "Blue",
-      "Green",
-      "Red",
-      "Yellow",
-    ];
 
     // Use ValueListenableBuilder to reactively build the UI
     return ValueListenableBuilder<SettingsModel>(
@@ -102,20 +96,14 @@ class SettingsPage extends StatelessWidget {
 
               CustomDivider(),
 
-              // --- Create Button Location ---
-              SettingsDropdownTile<String>(
-                title: "Current Theme".tr(),
-                subtitle: "sCurrent Theme".tr(),
-                value: themeItems[settings.themeIndex],
-                items: themeItems,
-                onChanged: (newValue) {
-                  final newIndex = themeItems.indexOf(newValue!);
+              // --- Theme Changing tile ---
+              ThemePopupMenu(
+                themeIndex: settings.themeIndex,
+                onChanged: (newIndex) {
                   settingsService.updateSettings(
                     settings.copyWith(themeIndex: newIndex),
                   );
                 },
-                titleSize: titleSize,
-                subtitleSize: subtitleSize,
               ),
 
               // --- Harmonize Colors ---
