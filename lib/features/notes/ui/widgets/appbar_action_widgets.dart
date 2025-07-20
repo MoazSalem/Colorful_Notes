@@ -5,7 +5,6 @@ class AppbarActionWidgets extends StatelessWidget {
   const AppbarActionWidgets({
     super.key,
     required this.settings,
-    required this.searchController,
     required this.onToggle,
     required this.switchView,
     required this.viewIndex,
@@ -13,7 +12,6 @@ class AppbarActionWidgets extends StatelessWidget {
   final SettingsModel settings;
   final VoidCallback onToggle;
   final VoidCallback switchView;
-  final TextEditingController searchController;
   final int viewIndex;
   @override
   Widget build(BuildContext context) {

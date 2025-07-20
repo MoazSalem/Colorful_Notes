@@ -33,6 +33,27 @@ class NotesNotifier extends AsyncNotifier<List<Note>> {
     state = await AsyncValue.guard(() => _getNotesOfType(voice));
   }
 
+  Future<void> searchNote(String query, int type) async {
+    if (type == 0) {
+      state = await AsyncValue.guard(() => _getNotes());
+    } else {
+      state = await AsyncValue.guard(() => _getNotesOfType(type == 2));
+    }
+    final List<Note> notes = state.value!;
+    state = await AsyncValue.guard(
+      () async => notes
+          .where(
+            (element) => element.type == 1
+                ? element.title.toLowerCase().contains(query.toLowerCase())
+                : element.title.toLowerCase().contains(query.toLowerCase()) ||
+                      element.content.toLowerCase().contains(
+                        query.toLowerCase(),
+                      ),
+          )
+          .toList(),
+    );
+  }
+
   Future<void> add(Note note) async {
     await _addNote(note);
     state = await AsyncValue.guard(() => _getNotes());

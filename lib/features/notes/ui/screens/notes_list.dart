@@ -16,24 +16,37 @@ import 'package:colorful_notes/core/models/settings_model.dart';
 import 'package:colorful_notes/core/services/settings_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final TextEditingController searchController = TextEditingController();
-
-class NotesList extends StatefulWidget {
+class NotesList extends ConsumerStatefulWidget {
   const NotesList({super.key, required this.typeIndex});
   final int typeIndex;
 
   @override
-  State<NotesList> createState() => _NotesListState();
+  ConsumerState<NotesList> createState() => _NotesListState();
 }
 
-class _NotesListState extends State<NotesList> {
+class _NotesListState extends ConsumerState<NotesList> {
+  final settingsService = serviceLocator<SettingsService>();
+  final TextEditingController searchController = TextEditingController();
   int viewIndex = 0;
+  bool isSearching = false;
+
   @override
   Widget build(BuildContext context) {
-    final settingsService = serviceLocator<SettingsService>();
+    if (!isSearching) {
+      // if not searching, refetch notes
+      if (widget.typeIndex == 0) {
+        Future.microtask(() {
+          ref.read(notesNotifierProvider.notifier).getNotes();
+        });
+      } else {
+        Future.microtask(() {
+          ref
+              .read(notesNotifierProvider.notifier)
+              .getNotesOfType(widget.typeIndex == 2);
+        });
+      }
+    }
     final String pageTitle = getPageTitle(widget.typeIndex);
-    bool isSearching = false;
-
     return ValueListenableBuilder<SettingsModel>(
       valueListenable: settingsService.settings,
       builder: (context, settings, child) {
@@ -44,32 +57,24 @@ class _NotesListState extends State<NotesList> {
               title: pageTitle,
               top: 65,
               leading: AppbarActionWidgets(
-                searchController: searchController,
                 settings: settings,
                 onToggle: () => setState(() => isSearching = !isSearching),
-                switchView: () =>
-                    setState(() => viewIndex = (viewIndex + 1) % 3),
+                switchView: () => setState(() {
+                  viewIndex = (viewIndex + 1) % 3;
+                }),
                 viewIndex: viewIndex,
               ),
             ),
-            SearchBarWidget(
-              isSearching: isSearching,
-              searchController: searchController,
-            ),
+            if (isSearching)
+              SearchBarWidget(
+                searchController: searchController,
+                search: (query) => ref
+                    .read(notesNotifierProvider.notifier)
+                    .searchNote(query, widget.typeIndex),
+              ),
             Consumer(
               builder: (context, ref, child) {
                 final notes = ref.watch(notesNotifierProvider);
-                if (widget.typeIndex == 0) {
-                  Future.microtask(() {
-                    ref.read(notesNotifierProvider.notifier).getNotes();
-                  });
-                } else {
-                  Future.microtask(() {
-                    ref
-                        .read(notesNotifierProvider.notifier)
-                        .getNotesOfType(widget.typeIndex == 2);
-                  });
-                }
                 return notes.when(
                   data: (data) =>
                       _buildNotesList(context, settings, data, viewIndex),

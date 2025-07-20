@@ -59,6 +59,7 @@ class _MainScreenState extends State<MainScreen> {
                     },
                     data: (data) {
                       return Expanded(
+                        key: ValueKey(currentIndex),
                         flex: 5,
                         child: AppConsts.pagesList[currentIndex],
                       );
