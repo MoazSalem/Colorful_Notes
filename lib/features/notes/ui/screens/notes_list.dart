@@ -102,7 +102,7 @@ class _NotesListState extends State<NotesList> {
         padding: const EdgeInsets.symmetric(vertical: 200),
         child: Center(
           child: Text(
-            "N1".tr(),
+            "N${widget.typeIndex}".tr(),
             style: TextStyle(
               color: settings.colorful
                   ? AppConsts.lightColors[widget.typeIndex]
