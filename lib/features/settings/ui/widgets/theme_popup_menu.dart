@@ -43,7 +43,7 @@ class ThemePopupMenu extends StatelessWidget {
           style: TextStyle(fontSize: 22, fontWeight: FontWeight.w400),
         ),
         subtitle: Text(
-          "${themesNames[themeIndex]}  - You currently need to restart the app for changes to take effect.",
+          "${"sCurrent Theme".tr()} - ${themesNames[themeIndex]} ",
           style: TextStyle(fontSize: 12, fontWeight: FontWeight.w300),
         ),
         trailing: Icon(Icons.lens, color: themesValues[themeIndex], size: 40),

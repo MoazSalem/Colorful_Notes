@@ -13,12 +13,11 @@ import 'core/theme.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // Initialize the Work manager services, this is for background process to allow for home screen widgets.
-  Workmanager().initialize(callbackDispatcher, isInDebugMode: true);
+  Workmanager().initialize(callbackDispatcher, isInDebugMode: false);
   // Initialize the Localization services.
   await EasyLocalization.ensureInitialized();
   // Initialize the Hive services.
   await Hive.initFlutter();
-  // Initialize get it.
   runApp(
     ProviderScope(
       child: EasyLocalization(
@@ -37,6 +36,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Get the opposite brightness to compensate for the status bar
     Brightness oppositeBrightness =
         MediaQuery.of(context).platformBrightness == Brightness.dark
         ? Brightness.light
@@ -50,20 +50,26 @@ class MyApp extends StatelessWidget {
       ),
       child: Consumer(
         builder: (context, ref, child) {
+          // Get the settings provider
           final settings = ref.watch(settingsNotifierProvider);
           return settings.when(
-            data: (settings) => MaterialApp(
-              theme: AppTheme.light,
-              darkTheme: AppTheme.dark,
-              initialRoute: '/',
-              debugShowCheckedModeBanner: false,
-              title: 'Colorful Notes',
-              localizationsDelegates: context.localizationDelegates,
-              supportedLocales: context.supportedLocales,
-              locale: context.locale,
-              // Skip on boarding screen if not first time
-              home: settings.firstLaunch ? const IntroPage() : MainScreen(),
-            ),
+            data: (settings) {
+              // Get the current theme from the settings
+              AppTheme.light = AppTheme.lightThemes[settings.themeIndex];
+              AppTheme.dark = AppTheme.darkThemes[settings.themeIndex];
+              return MaterialApp(
+                theme: AppTheme.light,
+                darkTheme: AppTheme.dark,
+                initialRoute: '/',
+                debugShowCheckedModeBanner: false,
+                title: 'Colorful Notes',
+                localizationsDelegates: context.localizationDelegates,
+                supportedLocales: context.supportedLocales,
+                locale: context.locale,
+                // Skip on boarding screen if not first time
+                home: settings.firstLaunch ? const IntroPage() : MainScreen(),
+              );
+            },
             error: (error, stackTrace) => const Text('Error'),
             loading: () => const CircularProgressIndicator(),
           );
