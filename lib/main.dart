@@ -1,4 +1,5 @@
 import 'package:colorful_notes/features/notes/ui/screens/main_screen.dart.';
+import 'package:colorful_notes/features/onboarding/ui/onboarding_view.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/services.dart';
@@ -6,7 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:home_widget/home_widget.dart';
 import 'package:workmanager/workmanager.dart';
-
+import 'core/providers/settings_notifier.dart';
 import 'core/theme.dart';
 
 void main() async {
@@ -47,17 +48,26 @@ class MyApp extends StatelessWidget {
         systemNavigationBarIconBrightness: oppositeBrightness,
         statusBarIconBrightness: oppositeBrightness,
       ),
-      child: MaterialApp(
-        theme: AppTheme.light,
-        darkTheme: AppTheme.dark,
-        initialRoute: '/',
-        debugShowCheckedModeBanner: false,
-        title: 'Colorful Notes',
-        localizationsDelegates: context.localizationDelegates,
-        supportedLocales: context.supportedLocales,
-        locale: context.locale,
-        // Skip on boarding screen if not first time
-        home: MainScreen(),
+      child: Consumer(
+        builder: (context, ref, child) {
+          final settings = ref.watch(settingsNotifierProvider);
+          return settings.when(
+            data: (settings) => MaterialApp(
+              theme: AppTheme.light,
+              darkTheme: AppTheme.dark,
+              initialRoute: '/',
+              debugShowCheckedModeBanner: false,
+              title: 'Colorful Notes',
+              localizationsDelegates: context.localizationDelegates,
+              supportedLocales: context.supportedLocales,
+              locale: context.locale,
+              // Skip on boarding screen if not first time
+              home: settings.firstLaunch ? const IntroPage() : MainScreen(),
+            ),
+            error: (error, stackTrace) => const Text('Error'),
+            loading: () => const CircularProgressIndicator(),
+          );
+        },
       ),
     );
   }
