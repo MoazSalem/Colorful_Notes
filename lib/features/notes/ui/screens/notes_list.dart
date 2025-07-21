@@ -25,9 +25,7 @@ class NotesList extends ConsumerStatefulWidget {
 
 class _NotesListState extends ConsumerState<NotesList> {
   final TextEditingController searchController = TextEditingController();
-  int viewIndex = 0;
   bool isSearching = false;
-
   @override
   Widget build(BuildContext context) {
     if (!isSearching) {
@@ -40,6 +38,11 @@ class _NotesListState extends ConsumerState<NotesList> {
     }
     final String pageTitle = getPageTitle(widget.typeIndex);
     final settings = ref.watch(settingsNotifierProvider).value!;
+    final List<int> viewIndexList = [
+      settings.homeViewIndex,
+      settings.textViewIndex,
+      settings.voiceViewIndex,
+    ];
     return ListView(
       padding: EdgeInsets.zero,
       children: [
@@ -50,9 +53,19 @@ class _NotesListState extends ConsumerState<NotesList> {
             settings: settings,
             onToggle: () => setState(() => isSearching = !isSearching),
             switchView: () => setState(() {
-              viewIndex = (viewIndex + 1) % 3;
+              viewIndexList[widget.typeIndex] =
+                  (viewIndexList[widget.typeIndex] + 1) % 3;
+              ref
+                  .read(settingsNotifierProvider.notifier)
+                  .updateSettings(
+                    settings.copyWith(
+                      homeViewIndex: viewIndexList[0],
+                      textViewIndex: viewIndexList[1],
+                      voiceViewIndex: viewIndexList[2],
+                    ),
+                  );
             }),
-            viewIndex: viewIndex,
+            viewIndex: viewIndexList[widget.typeIndex],
           ),
         ),
         if (isSearching)
@@ -66,8 +79,12 @@ class _NotesListState extends ConsumerState<NotesList> {
           builder: (context, ref, child) {
             final notes = ref.watch(notesNotifierProvider);
             return notes.when(
-              data: (data) =>
-                  _buildNotesList(context, settings, data, viewIndex),
+              data: (data) => _buildNotesList(
+                context,
+                settings,
+                data,
+                viewIndexList[widget.typeIndex],
+              ),
               error: (Object error, StackTrace stackTrace) {
                 return Center(child: Text(error.toString()));
               },
