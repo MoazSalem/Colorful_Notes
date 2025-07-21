@@ -31,8 +31,20 @@ class _MainScreenState extends ConsumerState<MainScreen> {
             ? null
             : Padding(
                 padding: EdgeInsets.only(
-                  left: [0, 1].contains(settings.sbIndex) ? 72.0 : 6.0,
-                  right: [2, 3].contains(settings.sbIndex) ? 72.0 : 6.0,
+                  left:
+                      [0, 1].contains(settings.sbIndex) && settings.lang != 'ar'
+                      ? 72.0
+                      : [2, 3].contains(settings.sbIndex) &&
+                            settings.lang == 'ar'
+                      ? 72.0
+                      : 12.0,
+                  right:
+                      [2, 3].contains(settings.sbIndex) && settings.lang != 'ar'
+                      ? 72.0
+                      : [0, 1].contains(settings.sbIndex) &&
+                            settings.lang == 'ar'
+                      ? 72.0
+                      : 12.0,
                 ),
                 child: CustomFab(settings: settings, typeIndex: currentIndex),
               ),
