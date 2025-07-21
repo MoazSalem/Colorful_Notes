@@ -2,6 +2,7 @@ class SettingsModel {
   final int sbIndex;
   final int fabIndex;
   final int themeIndex;
+  final int themeMode;
   final int homeViewIndex;
   final int textViewIndex;
   final int voiceViewIndex;
@@ -17,6 +18,7 @@ class SettingsModel {
     this.sbIndex = 0,
     this.fabIndex = 0,
     this.themeIndex = 0,
+    this.themeMode = 0,
     this.homeViewIndex = 0,
     this.textViewIndex = 0,
     this.voiceViewIndex = 0,
@@ -33,6 +35,7 @@ class SettingsModel {
     int? sbIndex,
     int? fabIndex,
     int? themeIndex,
+    int? themeMode,
     int? homeViewIndex,
     int? textViewIndex,
     int? voiceViewIndex,
@@ -48,6 +51,7 @@ class SettingsModel {
       sbIndex: sbIndex ?? this.sbIndex,
       fabIndex: fabIndex ?? this.fabIndex,
       themeIndex: themeIndex ?? this.themeIndex,
+      themeMode: themeMode ?? this.themeMode,
       homeViewIndex: homeViewIndex ?? this.homeViewIndex,
       textViewIndex: textViewIndex ?? this.textViewIndex,
       voiceViewIndex: voiceViewIndex ?? this.voiceViewIndex,
@@ -67,6 +71,7 @@ class SettingsModel {
       'sbIndex': sbIndex,
       'fabIndex': fabIndex,
       'themeIndex': themeIndex,
+      'themeMode': themeMode,
       'homeViewIndex': homeViewIndex,
       'textViewIndex': textViewIndex,
       'voiceViewIndex': voiceViewIndex,
@@ -86,6 +91,7 @@ class SettingsModel {
       sbIndex: json['sbIndex'] ?? 0,
       fabIndex: json['fabIndex'] ?? 0,
       themeIndex: json['themeIndex'] ?? 0,
+      themeMode: json['themeMode'] ?? 0,
       homeViewIndex: json['homeViewIndex'] ?? 0,
       textViewIndex: json['textViewIndex'] ?? 0,
       voiceViewIndex: json['voiceViewIndex'] ?? 0,

@@ -29,6 +29,7 @@ class SettingsPage extends ConsumerWidget {
       "Bottom Bar",
     ];
     const List<String> fabItems = ["Right", "Left"];
+    const List<String> themeModes = ["System", "Dark", "Light"];
     List<Color> colors = settings.darkColors
         ? AppConsts.darkerColors
         : AppConsts.lightColors;
@@ -103,23 +104,24 @@ class SettingsPage extends ConsumerWidget {
             },
           ),
 
-          // --- Harmonize Colors ---
-          // CustomDivider(),
-          //
-          // _SettingsSwitchTile(
-          //   title: "harmonize Colors".tr(),
-          //   subtitle: "sHarmonizeColors".tr(),
-          //   value: settings.harmonizeColor,
-          //   onChanged: (newValue) {
-          //     settingsService.updateSettings(
-          //       settings.copyWith(harmonizeColor: newValue),
-          //     );
-          //     C.harmonizeColors(); // Assuming this needs to be called
-          //   },
-          //   switchSize: switchSize,
-          //   titleSize: titleSize,
-          //   subtitleSize: subtitleSize,
-          // ),
+          CustomDivider(),
+
+          // --- Theme Mode ---
+          SettingsDropdownTile<String>(
+            title: "Theme Mode".tr(),
+            subtitle: "sTheme Mode".tr(),
+            value: themeModes[settings.themeMode],
+            items: themeModes,
+            onChanged: (newValue) {
+              final newIndex = themeModes.indexOf(newValue!);
+              settingsService.updateSettings(
+                settings.copyWith(themeMode: newIndex),
+              );
+            },
+            titleSize: titleSize,
+            subtitleSize: subtitleSize,
+          ),
+
           CustomDivider(),
 
           // --- Colorful Notes ---

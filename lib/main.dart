@@ -60,6 +60,11 @@ class MyApp extends StatelessWidget {
               return MaterialApp(
                 theme: AppTheme.light,
                 darkTheme: AppTheme.dark,
+                themeMode: settings.themeMode == 0
+                    ? ThemeMode.system
+                    : settings.themeMode == 1
+                    ? ThemeMode.dark
+                    : ThemeMode.light,
                 initialRoute: '/',
                 debugShowCheckedModeBanner: false,
                 title: 'Colorful Notes',
