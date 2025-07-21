@@ -1,4 +1,4 @@
-import 'package:colorful_notes/features/notes/ui/screens/main_screen.dart.';
+import 'package:colorful_notes/features/notes/ui/screens/main_screen.dart';
 import 'package:colorful_notes/features/onboarding/ui/onboarding_view.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -72,7 +72,9 @@ class MyApp extends StatelessWidget {
                 supportedLocales: context.supportedLocales,
                 locale: context.locale,
                 // Skip on boarding screen if not first time
-                home: settings.firstLaunch ? const IntroPage() : MainScreen(),
+                home: settings.firstLaunch
+                    ? const IntroPage()
+                    : const MainScreen(),
               );
             },
             error: (error, stackTrace) => const Text('Error'),
