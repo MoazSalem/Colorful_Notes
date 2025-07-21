@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 class AppTheme {
-  static late ThemeData light;
-  static late ThemeData dark;
+  static ThemeData light = _themesLight[0];
+  static ThemeData dark = _themesDark[0];
   static final lightThemes = _themesLight;
   static final darkThemes = _themesDark;
   static final themeColors = _themeColors;

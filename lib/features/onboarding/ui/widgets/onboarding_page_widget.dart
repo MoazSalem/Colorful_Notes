@@ -1,4 +1,3 @@
-import 'package:colorful_notes/core/services/service_locator.dart';
 import 'package:colorful_notes/features/notes/ui/screens/main_screen.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -64,7 +63,7 @@ class OnboardingPageWidget extends StatelessWidget {
                 ),
               ),
               onPressed: () async {
-                serviceLocator<Box>().put('showHome', true);
+                //serviceLocator<Box>().put('showHome', true);
                 Navigator.of(context).pushReplacement(
                   MaterialPageRoute(builder: (context) => const MainScreen()),
                 );

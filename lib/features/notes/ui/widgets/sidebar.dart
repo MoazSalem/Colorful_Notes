@@ -1,8 +1,8 @@
 import 'package:colorful_notes/core/consts.dart';
+import 'package:colorful_notes/core/providers/settings_notifier.dart';
 import 'package:flutter/material.dart';
-import 'package:colorful_notes/core/services/service_locator.dart';
 import 'package:colorful_notes/core/models/settings_model.dart';
-import 'package:colorful_notes/core/services/settings_service.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Data class to hold information for each sidebar button.
 class _SideBarItem {
@@ -17,7 +17,7 @@ class _SideBarItem {
   });
 }
 
-class SideBar extends StatelessWidget {
+class SideBar extends ConsumerWidget {
   final int currentIndex;
   final ValueChanged<int> onIndexChanged;
 
@@ -47,41 +47,36 @@ class SideBar extends StatelessWidget {
   ];
 
   @override
-  Widget build(BuildContext context) {
-    final settingsService = serviceLocator<SettingsService>();
+  Widget build(BuildContext context, WidgetRef ref) {
+    final settings = ref.watch(settingsNotifierProvider).value!;
     final theme = Theme.of(context).colorScheme;
-    List<Color> colors = settingsService.settings.value.darkColors
+    List<Color> colors = settings.darkColors
         ? AppConsts.darkerColors
         : AppConsts.lightColors;
+    // Determine if the layout should be inverted (bottom-aligned)
+    // based on the settings from the service.
+    final bool isInverted = settings.sbIndex == 1 || settings.sbIndex == 3;
+    final double sizeBox = 10;
 
-    return ValueListenableBuilder<SettingsModel>(
-      valueListenable: settingsService.settings,
-      builder: (context, settings, child) {
-        // Determine if the layout should be inverted (bottom-aligned)
-        // based on the settings from the service.
-        final bool isInverted = settings.sbIndex == 1 || settings.sbIndex == 3;
-        final double sizeBox = 10;
+    // Build the list of main navigation buttons
+    final List<Widget> navButtons = _navItems
+        .map(
+          (item) => _SideBarButton(
+            item: item,
+            isSelected: currentIndex == item.index,
+            settings: settings,
+            onPressed: () => onIndexChanged(item.index),
+            colors: colors,
+          ),
+        )
+        .toList();
 
-        // Build the list of main navigation buttons
-        final List<Widget> navButtons = _navItems
-            .map(
-              (item) => _SideBarButton(
-                item: item,
-                isSelected: currentIndex == item.index,
-                settings: settings,
-                onPressed: () => onIndexChanged(item.index),
-                colors: colors,
-              ),
-            )
-            .toList();
-        return Container(
-          width: 60,
-          decoration: BoxDecoration(color: theme.surfaceContainerHigh),
-          child: isInverted
-              ? _buildInvertedLayout(navButtons.reversed.toList(), sizeBox)
-              : _buildNormalLayout(navButtons, sizeBox),
-        );
-      },
+    return Container(
+      width: 60,
+      decoration: BoxDecoration(color: theme.surfaceContainerHigh),
+      child: isInverted
+          ? _buildInvertedLayout(navButtons.reversed.toList(), sizeBox)
+          : _buildNormalLayout(navButtons, sizeBox),
     );
   }
 

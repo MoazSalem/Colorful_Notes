@@ -1,4 +1,5 @@
 import 'package:colorful_notes/core/consts.dart';
+import 'package:colorful_notes/core/providers/settings_notifier.dart';
 import 'package:colorful_notes/features/notes/domain/entities/note.dart';
 import 'package:colorful_notes/features/notes/ui/providers/notes_provider.dart';
 import 'package:colorful_notes/core/shared_widgets/custom_appbar.dart';
@@ -11,9 +12,7 @@ import 'package:colorful_notes/features/notes/ui/screens/text_note.dart';
 import 'package:colorful_notes/features/notes/ui/widgets/notes/small_grid_note.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:colorful_notes/core/services/service_locator.dart';
 import 'package:colorful_notes/core/models/settings_model.dart';
-import 'package:colorful_notes/core/services/settings_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class NotesList extends ConsumerStatefulWidget {
@@ -25,7 +24,6 @@ class NotesList extends ConsumerStatefulWidget {
 }
 
 class _NotesListState extends ConsumerState<NotesList> {
-  final settingsService = serviceLocator<SettingsService>();
   final TextEditingController searchController = TextEditingController();
   int viewIndex = 0;
   bool isSearching = false;
@@ -41,50 +39,46 @@ class _NotesListState extends ConsumerState<NotesList> {
       });
     }
     final String pageTitle = getPageTitle(widget.typeIndex);
-    return ValueListenableBuilder<SettingsModel>(
-      valueListenable: settingsService.settings,
-      builder: (context, settings, child) {
-        return ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            CustomAppbar(
-              title: pageTitle,
-              top: 65,
-              leading: AppbarActionWidgets(
-                settings: settings,
-                onToggle: () => setState(() => isSearching = !isSearching),
-                switchView: () => setState(() {
-                  viewIndex = (viewIndex + 1) % 3;
-                }),
-                viewIndex: viewIndex,
-              ),
-            ),
-            if (isSearching)
-              SearchBarWidget(
-                searchController: searchController,
-                search: (query) => ref
-                    .read(notesNotifierProvider.notifier)
-                    .searchNote(query, widget.typeIndex),
-              ),
-            Consumer(
-              builder: (context, ref, child) {
-                final notes = ref.watch(notesNotifierProvider);
-                return notes.when(
-                  data: (data) =>
-                      _buildNotesList(context, settings, data, viewIndex),
-                  error: (Object error, StackTrace stackTrace) {
-                    return Center(child: Text(error.toString()));
-                  },
-                  loading: () {
-                    // should be unnoticeable, so no loading widget
-                    return Container();
-                  },
-                );
+    final settings = ref.watch(settingsNotifierProvider).value!;
+    return ListView(
+      padding: EdgeInsets.zero,
+      children: [
+        CustomAppbar(
+          title: pageTitle,
+          top: 65,
+          leading: AppbarActionWidgets(
+            settings: settings,
+            onToggle: () => setState(() => isSearching = !isSearching),
+            switchView: () => setState(() {
+              viewIndex = (viewIndex + 1) % 3;
+            }),
+            viewIndex: viewIndex,
+          ),
+        ),
+        if (isSearching)
+          SearchBarWidget(
+            searchController: searchController,
+            search: (query) => ref
+                .read(notesNotifierProvider.notifier)
+                .searchNote(query, widget.typeIndex),
+          ),
+        Consumer(
+          builder: (context, ref, child) {
+            final notes = ref.watch(notesNotifierProvider);
+            return notes.when(
+              data: (data) =>
+                  _buildNotesList(context, settings, data, viewIndex),
+              error: (Object error, StackTrace stackTrace) {
+                return Center(child: Text(error.toString()));
               },
-            ),
-          ],
-        );
-      },
+              loading: () {
+                // should be unnoticeable, so no loading widget
+                return Container();
+              },
+            );
+          },
+        ),
+      ],
     );
   }
 
