@@ -72,7 +72,7 @@ class SmallGridNote extends StatelessWidget {
                           textDirection: note.layout == 1 || note.layout == 2
                               ? TextDirection.rtl
                               : TextDirection.ltr,
-                          maxLines: 5,
+                          maxLines: 4,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
                             color: noContent
@@ -82,7 +82,7 @@ class SmallGridNote extends StatelessWidget {
                                 : note.tIndex == 0
                                 ? Colors.white
                                 : Colors.black,
-                            fontSize: noTitle ? 16 : 13,
+                            fontSize: noTitle ? 16 : 14,
                           ),
                         )
                       : Padding(

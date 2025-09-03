@@ -107,6 +107,10 @@ class _NotesListState extends ConsumerState<NotesList> {
   ) {
     final theme = Theme.of(context).colorScheme;
     final double padding = settings.sbIndex == 4 ? 28 : 12;
+    int multiplier = (MediaQuery.sizeOf(context).width / 400).round();
+    multiplier < 1 ? multiplier = 1 : multiplier;
+    final int crossAxisCount = viewIndex == 2 ? multiplier * 2 : multiplier * 1;
+    final double childAspectRatio = viewIndex == 1 ? 2.8 : 1.0;
     if (notes.isEmpty) {
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 200),
@@ -131,12 +135,8 @@ class _NotesListState extends ConsumerState<NotesList> {
         right: padding,
       ),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: viewIndex == 2 ? 2 : 1,
-        childAspectRatio: viewIndex == 1
-            ? settings.sbIndex == 4
-                  ? 3.25
-                  : 3.05
-            : 1.0,
+        crossAxisCount: crossAxisCount,
+        childAspectRatio: childAspectRatio,
       ),
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),

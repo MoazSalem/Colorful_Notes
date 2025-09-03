@@ -28,7 +28,6 @@ class WideSmallNoteWidget extends StatelessWidget {
     final int dateValue = WidgetsHelper.calculateDifference(note.time);
     return Center(
       child: Container(
-        height: 100,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(0),
           color: color,
