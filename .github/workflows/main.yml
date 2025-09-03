@@ -85,6 +85,11 @@ jobs:
           (cd ./build/app/outputs/flutter-apk/ &&
             mv ./app-release.apk "$ARTIFACTS_PATH/$APP_NAME-$app_ver-universal.apk"
           )
+          
+          flutter build appbundle --release
+          (cd ./build/app/outputs/bundle/release/ &&
+            mv ./app-release.aab "$ARTIFACTS_PATH/$APP_NAME-$app_ver-appbundle.apk"
+          )
 
           rm -rf ./build/app/outputs/apk # remove dupe apk dir
         shell: bash
