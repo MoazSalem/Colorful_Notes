@@ -68,8 +68,9 @@ jobs:
             echo "ARTIFACTS_PATH=$ARTIFACTS_PATH" >>$GITHUB_ENV
           }
 
-          echo "$JAVA_KEYSTORE" | base64 -d >keystore.jks
-
+          echo "$JAVA_KEYSTORE" | base64 -d > android/app/keystore.jks
+          echo "$JAVA_KEYSTORE_PROPERTIES" | base64 -d > android/keystore.properties
+          
           ## build
 
           flutter pub get
