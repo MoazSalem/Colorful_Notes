@@ -1,6 +1,8 @@
+import 'package:colorful_notes/core/shared_widgets/custom_loading_widget.dart';
 import 'package:colorful_notes/features/notes/ui/screens/main_screen.dart';
 import 'package:colorful_notes/features/onboarding/ui/onboarding_view.dart';
 import 'package:flutter/material.dart';
+import 'dart:ui' as ui;
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -36,35 +38,38 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Get the opposite brightness to compensate for the status bar
-    Brightness oppositeBrightness =
-        MediaQuery.of(context).platformBrightness == Brightness.dark
-        ? Brightness.light
-        : Brightness.dark;
-    return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: SystemUiOverlayStyle(
-        statusBarColor: Colors.transparent,
-        systemNavigationBarColor: Colors.transparent,
-        systemNavigationBarIconBrightness: oppositeBrightness,
-        statusBarIconBrightness: oppositeBrightness,
-      ),
-      child: Consumer(
-        builder: (context, ref, child) {
-          // Get the settings provider
-          final settings = ref.watch(settingsNotifierProvider);
-          return settings.when(
-            data: (settings) {
-              // Get the current theme from the settings
-              AppTheme.light = AppTheme.lightThemes[settings.themeIndex];
-              AppTheme.dark = AppTheme.darkThemes[settings.themeIndex];
-              return MaterialApp(
+    return Consumer(
+      builder: (context, ref, child) {
+        // Get the settings provider
+        final settings = ref.watch(settingsNotifierProvider);
+        return settings.when(
+          data: (settings) {
+            // Get the current theme from the settings
+            AppTheme.light = AppTheme.lightThemes[settings.themeIndex];
+            AppTheme.dark = AppTheme.darkThemes[settings.themeIndex];
+            final themeMode = settings.themeMode == 0
+                ? ThemeMode.system
+                : settings.themeMode == 1
+                ? ThemeMode.dark
+                : ThemeMode.light;
+            final oppositeBrightness = settings.themeMode == 0
+                ? MediaQuery.of(context).platformBrightness == Brightness.dark
+                      ? Brightness.light
+                      : Brightness.dark
+                : settings.themeMode == 1
+                ? Brightness.light
+                : Brightness.dark;
+            return AnnotatedRegion<SystemUiOverlayStyle>(
+              value: SystemUiOverlayStyle(
+                statusBarColor: Colors.transparent,
+                systemNavigationBarColor: Colors.transparent,
+                systemNavigationBarIconBrightness: oppositeBrightness,
+                statusBarIconBrightness: oppositeBrightness,
+              ),
+              child: MaterialApp(
                 theme: AppTheme.light,
                 darkTheme: AppTheme.dark,
-                themeMode: settings.themeMode == 0
-                    ? ThemeMode.system
-                    : settings.themeMode == 1
-                    ? ThemeMode.dark
-                    : ThemeMode.light,
+                themeMode: themeMode,
                 initialRoute: '/',
                 debugShowCheckedModeBanner: false,
                 title: 'Colorful Notes',
@@ -75,13 +80,16 @@ class MyApp extends StatelessWidget {
                 home: settings.firstLaunch
                     ? const IntroPage()
                     : const MainScreen(),
-              );
-            },
-            error: (error, stackTrace) => const Text('Error'),
-            loading: () => const CircularProgressIndicator(),
-          );
-        },
-      ),
+              ),
+            );
+          },
+          error: (error, stackTrace) => const Text('Error'),
+          loading: () => Directionality(
+            textDirection: ui.TextDirection.ltr,
+            child: Scaffold(body: CustomLoadingWidget()),
+          ),
+        );
+      },
     );
   }
 }

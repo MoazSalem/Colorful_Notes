@@ -90,7 +90,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
             : null,
       ),
       error: (error, stackTrace) => Center(child: Text(error.toString())),
-      loading: () => CustomLoadingWidget(),
+      loading: () => Scaffold(body: Expanded(child: CustomLoadingWidget())),
     );
   }
 }
