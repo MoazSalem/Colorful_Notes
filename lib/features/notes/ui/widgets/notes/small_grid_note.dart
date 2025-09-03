@@ -1,6 +1,7 @@
 import 'package:colorful_notes/core/consts.dart';
 import 'package:colorful_notes/core/helpers/widgets_helper.dart';
 import 'package:colorful_notes/core/models/settings_model.dart';
+import 'package:colorful_notes/core/shared_widgets/dynamic_max_lines_text.dart';
 import 'package:colorful_notes/features/notes/domain/entities/note.dart';
 import 'package:colorful_notes/features/notes/ui/widgets/notes/sound_player.dart';
 import 'package:easy_localization/easy_localization.dart' hide TextDirection;
@@ -37,15 +38,15 @@ class SmallGridNote extends StatelessWidget {
                 ]
               : [],
         ),
-        child: Stack(
-          alignment: Alignment.bottomLeft,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Stack(
+            alignment: Alignment.topCenter,
+            children: [
+              Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  if (!noTitle)
+                  if (!noTitle && note.type == 0)
                     SizedBox(
                       width: double.infinity,
                       child: Text(
@@ -64,82 +65,104 @@ class SmallGridNote extends StatelessWidget {
                       ),
                     ),
                   note.type == 0
-                      ? Text(
-                          noContent ? "Empty".tr() : note.content,
-                          textAlign: note.layout == 1 || note.layout == 2
-                              ? TextAlign.right
-                              : TextAlign.left,
-                          textDirection: note.layout == 1 || note.layout == 2
-                              ? TextDirection.rtl
-                              : TextDirection.ltr,
-                          maxLines: 4,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            color: noContent
-                                ? note.tIndex == 0
-                                      ? Colors.white38
-                                      : Colors.black38
-                                : note.tIndex == 0
-                                ? Colors.white
-                                : Colors.black,
-                            fontSize: noTitle ? 16 : 14,
+                      ? Expanded(
+                          child: DynamicMaxLinesText(
+                            text: noContent ? "Empty".tr() : note.content,
+                            textAlign: note.layout == 1 || note.layout == 2
+                                ? TextAlign.right
+                                : TextAlign.left,
+                            textDirection: note.layout == 1 || note.layout == 2
+                                ? TextDirection.rtl
+                                : TextDirection.ltr,
+                            style: TextStyle(
+                              color: noContent
+                                  ? note.tIndex == 0
+                                        ? Colors.white38
+                                        : Colors.black38
+                                  : note.tIndex == 0
+                                  ? Colors.white
+                                  : Colors.black,
+                              fontSize: noTitle ? 16 : 14,
+                            ),
                           ),
                         )
-                      : Padding(
-                          padding: EdgeInsets.only(top: noTitle ? 24 : 4.0),
-                          child: SoundPlayer(
-                            voiceNote: note,
-                            color: color,
-                            viewMode: 3,
+                      : Expanded(
+                          child: Padding(
+                            padding: EdgeInsets.only(top: noTitle ? 24 : 4.0),
+                            child: SoundPlayer(
+                              voiceNote: note,
+                              color: color,
+                              viewMode: 3,
+                            ),
                           ),
                         ),
-                ],
-              ),
-            ),
-            if (settings.showDate)
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 4.0,
-                  horizontal: 8,
-                ),
-                child: Stack(
-                  alignment: settings.lang == 'en'
-                      ? Alignment.centerLeft
-                      : Alignment.centerRight,
-                  children: [
-                    Text(
-                      dateValue == 0
-                          ? "Today".tr()
-                          : dateValue == -1
-                          ? "Yesterday".tr()
-                          : date,
-                      style: TextStyle(
-                        color: note.tIndex == 0 ? Colors.white : Colors.black,
-                        fontSize: note.type == 0 ? 13 : 12,
-                        fontWeight: FontWeight.w500,
+                  if (settings.showDate)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 2.0,
+                        horizontal: 8,
+                      ),
+                      child: Stack(
+                        alignment: settings.lang == 'en'
+                            ? Alignment.centerLeft
+                            : Alignment.centerRight,
+                        children: [
+                          Text(
+                            dateValue == 0
+                                ? "Today".tr()
+                                : dateValue == -1
+                                ? "Yesterday".tr()
+                                : date,
+                            style: TextStyle(
+                              color: note.tIndex == 0
+                                  ? Colors.white
+                                  : Colors.black,
+                              fontSize: note.type == 0 ? 13 : 12,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Text(
+                                settings.showEdited
+                                    ? note.edited == "yes"
+                                          ? "Edited".tr()
+                                          : ""
+                                    : "",
+                                style: TextStyle(
+                                  color: note.tIndex == 0
+                                      ? Colors.white38
+                                      : Colors.black38,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Text(
-                          settings.showEdited
-                              ? note.edited == "yes"
-                                    ? "Edited".tr()
-                                    : ""
-                              : "",
-                          style: TextStyle(
-                            color: note.tIndex == 0
-                                ? Colors.white38
-                                : Colors.black38,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
+                ],
               ),
-          ],
+              if (!noTitle && note.type == 1)
+                SizedBox(
+                  width: double.infinity,
+                  child: Text(
+                    note.title,
+                    textAlign: TextAlign.center,
+                    textDirection: note.layout == 0 || note.layout == 2
+                        ? TextDirection.ltr
+                        : TextDirection.rtl,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontWeight: FontWeight.w800,
+                      fontSize: 18,
+                      color: note.tIndex == 0 ? Colors.white : Colors.black,
+                    ),
+                  ),
+                ),
+            ],
+          ),
         ),
       ),
     );

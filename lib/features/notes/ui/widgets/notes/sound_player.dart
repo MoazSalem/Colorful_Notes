@@ -183,8 +183,7 @@ class _SoundPlayerState extends State<SoundPlayer> {
                   alignment: Alignment.bottomCenter,
                   children: [
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         IconButton(
                           onPressed: () async {
