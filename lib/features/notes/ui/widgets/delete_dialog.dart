@@ -10,19 +10,19 @@ Future<bool?> showDeleteNoteDialog(
   return showDialog<bool>(
     context: context,
     builder: (context) => AlertDialog(
-      title: const Text('Delete Note'),
+      title: Text('DeleteN'.tr()),
       content: Text("msg".tr()),
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(false),
-          child: const Text('Cancel'),
+          child: Text('Cancel'.tr()),
         ),
         TextButton(
           onPressed: () async {
             await notesController.delete(noteId);
             if (context.mounted) Navigator.of(context).pop(true);
           },
-          child: const Text('Delete', style: TextStyle(color: Colors.red)),
+          child: Text('Delete'.tr(), style: TextStyle(color: Colors.red)),
         ),
       ],
     ),
