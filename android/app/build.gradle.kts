@@ -9,15 +9,6 @@ plugins {
     id("dev.flutter.flutter-gradle-plugin")
 }
 
-val keyProperties = Properties().apply {
-    load(FileInputStream(File("keystore.properties")))
-}
-val detKeyAlias = keyProperties.getProperty("keyAlias")
-require(detKeyAlias != null) { "keyAlias not found in key.properties file." }
-val detKeyPassword = keyProperties.getProperty("keyPassword")
-val detStoreFile = keyProperties.getProperty("storeFile")
-val detStorePassword = keyProperties.getProperty("storePassword")
-
 android {
     namespace = "com.moazsalem.notes"
     compileSdk = flutter.compileSdkVersion
@@ -45,10 +36,10 @@ android {
 
     signingConfigs {
         create("release") {
-            keyAlias = detKeyAlias
-            keyPassword = detKeyPassword
-            storeFile = file(detStoreFile)
-            storePassword = detStorePassword
+            storeFile = file("keystore.jks")
+            storePassword = System.getenv("JAVA_KEYPASS")
+            keyAlias = "upload"
+            keyPassword = System.getenv("JAVA_KEYPASS")
         }
 
         buildTypes {

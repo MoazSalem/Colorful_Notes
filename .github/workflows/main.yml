@@ -69,7 +69,6 @@ jobs:
           }
 
           echo "$JAVA_KEYSTORE" | base64 -d > android/app/keystore.jks
-          echo "$JAVA_KEYSTORE_PROPERTIES" | base64 -d > android/keystore.properties
           
           ## build
 
