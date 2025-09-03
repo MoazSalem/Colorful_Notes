@@ -183,10 +183,10 @@ class _SoundPlayerState extends State<SoundPlayer> {
                   alignment: Alignment.bottomCenter,
                   children: [
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        IconButton(
-                          onPressed: () async {
+                        GestureDetector(
+                          onTap: () async {
                             play = !play;
                             play
                                 ? {await audioPlayer.resume()}
@@ -194,9 +194,11 @@ class _SoundPlayerState extends State<SoundPlayer> {
 
                             setState(() {});
                           },
-                          icon: play
-                              ? Icon(Icons.pause_circle, size: 50, color: color)
-                              : Icon(Icons.play_circle, size: 50, color: color),
+                          child: Icon(
+                            play ? Icons.pause_circle : Icons.play_circle,
+                            size: 50,
+                            color: color,
+                          ),
                         ),
                         SizedBox(
                           width: 175,

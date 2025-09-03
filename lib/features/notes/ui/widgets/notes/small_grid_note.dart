@@ -88,7 +88,7 @@ class SmallGridNote extends StatelessWidget {
                         )
                       : Expanded(
                           child: Padding(
-                            padding: EdgeInsets.only(top: noTitle ? 24 : 4.0),
+                            padding: EdgeInsets.only(top: noTitle ? 0 : 4.0),
                             child: SoundPlayer(
                               voiceNote: note,
                               color: color,

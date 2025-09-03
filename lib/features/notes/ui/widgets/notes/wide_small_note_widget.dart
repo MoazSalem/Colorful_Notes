@@ -112,18 +112,13 @@ class WideSmallNoteWidget extends StatelessWidget {
                           ),
                         )
                       : Expanded(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              SoundPlayer(
-                                voiceNote: note,
-                                color: color,
-                                viewMode: 1,
-                              ),
-                            ],
+                          child: SoundPlayer(
+                            voiceNote: note,
+                            color: color,
+                            viewMode: 1,
                           ),
                         ),
-                  if (settings.showDate)
+                  if (settings.showDate && note.type == 0)
                     Padding(
                       padding: const EdgeInsets.symmetric(
                         vertical: 3.0,

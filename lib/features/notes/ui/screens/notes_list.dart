@@ -110,7 +110,7 @@ class _NotesListState extends ConsumerState<NotesList> {
     int multiplier = (MediaQuery.sizeOf(context).width / 400).round();
     multiplier < 1 ? multiplier = 1 : multiplier;
     final int crossAxisCount = viewIndex == 2 ? multiplier * 2 : multiplier * 1;
-    final double childAspectRatio = viewIndex == 1 ? 2.8 : 1.0;
+    final double childAspectRatio = viewIndex == 1 ? 2.7 : 1.0;
     if (notes.isEmpty) {
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 200),
