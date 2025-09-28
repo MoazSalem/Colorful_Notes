@@ -1,18 +1,18 @@
 import 'package:colorful_notes/core/consts.dart';
+import 'package:colorful_notes/core/models/settings_model.dart';
 import 'package:colorful_notes/core/providers/settings_notifier.dart';
+import 'package:colorful_notes/core/shared_widgets/custom_appbar.dart';
 import 'package:colorful_notes/features/notes/domain/entities/note.dart';
 import 'package:colorful_notes/features/notes/ui/providers/notes_provider.dart';
-import 'package:colorful_notes/core/shared_widgets/custom_appbar.dart';
+import 'package:colorful_notes/features/notes/ui/screens/text_note.dart';
 import 'package:colorful_notes/features/notes/ui/screens/voice_note.dart';
 import 'package:colorful_notes/features/notes/ui/widgets/appbar_action_widgets.dart';
 import 'package:colorful_notes/features/notes/ui/widgets/notes/large_note.dart';
+import 'package:colorful_notes/features/notes/ui/widgets/notes/small_grid_note.dart';
 import 'package:colorful_notes/features/notes/ui/widgets/notes/wide_small_note_widget.dart';
 import 'package:colorful_notes/features/notes/ui/widgets/search_bar_widget.dart';
-import 'package:colorful_notes/features/notes/ui/screens/text_note.dart';
-import 'package:colorful_notes/features/notes/ui/widgets/notes/small_grid_note.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:colorful_notes/core/models/settings_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class NotesList extends ConsumerStatefulWidget {
@@ -106,7 +106,6 @@ class _NotesListState extends ConsumerState<NotesList> {
     int viewIndex,
   ) {
     final theme = Theme.of(context).colorScheme;
-    final double padding = settings.sbIndex == 4 ? 28 : 12;
     int multiplier = (MediaQuery.sizeOf(context).width / 400).round();
     multiplier < 1 ? multiplier = 1 : multiplier;
     final int crossAxisCount = viewIndex == 2 ? multiplier * 2 : multiplier * 1;
@@ -128,12 +127,7 @@ class _NotesListState extends ConsumerState<NotesList> {
       );
     }
     return GridView.builder(
-      padding: EdgeInsets.only(
-        top: settings.sbIndex == 4 ? 16 : 0,
-        bottom: 32,
-        left: padding,
-        right: padding,
-      ),
+      padding: EdgeInsets.only(bottom: 32, left: 12, right: 12),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: crossAxisCount,
         childAspectRatio: childAspectRatio,

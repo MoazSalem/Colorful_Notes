@@ -77,11 +77,12 @@ class _CustomFabWithChildrenState extends State<CustomFabWithChildren> {
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 6, vertical: 12),
+            padding: EdgeInsets.symmetric(vertical: 10),
             child: AnimatedSwitcher(
               duration: const Duration(milliseconds: 200),
               child: openFab
                   ? Column(
+                      mainAxisSize: MainAxisSize.min,
                       spacing: 10,
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
@@ -199,7 +200,7 @@ class _CustomFabWithChildrenState extends State<CustomFabWithChildren> {
                         ),
                       ],
                     )
-                  : Container(width: 160),
+                  : Container(width: 0),
             ),
           ),
           InkWell(
