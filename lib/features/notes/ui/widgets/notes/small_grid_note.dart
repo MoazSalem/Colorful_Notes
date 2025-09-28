@@ -46,6 +46,7 @@ class SmallGridNote extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  if (!noTitle && note.type == 1) SizedBox(height: 14),
                   if (!noTitle && note.type == 0)
                     SizedBox(
                       width: double.infinity,
@@ -87,58 +88,13 @@ class SmallGridNote extends StatelessWidget {
                           ),
                         )
                       : Expanded(
-                          child: Padding(
-                            padding: EdgeInsets.only(top: noTitle ? 0 : 4.0),
-                            child: SoundPlayer(
-                              voiceNote: note,
-                              color: color,
-                              viewMode: 3,
-                            ),
+                          child: SoundPlayer(
+                            voiceNote: note,
+                            color: color,
+                            viewMode: 3,
                           ),
                         ),
-                  if (settings.showDate)
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 2.0,
-                        horizontal: 8,
-                      ),
-                      child: Stack(
-                        alignment: AlignmentDirectional.centerStart,
-                        children: [
-                          Text(
-                            dateValue == 0
-                                ? "Today".tr()
-                                : dateValue == -1
-                                ? "Yesterday".tr()
-                                : date,
-                            style: TextStyle(
-                              color: note.tIndex == 0
-                                  ? Colors.white
-                                  : Colors.black,
-                              fontSize: note.type == 0 ? 13 : 12,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Text(
-                                settings.showEdited
-                                    ? note.edited == "yes"
-                                          ? "Edited".tr()
-                                          : ""
-                                    : "",
-                                style: TextStyle(
-                                  color: note.tIndex == 0
-                                      ? Colors.white38
-                                      : Colors.black38,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
+                  if (settings.showDate) SizedBox(height: 10),
                 ],
               ),
               if (!noTitle && note.type == 1)
@@ -154,8 +110,51 @@ class SmallGridNote extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
                       fontWeight: FontWeight.w800,
-                      fontSize: 18,
+                      fontSize: 16,
                       color: note.tIndex == 0 ? Colors.white : Colors.black,
+                    ),
+                  ),
+                ),
+              if (settings.showDate)
+                Align(
+                  alignment: AlignmentDirectional.bottomCenter,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: Stack(
+                      alignment: AlignmentDirectional.centerStart,
+                      children: [
+                        Text(
+                          dateValue == 0
+                              ? "Today".tr()
+                              : dateValue == -1
+                              ? "Yesterday".tr()
+                              : date,
+                          style: TextStyle(
+                            color: note.tIndex == 0
+                                ? Colors.white
+                                : Colors.black,
+                            fontSize: note.type == 0 ? 13 : 12,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Text(
+                              settings.showEdited
+                                  ? note.edited == "yes"
+                                        ? "Edited".tr()
+                                        : ""
+                                  : "",
+                              style: TextStyle(
+                                color: note.tIndex == 0
+                                    ? Colors.white38
+                                    : Colors.black38,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
                   ),
                 ),

@@ -286,7 +286,7 @@ class _SoundPlayerState extends State<SoundPlayer> {
             child: SizedBox(
               width: double.infinity,
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   FittedBox(
                     child: SliderTheme(
