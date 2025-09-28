@@ -1,12 +1,12 @@
 import 'package:colorful_notes/core/consts.dart';
 import 'package:colorful_notes/core/providers/settings_notifier.dart';
-import 'package:colorful_notes/features/settings/ui/widgets/theme_popup_menu.dart';
-import 'package:flutter/material.dart';
 import 'package:colorful_notes/core/shared_widgets/custom_appbar.dart';
 import 'package:colorful_notes/core/shared_widgets/custom_divider.dart';
 import 'package:colorful_notes/features/settings/ui/widgets/setting_switch_tile.dart';
 import 'package:colorful_notes/features/settings/ui/widgets/settings_dropdown_tile.dart';
+import 'package:colorful_notes/features/settings/ui/widgets/theme_popup_menu.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class SettingsPage extends ConsumerWidget {
@@ -39,7 +39,7 @@ class SettingsPage extends ConsumerWidget {
       body: ListView(
         padding: EdgeInsets.zero,
         children: [
-          CustomAppbar(title: "Settings".tr(), top: 65),
+          CustomAppbar(title: "Settings".tr()),
 
           // --- Language Setting ---
           SettingsDropdownTile<String>(

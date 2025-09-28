@@ -6,7 +6,7 @@ class CustomAppbar extends StatelessWidget {
   const CustomAppbar({
     super.key,
     required this.title,
-    required this.top,
+    this.top = 52,
     this.leading,
   });
   final String title;

@@ -26,16 +26,33 @@ class NotesList extends ConsumerStatefulWidget {
 class _NotesListState extends ConsumerState<NotesList> {
   final TextEditingController searchController = TextEditingController();
   bool isSearching = false;
+
   @override
-  Widget build(BuildContext context) {
-    if (!isSearching) {
-      // if not searching, refetch notes
-      Future.microtask(() {
-        ref
-            .read(notesNotifierProvider.notifier)
-            .getNotes(widget.typeIndex == 0 ? null : widget.typeIndex == 2);
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _fetchNotes();
+    });
+  }
+
+  @override
+  void didUpdateWidget(NotesList oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.typeIndex != widget.typeIndex) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _fetchNotes();
       });
     }
+  }
+
+  void _fetchNotes() {
+    ref
+        .read(notesNotifierProvider.notifier)
+        .getNotes(widget.typeIndex == 0 ? null : widget.typeIndex == 2);
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final String pageTitle = getPageTitle(widget.typeIndex);
     final settings = ref.watch(settingsNotifierProvider).value!;
     final List<int> viewIndexList = [
@@ -43,12 +60,18 @@ class _NotesListState extends ConsumerState<NotesList> {
       settings.textViewIndex,
       settings.voiceViewIndex,
     ];
+    // We only call getNotes again when search is cancelled.
+    if (!isSearching && searchController.text.isNotEmpty) {
+      searchController.clear();
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _fetchNotes();
+      });
+    }
     return ListView(
       padding: EdgeInsets.zero,
       children: [
         CustomAppbar(
           title: pageTitle,
-          top: 65,
           leading: AppbarActionWidgets(
             settings: settings,
             onToggle: () => setState(() => isSearching = !isSearching),
@@ -90,7 +113,7 @@ class _NotesListState extends ConsumerState<NotesList> {
               },
               loading: () {
                 // should be unnoticeable, so no loading widget
-                return Container();
+                return const SizedBox.shrink();
               },
             );
           },

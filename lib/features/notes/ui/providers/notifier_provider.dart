@@ -28,6 +28,10 @@ class NotesNotifier extends AsyncNotifier<List<Note>> {
     return [];
   }
 
+  void setLoading() {
+    state = AsyncValue.loading();
+  }
+
   Future<void> getNotes(bool? voice) async {
     state = await AsyncValue.guard(
       () => voice == null ? _getNotes() : _getNotesOfType(voice),

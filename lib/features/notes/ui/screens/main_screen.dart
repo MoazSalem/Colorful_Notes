@@ -2,6 +2,7 @@ import 'package:colorful_notes/core/consts.dart';
 import 'package:colorful_notes/core/providers/settings_notifier.dart';
 import 'package:colorful_notes/core/shared_widgets/custom_loading_widget.dart';
 import 'package:colorful_notes/features/notes/ui/providers/database_provider.dart';
+import 'package:colorful_notes/features/notes/ui/providers/notes_provider.dart';
 import 'package:colorful_notes/features/notes/ui/widgets/custom_bottom_navigation_bar.dart';
 import 'package:colorful_notes/features/notes/ui/widgets/custom_fab.dart';
 import 'package:colorful_notes/features/notes/ui/widgets/sidebar.dart';
@@ -27,7 +28,12 @@ class _MainScreenState extends ConsumerState<MainScreen> {
       if (showSideBar)
         SideBar(
           currentIndex: currentIndex,
-          onIndexChanged: (i) => {setState(() => currentIndex = i)},
+          onIndexChanged: (i) => i != currentIndex
+              ? setState(() {
+                  currentIndex = i;
+                  ref.read(notesNotifierProvider.notifier).setLoading();
+                })
+              : null,
         ),
       Expanded(
         child: settings.when(
