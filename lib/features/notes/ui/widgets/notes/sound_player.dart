@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:audioplayers/audioplayers.dart';
 import 'package:colorful_notes/features/notes/domain/entities/note.dart';
 import 'package:flutter/material.dart';
@@ -29,25 +31,48 @@ class _SoundPlayerState extends State<SoundPlayer> {
   PlayerState currentState = PlayerState.stopped;
   bool isPlaying = false;
 
+  StreamSubscription? _positionSubscription;
+  StreamSubscription? _durationSubscription;
+  StreamSubscription? _playerStateSubscription;
+  StreamSubscription? _playerCompleteSubscription;
+
   @override
   void initState() {
     super.initState();
-    audioPlayer.onPositionChanged.listen(
-      (Duration p) => setState(() => position = p),
-    );
-    audioPlayer.onDurationChanged.listen(
-      (Duration p) => setState(() => duration = p),
-    );
-    audioPlayer.onPlayerStateChanged.listen(
-      (PlayerState s) => currentState = s,
-    );
-    audioPlayer.onPlayerComplete.listen((event) {
-      setState(() {
-        audioPlayer.setSourceDeviceFile(widget.voiceNote.content);
-        position = Duration.zero;
-        play = false;
-      });
+
+    _positionSubscription = audioPlayer.onPositionChanged.listen((Duration p) {
+      if (mounted) setState(() => position = p);
     });
+
+    _durationSubscription = audioPlayer.onDurationChanged.listen((Duration p) {
+      if (mounted) setState(() => duration = p);
+    });
+
+    _playerStateSubscription = audioPlayer.onPlayerStateChanged.listen((
+      PlayerState s,
+    ) {
+      if (mounted) setState(() => currentState = s);
+    });
+
+    _playerCompleteSubscription = audioPlayer.onPlayerComplete.listen((event) {
+      if (mounted) {
+        setState(() {
+          audioPlayer.setSourceDeviceFile(widget.voiceNote.content);
+          position = Duration.zero;
+          play = false;
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _positionSubscription?.cancel();
+    _durationSubscription?.cancel();
+    _playerStateSubscription?.cancel();
+    _playerCompleteSubscription?.cancel();
+    audioPlayer.dispose();
+    super.dispose();
   }
 
   @override
