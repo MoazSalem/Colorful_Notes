@@ -5,8 +5,8 @@ import 'package:colorful_notes/features/notes/ui/providers/notes_provider.dart';
 import 'package:colorful_notes/features/notes/ui/providers/notifier_provider.dart';
 import 'package:colorful_notes/features/notes/ui/widgets/color_bar.dart';
 import 'package:colorful_notes/features/notes/ui/widgets/delete_dialog.dart';
-import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart' hide TextDirection;
+import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -311,7 +311,7 @@ class _TextNoteState extends State<TextNote> {
                         child: ListView(
                           children: [
                             Padding(
-                              padding: EdgeInsets.only(left: 20, right: 20),
+                              padding: EdgeInsets.symmetric(horizontal: 20),
                               child: ValueListenableBuilder<TextDirection>(
                                 valueListenable: titleDirection,
                                 builder: (context, value, child) =>
@@ -351,7 +351,7 @@ class _TextNoteState extends State<TextNote> {
                             ),
                             const SizedBox(height: 10),
                             Padding(
-                              padding: EdgeInsets.only(left: 20, right: 20),
+                              padding: EdgeInsets.symmetric(horizontal: 20),
                               child: ValueListenableBuilder<TextDirection>(
                                 valueListenable: contentDirection,
                                 builder: (context, value, child) =>

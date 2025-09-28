@@ -30,21 +30,9 @@ class _MainScreenState extends ConsumerState<MainScreen> {
         floatingActionButton: [3, 4].contains(currentIndex)
             ? null
             : Padding(
-                padding: EdgeInsets.only(
-                  left:
-                      [0, 1].contains(settings.sbIndex) && settings.lang != 'ar'
-                      ? 72.0
-                      : [2, 3].contains(settings.sbIndex) &&
-                            settings.lang == 'ar'
-                      ? 72.0
-                      : 12.0,
-                  right:
-                      [2, 3].contains(settings.sbIndex) && settings.lang != 'ar'
-                      ? 72.0
-                      : [0, 1].contains(settings.sbIndex) &&
-                            settings.lang == 'ar'
-                      ? 72.0
-                      : 12.0,
+                padding: EdgeInsetsDirectional.only(
+                  start: [0, 1].contains(settings.sbIndex) ? 72.0 : 12.0,
+                  end: [2, 3].contains(settings.sbIndex) ? 72.0 : 12.0,
                 ),
                 child: CustomFab(settings: settings, typeIndex: currentIndex),
               ),

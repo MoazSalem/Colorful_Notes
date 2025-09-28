@@ -1,10 +1,11 @@
 import 'dart:ui' as ui;
+
 import 'package:colorful_notes/core/consts.dart';
 import 'package:colorful_notes/core/models/settings_model.dart';
 import 'package:colorful_notes/features/notes/ui/screens/text_note.dart';
 import 'package:colorful_notes/features/notes/ui/screens/voice_note.dart';
-import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
 
 class CustomFab extends StatelessWidget {
   const CustomFab({super.key, required this.settings, required this.typeIndex});
@@ -100,9 +101,8 @@ class _CustomFabWithChildrenState extends State<CustomFabWithChildren> {
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
                               Padding(
-                                padding: const EdgeInsets.only(
-                                  left: 12.0,
-                                  right: 12.0,
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 12.0,
                                 ),
                                 child: Container(
                                   decoration: BoxDecoration(
@@ -159,9 +159,8 @@ class _CustomFabWithChildrenState extends State<CustomFabWithChildren> {
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
                               Padding(
-                                padding: const EdgeInsets.only(
-                                  left: 12.0,
-                                  right: 12.0,
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 12.0,
                                 ),
                                 child: Container(
                                   decoration: BoxDecoration(

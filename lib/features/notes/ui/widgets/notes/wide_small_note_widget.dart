@@ -3,9 +3,9 @@ import 'package:colorful_notes/core/helpers/widgets_helper.dart';
 import 'package:colorful_notes/core/models/settings_model.dart';
 import 'package:colorful_notes/core/shared_widgets/dynamic_max_lines_text.dart';
 import 'package:colorful_notes/features/notes/domain/entities/note.dart';
-import 'package:flutter/material.dart';
-import 'package:easy_localization/easy_localization.dart' hide TextDirection;
 import 'package:colorful_notes/features/notes/ui/widgets/notes/sound_player.dart';
+import 'package:easy_localization/easy_localization.dart' hide TextDirection;
+import 'package:flutter/material.dart';
 
 class WideSmallNoteWidget extends StatelessWidget {
   const WideSmallNoteWidget({
@@ -125,9 +125,7 @@ class WideSmallNoteWidget extends StatelessWidget {
                         horizontal: 8,
                       ),
                       child: Stack(
-                        alignment: settings.lang == 'en'
-                            ? Alignment.centerLeft
-                            : Alignment.centerRight,
+                        alignment: AlignmentDirectional.centerStart,
                         children: [
                           Text(
                             dateValue == 0

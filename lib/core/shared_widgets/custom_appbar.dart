@@ -19,12 +19,7 @@ class CustomAppbar extends StatelessWidget {
     return Column(
       children: [
         Padding(
-          padding: EdgeInsets.only(
-            left: locale == 'en' ? 20 : 0,
-            right: locale == 'en' ? 0 : 20,
-            bottom: 10,
-            top: top,
-          ),
+          padding: EdgeInsetsDirectional.only(start: 20, bottom: 10, top: top),
           child: Stack(
             alignment: locale == 'en'
                 ? Alignment.centerLeft
@@ -39,7 +34,7 @@ class CustomAppbar extends StatelessWidget {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(right: 5),
+                padding: const EdgeInsetsDirectional.only(end: 5),
                 child: leading ?? Container(),
               ),
             ],

@@ -115,9 +115,7 @@ class LargeNote extends StatelessWidget {
                       ),
                 if (settings.showDate)
                   Stack(
-                    alignment: settings.lang == 'en'
-                        ? Alignment.centerLeft
-                        : Alignment.centerRight,
+                    alignment: AlignmentDirectional.centerStart,
                     children: [
                       Text(
                         dateValue == 0
